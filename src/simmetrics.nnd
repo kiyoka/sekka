@@ -1,0 +1,34 @@
+#!/bin/sh
+:; #-*- mode: nendo; syntax: scheme -*-;;
+:; exec /usr/local/bin/nendo $0 $*
+
+(require "levenshtein")
+
+(define (distance str1 str2)
+  (Levenshtein.normalized_distance str1 str2))
+
+(define (disp-distance str1 str2)
+  (printf "[%s] and [%s] => %f\n" str1 str2 (- 1.0 (distance str1 str2))))
+
+(define (main argv)
+  (case (length argv)
+    ((0)
+     (for-each
+      (lambda (x)
+        (disp-distance (car x) (cdr x)))
+      '(
+        ("apple" . "apple")
+        ("apply" . "apple")
+        ("henkan" . "henkann")
+        ("henkan" . "hekan"))))
+    ((1)
+     (error "Error: leven str1 str2"))
+    (else
+     (disp-distance (first argv) (second argv)))))
+
+
+
+      
+   
+
+
