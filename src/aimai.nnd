@@ -1,0 +1,50 @@
+#!/bin/sh
+:; #-*- mode: nendo; syntax: scheme -*-;;
+:; exec /usr/local/bin/nendo $0 $*
+(require "kyotocabinet")
+(require "levenshtein")
+(require "./jarowinkler.rb")
+
+(define jisyo-file "../data/SKK-JISYO.S.201001")
+
+(define (init-db name)
+  (let1 db (KyotoCabinet::DB.new)
+    (if (not (db.open (+ name ".kch") (+ KyotoCabinet::DB::OWRITER KyotoCabinet::DB::OCREATE)))
+        (printf "open error: %s\n" db.error))
+    (with-open name
+               (lambda (f)
+                 (for-each
+                  (lambda (line)
+                    (cond
+                     ((rxmatch #/^([あ-ん]+)[ ][\/](.+)[\/]$/ (line.chomp))
+                      => (lambda (m)
+                           (let ((k (rxmatch-substring m 1))
+                                 (v (rxmatch-substring m 2)))
+                             (hash-table-put! db #?=k #?=v))))))
+                  (f.readlines.to_list))))))
+
+
+(define (leven str1 str2)
+  (Levenshtein.normalized_distance str1 str2))
+
+(define (jaro str1 str2)
+  (JaroWinkler.distance str1 str2))
+
+
+(define jaro-shikii 0.5)
+
+(define (aimai-search name keyword)
+  (let1 db (KyotoCabinet::DB.new)
+    (if (not (db.open (+ name ".kch")))
+        (printf "open error: %s\n" db.error))
+    (db.each
+     (&block (k v)
+       (when (< jaro-shikii (jaro keyword k))
+         (printf "found [%s]:[%s]\n", k v))))))
+
+(define (main argv)
+  ;;(init-db jisyo-file)
+  (aimai-search jisyo-file (. (car argv) dup)))
+
+
+  
