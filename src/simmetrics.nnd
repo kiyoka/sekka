@@ -5,6 +5,9 @@
 (require "levenshtein")
 (require "./jarowinkler.rb")
 
+(load "./compare_data.nnd")
+
+
 (define (leven str1 str2)
   (Levenshtein.normalized_distance str1 str2))
 
@@ -22,21 +25,13 @@
      (for-each
       (lambda (x)
         (disp-distance (car x) (cdr x)))
-      '(
-        ("apple" . "apple")
-        ("apply" . "apple")
-        ("henkan" . "henkann")
-        ("henkan" . "hekan"))))
+      compare-data))
     ((1)
      (error "Error: leven str1 str2"))
     (else
      (disp-distance
       (. (first  argv) dup)
       (. (second argv) dup)))))
-
-
-
-
 
       
    
