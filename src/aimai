@@ -9,7 +9,7 @@
   "../data/SKK-JISYO.L.201008"
   ;;"../data/SKK-JISYO.S.201001"
   )
-(define jaro-shikii 1.60)
+(define jaro-shikii 0.70)
 
 (define roman->kana-table
   '(("kkya" . "っきゃ")
@@ -333,15 +333,10 @@
 (define (jaro str1 str2)
   (JaroWinkler.distance str1 str2))
 
-(define (jaro-plus str1 str2)
-  (+ (jaro str1 str2)
-     (if (eq? (str1.slice 0 1) (str2.slice 0 1))
-         1.0
-         0.0)))
-
 (define (aimai-search name keyword)
   (printf "shikii = %f\n" jaro-shikii)
-  (let1 db (KyotoCabinet::DB.new)
+  (let ((db (KyotoCabinet::DB.new))
+        (k0 (keyword.slice 0 1)))
     (when (not (db.open (+ name ".kch")))
       (printf "open error: %s\n" db.error))
     (print "----------")
@@ -349,9 +344,10 @@
       (printf "FOUND [%s]:[%s]\n" keyword (hash-table-get db keyword)))
     (db.each
      (&block (k v)
-       (let1 val (jaro-plus keyword k)
-         (when (< jaro-shikii val)
-           (printf "found [%s]:[%s] (%f)\n" k v val)))))))
+       (when (eq? k0 (k.slice 0 1))
+         (let1 val (jaro keyword k)
+           (when (< jaro-shikii val)
+             (printf "found [%s]:[%s] (%f)\n" k v val))))))))
 
 (define (main argv)
   (cond
