@@ -1,9 +1,6 @@
 module JaroWinkler
   
   def self.distance(str1, str2)
-    str1.strip!
-    str2.strip!
-
     if str1 == str2
       return 1
     end

@@ -5,8 +5,11 @@
 (require "levenshtein")
 (require "./jarowinkler.rb")
 
-(define jisyo-file "../data/SKK-JISYO.L.201008")
-
+(define jisyo-file
+  "../data/SKK-JISYO.L.201008"
+  ;;"../data/SKK-JISYO.S.201001"
+  )
+(define jaro-shikii 1.60)
 
 (define roman->kana-table
   '(("kkya" . "っきゃ")
@@ -15,11 +18,11 @@
     ("ggya" . "っぎゃ")
     ("ggyu" . "っぎゅ")
     ("ggyo" . "っぎょ")
-    ("sshi" . "っし")
-    ("ssha" . "っしゃ")
-    ("sshu" . "っしゅ")
-    ("sshe" . "っしぇ")
-    ("ssho" . "っしょ")
+    ("ssyi" . "っし")
+    ("ssya" . "っしゃ")
+    ("ssyu" . "っしゅ")
+    ("ssye" . "っしぇ")
+    ("ssyo" . "っしょ")
     ("cchi" . "っち")
     ("ccha" . "っちゃ")
     ("cchu" . "っちゅ")
@@ -29,7 +32,7 @@
     ("ddyu" . "っぢゅ")
     ("ddye" . "っぢぇ")
     ("ddyo" . "っぢょ")
-    ("ttsu" . "っつ")
+    ("ttu" . "っつ")
     ("hhya" . "っひゃ")
     ("hhyu" . "っひゅ")
     ("hhyo" . "っひょ")
@@ -44,7 +47,7 @@
     ("rryo" . "っりょ")
     ("ddyi" . "っでぃ")
     ("ddhi" . "っでぃ")
-    ("xtsu" . "っ")
+    ("xtu" . "っ")
     ("ttya" . "っちゃ")
     ("ttyi" . "っち")
     ("ttyu" . "っちゅ")
@@ -56,11 +59,11 @@
     ("gya" . "ぎゃ")
     ("gyu" . "ぎゅ")
     ("gyo" . "ぎょ")
-    ("shi" . "し")
-    ("sha" . "しゃ")
-    ("shu" . "しゅ")
-    ("she" . "しぇ")
-    ("sho" . "しょ")
+    ("syi" . "し")
+    ("sya" . "しゃ")
+    ("syu" . "しゅ")
+    ("sye" . "しぇ")
+    ("syo" . "しょ")
     ("chi" . "ち")
     ("cha" . "ちゃ")
     ("chu" . "ちゅ")
@@ -133,7 +136,7 @@
     ("rru" . "っる")
     ("rre" . "っれ")
     ("rro" . "っろ")
-    ("tsu" . "つ")
+    ("tu" . "つ")
     ("nya" . "にゃ")
     ("nyu" . "にゅ")
     ("nyo" . "にょ")
@@ -315,6 +318,11 @@
                       => (lambda (m)
                            (let ((k (kana->roman (rxmatch-substring m 1)))
                                  (v (rxmatch-substring m 2)))
+                             (hash-table-put! db k v))))
+                     ((rxmatch #/^([a-zA-Z]+)[ ][\/](.+)[\/]$/ (line.chomp))
+                      => (lambda (m)
+                           (let ((k (rxmatch-substring m 1))
+                                 (v (rxmatch-substring m 2)))
                              (hash-table-put! db k v))))))
                   (f.readlines.to_list))))))
 
@@ -325,9 +333,11 @@
 (define (jaro str1 str2)
   (JaroWinkler.distance str1 str2))
 
-
-(define jaro-shikii 0.76)
-
+(define (jaro-plus str1 str2)
+  (+ (jaro str1 str2)
+     (if (eq? (str1.slice 0 1) (str2.slice 0 1))
+         1.0
+         0.0)))
 
 (define (aimai-search name keyword)
   (printf "shikii = %f\n" jaro-shikii)
@@ -339,7 +349,7 @@
       (printf "FOUND [%s]:[%s]\n" keyword (hash-table-get db keyword)))
     (db.each
      (&block (k v)
-       (let1 val (jaro keyword k)
+       (let1 val (jaro-plus keyword k)
          (when (< jaro-shikii val)
            (printf "found [%s]:[%s] (%f)\n" k v val)))))))
 
