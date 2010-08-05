@@ -9,7 +9,7 @@
   "../data/SKK-JISYO.L.201008"
   ;;"../data/SKK-JISYO.S.201001"
   )
-(define jaro-shikii 0.70)
+(define jaro-shikii 0.68)
 
 (define roman->kana-table
   '(("kkya" . "っきゃ")
@@ -333,30 +333,52 @@
 (define (jaro str1 str2)
   (JaroWinkler.distance str1 str2))
 
+
+;; return unsorted list
+;;  '(
+;;     ( distance key val )
+;;         .
+;;         .
+;;         .
+;;   )
 (define (aimai-search name keyword)
-  (printf "shikii = %f\n" jaro-shikii)
   (let ((db (KyotoCabinet::DB.new))
         (k0 (keyword.slice 0 1)))
     (when (not (db.open (+ name ".kch")))
       (printf "open error: %s\n" db.error))
-    (print "----------")
-    (when (hash-table-exist? db keyword)
-      (printf "FOUND [%s]:[%s]\n" keyword (hash-table-get db keyword)))
-    (db.each
-     (&block (k v)
-       (when (eq? k0 (k.slice 0 1))
-         (let1 val (jaro keyword k)
-           (when (< jaro-shikii val)
-             (printf "found [%s]:[%s] (%f)\n" k v val))))))))
+    (let1 result '()
+      (db.each
+       (&block (k v)
+         (when (eq? k0 (k.slice 0 1))
+           (let1 val (jaro keyword k)
+             (when (< jaro-shikii val)
+               (set! result (cons
+                             (list val k v)
+                             result)))))))
+      result)))
 
+(define (disp-search-result result)
+  (printf "閾値 = %f\n" jaro-shikii)
+  (print "----------")
+  (for-each
+   (lambda (x)
+     (printf " (%1.5f) [%s]:[%s]\n"
+             (first x)
+             (second x)
+             (third x)))
+   (sort-by result
+            (lambda (item)
+              (- 1.0 (car item))))))
+  
 (define (main argv)
+  (define (readline)
+    (printf "> ")
+    (STDIN.readline.chomp))
   (cond
-   ((= 0 (length argv))
-    (print "Usage: ")
-    (print "   aimai keyword ... search")
-    (print "   aimai init    ... initialize db"))
+   ((eq? 0 (length argv))
+    (let loop ((line (readline)))
+      (disp-search-result
+       (aimai-search jisyo-file line))
+      (loop (readline))))
    (else
-    (let1 arg1 (. (car argv) dup)
-      (if (eq? "init" arg1)
-          (init-db jisyo-file)
-          (aimai-search jisyo-file arg1))))))
+    (init-db jisyo-file))))
