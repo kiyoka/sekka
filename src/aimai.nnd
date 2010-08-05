@@ -5,7 +5,7 @@
 (require "levenshtein")
 (require "./jarowinkler.rb")
 
-(define jisyo-file "../data/SKK-JISYO.S.201001")
+(define jisyo-file "../data/SKK-JISYO.L.201008")
 
 
 (define roman->kana-table
@@ -203,10 +203,6 @@
     ("sa" . "さ")
     ("za" . "ざ")
     ("ji" . "じ")
-    ("ja" . "じゃ")
-    ("ju" . "じゅ")
-    ("je" . "じぇ")
-    ("jo" . "じょ")
     ("su" . "す")
     ("zu" . "ず")
     ("se" . "せ")
@@ -280,7 +276,7 @@
        (let ((k (cdr x))
              (v (car x)))
          (hash-table-put! h k v)))
-     roman->kana-table)
+     (reverse roman->kana-table))
     h))
 
 
@@ -308,7 +304,7 @@
     
 (define (init-db name)
   (let1 db (KyotoCabinet::DB.new)
-    (when (not (db.open (+ name ".kch") (+ KyotoCabinet::DB::OWRITER KyotoCabinet::DB::OCREATE)))
+    (when (not (db.open (+ name ".kch") (+  KyotoCabinet::DB::OWRITER KyotoCabinet::DB::OCREATE KyotoCabinet::DB::OTRUNCATE)))
       (printf "open error: %s\n" db.error))
     (with-open name
                (lambda (f)
@@ -317,9 +313,9 @@
                     (cond
                      ((rxmatch #/^([あ-ん]+)[ ][\/](.+)[\/]$/ (line.chomp))
                       => (lambda (m)
-                           (let ((k (kana->roman #?=(rxmatch-substring m 1)))
+                           (let ((k (kana->roman (rxmatch-substring m 1)))
                                  (v (rxmatch-substring m 2)))
-                             (hash-table-put! db #?=k #?=v))))))
+                             (hash-table-put! db k v))))))
                   (f.readlines.to_list))))))
 
 
@@ -330,20 +326,28 @@
   (JaroWinkler.distance str1 str2))
 
 
-(define jaro-shikii 0.7)
+(define jaro-shikii 0.76)
 
 
 (define (aimai-search name keyword)
+  (printf "shikii = %f\n" jaro-shikii)
   (let1 db (KyotoCabinet::DB.new)
     (when (not (db.open (+ name ".kch")))
       (printf "open error: %s\n" db.error))
     (db.each
      (&block (k v)
-       (when (< jaro-shikii (jaro keyword k))
-         (printf "found [%s]:[%s]\n" k v))))))
+       (let1 val (jaro keyword k)
+         (when (< jaro-shikii val)
+           (printf "found [%s]:[%s] (%f)\n" k v val)))))))
 
 (define (main argv)
-  (init-db jisyo-file)
-  (when (< 0 (length argv))
-    (aimai-search jisyo-file (. (car argv) dup))))
-
+  (cond
+   ((= 0 (length argv))
+    (print "Usage: ")
+    (print "   aimai keyword ... search")
+    (print "   aimai init    ... initialize db"))
+   (else
+    (let1 arg1 (. (car argv) dup)
+      (if (eq? "init" arg1)
+          (init-db jisyo-file)
+          (aimai-search jisyo-file arg1))))))
