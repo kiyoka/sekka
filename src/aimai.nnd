@@ -334,6 +334,9 @@
   (let1 db (KyotoCabinet::DB.new)
     (when (not (db.open (+ name ".kch")))
       (printf "open error: %s\n" db.error))
+    (print "----------")
+    (when (hash-table-exist? db keyword)
+      (printf "FOUND [%s]:[%s]\n" keyword (hash-table-get db keyword)))
     (db.each
      (&block (k v)
        (let1 val (jaro keyword k)
