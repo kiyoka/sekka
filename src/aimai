@@ -8,6 +8,7 @@
   "../data/SKK-JISYO.L.201008"
   ;;"../data/SKK-JISYO.S.201001"
   )
+(define cabinet-ext ".kct")
 (define jarow-shikii 0.94)
 
 (define roman->kana-table
@@ -297,7 +298,7 @@
     
 (define (init-db name)
   (let1 db (KyotoCabinet::DB.new)
-    (when (not (db.open (+ name ".kct") (+  KyotoCabinet::DB::OWRITER KyotoCabinet::DB::OCREATE KyotoCabinet::DB::OTRUNCATE)))
+    (when (not (db.open (+ name cabinet-ext) (+  KyotoCabinet::DB::OWRITER KyotoCabinet::DB::OCREATE KyotoCabinet::DB::OTRUNCATE)))
       (printf "open error: %s\n" db.error))
     (with-open name
                (lambda (f)
@@ -340,7 +341,7 @@
 (define (aimai-search name keyword)
   (let ((db (KyotoCabinet::DB.new))
         (k0 (keyword.slice 0 1)))
-    (when (not (db.open (+ name ".kct")))
+    (when (not (db.open (+ name cabinet-ext)))
       (printf "open error: %s\n" db.error))
     (let1 result '()
       (db.each
