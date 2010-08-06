@@ -297,27 +297,26 @@
 
     
 (define (init-db name)
-  (if (KyotoCabinet::DB.process
-       (+ name cabinet-ext)
-       (&block (db)
-         (begin
-           (with-open name
-                      (lambda (f)
-                        (for-each
-                         (lambda (line)
-                           (cond
-                            ((rxmatch #/^([あ-ん]+)[ ][\/](.+)[\/]$/ (line.chomp))
-                             => (lambda (m)
-                                  (let ((k (kana->roman (rxmatch-substring m 1)))
-                                        (v (rxmatch-substring m 2)))
-                                    (hash-table-put! db k v))))
-                            ((rxmatch #/^([a-zA-Z]+)[ ][\/](.+)[\/]$/ (line.chomp))
-                             => (lambda (m)
-                                  (let ((k (rxmatch-substring m 1))
-                                        (v (rxmatch-substring m 2)))
-                                    (hash-table-put! db k v))))))
-                         (f.readlines.to_list)))))))
-      (printf "open error: %s\n" db.error)))
+  (KyotoCabinet::DB.process
+   (+ name cabinet-ext)
+   (&block (db)
+     (begin
+       (with-open name
+                  (lambda (f)
+                    (for-each
+                     (lambda (line)
+                       (cond
+                        ((rxmatch #/^([あ-ん]+)[ ][\/](.+)[\/]$/ (line.chomp))
+                         => (lambda (m)
+                              (let ((k (kana->roman (rxmatch-substring m 1)))
+                                    (v (rxmatch-substring m 2)))
+                                (hash-table-put! db k v))))
+                        ((rxmatch #/^([a-zA-Z]+)[ ][\/](.+)[\/]$/ (line.chomp))
+                         => (lambda (m)
+                              (let ((k (rxmatch-substring m 1))
+                                    (v (rxmatch-substring m 2)))
+                                (hash-table-put! db k v))))))
+                     (f.readlines.to_list))))))))
 
 
 (define (leven str1 str2)
@@ -341,29 +340,31 @@
 ;;         .
 ;;   )
 (define (aimai-search name keyword)
-  (let ((db (KyotoCabinet::DB.new))
-        (k0 (keyword.slice 0 1)))
-    (if (not (db.open (+ name cabinet-ext)))
-        (printf "open error: %s\n" db.error)
-        (let1 result '()
-          (db.each
-           (&block (k v)
-             (when (eq? k0 (k.slice 0 1))
-               (let (
-                     (_jarow (jarow keyword k))
-                     (_jaro  (jaro  keyword k))
-                     (_leven (leven keyword k))
-                     (_paird (paird keyword k)))
-                 (when (< jarow-shikii _jarow)
-                   (set! result (cons
-                                 (list
-                                  _jarow _jaro _leven _paird
-                                  k v)
-                                 result)))))))
-          (db.close)
-          result))))
+  (let* ((result '())
+         (err (KyotoCabinet::DB.process
+               (+ name cabinet-ext)
+               (&block (db)
+                 (let ((k0 (keyword.slice 0 1)))
+                   (db.each
+                    (&block (k v)
+                      (when (eq? k0 (k.slice 0 1))
+                        (let (
+                              (_jarow (jarow keyword k))
+                              (_jaro  (jaro  keyword k))
+                              (_leven (leven keyword k))
+                              (_paird (paird keyword k)))
+                          (when (< jarow-shikii _jarow)
+                            (set! result (cons
+                                          (list
+                                           _jarow _jaro _leven _paird
+                                           k v)
+                                          result))))))))))))
+    (when err
+      (printf "db error [%s]\n" err)
+      (exit 1))
+    result))
 
-
+  
 (define (disp-search-result result)
   (printf "閾値 = %f\n" jarow-shikii)
   (print "----------")
