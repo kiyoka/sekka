@@ -2,14 +2,13 @@
 :; #-*- mode: nendo; syntax: scheme -*-;;
 :; exec /usr/local/bin/nendo $0 $*
 (require "kyotocabinet")
-(require "levenshtein")
-(require "./jarowinkler.rb")
+(require "amatch")
 
 (define jisyo-file
   "../data/SKK-JISYO.L.201008"
   ;;"../data/SKK-JISYO.S.201001"
   )
-(define jaro-shikii 0.68)
+(define jarow-shikii 0.94)
 
 (define roman->kana-table
   '(("kkya" . "っきゃ")
@@ -18,7 +17,7 @@
     ("ggya" . "っぎゃ")
     ("ggyu" . "っぎゅ")
     ("ggyo" . "っぎょ")
-    ("ssyi" . "っし")
+    ("sshi" . "っし")
     ("ssya" . "っしゃ")
     ("ssyu" . "っしゅ")
     ("ssye" . "っしぇ")
@@ -59,11 +58,7 @@
     ("gya" . "ぎゃ")
     ("gyu" . "ぎゅ")
     ("gyo" . "ぎょ")
-    ("syi" . "し")
-    ("sya" . "しゃ")
-    ("syu" . "しゅ")
-    ("sye" . "しぇ")
-    ("syo" . "しょ")
+    ("shi" . "し")
     ("chi" . "ち")
     ("cha" . "ちゃ")
     ("chu" . "ちゅ")
@@ -159,7 +154,6 @@
     ("ryu" . "りゅ")
     ("ryo" . "りょ")
     ("xwa" . "ゎ")
-    ("dyi" . "でぃ")
     ("thi" . "てぃ")
     ("hhu" . "っふ")
     ("shu" . "しゅ")
@@ -172,10 +166,6 @@
     ("jyu" . "じゅ")
     ("jye" . "じぇ")
     ("jyo" . "じょ")
-    ("zya" . "じゃ")
-    ("zyu" . "じゅ")
-    ("zye" . "じぇ")
-    ("zyo" . "じょ")
     ("tya" . "ちゃ")
     ("tyi" . "ち")
     ("tyu" . "ちゅ")
@@ -328,10 +318,16 @@
 
 
 (define (leven str1 str2)
-  (Levenshtein.normalized_distance str1 str2))
+  (. (Amatch::Levenshtein.new str1) match str2))
 
 (define (jaro str1 str2)
-  (JaroWinkler.distance str1 str2))
+  (. (Amatch::Jaro.new str1) match str2))
+
+(define (jarow str1 str2)
+  (. (Amatch::JaroWinkler.new str1) match str2))
+
+(define (paird str1 str2)
+  (. (Amatch::PairDistance.new str1) match str2))
 
 
 ;; return unsorted list
@@ -350,22 +346,33 @@
       (db.each
        (&block (k v)
          (when (eq? k0 (k.slice 0 1))
-           (let1 val (jaro keyword k)
-             (when (< jaro-shikii val)
+           (let (
+                 (_jarow (jarow keyword k))
+                 (_jaro  (jaro  keyword k))
+                 (_leven (leven keyword k))
+                 (_paird (paird keyword k)))
+             (when (< jarow-shikii _jarow)
                (set! result (cons
-                             (list val k v)
+                             (list
+                              _jarow _jaro _leven _paird
+                              k v)
                              result)))))))
       result)))
 
+
 (define (disp-search-result result)
-  (printf "閾値 = %f\n" jaro-shikii)
+  (printf "閾値 = %f\n" jarow-shikii)
   (print "----------")
   (for-each
    (lambda (x)
-     (printf " (%1.5f) [%s]:[%s]\n"
-             (first x)
-             (second x)
-             (third x)))
+     (let1 vec (x.to_arr)
+       (printf " JaroW(%1.5f) Jaro(%1.5f) Leven(%1.5f) PairD(%1.5f) [%s]:[%s]\n"
+               (vector-ref vec 0)
+               (vector-ref vec 1)
+               (vector-ref vec 2)
+               (vector-ref vec 3)
+               (vector-ref vec 4)
+               (vector-ref vec 5))))
    (sort-by result
             (lambda (item)
               (- 1.0 (car item))))))
