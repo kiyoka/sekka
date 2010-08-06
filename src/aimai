@@ -297,7 +297,7 @@
     
 (define (init-db name)
   (let1 db (KyotoCabinet::DB.new)
-    (when (not (db.open (+ name ".kch") (+  KyotoCabinet::DB::OWRITER KyotoCabinet::DB::OCREATE KyotoCabinet::DB::OTRUNCATE)))
+    (when (not (db.open (+ name ".kct") (+  KyotoCabinet::DB::OWRITER KyotoCabinet::DB::OCREATE KyotoCabinet::DB::OTRUNCATE)))
       (printf "open error: %s\n" db.error))
     (with-open name
                (lambda (f)
@@ -340,7 +340,7 @@
 (define (aimai-search name keyword)
   (let ((db (KyotoCabinet::DB.new))
         (k0 (keyword.slice 0 1)))
-    (when (not (db.open (+ name ".kch")))
+    (when (not (db.open (+ name ".kct")))
       (printf "open error: %s\n" db.error))
     (let1 result '()
       (db.each
