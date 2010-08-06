@@ -297,27 +297,27 @@
 
     
 (define (init-db name)
-  (let1 db (KyotoCabinet::DB.new)
-    (if (not (db.open (+ name cabinet-ext) (+  KyotoCabinet::DB::OWRITER KyotoCabinet::DB::OCREATE KyotoCabinet::DB::OTRUNCATE)))
-        (printf "open error: %s\n" db.error)
-        (begin
-          (with-open name
-                     (lambda (f)
-                       (for-each
-                        (lambda (line)
-                          (cond
-                           ((rxmatch #/^([あ-ん]+)[ ][\/](.+)[\/]$/ (line.chomp))
-                            => (lambda (m)
-                                 (let ((k (kana->roman (rxmatch-substring m 1)))
-                                       (v (rxmatch-substring m 2)))
-                                   (hash-table-put! db k v))))
-                           ((rxmatch #/^([a-zA-Z]+)[ ][\/](.+)[\/]$/ (line.chomp))
-                            => (lambda (m)
-                                 (let ((k (rxmatch-substring m 1))
-                                       (v (rxmatch-substring m 2)))
-                                   (hash-table-put! db k v))))))
-                        (f.readlines.to_list))))
-          (db.close)))))
+  (if (KyotoCabinet::DB.process
+       (+ name cabinet-ext)
+       (&block (db)
+         (begin
+           (with-open name
+                      (lambda (f)
+                        (for-each
+                         (lambda (line)
+                           (cond
+                            ((rxmatch #/^([あ-ん]+)[ ][\/](.+)[\/]$/ (line.chomp))
+                             => (lambda (m)
+                                  (let ((k (kana->roman (rxmatch-substring m 1)))
+                                        (v (rxmatch-substring m 2)))
+                                    (hash-table-put! db k v))))
+                            ((rxmatch #/^([a-zA-Z]+)[ ][\/](.+)[\/]$/ (line.chomp))
+                             => (lambda (m)
+                                  (let ((k (rxmatch-substring m 1))
+                                        (v (rxmatch-substring m 2)))
+                                    (hash-table-put! db k v))))))
+                         (f.readlines.to_list)))))))
+      (printf "open error: %s\n" db.error)))
 
 
 (define (leven str1 str2)
