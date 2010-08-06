@@ -388,8 +388,12 @@
   (cond
    ((eq? 0 (length argv))
     (let loop ((line (readline)))
-      (disp-search-result
-       (aimai-search jisyo-file line))
-      (loop (readline))))
+      (if (rxmatch #/^[qQ]$/ line)
+          (printf "quit.\n")
+          (begin
+            (disp-search-result
+             (aimai-search jisyo-file line))
+            (loop (readline))))))
    (else
     (init-db jisyo-file))))
+
