@@ -297,26 +297,30 @@
 
     
 (define (init-db name)
-  (KyotoCabinet::DB.process
-   (+ name cabinet-ext)
-   (&block (db)
-     (begin
-       (with-open name
-                  (lambda (f)
-                    (for-each
-                     (lambda (line)
-                       (cond
-                        ((rxmatch #/^([あ-ん]+)[ ][\/](.+)[\/]$/ (line.chomp))
-                         => (lambda (m)
-                              (let ((k (kana->roman (rxmatch-substring m 1)))
-                                    (v (rxmatch-substring m 2)))
-                                (hash-table-put! db k v))))
-                        ((rxmatch #/^([a-zA-Z]+)[ ][\/](.+)[\/]$/ (line.chomp))
-                         => (lambda (m)
-                              (let ((k (rxmatch-substring m 1))
-                                    (v (rxmatch-substring m 2)))
-                                (hash-table-put! db k v))))))
-                     (f.readlines.to_list))))))))
+  (let1 err 
+      (KyotoCabinet::DB.process
+       (+ name cabinet-ext)
+       (&block (db)
+         (begin
+           (with-open name
+                      (lambda (f)
+                        (for-each
+                         (lambda (line)
+                           (cond
+                            ((rxmatch #/^([あ-ん]+)[ ][\/](.+)[\/]$/ (line.chomp))
+                             => (lambda (m)
+                                  (let ((k (kana->roman (rxmatch-substring m 1)))
+                                        (v (rxmatch-substring m 2)))
+                                    (hash-table-put! db k v))))
+                            ((rxmatch #/^([a-zA-Z]+)[ ][\/](.+)[\/]$/ (line.chomp))
+                             => (lambda (m)
+                                  (let ((k (rxmatch-substring m 1))
+                                        (v (rxmatch-substring m 2)))
+                                    (hash-table-put! db k v))))))
+                         (f.readlines.to_list)))))))
+    (when err
+      (printf "db error [%s]\n" err)
+      (exit 1))))
 
 
 (define (leven str1 str2)
