@@ -5,11 +5,16 @@
 (require "amatch")
 
 (define jisyo-file
-  "../data/SKK-JISYO.L.201008"
-  ;;"../data/SKK-JISYO.S.201001"
+  ;;"../data/SKK-JISYO.L.201008"
+  "../data/SKK-JISYO.S.201001"
   )
 (define cabinet-ext ".kct")
 (define jarow-shikii 0.94)
+
+(define alphabet-list (to-list (. "abcdefghijklmnopqrstuvwxyz-" split "")))
+(define (get-next-alphabet str)
+  (let1 rest (memv str alphabet-list)
+    (second rest)))
 
 (define roman->kana-table
   '(("kkya" . "っきゃ")
@@ -317,7 +322,12 @@
                                   (let ((k (rxmatch-substring m 1))
                                         (v (rxmatch-substring m 2)))
                                     (hash-table-put! db k v))))))
-                         (f.readlines.to_list)))))))
+                         (f.readlines.to_list))))
+           (map
+            (lambda (x)
+              (hash-table-put! db x x))
+            alphabet-list))))
+    
     (when err
       (printf "db error [%s]\n" err)
       (exit 1))))
@@ -348,21 +358,26 @@
          (err (KyotoCabinet::DB.process
                (+ name cabinet-ext)
                (&block (db)
-                 (let ((k0 (keyword.slice 0 1)))
-                   (db.each
-                    (&block (k v)
-                      (when (eq? k0 (k.slice 0 1))
-                        (let (
-                              (_jarow (jarow keyword k))
-                              (_jaro  (jaro  keyword k))
-                              (_leven (leven keyword k))
-                              (_paird (paird keyword k)))
-                          (when (< jarow-shikii _jarow)
-                            (set! result (cons
-                                          (list
-                                           _jarow _jaro _leven _paird
-                                           k v)
-                                          result))))))))))))
+                 (let* ((k0     (keyword.slice 0 1))
+                        (stop   (get-next-alphabet k0))
+                        (cursor (db.cursor)))
+                   (cursor.jump k0)
+                   (let loop ((k (cursor.get_key))
+                              (v (cursor.get_value)))
+                     (let (
+                           (_jarow (jarow keyword #?=k))
+                           (_jaro  (jaro  keyword k))
+                           (_leven (leven keyword k))
+                           (_paird (paird keyword k)))
+                       (when (< jarow-shikii _jarow)
+                         (set! result (cons
+                                       (list
+                                        _jarow _jaro _leven _paird
+                                        k v)
+                                       result))))
+                     (when (cursor.step)
+                       (when (not (eq? stop (cursor.get_key)))
+                         (loop (cursor.get_key) (cursor.get_value))))))))))
     (when err
       (printf "db error [%s]\n" err)
       (exit 1))
