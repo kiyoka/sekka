@@ -3,18 +3,14 @@
 :; exec /usr/local/bin/nendo $0 $*
 (require "kyotocabinet")
 (require "amatch")
+(require "./keylist.rb")
 
 (define jisyo-file
-  ;;"../data/SKK-JISYO.L.201008"
-  "../data/SKK-JISYO.S.201001"
+  "../data/SKK-JISYO.L.201008"
+  ;;"../data/SKK-JISYO.S.201001"
   )
 (define cabinet-ext ".kct")
 (define jarow-shikii 0.94)
-
-(define alphabet-list (to-list (. "abcdefghijklmnopqrstuvwxyz-" split "")))
-(define (get-next-alphabet str)
-  (let1 rest (memv str alphabet-list)
-    (second rest)))
 
 (define roman->kana-table
   '(("kkya" . "っきゃ")
@@ -333,9 +329,6 @@
       (exit 1))))
 
 
-(define (leven str1 str2)
-  (. (Amatch::Levenshtein.new str1) match str2))
-
 (define (jaro str1 str2)
   (. (Amatch::Jaro.new str1) match str2))
 
@@ -346,6 +339,22 @@
   (. (Amatch::PairDistance.new str1) match str2))
 
 
+
+(define (search-main db keyword lst)
+  (list (length lst)
+        (filter-map
+         (lambda (k)
+           (let (
+                 (_jarow (jarow keyword k))
+                 (_jaro  (jaro  keyword k))
+                 (_paird (paird keyword k)))
+             (when (< jarow-shikii _jarow)
+               (list
+                _jarow _jaro _paird
+                k (hash-table-get db k)))))
+         lst)))
+   
+  
 ;; return unsorted list
 ;;  '(
 ;;     ( distance key val )
@@ -355,49 +364,31 @@
 ;;   )
 (define (aimai-search name keyword)
   (let* ((result '())
+         (lst     (. (KeyList.new) getKeyList (+ name cabinet-ext) keyword))
          (err (KyotoCabinet::DB.process
                (+ name cabinet-ext)
                (&block (db)
-                 (let* ((k0     (keyword.slice 0 1))
-                        (stop   (get-next-alphabet k0))
-                        (cursor (db.cursor)))
-                   (cursor.jump k0)
-                   (let loop ((k (cursor.get_key))
-                              (v (cursor.get_value)))
-                     (let (
-                           (_jarow (jarow keyword #?=k))
-                           (_jaro  (jaro  keyword k))
-                           (_leven (leven keyword k))
-                           (_paird (paird keyword k)))
-                       (when (< jarow-shikii _jarow)
-                         (set! result (cons
-                                       (list
-                                        _jarow _jaro _leven _paird
-                                        k v)
-                                       result))))
-                     (when (cursor.step)
-                       (when (not (eq? stop (cursor.get_key)))
-                         (loop (cursor.get_key) (cursor.get_value))))))))))
+                 (set! result (search-main db keyword lst))))))
     (when err
       (printf "db error [%s]\n" err)
       (exit 1))
     result))
 
-  
+
+;; result ( search-range '(search result...) )
 (define (disp-search-result result)
-  (printf "閾値 = %f\n" jarow-shikii)
+  (printf "閾値 = %f  探索件数(%d)\n" jarow-shikii (car result))
   (print "----------")
   (for-each
    (lambda (x)
      (let1 vec (x.to_arr)
-       (printf " JaroW(%1.5f) Jaro(%1.5f) Leven(%1.5f) PairD(%1.5f) [%s]:[%s]\n"
+       (printf " JaroW(%1.5f) Jaro(%1.5f) PairD(%1.5f) [%s]:[%s]\n"
                (vector-ref vec 0)
                (vector-ref vec 1)
                (vector-ref vec 2)
                (vector-ref vec 3)
-               (vector-ref vec 4)
-               (vector-ref vec 5))))
-   (sort-by result
+               (vector-ref vec 4))))
+   (sort-by (cadr result)
             (lambda (item)
               (- 1.0 (car item))))))
   
@@ -407,6 +398,7 @@
     (STDIN.readline.chomp))
   (cond
    ((eq? 0 (length argv))
+    (printf " 'q': quit.\n")
     (let loop ((line (readline)))
       (if (rxmatch #/^[qQ]$/ line)
           (printf "quit.\n")
