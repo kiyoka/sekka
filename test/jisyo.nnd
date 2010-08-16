@@ -13,10 +13,21 @@
 (let1 hira-list
     (map
      (lambda (x)
-       (first x))
+       (second x))
      sekka-kana->roman-table)
-  (test* "kana->roman table length" 232 (length hira-list))
+  (test* "kana->roman table length"        232 (length hira-list))
   (test* "kana->roman key duplicate check" 232 (length (uniq (sort hira-list)))))
+
+(test* "hiragana -> roman-pattern1"
+       '(("he") ("n" "nn" "n'") ("ka" "ca") ("n" "nn" "n'"))
+       (gen-hiragana->roman-pattens "へんかん"))
+(test* "hiragana -> roman-pattern2"
+       '(("ka" "ca") ("n" "nn" "n'") ("ji" "zi") ("he") ("n" "nn" "n'") ("ka" "ca") ("n" "nn" "n'"))
+       (gen-hiragana->roman-pattens "かんじへんかん"))
+(test* "hiragana -> roman-pattern3"
+       '(("shi" "si") ("ze") ("n" "nn" "n'") ("ge") ("n" "nn" "n'") ("go") ("sho" "syo") ("ri"))
+       (gen-hiragana->roman-pattens "しぜんげんごしょり"))
+
 
 ;;===================================================================
 (test-end)
