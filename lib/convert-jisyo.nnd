@@ -246,22 +246,6 @@
        (- k.size)))))
 
 
-;; キーの重複チェック ( sekka-kana->roman-tableのキー「平仮名部分」が重複していないかチェックするコード
-(when #f
-  (let* ((hira-list
-          (map
-           (lambda (x)
-             (first x))
-           sekka-kana->roman-table)))
-    (printf "オリジナル:       %d個\n" (length hira-list))
-    (printf "ユニーク処理済み: %d個\n" (length (uniq (sort hira-list))))))
-
-
-
-
-(define (convert-okuri-nashi-entry line)
-  )
-
 
 (define (convert-skk-jisyo-f f)
   (let loop ((line f.readline.chomp))
