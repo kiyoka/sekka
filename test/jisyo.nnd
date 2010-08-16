@@ -28,6 +28,14 @@
        '(("shi" "si") ("ze") ("n" "nn" "n'") ("ge") ("n" "nn" "n'") ("go") ("sho" "syo") ("ri"))
        (gen-hiragana->roman-pattens "しぜんげんごしょり"))
 
+(test* "patterns -> roman-list1"
+       '("kanji" "kannji" "kan'ji" "canji" "cannji" "can'ji")
+       (patterns->roman-list  '(("ka" "ca") ("n" "nn" "n'") ("ji"))))
+
+(test* "patterns -> roman-list2"
+       '("shizengengoshori" "shizengengosyori" "shizengenngoshori" "shizengenngosyori" "shizengen'goshori" "shizengen'gosyori" "shizenngengoshori" "shizenngengosyori" "shizenngenngoshori" "shizenngenngosyori" "shizenngen'goshori" "shizenngen'gosyori" "shizen'gengoshori" "shizen'gengosyori" "shizen'genngoshori" "shizen'genngosyori" "shizen'gen'goshori" "shizen'gen'gosyori" "sizengengoshori" "sizengengosyori" "sizengenngoshori" "sizengenngosyori" "sizengen'goshori" "sizengen'gosyori" "sizenngengoshori" "sizenngengosyori" "sizenngenngoshori" "sizenngenngosyori" "sizenngen'goshori" "sizenngen'gosyori" "sizen'gengoshori" "sizen'gengosyori" "sizen'genngoshori" "sizen'genngosyori" "sizen'gen'goshori" "sizen'gen'gosyori")
+       (patterns->roman-list  '(("shi" "si") ("ze") ("n" "nn" "n'") ("ge") ("n" "nn" "n'") ("go") ("sho" "syo") ("ri"))))
+
 
 ;;===================================================================
 (test-end)

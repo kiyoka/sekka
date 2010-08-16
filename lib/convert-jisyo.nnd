@@ -1,5 +1,7 @@
 :; #-*- mode: nendo; syntax: scheme -*-;;
 
+(use srfi-1)
+
 ;; このテーブルはruby-romkan から変換し、一部不足を追加した。
 ;;  クンレイ、日本式、ボン式もデータ中に併記し全てを網羅している。
 (define sekka-kana->roman-table
@@ -269,6 +271,25 @@
           (loop rest-str))))
     (reverse result)))
 
+
+;; This function port from Gauche-0.9's util.combinations.
+(define (cartesian-product lol)
+  (if (null? lol)
+      (list '())
+      (let ((l (car lol))
+            (rest (cartesian-product (cdr lol))))
+        (append-map
+         (lambda (x)
+           (map (lambda (sub-prod) (cons x sub-prod)) rest))
+         l))))
+
+
+(define (patterns->roman-list patterns)
+  (map
+   (lambda (x)
+     (string-join x))
+   (cartesian-product patterns)))
+  
 
 (define (convert-skk-jisyo-f f)
   (let loop ((line f.readline.chomp))
