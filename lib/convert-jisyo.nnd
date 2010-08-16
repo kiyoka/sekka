@@ -291,6 +291,17 @@
    (cartesian-product patterns)))
   
 
+(define (gen-hiragana->roman-list hiragana)
+  (patterns->roman-list 
+   (gen-hiragana->roman-pattens hiragana)))
+
+
+(define (convert-okuri-nashi-entry key value)
+  #?=key
+  #?=value
+  (let ((roman-list gen-hiragana->roman-list hiragana))))
+  
+
 (define (convert-skk-jisyo-f f)
   (let loop ((line f.readline.chomp))
     (let1 fields (line.split " ")

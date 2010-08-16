@@ -29,12 +29,33 @@
        (gen-hiragana->roman-pattens "しぜんげんごしょり"))
 
 (test* "patterns -> roman-list1"
-       '("kanji" "kannji" "kan'ji" "canji" "cannji" "can'ji")
-       (patterns->roman-list  '(("ka" "ca") ("n" "nn" "n'") ("ji"))))
+       '("kanji" "kanzi" "kannji" "kannzi" "kan'ji" "kan'zi" "canji" "canzi" "cannji" "cannzi" "can'ji" "can'zi")
+       (patterns->roman-list  '(("ka" "ca") ("n" "nn" "n'") ("ji" "zi"))))
 
 (test* "patterns -> roman-list2"
        '("shizengengoshori" "shizengengosyori" "shizengenngoshori" "shizengenngosyori" "shizengen'goshori" "shizengen'gosyori" "shizenngengoshori" "shizenngengosyori" "shizenngenngoshori" "shizenngenngosyori" "shizenngen'goshori" "shizenngen'gosyori" "shizen'gengoshori" "shizen'gengosyori" "shizen'genngoshori" "shizen'genngosyori" "shizen'gen'goshori" "shizen'gen'gosyori" "sizengengoshori" "sizengengosyori" "sizengenngoshori" "sizengenngosyori" "sizengen'goshori" "sizengen'gosyori" "sizenngengoshori" "sizenngengosyori" "sizenngenngoshori" "sizenngenngosyori" "sizenngen'goshori" "sizenngen'gosyori" "sizen'gengoshori" "sizen'gengosyori" "sizen'genngoshori" "sizen'genngosyori" "sizen'gen'goshori" "sizen'gen'gosyori")
        (patterns->roman-list  '(("shi" "si") ("ze") ("n" "nn" "n'") ("ge") ("n" "nn" "n'") ("go") ("sho" "syo") ("ri"))))
+
+(test* "hiragana -> roman-list1"
+       '("kanji" "kanzi" "kannji" "kannzi" "kan'ji" "kan'zi" "canji" "canzi" "cannji" "cannzi" "can'ji" "can'zi")
+       (gen-hiragana->roman-list "かんじ"))
+
+(test* "hiragana -> roman-list2"
+       '("nishiyama" "nisiyama")
+       (gen-hiragana->roman-list "にしやま"))
+
+(test* "hiragana -> roman-list3"
+       '("toukyou")
+       (gen-hiragana->roman-list "とうきょう"))
+
+(test* "hiragana -> roman-list4"
+       '("ko-hi-" "ko-hi^" "ko^hi-" "ko^hi^" "co-hi-" "co-hi^" "co^hi-" "co^hi^")       
+       (gen-hiragana->roman-list "こーひー"))
+
+(test* "hiragana -> roman-list4"
+       '("tsumiki" "tsumici" "tumiki" "tumici")
+       (gen-hiragana->roman-list "つみき"))
+
 
 
 ;;===================================================================
