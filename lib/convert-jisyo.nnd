@@ -3,7 +3,7 @@
 (use srfi-1)
 
 ;; このテーブルはruby-romkan から変換し、一部不足を追加した。
-;;  クンレイ、日本式、ボン式もデータ中に併記し全てを網羅している。
+;;  クンレイ、日本式、ヘボン式もデータ中に併記し全てを網羅している。
 (define sekka-kana->roman-table
   (map
    (lambda (x)
@@ -296,11 +296,25 @@
    (gen-hiragana->roman-pattens hiragana)))
 
 
-(define (convert-okuri-nashi-entry key value)
-  #?=key
-  #?=value
-  (let ((roman-list gen-hiragana->roman-list hiragana))))
-  
+(define (expand-okuri-nashi-entry key value)
+  (let1 roman-list (gen-hiragana->roman-list key)
+    (append
+     (map
+      (lambda (x)
+        (cons x (+ "C" key)))
+      roman-list)
+     (list (cons key value)))))
+
+
+(define (expand-okuri-ari-entry key okuri value)
+  (let1 roman-list (gen-hiragana->roman-list key)
+    (append
+     (map
+      (lambda (x)
+        (cons (+ x okuri.upcase) (+ "C" key okuri)))
+      roman-list)
+     (list (cons (+ key okuri) value)))))
+
 
 (define (convert-skk-jisyo-f f)
   (let loop ((line f.readline.chomp))
@@ -308,11 +322,17 @@
       (cond
        ((rxmatch #/^\;/ line)
         ;; コメント行
-        ""
+        '()
         )
        ((rxmatch #/^[あ-ん]+/ (first fields))
         ;; 送り仮名なしデータ
-        )
-       ((rxmatch #/^[あ-ん]+[a-z]/ (first fields))
-        ;; 送り仮名ありデータ
+        (expand-okuri-nashi-entry (first fields) (second field)))
+       ((rxmatch #/^([あ-ん]+)([a-z])/ (first fields))
+        => (lambda (m)
+             ;; 送り仮名ありデータ
+             (expand-okuri-ari-entry (rxmatch-substring m 1)
+                                     (rxmatch-substring m 2)
+                                     (second field))))
+       (else
+        '()
         )))))

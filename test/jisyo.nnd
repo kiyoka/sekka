@@ -8,7 +8,7 @@
 
 ;;===================================================================
 ;;-------------------------------------------------------------------
-(test-section "SKK2Sekka")
+(test-section "SKK2Sekka Convert")
 
 (let1 hira-list
     (map
@@ -56,6 +56,20 @@
        '("tsumiki" "tsumici" "tumiki" "tumici")
        (gen-hiragana->roman-list "つみき"))
 
+
+(test* "expanding SKK(1) entry to SEKKA(n) entry. (送りなし1)"
+       '(("ai" . "Cあい") ("あい" . "/愛/哀/相/挨/"))
+       (expand-okuri-nashi-entry "あい" "/愛/哀/相/挨/"))
+(test* "expanding SKK(1) entry to SEKKA(n) entry. (送りなし2)"
+       '(("un" . "Cうん") ("unn" . "Cうん") ("un'" . "Cうん") ("うん" . "/云/運/雲/"))
+       (expand-okuri-nashi-entry "うん" "/云/運/雲/"))
+       
+(test* "expanding SKK(1) entry to SEKKA(n) entry. (送りあり1)"
+       '(("shiroI" . "Cしろi") ("siroI" . "Cしろi") ("しろi" . "/白/"))
+       (expand-okuri-ari-entry   "しろ" "i" "/白/"))
+(test* "expanding SKK(1) entry to SEKKA(n) entry. (送りあり2)"
+       '(("kaK" . "Cかk") ("caK" . "Cかk") ("かk" . "/書/掛/欠/架/駆/懸/"))
+       (expand-okuri-ari-entry   "か" "k" "/書/掛/欠/架/駆/懸/"))
 
 
 ;;===================================================================
