@@ -15,5 +15,5 @@ task :check do
 end
 
 task :jisyo do
-  sh "ruby /usr/local/bin/nendo ./bin/sekka-jisyo convert ./data/SKK-JISYO.S.201001"
+  sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.S.201001"
 end

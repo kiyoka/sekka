@@ -6,11 +6,13 @@
 (load "./lib/convert-jisyo.nnd")
 
 (define (convert-skk-jisyo filename)
-  (with-open
-   filename
-   (lambda (f)
-     (convert-skk-jisyo-f f))))
-
+  (let1 lines (with-open
+               filename
+               (lambda (f)
+                 (convert-skk-jisyo-f f)))
+    (for-each
+     print
+     lines)))
 
 (define (display-help)
   (print "Usage : ")

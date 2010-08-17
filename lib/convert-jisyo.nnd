@@ -327,6 +327,7 @@
          (entry-list
           (filter-map
            (lambda (line)
+             #?=line
              (let1 fields (to-list (line.split " "))
                (cond
                 ((rxmatch #/^\;/ line)
