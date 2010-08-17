@@ -246,6 +246,8 @@
 
       ;; Ruby romkanからの不足分追加
       ("てぃ"     "thi")
+      ;; Sekkaの辞書に入っている特別なキーワード ">あん" など
+      (">"        ">")
       )
     (lambda (item)
       (let1 k (car item)
@@ -331,21 +333,20 @@
                  ;; コメント行
                  #f
                  )
-                ((rxmatch #/^[あ-ん]+$/ (first fields))
+                ((rxmatch #/^[>あ-ん]+$/ (first fields))
                  ;; 送り仮名なしデータ
                  (expand-okuri-nashi-entry (first fields) (second fields)))
-                ((rxmatch #/^([あ-ん]+)([a-z])$/ (first fields))
+                ((rxmatch #/^([>あ-ん]+)([a-z])$/ (first fields))
                  => (lambda (m)
                       ;; 送り仮名ありデータ
                       (expand-okuri-ari-entry (rxmatch-substring m 1)
                                               (rxmatch-substring m 2)
                                               (second fields))))
                 (else
-                 #f))))
+                 (list (cons (first fields) (second fields)))))))
            lines)))
     (map
      (lambda (entry)
+       entry
        (sprintf "%s %s" (car entry) (cdr entry)))
-     (apply append entry-list))))
-
-       
+     (apply append! entry-list))))

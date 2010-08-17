@@ -4,6 +4,8 @@
 (use nendo.test)
 (load "./lib/convert-jisyo.nnd")
 
+(define debug-print-length 2000)
+
 (test-start "jisyo converter")
 
 ;;===================================================================
@@ -15,8 +17,8 @@
      (lambda (x)
        (second x))
      sekka-kana->roman-table)
-  (test* "kana->roman table length"        232 (length hira-list))
-  (test* "kana->roman key duplicate check" 232 (length (uniq (sort hira-list)))))
+  (test* "kana->roman table length"        233 (length hira-list))
+  (test* "kana->roman key duplicate check" 233 (length (uniq (sort hira-list)))))
 
 (test* "hiragana -> roman-pattern1"
        '(("he") ("n" "nn" "n'") ("ka" "ca") ("n" "nn" "n'"))
@@ -75,13 +77,17 @@
 (let1 _input (StringIO.new
               (string-join
                '(
+                 ";; コメント"
+                 ";; コメント コメント コメント コメント コメント "
                  "しろi /白/"
                  "あい /愛/哀/相/挨/"
                  "Greek /Α/Β/Γ/Δ/Ε/Ζ/Η/Θ/Ι/Κ/Λ/Μ/Ν/Ξ/Ο/Π/Ρ/Σ/Τ/Υ/Φ/Χ/Ψ/Ω/"
+                 ">あん /案/"
+                 ">やすi /易/"
                  )
                "\n"))
   (test* "convert SKK file to SEKKA jisyo file. (1)"
-         '("shiroI Cしろi" "siroI Cしろi" "しろi /白/" "ai Cあい" "あい /愛/哀/相/挨/" "Greek /Α/Β/Γ/Δ/Ε/Ζ/Η/Θ/Ι/Κ/Λ/Μ/Ν/Ξ/Ο/Π/Ρ/Σ/Τ/Υ/Φ/Χ/Ψ/Ω/")
+         '("shiroI Cしろi" "siroI Cしろi" "しろi /白/" "ai Cあい" "あい /愛/哀/相/挨/" "Greek /Α/Β/Γ/Δ/Ε/Ζ/Η/Θ/Ι/Κ/Λ/Μ/Ν/Ξ/Ο/Π/Ρ/Σ/Τ/Υ/Φ/Χ/Ψ/Ω/" ">an C>あん" ">ann C>あん" ">an' C>あん" ">あん /案/" ">yasuI C>やすi" ">やすi /易/")
          (convert-skk-jisyo-f _input)))
 
 
