@@ -72,5 +72,18 @@
        (expand-okuri-ari-entry   "か" "k" "/書/掛/欠/架/駆/懸/"))
 
 
+(let1 _input (StringIO.new
+              (string-join
+               '(
+                 "しろi /白/"
+                 "あい /愛/哀/相/挨/"
+                 "Greek /Α/Β/Γ/Δ/Ε/Ζ/Η/Θ/Ι/Κ/Λ/Μ/Ν/Ξ/Ο/Π/Ρ/Σ/Τ/Υ/Φ/Χ/Ψ/Ω/"
+                 )
+               "\n"))
+  (test* "convert SKK file to SEKKA jisyo file. (1)"
+         '("shiroI Cしろi" "siroI Cしろi" "しろi /白/" "ai Cあい" "あい /愛/哀/相/挨/" "Greek /Α/Β/Γ/Δ/Ε/Ζ/Η/Θ/Ι/Κ/Λ/Μ/Ν/Ξ/Ο/Π/Ρ/Σ/Τ/Υ/Φ/Χ/Ψ/Ω/")
+         (convert-skk-jisyo-f _input)))
+
+
 ;;===================================================================
 (test-end)

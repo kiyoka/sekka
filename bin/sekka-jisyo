@@ -3,7 +3,7 @@
 :; exec /usr/local/bin/nendo $0 $*
 
 
-(load "lib/convert-jisyo")
+(load "./lib/convert-jisyo.nnd")
 
 (define (convert-skk-jisyo filename)
   (with-open
@@ -24,12 +24,13 @@
    (else
     (let1 command (string->symbol (first argv))
       (cond
-       ((eq? 'convert commnad)
+       ((eq? 'convert command)
         (if (< (length argv) 2)
             (display-help)
             (convert-skk-jisyo (second argv))))
        (else
-        (errorf "Error: no such command [%s] \n", command )))))))
+        (errorf "Error: no such command [%s] \n" command )))))))
+
 
 
        

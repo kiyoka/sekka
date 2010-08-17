@@ -317,22 +317,35 @@
 
 
 (define (convert-skk-jisyo-f f)
-  (let loop ((line f.readline.chomp))
-    (let1 fields (line.split " ")
-      (cond
-       ((rxmatch #/^\;/ line)
-        ;; コメント行
-        '()
-        )
-       ((rxmatch #/^[あ-ん]+/ (first fields))
-        ;; 送り仮名なしデータ
-        (expand-okuri-nashi-entry (first fields) (second field)))
-       ((rxmatch #/^([あ-ん]+)([a-z])/ (first fields))
-        => (lambda (m)
-             ;; 送り仮名ありデータ
-             (expand-okuri-ari-entry (rxmatch-substring m 1)
-                                     (rxmatch-substring m 2)
-                                     (second field))))
-       (else
-        '()
-        )))))
+  (let* ((lines
+          (map
+           (lambda (line)
+             (line.chomp))
+           (f.readlines.to_list)))
+         (entry-list
+          (filter-map
+           (lambda (line)
+             (let1 fields (to-list (line.split " "))
+               (cond
+                ((rxmatch #/^\;/ line)
+                 ;; コメント行
+                 #f
+                 )
+                ((rxmatch #/^[あ-ん]+$/ (first fields))
+                 ;; 送り仮名なしデータ
+                 (expand-okuri-nashi-entry (first fields) (second fields)))
+                ((rxmatch #/^([あ-ん]+)([a-z])$/ (first fields))
+                 => (lambda (m)
+                      ;; 送り仮名ありデータ
+                      (expand-okuri-ari-entry (rxmatch-substring m 1)
+                                              (rxmatch-substring m 2)
+                                              (second fields))))
+                (else
+                 #f))))
+           lines)))
+    (map
+     (lambda (entry)
+       (sprintf "%s %s" (car entry) (cdr entry)))
+     (apply append entry-list))))
+
+       

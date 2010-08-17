@@ -13,3 +13,7 @@ task :check do
   }
   sh "cat test.record" 
 end
+
+task :jisyo do
+  sh "ruby /usr/local/bin/nendo ./bin/sekka-jisyo convert ./data/SKK-JISYO.S.201001"
+end
