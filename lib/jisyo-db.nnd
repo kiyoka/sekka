@@ -1,0 +1,35 @@
+:; #-*- mode: nendo; syntax: scheme -*-;;
+
+(require "kyotocabinet")
+
+(define (load-sekka-jisyo-f f basename)
+  (define cabinet-ext ".kct")
+  (define alphabet-list (to-list (. "abcdefghijklmnopqrstuvwxyz-" split "")))
+  (let1 err
+      (KyotoCabinet::DB.process
+       (+ basename cabinet-ext)
+       (&block (db)
+         (begin
+           (for-each
+            (lambda (line)
+              (let* ((fields (to-list (line.split " ")))
+                     (hira   (rxmatch #/^[あ-ん]/ (first fields))))
+                (when (not hira)
+                  (hash-table-put! db
+                                   (first fields)
+                                   (second fields)))))
+            (f.readlines.to_list))
+           (for-each
+            (lambda (x)
+              (hash-table-put! db x x))
+            alphabet-list))))
+    (when err
+      (printf "db error [%s]\n" err)
+      (exit 1))
+    #t))
+
+
+      
+
+
+

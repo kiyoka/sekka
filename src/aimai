@@ -13,7 +13,6 @@
 (define cabinet-ext ".kct")
 (define jarow-shikii 0.94)
 
-(define alphabet-list (to-list (. "abcdefghijklmnopqrstuvwxyz-" split "")))
 
 (define roman->kana-table
   '(("kkya" . "っきゃ")

@@ -14,7 +14,11 @@ task :check do
   sh "cat test.record" 
 end
 
-task :jisyo do
+task :convert do
   sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.S.201001 > ./data/SEKKA-JISYO.S.201001"
   sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.L.201008 > ./data/SEKKA-JISYO.L.201008"
+end
+
+task :demo do
+  sh "./bin/sekka-engine ./data/SEKKA-JISYO.S.201001"
 end

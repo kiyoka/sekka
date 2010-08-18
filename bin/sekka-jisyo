@@ -4,6 +4,7 @@
 
 
 (load "./lib/convert-jisyo.nnd")
+(load "./lib/jisyo-db.nnd")
 
 (define (convert-skk-jisyo filename)
   (let1 lines (with-open
@@ -13,9 +14,17 @@
     (for-each print lines)))
 
 
+(define (load-sekka-jisyo sekka-file)
+  (with-open
+   sekka-file
+   (lambda (f)
+     (load-sekka-jisyo-f f sekka-file))))
+
+
 (define (display-help)
   (print "Usage : ")
-  (print "  sekka-jisyo convert [SKK-JISYO.L]  ... output SEKKA-JISYO to STDOUT"))
+  (print "  sekka-jisyo convert [SKK-JISYO.L]    ... output SEKKA-JISYO to STDOUT")
+  (print "  sekka-jisyo load    [SEKKA-JISYO.L]  ... load   SEKKA-JISYO to DB (*.kct)"))
 
 
 (define (main argv)
@@ -29,8 +38,13 @@
         (if (< (length argv) 2)
             (display-help)
             (convert-skk-jisyo (second argv))))
+       ((eq? 'load command)
+        (if (< (length argv) 2)
+            (display-help)
+            (load-sekka-jisyo (second argv))))
        (else
         (errorf "Error: no such command [%s] \n" command )))))))
+
 
 
 
