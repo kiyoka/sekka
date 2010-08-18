@@ -13,10 +13,7 @@
 (test-section "SKK2Sekka Convert")
 
 (let1 hira-list
-    (map
-     (lambda (x)
-       (second x))
-     sekka-kana->roman-table)
+    (hash-table-keys sekka-kana->roman-hash)
   (test* "kana->roman table length"        233 (length hira-list))
   (test* "kana->roman key duplicate check" 233 (length (uniq (sort hira-list)))))
 

@@ -10,9 +10,8 @@
                filename
                (lambda (f)
                  (convert-skk-jisyo-f f)))
-    (for-each
-     print
-     lines)))
+    (for-each print lines)))
+
 
 (define (display-help)
   (print "Usage : ")
