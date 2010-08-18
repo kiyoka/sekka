@@ -4,13 +4,16 @@
 (require "kyotocabinet")
 (require "amatch")
 (require "./keylist.rb")
+(define debug-print-length 1000)
 
 (define jisyo-file
-  "../data/SKK-JISYO.L.201008"
-  ;;"../data/SKK-JISYO.S.201001"
+  ;;"../data/SEKKA-JISYO.L.201008"
+  "../data/SEKKA-JISYO.S.201001"
   )
 (define cabinet-ext ".kct")
 (define jarow-shikii 0.94)
+
+(define alphabet-list (to-list (. "abcdefghijklmnopqrstuvwxyz-" split "")))
 
 (define roman->kana-table
   '(("kkya" . "っきゃ")
@@ -308,12 +311,7 @@
                         (for-each
                          (lambda (line)
                            (cond
-                            ((rxmatch #/^([あ-ん]+)[ ][\/](.+)[\/]$/ (line.chomp))
-                             => (lambda (m)
-                                  (let ((k (kana->roman (rxmatch-substring m 1)))
-                                        (v (rxmatch-substring m 2)))
-                                    (hash-table-put! db k v))))
-                            ((rxmatch #/^([a-zA-Z]+)[ ][\/](.+)[\/]$/ (line.chomp))
+                            ((rxmatch #/^([a-zA-Z'-]+)[ ](.+)$/ (line.chomp))
                              => (lambda (m)
                                   (let ((k (rxmatch-substring m 1))
                                         (v (rxmatch-substring m 2)))
@@ -364,7 +362,7 @@
 ;;   )
 (define (aimai-search name keyword)
   (let* ((result '())
-         (lst     (. (KeyList.new) getKeyList (+ name cabinet-ext) keyword))
+         (lst     #?=(. (KeyList.new) getKeyList (+ name cabinet-ext) keyword))
          (err (KyotoCabinet::DB.process
                (+ name cabinet-ext)
                (&block (db)
