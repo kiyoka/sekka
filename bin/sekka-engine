@@ -22,7 +22,7 @@
   (. (Amatch::PairDistance.new str1) match str2))
 
 
-(define (search-main db keyword lst)
+(define (aimai-search-main db keyword lst)
   (list (length lst)
         (filter-map
          (lambda (k)
@@ -50,7 +50,7 @@
          (err (KyotoCabinet::DB.process
                db-filename
                (&block (db)
-                 (set! result (search-main db keyword lst))))))
+                 (set! result (aimai-search-main db keyword lst))))))
     (when err
       (printf "db error [%s]\n" err)
       (exit 1))

@@ -1,0 +1,60 @@
+:; #-*- mode: nendo; syntax: scheme -*-;;
+;;
+;;      石火変換ライブラリ
+;;
+(require "kyotocabinet")
+(require "amatch")
+(require "./lib/keywordlist")
+ 
+
+(define (jaro str1 str2)
+  (. (Amatch::Jaro.new str1) match str2))
+
+(define (jarow str1 str2)
+  (. (Amatch::JaroWinkler.new str1) match str2))
+
+(define (paird str1 str2)
+  (. (Amatch::PairDistance.new str1) match str2))
+
+
+;; 曖昧検索
+;;  リストで返す。 (検索範囲件数 検索結果)
+(define (approximate-search db keyword regexp)
+  (define jarow-shikii 0.94)
+  (let* ((util (SekkaRubyUtil.new))
+         (keyword-list (util.get_search_keyword_list db keyword regexp)))
+    (list (length keyword-list)
+          (filter-map
+           (lambda (k)
+             (let (
+                   (_jarow (jarow keyword k))
+                   (_jaro  (jaro  keyword k))
+                   (_paird (paird keyword k)))
+               (when (< jarow-shikii _jarow)
+                 (list
+                  _jarow _jaro _paird
+                  k (hash-table-get db k)))))
+           keyword-list))))
+
+
+;; 送り仮名なしの変換
+(define (henkan-okuri-nashi db keyword)
+  (approximate-search db keyword))
+
+
+;; keyword には ローマ字のみを受け付ける
+(define (sekka-henkan db keyword)
+  ;; キーワードの種別で処理を分割する
+  (cond
+   ((rxmatch #/[A-Z]/ keyword)
+    (cond
+     ((rxmatch #/[A-Z]/ (keyword.slice 1 keyword.size))
+      ;; 送りあり
+      (henkan-okuri-ari db keyword))
+     (else
+      ;; 送りなし
+      (henkan-okuri-nashi db keyword))))
+   (else
+    (henkan-non-kanji db keyword))))
+
+
