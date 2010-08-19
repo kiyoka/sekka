@@ -1,0 +1,89 @@
+;;-*- mode: nendo; syntax: scheme -*-;;
+;;-* encode : utf-8 -*-
+;; test for sekka jisyo library
+
+(use nendo.test)
+(load "./lib/jisyo-db.nnd")
+(load "./lib/convert-jisyo.nnd")
+(load "./lib/henkan.nnd")
+
+(define debug-print-length 2000)
+
+(test-start "henkan engine")
+;;===================================================================
+
+;;-------------------------------------------------------------------
+(test-section "Create jisyo for test suite")
+
+(let ((_input (StringIO.new
+               (string-join
+                '(
+                  "おこなu /行/行な;※送り位置補正/"
+                  "へんかん /変換/返還/"
+                  "へんか /変化/返歌/"
+                  "へんかs /変化/"
+                  "しぜんげんご /自然言語/"
+                  "しぜんげんごしょり /自然言語処理/"
+                  "しぜんげんごりかい /自然言語理解/"
+                  "developer /デベロッパー/ディベロッパー/デベロッパ/"
+                  "! /！/感嘆符/"
+                  ">あん /案/"
+                  "{ /｛/"
+                  "かっこ /確固/括弧/各個/各戸/確乎/羯鼓;雅楽の打楽器/格好/『/』;二重鉤括弧/【/】;隅付き括弧/［/］;大括弧(bracket)/〔/〕;亀甲括弧/〈/〉;山括弧/《/》;二重山括弧/｛/｝;中括弧(brace)/「/」;鉤括弧/（/）;小括弧,丸括弧(parenthesis)/‘/’;singlequote/“/”;doublequote/『』/【】/［］/〔〕/〈〉/《》/｛｝/「」/（）/‘’/“”/"
+                  "こっか /国家;state/国歌;anthem.「-斉唱」/国花/骨化/國家;「国」旧字/黒化/刻下/】/）/］/』/"
+                  )
+                "\n")))
+      (sekka-jisyo-data '("okonaU Cおこなu" "oconaU Cおこなu" "おこなu /行/行な;※送り位置補正/" "henkan Cへんかん" "henkann Cへんかん" "henkan' Cへんかん" "hencan Cへんかん" "hencann Cへんかん" "hencan' Cへんかん" "hennkan Cへんかん" "hennkann Cへんかん" "hennkan' Cへんかん" "henncan Cへんかん" "henncann Cへんかん" "henncan' Cへんかん" "hen'kan Cへんかん" "hen'kann Cへんかん" "hen'kan' Cへんかん" "hen'can Cへんかん" "hen'cann Cへんかん" "hen'can' Cへんかん" "へんかん /変換/返還/" "henka Cへんか" "henca Cへんか" "hennka Cへんか" "hennca Cへんか" "hen'ka Cへんか" "hen'ca Cへんか" "へんか /変化/返歌/" "henkaS Cへんかs" "hencaS Cへんかs" "hennkaS Cへんかs" "henncaS Cへんかs" "hen'kaS Cへんかs" "hen'caS Cへんかs" "へんかs /変化/" "shizengengo Cしぜんげんご" "shizengenngo Cしぜんげんご" "shizengen'go Cしぜんげんご" "shizenngengo Cしぜんげんご" "shizenngenngo Cしぜんげんご" "shizenngen'go Cしぜんげんご" "shizen'gengo Cしぜんげんご" "shizen'genngo Cしぜんげんご" "shizen'gen'go Cしぜんげんご" "sizengengo Cしぜんげんご" "sizengenngo Cしぜんげんご" "sizengen'go Cしぜんげんご" "sizenngengo Cしぜんげんご" "sizenngenngo Cしぜんげんご" "sizenngen'go Cしぜんげんご" "sizen'gengo Cしぜんげんご" "sizen'genngo Cしぜんげんご" "sizen'gen'go Cしぜんげんご" "しぜんげんご /自然言語/" "shizengengoshori Cしぜんげんごしょり" "shizengengosyori Cしぜんげんごしょり" "shizengenngoshori Cしぜんげんごしょり" "shizengenngosyori Cしぜんげんごしょり" "shizengen'goshori Cしぜんげんごしょり" "shizengen'gosyori Cしぜんげんごしょり" "shizenngengoshori Cしぜんげんごしょり" "shizenngengosyori Cしぜんげんごしょり" "shizenngenngoshori Cしぜんげんごしょり" "shizenngenngosyori Cしぜんげんごしょり" "shizenngen'goshori Cしぜんげんごしょり" "shizenngen'gosyori Cしぜんげんごしょり" "shizen'gengoshori Cしぜんげんごしょり" "shizen'gengosyori Cしぜんげんごしょり" "shizen'genngoshori Cしぜんげんごしょり" "shizen'genngosyori Cしぜんげんごしょり" "shizen'gen'goshori Cしぜんげんごしょり" "shizen'gen'gosyori Cしぜんげんごしょり" "sizengengoshori Cしぜんげんごしょり" "sizengengosyori Cしぜんげんごしょり" "sizengenngoshori Cしぜんげんごしょり" "sizengenngosyori Cしぜんげんごしょり" "sizengen'goshori Cしぜんげんごしょり" "sizengen'gosyori Cしぜんげんごしょり" "sizenngengoshori Cしぜんげんごしょり" "sizenngengosyori Cしぜんげんごしょり" "sizenngenngoshori Cしぜんげんごしょり" "sizenngenngosyori Cしぜんげんごしょり" "sizenngen'goshori Cしぜんげんごしょり" "sizenngen'gosyori Cしぜんげんごしょり" "sizen'gengoshori Cしぜんげんごしょり" "sizen'gengosyori Cしぜんげんごしょり" "sizen'genngoshori Cしぜんげんごしょり" "sizen'genngosyori Cしぜんげんごしょり" "sizen'gen'goshori Cしぜんげんごしょり" "sizen'gen'gosyori Cしぜんげんごしょり" "しぜんげんごしょり /自然言語処理/" "shizengengorikai Cしぜんげんごりかい" "shizengengoricai Cしぜんげんごりかい" "shizengenngorikai Cしぜんげんごりかい" "shizengenngoricai Cしぜんげんごりかい" "shizengen'gorikai Cしぜんげんごりかい" "shizengen'goricai Cしぜんげんごりかい" "shizenngengorikai Cしぜんげんごりかい" "shizenngengoricai Cしぜんげんごりかい" "shizenngenngorikai Cしぜんげんごりかい" "shizenngenngoricai Cしぜんげんごりかい" "shizenngen'gorikai Cしぜんげんごりかい" "shizenngen'goricai Cしぜんげんごりかい" "shizen'gengorikai Cしぜんげんごりかい" "shizen'gengoricai Cしぜんげんごりかい" "shizen'genngorikai Cしぜんげんごりかい" "shizen'genngoricai Cしぜんげんごりかい" "shizen'gen'gorikai Cしぜんげんごりかい" "shizen'gen'goricai Cしぜんげんごりかい" "sizengengorikai Cしぜんげんごりかい" "sizengengoricai Cしぜんげんごりかい" "sizengenngorikai Cしぜんげんごりかい" "sizengenngoricai Cしぜんげんごりかい" "sizengen'gorikai Cしぜんげんごりかい" "sizengen'goricai Cしぜんげんごりかい" "sizenngengorikai Cしぜんげんごりかい" "sizenngengoricai Cしぜんげんごりかい" "sizenngenngorikai Cしぜんげんごりかい" "sizenngenngoricai Cしぜんげんごりかい" "sizenngen'gorikai Cしぜんげんごりかい" "sizenngen'goricai Cしぜんげんごりかい" "sizen'gengorikai Cしぜんげんごりかい" "sizen'gengoricai Cしぜんげんごりかい" "sizen'genngorikai Cしぜんげんごりかい" "sizen'genngoricai Cしぜんげんごりかい" "sizen'gen'gorikai Cしぜんげんごりかい" "sizen'gen'goricai Cしぜんげんごりかい" "しぜんげんごりかい /自然言語理解/" "developer /デベロッパー/ディベロッパー/デベロッパ/" "! /！/感嘆符/" ">an C>あん" ">ann C>あん" ">an' C>あん" ">あん /案/" "{ /｛/" "kakko Cかっこ" "cakko Cかっこ" "かっこ /確固/括弧/各個/各戸/確乎/羯鼓;雅楽の打楽器/格好/『/』;二重鉤括弧/【/】;隅付き括弧/［/］;大括弧(bracket)/〔/〕;亀甲括弧/〈/〉;山括弧/《/》;二重山括弧/｛/｝;中括弧(brace)/「/」;鉤括弧/（/）;小括弧,丸括弧(parenthesis)/‘/’;singlequote/“/”;doublequote/『』/【】/［］/〔〕/〈〉/《》/｛｝/「」/（）/‘’/“”/" "kokka Cこっか" "cokka Cこっか" "こっか /国家;state/国歌;anthem.「-斉唱」/国花/骨化/國家;「国」旧字/黒化/刻下/】/）/］/』/")))
+  (test* "Create test jisyo"
+         sekka-jisyo-data          
+         (convert-skk-jisyo-f _input))
+
+  (let1 sio (StringIO.new (string-join sekka-jisyo-data "\n"))
+    (sio.set_encoding "utf-8")
+    (load-sekka-jisyo-f sio "./test")))
+
+
+;;-------------------------------------------------------------------
+(test-section "Open the test-suite DB")
+(require "kyotocabinet")
+(define db (KyotoCabinet::DB.new))
+(define rubyUtil (SekkaRubyUtil.new))
+(test* "DB open"  #t    (db.open   "./test.kct"))
+
+;;-------------------------------------------------------------------
+(test-section "approximate-search core")
+
+(test* "search keyword list 1"
+       '("hen'ca" "hen'can" "hen'cann" "hen'ka" "hen'kan" "hen'kann" "henca" "hencan" "hencann" "henka" "henkan" "henkann" "hennca" "henncan" "henncann" "hennka" "hennkan" "hennkann" "i")
+       (rubyUtil.get_search_keyword_list db "henkan" #/[a-z]$/))
+
+(test* "search keyword list 2"
+       '("hen'caS" "hen'kaS" "hencaS" "henkaS" "henncaS" "hennkaS")
+       (rubyUtil.get_search_keyword_list db "henkan" #/[A-Z]$/))
+
+(test* "approximate search 1"
+       '(19
+         ((0.961111111773385 0.9444444444444445 0.6666666666666666 "hen'ka" "Cへんか")
+          (1.0 1.0 1.0 "henka" "Cへんか")
+          (0.9666666669978037 0.9444444444444445 0.8888888888888888 "henkan" "Cへんかん")
+          (0.9428571434248061 0.9047619047619048 0.8 "henkann" "Cへんかん")
+          (0.961111111773385 0.9444444444444445 0.8888888888888888 "hennka" "Cへんか")))
+       (approximate-search db "henka" #/[a-z]$/))
+
+(test* "approximate search 2"
+       '(6
+         ((0.96666666723433 0.9523809523809524 0.7272727272727273 "hen'kaS" "Cへんかs")
+          (1.0 1.0 1.0 "henkaS" "Cへんかs")
+          (0.96666666723433 0.9523809523809524 0.9090909090909091 "hennkaS" "Cへんかs")))
+       (approximate-search db "henkaS" #/[A-Z]$/))
+
+
+;;-------------------------------------------------------------------
+(test-section "henkan (okuri nashi)")
+
+;;-------------------------------------------------------------------
+(test-section "henkan (okuri ari)")
+
+
+;;===================================================================
+(test-end)
