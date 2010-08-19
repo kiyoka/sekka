@@ -48,7 +48,8 @@
 (require "kyotocabinet")
 (define db (KyotoCabinet::DB.new))
 (define rubyUtil (SekkaRubyUtil.new))
-(test* "DB open"  #t    (db.open   "./test.kct"))
+(test* "DB open"                         #t    (db.open            "./test.kct"))
+(test* "DB tune_encoding to utf-8"       #t    (db.tune_encoding   "utf-8"))
 
 ;;-------------------------------------------------------------------
 (test-section "approximate-search core")

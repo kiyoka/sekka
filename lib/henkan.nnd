@@ -31,9 +31,10 @@
                    (_jaro  (jaro  keyword k))
                    (_paird (paird keyword k)))
                (when (< jarow-shikii _jarow)
-                 (list
-                  _jarow _jaro _paird
-                  k (hash-table-get db k)))))
+                 (let1 v (hash-table-get db k)
+                   (list
+                    _jarow _jaro _paird
+                    k v)))))
            keyword-list))))
 
 
