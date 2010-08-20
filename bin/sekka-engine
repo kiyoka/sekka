@@ -3,89 +3,48 @@
 :; exec /usr/local/bin/nendo $0 $*
 
 (require "kyotocabinet")
-(require "amatch")
-(require "./lib/keylist.rb")
-(load "./lib/convert-jisyo.nnd")
-(load "./lib/jisyo-db.nnd")
-
-(define debug-print-length 1000)
-(define jarow-shikii 0.94)
-
-
-(define (jaro str1 str2)
-  (. (Amatch::Jaro.new str1) match str2))
-
-(define (jarow str1 str2)
-  (. (Amatch::JaroWinkler.new str1) match str2))
-
-(define (paird str1 str2)
-  (. (Amatch::PairDistance.new str1) match str2))
-
-
-(define (aimai-search-main db keyword lst)
-  (list (length lst)
-        (filter-map
-         (lambda (k)
-           (let (
-                 (_jarow (jarow keyword k))
-                 (_jaro  (jaro  keyword k))
-                 (_paird (paird keyword k)))
-             (when (< jarow-shikii _jarow)
-               (list
-                _jarow _jaro _paird
-                k (hash-table-get db k)))))
-         lst)))
-   
-  
-;; return unsorted list
-;;  '(
-;;     ( distance key val )
-;;         .
-;;         .
-;;         .
-;;   )
-(define (aimai-search db-filename keyword)
-  (let* ((result '())
-         (lst     (. (KeyList.new) getKeyList db-filename keyword))
-         (err (KyotoCabinet::DB.process
-               db-filename
-               (&block (db)
-                 (set! result (aimai-search-main db keyword lst))))))
-    (when err
-      (printf "db error [%s]\n" err)
-      (exit 1))
-    result))
+(load "./lib/henkan.nnd")
 
 
 ;; result ( search-range '(search result...) )
 (define (disp-search-result result)
-  (printf "閾値 = %f  探索件数(%d)\n" jarow-shikii (car result))
   (print "----------")
   (for-each
    (lambda (x)
      (let1 vec (x.to_arr)
        (printf " JaroW(%1.5f) Jaro(%1.5f) PairD(%1.5f) [%s]:[%s]\n"
                (vector-ref vec 0)
-               (vector-ref vec 1)
-               (vector-ref vec 2)
                (vector-ref vec 3)
-               (vector-ref vec 4))))
-   (sort-by (cadr result)
-            (lambda (item)
-              (- 1.0 (car item))))))
-  
+               (vector-ref vec 4)
+               (vector-ref vec 1)
+               (vector-ref vec 2))))
+   (cadr result)))
+
+
 (define (sekka-read-henkan-loop db-filename)
   (define (readline)
     (printf "> ")
     (STDIN.readline.chomp))
-  (printf " 'q': quit.\n")
-  (let loop ((line (readline)))
-    (if (rxmatch #/^[qQ]$/ line)
-        (printf "quit.\n")
-        (begin
-          (disp-search-result
-           (aimai-search db-filename line))
-          (loop (readline))))))
+  (define (opendb db-filename)
+    (let* ((db (KyotoCabinet::DB.new)))
+      (cond
+       ((db.open db-filename)
+        (db.tune_encoding   "utf-8")
+        db)
+       (elsen
+        (printf "db error [%s]\n" db.error)
+        (exit 1)))))
+    
+  (let1 db (opendb db-filename)
+    (printf " 'q': quit.\n")
+    (let loop ((line (readline)))
+      (if (rxmatch #/^[qQ]$/ line)
+          (printf "quit.\n")
+          (begin
+            (disp-search-result
+             (approximate-search db #?=line #/[a-z]$/))
+            (loop (readline)))))
+    (db.close)))
 
 
 (define (display-help)
