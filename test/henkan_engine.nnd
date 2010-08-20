@@ -63,24 +63,49 @@
        (rubyUtil.get_search_keyword_list db "henkan" #/[A-Z]$/))
 
 (test* "approximate search 1"
-       '(19
-         ((0.961111111773385 0.9444444444444445 0.6666666666666666 "hen'ka" "Cへんか")
-          (1.0 1.0 1.0 "henka" "Cへんか")
-          (0.9666666669978037 0.9444444444444445 0.8888888888888888 "henkan" "Cへんかん")
-          (0.9428571434248061 0.9047619047619048 0.8 "henkann" "Cへんかん")
-          (0.961111111773385 0.9444444444444445 0.8888888888888888 "hennka" "Cへんか")))
+       '(19 ((1.0 "henka" "Cへんか" 1.0 1.0) (0.9666666669978037 "henkan" "Cへんかん" 0.9444444444444445 0.8888888888888888) (0.961111111773385 "hen'ka" "Cへんか" 0.9444444444444445 0.6666666666666666) (0.961111111773385 "hennka" "Cへんか" 0.9444444444444445 0.8888888888888888) (0.9428571434248061 "henkann" "Cへんかん" 0.9047619047619048 0.8)))
        (approximate-search db "henka" #/[a-z]$/))
 
 (test* "approximate search 2"
-       '(6
-         ((0.96666666723433 0.9523809523809524 0.7272727272727273 "hen'kaS" "Cへんかs")
-          (1.0 1.0 1.0 "henkaS" "Cへんかs")
-          (0.96666666723433 0.9523809523809524 0.9090909090909091 "hennkaS" "Cへんかs")))
+       '(6 ((1.0 "henkaS" "Cへんかs" 1.0 1.0) (0.96666666723433 "hen'kaS" "Cへんかs" 0.9523809523809524 0.7272727272727273) (0.96666666723433 "hennkaS" "Cへんかs" 0.9523809523809524 0.9090909090909091)))
        (approximate-search db "henkaS" #/[A-Z]$/))
-
 
 ;;-------------------------------------------------------------------
 (test-section "henkan (okuri nashi)")
+
+
+(test* "okuri nashi 1"
+       '("/変換/返還/" "/変化/返歌/")
+       (henkan-okuri-nashi db "henkan"))
+
+(test* "okuri nashi 2"
+       '("/変化/返歌/" "/変換/返還/")
+       (henkan-okuri-nashi db "henka"))
+
+(test* "okuri nashi 3"
+       '("/変換/返還/" "/変化/返歌/")
+       (henkan-okuri-nashi db "hennkann"))
+
+(test* "okuri nashi 4"
+       '("/自然言語/")
+       (henkan-okuri-nashi db "shizengengo"))
+
+(test* "okuri nashi 5"
+       '("/自然言語処理/" "/自然言語/")
+       (henkan-okuri-nashi db "shizengengosyo"))
+
+(test* "okuri nashi 6"
+       '("/案/")
+       (henkan-okuri-nashi db ">an"))
+
+(test* "okuri nashi 7"
+       '("/案/")
+       (henkan-okuri-nashi db ">ann"))
+
+(test* "okuri nashi 8"
+       '("/デベロッパー/ディベロッパー/デベロッパ/")
+       (henkan-okuri-nashi db "developper"))
+
 
 ;;-------------------------------------------------------------------
 (test-section "henkan (okuri ari)")

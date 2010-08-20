@@ -17,30 +17,49 @@
   (. (Amatch::PairDistance.new str1) match str2))
 
 
+(define (string-drop str n)
+  (or (str.slice n (str.size))
+      ""))
+
 ;; 曖昧検索
-;;  リストで返す。 (検索範囲件数 検索結果)
+;;  リストで返す。 (検索範囲件数 ソート済み検索結果)
 (define (approximate-search db keyword regexp)
   (define jarow-shikii 0.94)
   (let* ((util (SekkaRubyUtil.new))
-         (keyword-list (util.get_search_keyword_list db keyword regexp)))
+         (keyword-list (util.get_search_keyword_list db keyword regexp))
+         (lst  (filter-map
+                (lambda (k)
+                  (let (
+                        (_jarow (jarow keyword k))
+                        (_jaro  (jaro  keyword k))
+                        (_paird (paird keyword k)))
+                    (when (< jarow-shikii _jarow)
+                      (let1 v (hash-table-get db k)
+                        (list
+                         _jarow k v
+                         _jaro _paird
+                         )))))
+                keyword-list))
+         (sorted-lst  (sort-by lst (lambda (item) (- 1.0 (car item))))))
     (list (length keyword-list)
-          (filter-map
-           (lambda (k)
-             (let (
-                   (_jarow (jarow keyword k))
-                   (_jaro  (jaro  keyword k))
-                   (_paird (paird keyword k)))
-               (when (< jarow-shikii _jarow)
-                 (let1 v (hash-table-get db k)
-                   (list
-                    _jarow _jaro _paird
-                    k v)))))
-           keyword-list))))
+          sorted-lst)))
 
 
 ;; 送り仮名なしの変換
 (define (henkan-okuri-nashi db keyword)
-  (approximate-search db keyword))
+  (let* ((result (approximate-search db keyword #/[a-z]$/))
+         (kouho  (uniq (map
+                        (lambda (x)
+                          (third x))
+                        (second result)))))
+    (null? kouho)
+    (map
+     (lambda (value)
+       value
+       (if (rxmatch #/^C/ value)
+           (hash-table-get db (string-drop value 1)) ;; continue
+           value))
+     kouho)))
 
 
 ;; keyword には ローマ字のみを受け付ける
