@@ -45,6 +45,17 @@
           sorted-lst)))
 
 
+;; split "/a/b/c/" into '("a" "b" "c") list
+(define (split-henkan-kouho str)
+  (let1 trimmed (cond
+                 ((rxmatch #/^[\/](.+)[\/]$/ str)
+                  => (lambda (m)
+                       (rxmatch-substring m 1)))
+                 (else
+                  (errorf "split-henkan-kouho requires /a/b/c/ format string")))
+    (to-list (trimmed.split "/"))))
+
+
 ;; 送り仮名なしの変換
 (define (henkan-okuri-nashi db keyword)
   (let* ((result (approximate-search db keyword #/[a-z]$/))
@@ -52,15 +63,13 @@
                         (lambda (x)
                           (third x))
                         (second result)))))
-    (null? kouho)
-    (map
+    (append-map
      (lambda (value)
-       value
-       (if (rxmatch #/^C/ value)
-           (hash-table-get db (string-drop value 1)) ;; continue
-           value))
+       (split-henkan-kouho
+        (if (rxmatch #/^C/ value)
+            (hash-table-get db (string-drop value 1)) ;; continue
+            value)))
      kouho)))
-
 
 ;; keyword には ローマ字のみを受け付ける
 (define (sekka-henkan db keyword)

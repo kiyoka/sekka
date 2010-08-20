@@ -75,35 +75,35 @@
 
 
 (test* "okuri nashi 1"
-       '("/変換/返還/" "/変化/返歌/")
+       '("変換" "返還" "変化" "返歌")
        (henkan-okuri-nashi db "henkan"))
 
 (test* "okuri nashi 2"
-       '("/変化/返歌/" "/変換/返還/")
+       '("変化" "返歌" "変換" "返還")
        (henkan-okuri-nashi db "henka"))
 
 (test* "okuri nashi 3"
-       '("/変換/返還/" "/変化/返歌/")
+       '("変換" "返還" "変化" "返歌")
        (henkan-okuri-nashi db "hennkann"))
 
 (test* "okuri nashi 4"
-       '("/自然言語/")
+       '("自然言語")
        (henkan-okuri-nashi db "shizengengo"))
 
 (test* "okuri nashi 5"
-       '("/自然言語処理/" "/自然言語/")
+       '("自然言語処理" "自然言語")
        (henkan-okuri-nashi db "shizengengosyo"))
 
 (test* "okuri nashi 6"
-       '("/案/")
+       '("案")
        (henkan-okuri-nashi db ">an"))
 
 (test* "okuri nashi 7"
-       '("/案/")
+       '("案")
        (henkan-okuri-nashi db ">ann"))
 
 (test* "okuri nashi 8"
-       '("/デベロッパー/ディベロッパー/デベロッパ/")
+       '("デベロッパー" "ディベロッパー" "デベロッパ")
        (henkan-okuri-nashi db "developper"))
 
 
