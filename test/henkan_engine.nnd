@@ -55,7 +55,7 @@
 (test-section "approximate-search core")
 
 (test* "search keyword list 1"
-       '("hen'ca" "hen'can" "hen'cann" "hen'ka" "hen'kan" "hen'kann" "henca" "hencan" "hencann" "henka" "henkan" "henkann" "hennca" "henncan" "henncann" "hennka" "hennkan" "hennkann" "i")
+       '("h" "hen'ca" "hen'can" "hen'cann" "hen'ka" "hen'kan" "hen'kann" "henca" "hencan" "hencann" "henka" "henkan" "henkann" "hennca" "henncan" "henncann" "hennka" "hennkan" "hennkann" "i")
        (rubyUtil.get_search_keyword_list db "henkan" #/[a-z]$/))
 
 (test* "search keyword list 2"
@@ -63,7 +63,7 @@
        (rubyUtil.get_search_keyword_list db "henkan" #/[A-Z]$/))
 
 (test* "approximate search 1"
-       '(19 ((1.0 "henka" "Cへんか" 1.0 1.0) (0.9666666669978037 "henkan" "Cへんかん" 0.9444444444444445 0.8888888888888888) (0.961111111773385 "hen'ka" "Cへんか" 0.9444444444444445 0.6666666666666666) (0.961111111773385 "hennka" "Cへんか" 0.9444444444444445 0.8888888888888888) (0.9428571434248061 "henkann" "Cへんかん" 0.9047619047619048 0.8)))
+       '(20 ((1.0 "henka" "Cへんか" 1.0 1.0) (0.9666666669978037 "henkan" "Cへんかん" 0.9444444444444445 0.8888888888888888) (0.961111111773385 "hen'ka" "Cへんか" 0.9444444444444445 0.6666666666666666) (0.961111111773385 "hennka" "Cへんか" 0.9444444444444445 0.8888888888888888) (0.9428571434248061 "henkann" "Cへんかん" 0.9047619047619048 0.8)))
        (approximate-search db "henka" #/[a-z]$/))
 
 (test* "approximate search 2"
