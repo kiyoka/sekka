@@ -55,7 +55,7 @@
 (test-section "approximate-search core")
 
 (test* "search keyword list 1"
-       '("h" "hen'ca" "hen'can" "hen'cann" "hen'ka" "hen'kan" "hen'kann" "henca" "hencan" "hencann" "henka" "henkan" "henkann" "hennca" "henncan" "henncann" "hennka" "hennkan" "hennkann" "i")
+       '("he" "hen'ca" "hen'can" "hen'cann" "hen'ka" "hen'kan" "hen'kann" "henca" "hencan" "hencann" "henka" "henkan" "henkann" "hennca" "henncan" "henncann" "hennka" "hennkan" "hennkann" "hf")
        (rubyUtil.get_search_keyword_list db "henkan" #/[a-z]$/))
 
 (test* "search keyword list 2"
@@ -109,6 +109,27 @@
 
 ;;-------------------------------------------------------------------
 (test-section "henkan (okuri ari)")
+
+
+;;-------------------------------------------------------------------
+(test-section "henkan kana")
+
+
+;;(test* "kana 1"
+;;       '()
+;;       (henkan-kana db "aiueo"))
+
+;;(test* "kana 2"
+;;       '()
+;;       (henkan-non-kanji db "no"))
+
+
+;;-------------------------------------------------------------------
+(test-section "henkan (non alphabet)")
+
+;;(test* "non-alphabet 1"
+;;       '()
+;;       (henkan-kana db "{"))
 
 
 ;;===================================================================

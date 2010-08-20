@@ -2,9 +2,17 @@
 
 (require "kyotocabinet")
 
+
 (define (load-sekka-jisyo-f f basename)
   (define cabinet-ext ".kct")
-  (define alphabet-list (to-list (. "abcdefghijklmnopqrstuvwxyz-" split "")))
+  (define alphabet-list (to-list (. "abcdefghijklmnopqrstuvwxyz" split "")))
+  (define alphabet-pairs (append-map
+                          (lambda (a)
+                            (map
+                             (lambda (b)
+                               (+ a b))
+                             alphabet-list))
+                          alphabet-list))
   (let1 err
       (KyotoCabinet::DB.process
        (+ basename cabinet-ext)
@@ -21,7 +29,7 @@
            (for-each
             (lambda (x)
               (hash-table-put! db x x))
-            alphabet-list))))
+            alphabet-pairs))))
     (when err
       (printf "db error [%s]\n" err)
       (exit 1))
