@@ -8,7 +8,7 @@
 
 ;; result ( search-range '(search result...) )
 (define (disp-search-result result)
-  (print "----------")
+  (printf "----------(search-range:%d)---------\n" (car result))
   (for-each
    (lambda (x)
      (let1 vec (x.to_arr)
@@ -40,9 +40,10 @@
     (let loop ((line (readline)))
       (if (rxmatch #/^[qQ]$/ line)
           (printf "quit.\n")
-          (begin
-            (disp-search-result
-             (approximate-search db #?=line #/[a-z]$/))
+          (let1 result (approximate-search db line #/[a-z]$/)
+            (disp-search-result result)
+            (for-each (lambda (str) (printf " [%s]\n" str))
+                      (henkan-okuri-nashi db line))
             (loop (readline)))))
     (db.close)))
 

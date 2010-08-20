@@ -13,7 +13,7 @@ class SekkaRubyUtil
     while k0 == kk0
       kk = cur.get_key
       kk0 = kk.slice( 0, 2 )
-      #printf( "k0 = [%s]  kk0 = [%s] \n", k0, kk0 )
+      #printf( "kk = [%s] : k0 = [%s] kk0 = [%s] \n", kk, k0, kk0 )
       if regex.match( kk )
         arr << kk
       end

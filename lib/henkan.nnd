@@ -2,6 +2,7 @@
 ;;
 ;;      石火変換ライブラリ
 ;;
+(use srfi-1)
 (require "kyotocabinet")
 (require "amatch")
 (require "./lib/keywordlist")
@@ -27,18 +28,15 @@
   (define jarow-shikii 0.94)
   (let* ((util (SekkaRubyUtil.new))
          (keyword-list (util.get_search_keyword_list db keyword regexp))
+         (jarow        (Amatch::JaroWinkler.new keyword))
          (lst  (filter-map
                 (lambda (k)
-                  (let (
-                        (_jarow (jarow keyword k))
-                        (_jaro  (jaro  keyword k))
-                        (_paird (paird keyword k)))
+                  (let1 _jarow (jarow.match k)
                     (when (< jarow-shikii _jarow)
-                      (let1 v (hash-table-get db k)
-                        (list
-                         _jarow k v
-                         _jaro _paird
-                         )))))
+                      (list
+                       _jarow k (hash-table-get db k)
+                       0 0
+                       ))))
                 keyword-list))
          (sorted-lst  (sort-by lst (lambda (item) (- 1.0 (car item))))))
     (list (length keyword-list)
@@ -48,11 +46,11 @@
 ;; split "/a/b/c/" into '("a" "b" "c") list
 (define (split-henkan-kouho str)
   (let1 trimmed (cond
-                 ((rxmatch #/^[\/](.+)[\/]$/ str)
+                 ((rxmatch #/^[\/](.+)[\/]?$/ str)
                   => (lambda (m)
                        (rxmatch-substring m 1)))
                  (else
-                  (errorf "split-henkan-kouho requires /a/b/c/ format string")))
+                  (errorf "split-henkan-kouho got [%s]. it requires /a/b/c/ format string" str)))
     (to-list (trimmed.split "/"))))
 
 
