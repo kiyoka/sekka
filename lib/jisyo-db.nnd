@@ -13,25 +13,35 @@
                         alphabet-list))
 
 (define (setup-ready-made-keylist db)
-  ;; okuri-nashi
   (for-each
-   (lambda (ab)
-     (let ((lst-okuri-nashi '())
-           (lst-okuri-ari   '()))
-       (db.each_key
-        (&block (k)
-          (let1 str (vector-ref k 0)
-            (when (eq? ab (str.slice 0 2))
-              (if (rxmatch #/[A-Z]$/ str)
-                  (set! lst-okuri-ari   (cons str lst-okuri-ari))
-                  (set! lst-okuri-nashi (cons str lst-okuri-nashi)))))))
-       (hash-table-put! db
-                        (+ "(" ab.upcase ")")
-                        (string-join (reverse lst-okuri-ari) " "))
-       (hash-table-put! db
-                        (+ "(" ab        ")")
-                        (string-join (reverse lst-okuri-nashi) " "))))
-   alphabet-pairs))
+   (lambda (key)
+     (unless (hash-table-get db key #f)
+       (hash-table-put! db key "")))
+   alphabet-pairs)
+  
+  (let1 cur (db.cursor)
+    (for-each
+     (lambda (ab)
+       (let ((lst-okuri-nashi '())
+             (lst-okuri-ari   '()))
+         (cur.jump ab)
+         (let loop ((k (cur.get_key)))
+           (let1 k2 (k.slice 0 2)
+             (if (and (cur.step)
+                      (eq? ab k2))
+                 (begin
+                   (if (rxmatch #/[A-Z]$/ k)
+                       (set! lst-okuri-ari   (cons k lst-okuri-ari))
+                       (set! lst-okuri-nashi (cons k lst-okuri-nashi)))
+                   (loop (cur.get_key))))))
+         (hash-table-put! db
+                          (+ "(" ab.upcase ")")
+                          (string-join (reverse lst-okuri-ari) " "))
+         (hash-table-put! db
+                          (+ "(" ab        ")")
+                          (string-join #?=(reverse lst-okuri-nashi) " "))))
+     alphabet-pairs)
+    (cur.disable)))
 
 
 (define (load-sekka-jisyo-f f basename)
