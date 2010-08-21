@@ -39,7 +39,7 @@
                           (string-join (reverse lst-okuri-ari) " "))
          (hash-table-put! db
                           (+ "(" ab        ")")
-                          (string-join #?=(reverse lst-okuri-nashi) " "))))
+                          (string-join (reverse lst-okuri-nashi) " "))))
      alphabet-pairs)
     (cur.disable)))
 
