@@ -1,9 +1,9 @@
 :; #-*- mode: nendo; syntax: scheme -*-;;
 
+(use srfi-1)
 (require "kyotocabinet")
 
-
-(define alphabet-list (to-list (. "abcdefghijklmnopqrstuvwxyz" split "")))
+(define alphabet-list (to-list (. "abcdefghijklmnopqrstuvwxyz>" split "")))
 (define alphabet-pairs (append-map
                         (lambda (a)
                           (map
@@ -27,10 +27,10 @@
                   (set! lst-okuri-nashi (cons str lst-okuri-nashi)))))))
        (hash-table-put! db
                         (+ "(" ab.upcase ")")
-                        (string-join #?=(reverse lst-okuri-ari) " "))
+                        (string-join (reverse lst-okuri-ari) " "))
        (hash-table-put! db
                         (+ "(" ab        ")")
-                        (string-join #?=(reverse lst-okuri-nashi) " "))))
+                        (string-join (reverse lst-okuri-nashi) " "))))
    alphabet-pairs))
 
 

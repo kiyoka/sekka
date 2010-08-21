@@ -5,42 +5,26 @@
 (use srfi-1)
 (require "kyotocabinet")
 (require "amatch")
-(require "./lib/keywordlist")
- 
-
-(define (jaro str1 str2)
-  (. (Amatch::Jaro.new str1) match str2))
-
-(define (jarow str1 str2)
-  (. (Amatch::JaroWinkler.new str1) match str2))
-
-(define (paird str1 str2)
-  (. (Amatch::PairDistance.new str1) match str2))
-
+(require "./lib/approximatesearch")
 
 (define (string-drop str n)
   (or (str.slice n (str.size))
       ""))
 
 ;; 曖昧検索
-;;  リストで返す。 (検索範囲件数 ソート済み検索結果)
-(define (approximate-search db keyword regexp)
+;;  リストで返す。 (ソート済み検索結果)
+(define (approximate-search db keyword okuri-ari-flag)
   (define jarow-shikii 0.94)
-  (let* ((util (SekkaRubyUtil.new))
-         (keyword-list (util.get_search_keyword_list db keyword regexp))
-         (jarow        (Amatch::JaroWinkler.new keyword))
-         (lst  (filter-map
-                (lambda (k)
-                  (let1 _jarow (jarow.match k)
-                    (when (< jarow-shikii _jarow)
-                      (list
-                       _jarow k (hash-table-get db k)
-                       0 0
-                       ))))
-                keyword-list))
+  (let* ((a-search (ApproximateSearch.new jarow-shikii))
+         (lst      (map
+                    (lambda (x)
+                      (let* ((val (vector-ref x 0))
+                             (k   (vector-ref x 1))
+                             (v   (hash-table-get db k)))
+                        (list val k v)))
+                    (to-list (a-search.search db keyword okuri-ari-flag))))
          (sorted-lst  (sort-by lst (lambda (item) (- 1.0 (car item))))))
-    (list (length keyword-list)
-          sorted-lst)))
+    sorted-lst))
 
 
 ;; split "/a/b/c/" into '("a" "b" "c") list
@@ -56,11 +40,11 @@
 
 ;; 送り仮名なしの変換
 (define (henkan-okuri-nashi db keyword)
-  (let* ((result (approximate-search db keyword #/[a-z]$/))
+  (let* ((result (approximate-search db keyword #f))
          (kouho  (uniq (map
                         (lambda (x)
                           (third x))
-                        (second result)))))
+                        result))))
     (append-map
      (lambda (value)
        (split-henkan-kouho
