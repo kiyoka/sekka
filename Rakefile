@@ -27,6 +27,6 @@ task :load do
 end
 
 task :demo do
-  sh "./bin/sekka-engine ./data/SEKKA-JISYO.S.201001"
-#  sh "./bin/sekka-engine ./data/SEKKA-JISYO.L.201008"
+#  sh "./bin/sekka-engine ./data/SEKKA-JISYO.S.201001"
+  sh "./bin/sekka-engine ./data/SEKKA-JISYO.L.201008"
 end
