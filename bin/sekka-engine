@@ -8,17 +8,15 @@
 
 ;; result ( search-range '(search result...) )
 (define (disp-search-result result)
-  (printf "----------(search-range:%d)---------\n" (car result))
+  (printf "----------\n"
   (for-each
    (lambda (x)
      (let1 vec (x.to_arr)
-       (printf " JaroW(%1.5f) Jaro(%1.5f) PairD(%1.5f) [%s]:[%s]\n"
+       (printf " JaroW(%1.5f) [%s]:[%s]\n"
                (vector-ref vec 0)
-               (vector-ref vec 3)
-               (vector-ref vec 4)
                (vector-ref vec 1)
                (vector-ref vec 2))))
-   (cadr result)))
+   result)))
 
 
 (define (sekka-read-henkan-loop db-filename)
@@ -40,7 +38,7 @@
     (let loop ((line (readline)))
       (if (rxmatch #/^[qQ]$/ line)
           (printf "quit.\n")
-          (let1 result (approximate-search db line #/[a-z]$/)
+          (let1 result (approximate-search db line #f)
             (disp-search-result result)
             (for-each (lambda (str) (printf " [%s]\n" str))
                       (henkan-okuri-nashi db line))
