@@ -112,6 +112,22 @@
 ;;-------------------------------------------------------------------
 (test-section "henkan (okuri ari)")
 
+(test* "okuri ari 1"
+       '("変化")
+       (henkan-okuri-ari db "henkaSuru"))
+
+(test* "okuri ari 2"
+       '("変化")
+       (henkan-okuri-ari db "HenkaSuru"))
+
+(test* "okuri ari 3"
+       '("行" "行な;※送り位置補正")
+       (henkan-okuri-ari db "okonaU"))
+
+(test* "okuri ari 4"
+       '("行" "行な;※送り位置補正")
+       (henkan-okuri-ari db "OkonaU"))
+
 
 ;;-------------------------------------------------------------------
 (test-section "henkan kana")
