@@ -112,6 +112,22 @@
 ;;-------------------------------------------------------------------
 (test-section "henkan (okuri ari)")
 
+(test* "approximate search 1"
+       '((1.0 "henkaS" "Cへんかs"))
+       (approximate-search db "henkaS" #t))
+
+(test* "approximate search 2"
+       '((0.9714285717124032 "henkaS" "Cへんかs"))
+       (approximate-search db "henkanS" #t))
+
+(test* "approximate search 3"
+       '((1.0 "okonaU" "Cおこなu"))
+       (approximate-search db "okonaU" #t))
+
+(test* "approximate search 4"
+       '((0.9666666669978037 "okonaU" "Cおこなu"))
+       (approximate-search db "okonU" #t))
+
 (test* "okuri ari 1"
        '("変化")
        (henkan-okuri-ari db "henkaSuru"))
@@ -127,6 +143,10 @@
 (test* "okuri ari 4"
        '("行" "行な;※送り位置補正")
        (henkan-okuri-ari db "OkonaU"))
+
+(test* "okuri ari 5"
+       '("行" "行な;※送り位置補正")
+       (henkan-okuri-ari db "okonU"))
 
 
 ;;-------------------------------------------------------------------

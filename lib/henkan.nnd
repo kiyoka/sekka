@@ -60,7 +60,7 @@
     (if (not m)
         (errorf "henkan-okuri-ari: requires xxxxXx or XxxxxXx ascii format.  got:[%s] " keyword)
         (let* ((result (approximate-search db
-                                           (+ (rxmatch-substring m 1)
+                                           (+ (. (rxmatch-substring m 1) downcase)
                                               (rxmatch-substring m 2)
                                               (rxmatch-substring m 3))
                                            #t))
