@@ -3,16 +3,39 @@
 (require "kyotocabinet")
 
 
+(define alphabet-list (to-list (. "abcdefghijklmnopqrstuvwxyz" split "")))
+(define alphabet-pairs (append-map
+                        (lambda (a)
+                          (map
+                           (lambda (b)
+                             (+ a b))
+                           alphabet-list))
+                        alphabet-list))
+
+(define (setup-ready-made-keylist db)
+  ;; okuri-nashi
+  (for-each
+   (lambda (ab)
+     (let ((lst-okuri-nashi '())
+           (lst-okuri-ari   '()))
+       (db.each_key
+        (&block (k)
+          (let1 str (vector-ref k 0)
+            (when (eq? ab (str.slice 0 2))
+              (if (rxmatch #/[A-Z]$/ str)
+                  (set! lst-okuri-ari   (cons str lst-okuri-ari))
+                  (set! lst-okuri-nashi (cons str lst-okuri-nashi)))))))
+       (hash-table-put! db
+                        (+ "(" ab.upcase ")")
+                        (string-join #?=(reverse lst-okuri-ari) " "))
+       (hash-table-put! db
+                        (+ "(" ab        ")")
+                        (string-join #?=(reverse lst-okuri-nashi) " "))))
+   alphabet-pairs))
+
+
 (define (load-sekka-jisyo-f f basename)
   (define cabinet-ext ".kct")
-  (define alphabet-list (to-list (. "abcdefghijklmnopqrstuvwxyz" split "")))
-  (define alphabet-pairs (append-map
-                          (lambda (a)
-                            (map
-                             (lambda (b)
-                               (+ a b))
-                             alphabet-list))
-                          alphabet-list))
   (let1 err
       (KyotoCabinet::DB.process
        (+ basename cabinet-ext)
@@ -26,14 +49,12 @@
                                  (first fields)
                                  (second fields))))
             (f.readlines.to_list))
-           (for-each
-            (lambda (x)
-              (hash-table-put! db x x))
-            alphabet-pairs))))
+           (setup-ready-made-keylist db))))
     (when err
       (printf "db error [%s]\n" err)
       (exit 1))
     #t))
+
 
 
       
