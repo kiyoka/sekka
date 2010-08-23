@@ -10,7 +10,7 @@ task :check do
   sh "echo > test.log"
   [ "./test/roman-lib.nnd", 
     "./test/jisyo.nnd", 
-    "./test/henkan_engine.nnd"
+    "./test/henkan-main.nnd"
   ].each {|filename|
     sh  sprintf( "ruby -I ./lib /usr/local/bin/nendo %s", filename )
   }
