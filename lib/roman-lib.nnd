@@ -260,6 +260,10 @@
     (alist->hash-table swapped)))
 
 
+;;(define %match-and-push
+;;  (marco (str)
+;;         ))
+
 (define (gen-hiragana->roman-pattens hiragana)
   (let ((lst '())
         (h sekka-kana->roman-hash))
@@ -280,6 +284,35 @@
           (set! lst (cons (hash-table-get h str1) lst))
           (loop (str.slice (str1.size) (str.size)))))))
     (reverse lst)))
+
+
+(define (gen-roman->hiragana roman-str)
+  (let ((lst '())
+        (h sekka-roman->kana-hash))
+    (let loop ((str roman-str))
+      (let ((str1 (str.slice 0 1))
+            (str2 (str.slice 0 2))
+            (str3 (str.slice 0 3))
+            (str4 (str.slice 0 4)))
+        (cond
+         ((eq? 0 (str.size))
+          #f)
+         ((hash-table-exist? h str4)
+          (set! lst (cons (hash-table-get h str4) lst))
+          (loop (str.slice (str4.size) (str.size))))
+         ((hash-table-exist? h str3)
+          (set! lst (cons (hash-table-get h str3) lst))
+          (loop (str.slice (str3.size) (str.size))))
+         ((hash-table-exist? h str2)
+          (set! lst (cons (hash-table-get h str2) lst))
+          (loop (str.slice (str2.size) (str.size))))
+         ((hash-table-exist? h str1)
+          (set! lst (cons (hash-table-get h str1) lst))
+          (loop (str.slice (str1.size) (str.size)))))))
+    (string-join
+     (map
+      (lambda (x) (car x))
+      (reverse lst)))))
 
 
 ;; This function port from Gauche-0.9's util.combinations.

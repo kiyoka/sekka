@@ -11,28 +11,37 @@
 ;;===================================================================
 
 ;;-------------------------------------------------------------------
-(test-section "romaji kana conversion table")
-
+(test-section "kana->roman conversion hash")
 
 (test* "kana->roman 1"
        '("fu" "hu")
        (hash-table-get sekka-kana->roman-hash "ふ" #f))
-
 (test* "kana->roman 2"
        '("xa" "la")
        (hash-table-get sekka-kana->roman-hash "ぁ" #f))
-
 (test* "kana->roman 3"
        '("chi" "ti" "tyi")
        (hash-table-get sekka-kana->roman-hash "ち" #f))
-
 (test* "kana->roman 4"
        '("chi" "ti" "tyi")
        (hash-table-get sekka-kana->roman-hash "ち" #f))
 
+(test-section "roman->kana conversion hash")
+(test* "roman->kana 1"
+       '("あ")
+       (hash-table-get sekka-roman->kana-hash "a" #f))
+(test* "roman->kana 2"
+       '("っぎゃ")
+       (hash-table-get sekka-roman->kana-hash "ggya" #f))
+(test* "roman->kana 3"
+       '("し")
+       (hash-table-get sekka-roman->kana-hash "si" #f))
+(test* "roman->kana 4"
+       '("っ")
+       (hash-table-get sekka-roman->kana-hash "xtsu" #f))
 
 ;;-------------------------------------------------------------------
-(test-section "romaji kana conversion functions")
+(test-section "kana->roman conversion functions")
 
 (let1 hira-list
     (hash-table-keys sekka-kana->roman-hash)
@@ -76,6 +85,28 @@
 (test* "hiragana -> roman-list4"
        '("tsumiki" "tsumici" "tumiki" "tumici")
        (gen-hiragana->roman-list "つみき"))
+
+
+;;-------------------------------------------------------------------
+(test-section "roman->kana conversion functions")
+(test* "roman -> kanji 1"
+       "つみき"       
+       (gen-roman->hiragana "tsumiki"))
+(test* "roman -> kanji 2"
+       "こーひー"
+       (gen-roman->hiragana "ko-hi-"))
+(test* "roman -> kanji 3"
+       "かんじ"
+       (gen-roman->hiragana "kanji"))
+(test* "roman -> kanji 4"
+       "かんじ"
+       (gen-roman->hiragana "canzi"))
+(test* "roman -> kanji 5"
+       "とうきょうとっきょきょかきょく"
+       (gen-roman->hiragana "toukyoutokkyokyokakyoku"))
+(test* "roman -> kanji 6"
+       "はっぴょうってきょうかぁ"
+       (gen-roman->hiragana "happyouttekyoukaxa"))
 
 
 ;;===================================================================
