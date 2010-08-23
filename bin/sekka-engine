@@ -40,7 +40,7 @@
           (printf "quit.\n")
           (let1 result (approximate-search db line #f)
             (disp-search-result result)
-            (for-each (lambda (str) (printf " [%s]\n" str))
+            (for-each (lambda (pa) (printf " [%s](%s)\n" (car pa) (if (cdr pa) (cdr pa) "")))
                       (henkan-okuri-nashi db line))
             (loop (readline)))))
     (db.close)))
