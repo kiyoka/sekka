@@ -260,6 +260,23 @@
     (alist->hash-table swapped)))
 
 
+;; 平仮名->カタカナ 変換
+(define (gen-hiragana->katakana str)
+  (str.tr "あ-んぁぃぅぇぉゃゅょっー" "ア-ンァィゥェォャュョッー"))
+
+;; カタカナ->平仮名 変換
+(define (gen-katakana->hiragana str)
+  (str.tr "ア-ンァィゥェォャュョッー" "あ-んぁぃぅぇぉゃゅょっー"))
+
+;; カタカナの文字列かどうかを評価する
+(define (is-katakana str)
+  (rxmatch #/^[ア-ンァィゥェォャュョッー]+$/ str))
+
+;; 平仮名の文字列かどうかを評価する
+(define (is-hiragana str)
+  (rxmatch #/^[あ-んぁぃぅぇぉゃゅょっー]+$/ str))
+
+
 (define (gen-hiragana->roman-pattens hiragana)
   (let ((lst '())
         (h sekka-kana->roman-hash))
