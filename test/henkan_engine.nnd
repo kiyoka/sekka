@@ -77,35 +77,35 @@
 (test-section "henkan (okuri nashi)")
 
 (test* "okuri nashi 1"
-       '("変換" "返還" "変化" "返歌")
+       '(("変換" . #f) ("返還" . #f) ("変化" . #f) ("返歌" . #f))
        (henkan-okuri-nashi db "henkan"))
 
 (test* "okuri nashi 2"
-       '("変化" "返歌" "変換" "返還")
+       '(("変化" . #f) ("返歌" . #f) ("変換" . #f) ("返還" . #f))
        (henkan-okuri-nashi db "henka"))
 
 (test* "okuri nashi 3"
-       '("変換" "返還" "変化" "返歌")
+       '(("変換" . #f) ("返還" . #f) ("変化" . #f) ("返歌" . #f))
        (henkan-okuri-nashi db "henkann"))
 
 (test* "okuri nashi 4"
-       '("自然言語")
+       '(("自然言語" . #f))
        (henkan-okuri-nashi db "shizengengo"))
 
 (test* "okuri nashi 5"
-       '("自然言語処理" "自然言語")
+       '(("自然言語処理" . #f) ("自然言語" . #f))
        (henkan-okuri-nashi db "shizengengosyo"))
 
 (test* "okuri nashi 6"
-       '("案")
+       '(("案" . #f))
        (henkan-okuri-nashi db ">an"))
 
 (test* "okuri nashi 7"
-       '("案")
+       '(("案" . #f))
        (henkan-okuri-nashi db ">ann"))
 
 (test* "okuri nashi 8"
-       '("デベロッパー" "ディベロッパー" "デベロッパ")
+       '(("デベロッパー" . #f) ("ディベロッパー" . #f) ("デベロッパ" . #f))
        (henkan-okuri-nashi db "developper"))
 
 
@@ -129,23 +129,23 @@
        (approximate-search db "okonU" #t))
 
 (test* "okuri ari 1"
-       '("変化")
+       '(("変化" . #f))
        (henkan-okuri-ari db "henkaSuru"))
 
 (test* "okuri ari 2"
-       '("変化")
+       '(("変化" . #f))
        (henkan-okuri-ari db "HenkaSuru"))
 
 (test* "okuri ari 3"
-       '("行" "行な;※送り位置補正")
+       '(("行" . #f) ("行な" . "※送り位置補正"))
        (henkan-okuri-ari db "okonaU"))
 
 (test* "okuri ari 4"
-       '("行" "行な;※送り位置補正")
+       '(("行" . #f) ("行な" . "※送り位置補正"))
        (henkan-okuri-ari db "OkonaU"))
 
 (test* "okuri ari 5"
-       '("行" "行な;※送り位置補正")
+       '(("行" . #f) ("行な" . "※送り位置補正"))
        (henkan-okuri-ari db "okonU"))
 
 

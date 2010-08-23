@@ -27,15 +27,22 @@
     sorted-lst))
 
 
-;; split "/a/b/c/" into '("a" "b" "c") list
+;; split "/a;annotation/b/c/" into '(("a" . "annotation") ("b" . #f) ("c" . #f))  alist
 (define (split-henkan-kouho str)
-  (let1 trimmed (cond
-                 ((rxmatch #/^[\/](.+)[\/]?$/ str)
-                  => (lambda (m)
-                       (rxmatch-substring m 1)))
-                 (else
-                  (errorf "split-henkan-kouho got [%s]. it requires /a/b/c/ format string" str)))
-    (to-list (trimmed.split "/"))))
+  (let* ((trimmed (cond
+                   ((rxmatch #/^[\/](.+)[\/]?$/ str)
+                    => (lambda (m)
+                         (rxmatch-substring m 1)))
+                   (else
+                    (errorf "split-henkan-kouho got [%s]. it requires /a/b/c/ format string" str))))
+         (splitted (to-list (trimmed.split "/"))))
+    ;; pickup annotation
+    (map
+     (lambda (entry)
+       (let1 vec (entry.split ";")
+         (cons (vector-ref vec 0)
+               (vector-ref vec 1 #f))))
+     splitted)))
 
 
 ;; 送り仮名なしの変換
