@@ -260,10 +260,6 @@
     (alist->hash-table swapped)))
 
 
-;;(define %match-and-push
-;;  (marco (str)
-;;         ))
-
 (define (gen-hiragana->roman-pattens hiragana)
   (let ((lst '())
         (h sekka-kana->roman-hash))
