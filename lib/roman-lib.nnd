@@ -335,7 +335,7 @@
 ;; if failed, return #f
 (define (gen-roman->katakana roman-str)
   (let1 result (gen-roman->hiragana roman-str)
-    (or (gen-hiragana->katakana result)
+    (if result (gen-hiragana->katakana result)
         #f)))
 
 

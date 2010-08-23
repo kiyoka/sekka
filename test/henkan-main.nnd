@@ -164,6 +164,22 @@
 
 
 ;;-------------------------------------------------------------------
+(test-section "henkan hiragana")
+
+(test* "hiragana 1"
+       '(("あいうえお" . #f) ("アイウエオ" . #f))
+       (henkan-hiragana db "aiueo"))
+
+(test* "hiragana 2"
+       '(("の" . #f) ("ノ" . #f))
+       (henkan-hiragana db "no"))
+
+(test* "hiragana 3"
+       '((#f . #f) (#f . #f))
+       (henkan-hiragana db "b"))
+
+
+;;-------------------------------------------------------------------
 (test-section "henkan non-kanji")
 
 (test* "non-kanji 1"
@@ -173,6 +189,11 @@
 (test* "non-kanji 2"
        '(("の" . #f) ("ノ" . #f))
        (henkan-non-kanji db "no"))
+
+(test* "non-kanji 3"
+       '(("b" . #f) ("b" . #f))
+       (henkan-non-kanji db "b"))
+
 
 ;;===================================================================
 (test-end)

@@ -90,12 +90,17 @@
            kouho)))))
 
 
-;; 漢字かな混じり以外の変換
-(define (henkan-non-kanji db keyword)
+;; 平仮名の変換
+(define (henkan-hiragana db keyword)
   (let1 str (keyword.downcase)
     `(
       ( ,(gen-roman->hiragana str) . #f )
       ( ,(gen-roman->katakana str) . #f ))))
+
+
+;; 記号混じりの文字列の変換
+(define (henkan-non-kanji db keyword)
+  `(("(未サポート)" . #f)))
 
 
 ;; keyword には ローマ字のみを受け付ける
@@ -112,8 +117,11 @@
       ;; 送りなし
       (let1 result (approximate-search db keyword #f)  (disp-search-result result))
       (henkan-okuri-nashi db keyword))))
+   ((gen-roman->hiragana keyword)
+    (henkan-hiragana db keyword))
    (else
     (henkan-non-kanji db keyword))))
+
 
 
 
