@@ -8,7 +8,8 @@ task :check do
   sh "/bin/rm -f test.record"
   sh "/bin/rm -f test.kct"
   sh "echo > test.log"
-  [ "./test/jisyo.nnd",
+  [ "./test/roman-lib.nnd", 
+    "./test/jisyo.nnd", 
     "./test/henkan_engine.nnd"
   ].each {|filename|
     sh  sprintf( "ruby -I ./lib /usr/local/bin/nendo %s", filename )

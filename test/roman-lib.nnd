@@ -1,0 +1,82 @@
+;;-*- mode: nendo; syntax: scheme -*-;;
+;; test for sekka jisyo library
+
+(use nendo.test)
+(load "./lib/roman-lib.nnd")
+
+(define debug-print-length 2000)
+
+(test-start "roman-lib")
+
+;;===================================================================
+
+;;-------------------------------------------------------------------
+(test-section "romaji kana conversion table")
+
+
+(test* "kana->roman 1"
+       '("fu" "hu")
+       (hash-table-get sekka-kana->roman-hash "ふ" #f))
+
+(test* "kana->roman 2"
+       '("xa" "la")
+       (hash-table-get sekka-kana->roman-hash "ぁ" #f))
+
+(test* "kana->roman 3"
+       '("chi" "ti" "tyi")
+       (hash-table-get sekka-kana->roman-hash "ち" #f))
+
+(test* "kana->roman 4"
+       '("chi" "ti" "tyi")
+       (hash-table-get sekka-kana->roman-hash "ち" #f))
+
+
+;;-------------------------------------------------------------------
+(test-section "romaji kana conversion functions")
+
+(let1 hira-list
+    (hash-table-keys sekka-kana->roman-hash)
+  (test* "kana->roman table length"        233 (length hira-list))
+  (test* "kana->roman key duplicate check" 233 (length (uniq (sort hira-list)))))
+
+(test* "hiragana -> roman-pattern1"
+       '(("he") ("n") ("ka" "ca") ("n"))
+       (gen-hiragana->roman-pattens "へんかん"))
+(test* "hiragana -> roman-pattern2"
+       '(("ka" "ca") ("n") ("ji" "zi") ("he") ("n") ("ka" "ca") ("n"))
+       (gen-hiragana->roman-pattens "かんじへんかん"))
+(test* "hiragana -> roman-pattern3"
+       '(("shi" "si") ("ze") ("n") ("ge") ("n") ("go") ("sho" "syo") ("ri"))
+       (gen-hiragana->roman-pattens "しぜんげんごしょり"))
+
+(test* "patterns -> roman-list1"
+       '("kanji" "kanzi" "canji" "canzi")
+       (patterns->roman-list  '(("ka" "ca") ("n") ("ji" "zi"))))
+
+(test* "patterns -> roman-list2"
+       '("shizengengoshori" "shizengengosyori" "sizengengoshori" "sizengengosyori")
+       (patterns->roman-list  '(("shi" "si") ("ze") ("n") ("ge") ("n") ("go") ("sho" "syo") ("ri"))))
+
+(test* "hiragana -> roman-list1"
+       '("kanji" "kanzi" "canji" "canzi")
+       (gen-hiragana->roman-list "かんじ"))
+
+(test* "hiragana -> roman-list2"
+       '("nishiyama" "nisiyama")
+       (gen-hiragana->roman-list "にしやま"))
+
+(test* "hiragana -> roman-list3"
+       '("toukyou")
+       (gen-hiragana->roman-list "とうきょう"))
+
+(test* "hiragana -> roman-list4"
+       '("ko-hi-" "ko-hi^" "ko^hi-" "ko^hi^" "co-hi-" "co-hi^" "co^hi-" "co^hi^")       
+       (gen-hiragana->roman-list "こーひー"))
+
+(test* "hiragana -> roman-list4"
+       '("tsumiki" "tsumici" "tumiki" "tumici")
+       (gen-hiragana->roman-list "つみき"))
+
+
+;;===================================================================
+(test-end)
