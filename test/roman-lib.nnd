@@ -26,7 +26,9 @@
        '("chi" "ti" "tyi")
        (hash-table-get sekka-kana->roman-hash "ち" #f))
 
+;;-------------------------------------------------------------------
 (test-section "roman->kana conversion hash")
+
 (test* "roman->kana 1"
        '("あ")
        (hash-table-get sekka-roman->kana-hash "a" #f))
@@ -39,6 +41,67 @@
 (test* "roman->kana 4"
        '("っ")
        (hash-table-get sekka-roman->kana-hash "xtsu" #f))
+
+;;-------------------------------------------------------------------
+(test-section "hiragana<->katanaka conversion functions")
+
+(test* "hiragana->katakana 1"
+       "アイウエオーァィゥェォッ"
+       (gen-hiragana->katakana "あいうえおーぁぃぅぇぉっ"))
+(test* "hiragana->katakana 2"
+       "パイナップル"
+       (gen-hiragana->katakana "ぱいなっぷる"))
+(test* "hiragana->katakana 3"
+       "アメニモマケズ"
+       (gen-hiragana->katakana "あめにもまけず"))
+
+(test* "hiragana->katakana 1"
+       "あいうえおーぁぃぅぇぉっ"
+       (gen-katakana->hiragana "アイウエオーァィゥェォッ"))
+(test* "hiragana->katakana 2"
+       "ありがとうございます"
+       (gen-katakana->hiragana "アリガトウゴザイマス"))
+(test* "hiragana->katakana 3"
+       "いろはにほへとちりぬるを"
+       (gen-katakana->hiragana "イロハニホヘトチリヌルヲ"))
+
+(test* "is katakana 1"
+       #t
+       (is-katakana "アメニモマケズ"))
+(test* "is katakana 2"
+       #f
+       (is-katakana "englishア"))
+(test* "is katakana 3"
+       #f
+       (is-katakana "アenglish"))
+(test* "is katakana 4"
+       #f
+       (is-katakana "engアlish"))
+(test* "is katakana 5"
+       #f
+       (is-katakana "あア"))
+(test* "is katakana 6"
+       #f
+       (is-katakana "アメニEモマケズ"))
+(test* "is hiragana 1"
+       #t
+       (is-hiragana "ひらがなのぶんしょう"))
+(test* "is hiragana 2"
+       #f
+       (is-hiragana "ひらがなノぶんしょう"))
+(test* "is hiragana 3"
+       #f
+       (is-hiragana "Eひらがなのぶんしょう"))
+(test* "is hiragana 4"
+       #f
+       (is-hiragana "ひらがなEのぶんしょう"))
+(test* "is hiragana 5"
+       #f
+       (is-hiragana "ひらがなのぶんしょうE"))
+(test* "is hiragana 6"
+       #f
+       (is-hiragana "あア"))
+
 
 ;;-------------------------------------------------------------------
 (test-section "kana->roman conversion functions")
@@ -89,24 +152,30 @@
 
 ;;-------------------------------------------------------------------
 (test-section "roman->kana conversion functions")
-(test* "roman -> kanji 1"
+(test* "roman -> hiragana 1"
        "つみき"       
        (gen-roman->hiragana "tsumiki"))
-(test* "roman -> kanji 2"
+(test* "roman -> hiragana 2"
        "こーひー"
        (gen-roman->hiragana "ko-hi-"))
-(test* "roman -> kanji 3"
+(test* "roman -> hiragana 3"
        "かんじ"
        (gen-roman->hiragana "kanji"))
-(test* "roman -> kanji 4"
+(test* "roman -> hiragana 4"
        "かんじ"
        (gen-roman->hiragana "canzi"))
-(test* "roman -> kanji 5"
+(test* "roman -> hiragana 5"
        "とうきょうとっきょきょかきょく"
        (gen-roman->hiragana "toukyoutokkyokyokakyoku"))
-(test* "roman -> kanji 6"
+(test* "roman -> hiragana 6"
        "はっぴょうってきょうかぁ"
        (gen-roman->hiragana "happyouttekyoukaxa"))
+(test* "roman -> hiragana 7"
+       #f
+       (gen-roman->hiragana "b"))
+(test* "roman -> hiragana 8"
+       #f
+       (gen-roman->hiragana "xx"))
 
 
 ;;===================================================================

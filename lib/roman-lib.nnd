@@ -270,11 +270,11 @@
 
 ;; カタカナの文字列かどうかを評価する
 (define (is-katakana str)
-  (rxmatch #/^[ア-ンァィゥェォャュョッー]+$/ str))
+  (if (rxmatch #/^[ア-ンァィゥェォャュョッー]+$/ str) #t #f))
 
 ;; 平仮名の文字列かどうかを評価する
 (define (is-hiragana str)
-  (rxmatch #/^[あ-んぁぃぅぇぉゃゅょっー]+$/ str))
+  (if (rxmatch #/^[あ-んぁぃぅぇぉゃゅょっー]+$/ str) #t #f))
 
 
 (define (gen-hiragana->roman-pattens hiragana)
@@ -298,10 +298,11 @@
           (loop (str.slice (str1.size) (str.size)))))))
     (reverse lst)))
 
-
+;; if failed, return #f
 (define (gen-roman->hiragana roman-str)
   (let ((lst '())
-        (h sekka-roman->kana-hash))
+        (h sekka-roman->kana-hash)
+        (err #f))
     (let loop ((str roman-str))
       (let ((str1 (str.slice 0 1))
             (str2 (str.slice 0 2))
@@ -321,11 +322,15 @@
           (loop (str.slice (str2.size) (str.size))))
          ((hash-table-exist? h str1)
           (set! lst (cons (hash-table-get h str1) lst))
-          (loop (str.slice (str1.size) (str.size)))))))
-    (string-join
-     (map
-      (lambda (x) (car x))
-      (reverse lst)))))
+          (loop (str.slice (str1.size) (str.size))))
+         (else
+          (set! err #t)))))
+    (if err
+        #f
+        (string-join
+         (map
+          (lambda (x) (car x))
+          (reverse lst))))))
 
 
 ;; This function port from Gauche-0.9's util.combinations.
