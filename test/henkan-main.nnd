@@ -18,6 +18,7 @@
 (let ((_input (StringIO.new
                (string-join
                 '(
+                  "わたしh /私/"
                   "おこなu /行/行な;※送り位置補正/"
                   "へんかん /変換/返還/"
                   "へんか /変化/返歌/"
@@ -34,7 +35,8 @@
                   )
                 "\n")))
       (sekka-jisyo-data
-       '("okonaU Cおこなu" "oconaU Cおこなu" "おこなu /行/行な;※送り位置補正/" "henkan Cへんかん" "hencan Cへんかん" "へんかん /変換/返還/" "henka Cへんか" "henca Cへんか" "へんか /変化/返歌/" "henkaS Cへんかs" "hencaS Cへんかs" "へんかs /変化/" "shizengengo Cしぜんげんご" "sizengengo Cしぜんげんご" "しぜんげんご /自然言語/" "shizengengoshori Cしぜんげんごしょり" "shizengengosyori Cしぜんげんごしょり" "sizengengoshori Cしぜんげんごしょり" "sizengengosyori Cしぜんげんごしょり" "しぜんげんごしょり /自然言語処理/" "shizengengorikai Cしぜんげんごりかい" "shizengengoricai Cしぜんげんごりかい" "sizengengorikai Cしぜんげんごりかい" "sizengengoricai Cしぜんげんごりかい" "しぜんげんごりかい /自然言語理解/" "developer /デベロッパー/ディベロッパー/デベロッパ/" "! /！/感嘆符/" ">an C>あん" ">あん /案/" "{ /｛/" "kakko Cかっこ" "cakko Cかっこ" "かっこ /確固/括弧/各個/各戸/確乎/羯鼓;雅楽の打楽器/格好/『/』;二重鉤括弧/【/】;隅付き括弧/［/］;大括弧(bracket)/〔/〕;亀甲括弧/〈/〉;山括弧/《/》;二重山括弧/｛/｝;中括弧(brace)/「/」;鉤括弧/（/）;小括弧,丸括弧(parenthesis)/‘/’;singlequote/“/”;doublequote/『』/【】/［］/〔〕/〈〉/《》/｛｝/「」/（）/‘’/“”/" "kokka Cこっか" "cokka Cこっか" "こっか /国家;state/国歌;anthem.「-斉唱」/国花/骨化/國家;「国」旧字/黒化/刻下/】/）/］/』/")))
+       '("watashiH Cわたしh" "watasiH Cわたしh" "わたしh /私/" "okonaU Cおこなu" "oconaU Cおこなu" "おこなu /行/行な;※送り位置補正/" "henkan Cへんかん" "hencan Cへんかん" "へんかん /変換/返還/" "henka Cへんか" "henca Cへんか" "へんか /変化/返歌/" "henkaS Cへんかs" "hencaS Cへんかs" "へんかs /変化/" "shizengengo Cしぜんげんご" "sizengengo Cしぜんげんご" "しぜんげんご /自然言語/" "shizengengoshori Cしぜんげんごしょり" "shizengengosyori Cしぜんげんごしょり" "sizengengoshori Cしぜんげんごしょり" "sizengengosyori Cしぜんげんごしょり" "しぜんげんごしょり /自然言語処理/" "shizengengorikai Cしぜんげんごりかい" "shizengengoricai Cしぜんげんごりかい" "sizengengorikai Cしぜんげんごりかい" "sizengengoricai Cしぜんげんごりかい" "しぜんげんごりかい /自然言語理解/" "developer /デベロッパー/ディベロッパー/デベロッパ/" "! /！/感嘆符/" ">an C>あん" ">あん /案/" "{ /｛/" "kakko Cかっこ" "cakko Cかっこ" "かっこ /確固/括弧/各個/各戸/確乎/羯鼓;雅楽の打楽器/格好/『/』;二重鉤括弧/【/】;隅付き括弧/［/］;大括弧(bracket)/〔/〕;亀甲括弧/〈/〉;山括弧/《/》;二重山括弧/｛/｝;中括弧(brace)/「/」;鉤括弧/（/）;小括弧,丸括弧(parenthesis)/‘/’;singlequote/“/”;doublequote/『』/【】/［］/〔〕/〈〉/《》/｛｝/「」/（）/‘’/“”/" "kokka Cこっか" "cokka Cこっか" "こっか /国家;state/国歌;anthem.「-斉唱」/国花/骨化/國家;「国」旧字/黒化/刻下/】/）/］/』/")
+       ))
        
   (test* "Create test jisyo"
          sekka-jisyo-data          
@@ -129,46 +131,48 @@
        (approximate-search db "okonU" #t))
 
 (test* "okuri ari 1"
-       '(("変化する" . #f))
-       (henkan-okuri-ari db "henkaSuru"))
+       '(("私は" . #f))
+       (henkan-okuri-ari db "watashiHa"))
 
 (test* "okuri ari 2"
        '(("変化する" . #f))
-       (henkan-okuri-ari db "HenkaSuru"))
+       (henkan-okuri-ari db "henkaSuru"))
 
 (test* "okuri ari 3"
+       '(("変化する" . #f))
+       (henkan-okuri-ari db "HenkaSuru"))
+
+(test* "okuri ari 4"
+       '(("変化する" . #f))
+       (henkan-okuri-ari db "HenkaSURU"))
+
+(test* "okuri ari 5"
+       '(("変化する" . #f))
+       (henkan-okuri-ari db "HenkaSuRu"))
+
+(test* "okuri ari 6"
        '(("行う" . #f) ("行なう" . "※送り位置補正"))
        (henkan-okuri-ari db "okonaU"))
 
-(test* "okuri ari 4"
+(test* "okuri ari 7"
        '(("行う" . #f) ("行なう" . "※送り位置補正"))
        (henkan-okuri-ari db "OkonaU"))
 
-(test* "okuri ari 5"
+(test* "okuri ari 8"
        '(("行う" . #f) ("行なう" . "※送り位置補正"))
        (henkan-okuri-ari db "okonU"))
 
 
 ;;-------------------------------------------------------------------
-(test-section "henkan kana")
+(test-section "henkan non-kanji")
 
+(test* "non-kanji 1"
+       '(("あいうえお" . #f) ("アイウエオ" . #f))
+       (henkan-non-kanji db "aiueo"))
 
-;;(test* "kana 1"
-;;       '()
-;;       (henkan-kana db "aiueo"))
-
-;;(test* "kana 2"
-;;       '()
-;;       (henkan-non-kanji db "no"))
-
-
-;;-------------------------------------------------------------------
-(test-section "henkan (non alphabet)")
-
-;;(test* "non-alphabet 1"
-;;       '()
-;;       (henkan-kana db "{"))
-
+(test* "non-kanji 2"
+       '(("の" . #f) ("ノ" . #f))
+       (henkan-non-kanji db "no"))
 
 ;;===================================================================
 (test-end)

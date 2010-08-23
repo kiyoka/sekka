@@ -5,6 +5,7 @@
 (use srfi-1)
 (require "kyotocabinet")
 (require "amatch")
+(load "./lib/roman-lib.nnd")
 (require "./lib/approximatesearch")
 
 (define (string-drop str n)
@@ -64,7 +65,7 @@
 
 ;; 送り仮名ありの変換
 (define (henkan-okuri-ari db keyword)
-  (let1 m (rxmatch #/^([a-zA-Z])([a-z\-^]+)([A-Z])([a-z]*)$/ keyword)
+  (let1 m (rxmatch #/^([a-zA-Z])([a-z\-^]+)([A-Z])([a-zA-Z]*)$/ keyword)
     (if (not m)
         (errorf "henkan-okuri-ari: requires xxxxXx or XxxxxXx ascii format.  got:[%s] " keyword)
         (let* ((result (approximate-search db
@@ -72,9 +73,9 @@
                                               (rxmatch-substring m 2)
                                               (rxmatch-substring m 3))
                                            #t))
-               (okurigana  (gen-roman->hiragana (+
-                                                 (. (rxmatch-substring m 3) downcase)
-                                                 (rxmatch-substring m 4))))
+               (okurigana  (gen-roman->hiragana (. (+
+                                                    (rxmatch-substring m 3)
+                                                    (rxmatch-substring m 4)) downcase)))
                (kouho      (uniq (map
                                   (lambda (x)
                                     (third x))
@@ -89,6 +90,14 @@
            kouho)))))
 
 
+;; 漢字かな混じり以外の変換
+(define (henkan-non-kanji db keyword)
+  (let1 str (keyword.downcase)
+    `(
+      ( ,(gen-roman->hiragana str) . #f )
+      ( ,(gen-roman->katakana str) . #f ))))
+
+
 ;; keyword には ローマ字のみを受け付ける
 (define (sekka-henkan db keyword)
   ;; キーワードの種別で処理を分割する
@@ -97,11 +106,14 @@
     (cond
      ((rxmatch #/[A-Z]/ (keyword.slice 1 keyword.size))
       ;; 送りあり
+      (let1 result (approximate-search db keyword #t)  (disp-search-result result))
       (henkan-okuri-ari db keyword))
      (else
       ;; 送りなし
+      (let1 result (approximate-search db keyword #f)  (disp-search-result result))
       (henkan-okuri-nashi db keyword))))
    (else
     (henkan-non-kanji db keyword))))
+
 
 
