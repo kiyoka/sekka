@@ -28,19 +28,20 @@
 
 
 ;; split "/a;annotation/b/c/" into '(("a" . "annotation") ("b" . #f) ("c" . #f))  alist
-(define (split-henkan-kouho str)
+(define (split-henkan-kouho str . okuri)
   (let* ((trimmed (cond
                    ((rxmatch #/^[\/](.+)[\/]?$/ str)
                     => (lambda (m)
                          (rxmatch-substring m 1)))
                    (else
                     (errorf "split-henkan-kouho got [%s]. it requires /a/b/c/ format string" str))))
-         (splitted (to-list (trimmed.split "/"))))
+         (splitted (to-list (trimmed.split "/")))
+         (okuri    (get-optional okuri "")))
     ;; pickup annotation
     (map
      (lambda (entry)
        (let1 vec (entry.split ";")
-         (cons (vector-ref vec 0)
+         (cons (+ (vector-ref vec 0) okuri)
                (vector-ref vec 1 #f))))
      splitted)))
 
@@ -71,16 +72,20 @@
                                               (rxmatch-substring m 2)
                                               (rxmatch-substring m 3))
                                            #t))
-               (kouho  (uniq (map
-                              (lambda (x)
-                                (third x))
-                              result))))
+               (okurigana  (gen-roman->hiragana (+
+                                                 (. (rxmatch-substring m 3) downcase)
+                                                 (rxmatch-substring m 4))))
+               (kouho      (uniq (map
+                                  (lambda (x)
+                                    (third x))
+                                  result))))
           (append-map
            (lambda (value)
              (split-henkan-kouho
               (if (rxmatch #/^C/ value)
                   (hash-table-get db (string-drop value 1)) ;; continue
-                  value)))
+                  value)
+              okurigana))
            kouho)))))
 
 
