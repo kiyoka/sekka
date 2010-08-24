@@ -127,11 +127,11 @@
     (cond
      ((rxmatch #/[A-Z]/ (keyword.slice 1 keyword.size))
       ;; 送りあり
-      (let1 result (approximate-search db keyword #t)  (disp-search-result result))
+      ;;(let1 result (approximate-search db keyword #t)  (disp-search-result result))
       (henkan-okuri-ari db keyword))
      (else
       ;; 送りなし
-      (let1 result (approximate-search db keyword #f)  (disp-search-result result))
+      ;;(let1 result (approximate-search db keyword #f)  (disp-search-result result))
       (henkan-okuri-nashi db keyword))))
    ((gen-roman->hiragana keyword)
     (henkan-hiragana db keyword))

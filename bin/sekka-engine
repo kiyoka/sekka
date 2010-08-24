@@ -45,6 +45,7 @@
     (db.close)))
 
 
+
 (define (display-help)
   (print "Usage : ")
   (print "  sekka-engine [SEKKA-JISYO.L]  ... > input and henkan loop."))
