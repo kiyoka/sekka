@@ -27,15 +27,20 @@
                   "しぜんげんごしょり /自然言語処理/"
                   "しぜんげんごりかい /自然言語理解/"
                   "developer /デベロッパー/ディベロッパー/デベロッパ/"
-                  "! /！/感嘆符/"
                   ">あん /案/"
                   "{ /｛/"
                   "かっこ /確固/括弧/各個/各戸/確乎/羯鼓;雅楽の打楽器/格好/『/』;二重鉤括弧/【/】;隅付き括弧/［/］;大括弧(bracket)/〔/〕;亀甲括弧/〈/〉;山括弧/《/》;二重山括弧/｛/｝;中括弧(brace)/「/」;鉤括弧/（/）;小括弧,丸括弧(parenthesis)/‘/’;singlequote/“/”;doublequote/『』/【】/［］/〔〕/〈〉/《》/｛｝/「」/（）/‘’/“”/"
                   "こっか /国家;state/国歌;anthem.「-斉唱」/国花/骨化/國家;「国」旧字/黒化/刻下/】/）/］/』/"
+                  "! /！/感嘆符/"
+                  ". /．/・/。/…;.../"
+                  "* /＊/※/×/"
+                  "? /？/"
+                  "/ /／/÷/"
+                  "!= /≠/"
                   )
                 "\n")))
       (sekka-jisyo-data
-       '("watashiH Cわたしh" "watasiH Cわたしh" "わたしh /私/" "okonaU Cおこなu" "oconaU Cおこなu" "おこなu /行/行な;※送り位置補正/" "henkan Cへんかん" "hencan Cへんかん" "へんかん /変換/返還/" "henka Cへんか" "henca Cへんか" "へんか /変化/返歌/" "henkaS Cへんかs" "hencaS Cへんかs" "へんかs /変化/" "shizengengo Cしぜんげんご" "sizengengo Cしぜんげんご" "しぜんげんご /自然言語/" "shizengengoshori Cしぜんげんごしょり" "shizengengosyori Cしぜんげんごしょり" "sizengengoshori Cしぜんげんごしょり" "sizengengosyori Cしぜんげんごしょり" "しぜんげんごしょり /自然言語処理/" "shizengengorikai Cしぜんげんごりかい" "shizengengoricai Cしぜんげんごりかい" "sizengengorikai Cしぜんげんごりかい" "sizengengoricai Cしぜんげんごりかい" "しぜんげんごりかい /自然言語理解/" "developer /デベロッパー/ディベロッパー/デベロッパ/" "! /！/感嘆符/" ">an C>あん" ">あん /案/" "{ /｛/" "kakko Cかっこ" "cakko Cかっこ" "かっこ /確固/括弧/各個/各戸/確乎/羯鼓;雅楽の打楽器/格好/『/』;二重鉤括弧/【/】;隅付き括弧/［/］;大括弧(bracket)/〔/〕;亀甲括弧/〈/〉;山括弧/《/》;二重山括弧/｛/｝;中括弧(brace)/「/」;鉤括弧/（/）;小括弧,丸括弧(parenthesis)/‘/’;singlequote/“/”;doublequote/『』/【】/［］/〔〕/〈〉/《》/｛｝/「」/（）/‘’/“”/" "kokka Cこっか" "cokka Cこっか" "こっか /国家;state/国歌;anthem.「-斉唱」/国花/骨化/國家;「国」旧字/黒化/刻下/】/）/］/』/")
+       '("watashiH Cわたしh" "watasiH Cわたしh" "わたしh /私/" "okonaU Cおこなu" "oconaU Cおこなu" "おこなu /行/行な;※送り位置補正/" "henkan Cへんかん" "hencan Cへんかん" "へんかん /変換/返還/" "henka Cへんか" "henca Cへんか" "へんか /変化/返歌/" "henkaS Cへんかs" "hencaS Cへんかs" "へんかs /変化/" "shizengengo Cしぜんげんご" "sizengengo Cしぜんげんご" "しぜんげんご /自然言語/" "shizengengoshori Cしぜんげんごしょり" "shizengengosyori Cしぜんげんごしょり" "sizengengoshori Cしぜんげんごしょり" "sizengengosyori Cしぜんげんごしょり" "しぜんげんごしょり /自然言語処理/" "shizengengorikai Cしぜんげんごりかい" "shizengengoricai Cしぜんげんごりかい" "sizengengorikai Cしぜんげんごりかい" "sizengengoricai Cしぜんげんごりかい" "しぜんげんごりかい /自然言語理解/" "developer /デベロッパー/ディベロッパー/デベロッパ/" ">an C>あん" ">あん /案/" "{ /｛/" "kakko Cかっこ" "cakko Cかっこ" "かっこ /確固/括弧/各個/各戸/確乎/羯鼓;雅楽の打楽器/格好/『/』;二重鉤括弧/【/】;隅付き括弧/［/］;大括弧(bracket)/〔/〕;亀甲括弧/〈/〉;山括弧/《/》;二重山括弧/｛/｝;中括弧(brace)/「/」;鉤括弧/（/）;小括弧,丸括弧(parenthesis)/‘/’;singlequote/“/”;doublequote/『』/【】/［］/〔〕/〈〉/《》/｛｝/「」/（）/‘’/“”/" "kokka Cこっか" "cokka Cこっか" "こっか /国家;state/国歌;anthem.「-斉唱」/国花/骨化/國家;「国」旧字/黒化/刻下/】/）/］/』/" "! /！/感嘆符/" ". /．/・/。/…;.../" "* /＊/※/×/" "? /？/" "/ /／/÷/" "!= /≠/")
        ))
        
   (test* "Create test jisyo"
@@ -183,16 +188,20 @@
 (test-section "henkan non-kanji")
 
 (test* "non-kanji 1"
-       '(("あいうえお" . #f) ("アイウエオ" . #f))
-       (henkan-non-kanji db "aiueo"))
+       '(("｛" . #f))
+       (henkan-non-kanji db "{"))
 
 (test* "non-kanji 2"
-       '(("の" . #f) ("ノ" . #f))
-       (henkan-non-kanji db "no"))
+       '(("！" . #f) ("感嘆符" . #f))
+       (henkan-non-kanji db "!"))
 
 (test* "non-kanji 3"
-       '(("b" . #f) ("b" . #f))
-       (henkan-non-kanji db "b"))
+       '(("／" . #f) ("÷" . #f))
+       (henkan-non-kanji db "/"))
+
+(test* "non-kanji 4"
+       '(("≠" . #f))
+       (henkan-non-kanji db "!="))
 
 
 ;;===================================================================

@@ -28,6 +28,14 @@
     sorted-lst))
 
 
+;; 厳密検索
+(define (exact-search db keyword)
+  (let1 v (hash-table-get db keyword #f)
+    (if v
+        `((1.0 ,keyword ,v))
+        '())))
+
+
 ;; split "/a;annotation/b/c/" into '(("a" . "annotation") ("b" . #f) ("c" . #f))  alist
 (define (split-henkan-kouho str . okuri)
   (let* ((trimmed (cond
@@ -98,9 +106,17 @@
       ( ,(gen-roman->katakana str) . #f ))))
 
 
-;; 記号混じりの文字列の変換
+;; 記号を含むキーワードの変換
 (define (henkan-non-kanji db keyword)
-  `(("(未サポート)" . #f)))
+  (let* ((result (exact-search db keyword))
+         (kouho  (map
+                  (lambda (x)
+                    (third x))
+                  result)))
+    (append-map
+     (lambda (value)
+       (split-henkan-kouho value))
+     kouho)))
 
 
 ;; keyword には ローマ字のみを受け付ける
@@ -121,7 +137,4 @@
     (henkan-hiragana db keyword))
    (else
     (henkan-non-kanji db keyword))))
-
-
-
 
