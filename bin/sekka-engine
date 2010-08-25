@@ -19,6 +19,14 @@
    result)))
 
 
+(define (sekka-scheme-to-elisp sexp)
+  (map
+   (lambda (x)
+     (cons (car x)
+           (if (cdr x) (cdr x) nil)))
+   sexp))
+
+
 (define (sekka-read-henkan-loop db-filename)
   (define (readline)
     (printf "> ")
@@ -39,8 +47,8 @@
       (if (rxmatch #/^[qQ]$/ line)
           (printf "quit.\n")
           (begin
-            (for-each (lambda (pa) (printf " [%s](%s)\n" (car pa) (if (cdr pa) (cdr pa) "")))
-                      (sekka-henkan db line))
+            (write (sekka-scheme-to-elisp (sekka-henkan db line)))
+            (newline)
             (loop (readline)))))
     (db.close)))
 

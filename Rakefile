@@ -31,3 +31,7 @@ task :demo do
 #  sh "./bin/sekka-engine ./data/SEKKA-JISYO.S.201001"
   sh "./bin/sekka-engine ./data/SEKKA-JISYO.L.201008"
 end
+
+task :rackup do
+  sh "rackup ./lib/sekka.ru"
+end
