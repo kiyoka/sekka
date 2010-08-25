@@ -1,4 +1,4 @@
-;;;-*- mode: lisp-interaction; syntax: elisp -*-;;;
+;;;-*- mode: lisp-interaction; syntax: elisp ; coding: iso-2022-jp -*-"
 ;;
 ;; "sumibi.el" is a client for Sumibi server.
 ;;
