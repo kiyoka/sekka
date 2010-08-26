@@ -36,8 +36,8 @@
         '())))
 
 
-;; split "/a;annotation/b/c/" into '(("a" . "annotation") ("b" . #f) ("c" . #f))  alist
-(define (split-henkan-kouho str . okuri)
+;; split "/a;annotation/b/c/" into `(("a" "annotation" ,src) ("b" #f ,src) ("c" #f ,src))  alist
+(define (split-henkan-kouho str src . okuri)
   (let* ((trimmed (cond
                    ((rxmatch #/^[\/](.+)[\/]?$/ str)
                     => (lambda (m)
@@ -50,8 +50,9 @@
     (map
      (lambda (entry)
        (let1 vec (entry.split ";")
-         (cons (+ (vector-ref vec 0) okuri)
-               (vector-ref vec 1 #f))))
+         (list (+ (vector-ref vec 0) okuri)
+               (vector-ref vec 1 #f)
+               src)))
      splitted)))
 
 
@@ -64,10 +65,14 @@
                         result))))
     (append-map
      (lambda (value)
-       (split-henkan-kouho
-        (if (rxmatch #/^C/ value)
-            (hash-table-get db (string-drop value 1)) ;; continue
-            value)))
+       (if-let1 m (rxmatch #/^C(.+)$/ value)
+         (split-henkan-kouho
+          (hash-table-get db (string-drop value 1))
+          (rxmatch-substring m 1)
+          ) ;; continue to fetch
+         (split-henkan-kouho
+          value
+          keyword)))
      kouho)))
 
 
@@ -90,11 +95,12 @@
                                   result))))
           (append-map
            (lambda (value)
-             (split-henkan-kouho
-              (if (rxmatch #/^C/ value)
-                  (hash-table-get db (string-drop value 1)) ;; continue
-                  value)
-              okurigana))
+             (if-let1 m (rxmatch #/^C(.+)$/ value)
+               (split-henkan-kouho
+                (hash-table-get db (string-drop value 1))
+                (rxmatch-substring m 1)
+                okurigana) ;; continue to fetch
+               (split-henkan-kouho value keyword okurigana)))
            kouho)))))
 
 
@@ -115,7 +121,7 @@
                   result)))
     (append-map
      (lambda (value)
-       (split-henkan-kouho value))
+       (split-henkan-kouho value keyword))
      kouho)))
 
 

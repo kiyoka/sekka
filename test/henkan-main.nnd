@@ -84,35 +84,35 @@
 (test-section "henkan (okuri nashi)")
 
 (test* "okuri nashi 1"
-       '(("変換" . #f) ("返還" . #f) ("変化" . #f) ("返歌" . #f))
+       '(("変換" #f "へんかん") ("返還" #f "へんかん") ("変化" #f "へんか") ("返歌" #f "へんか"))
        (henkan-okuri-nashi db "henkan"))
 
 (test* "okuri nashi 2"
-       '(("変化" . #f) ("返歌" . #f) ("変換" . #f) ("返還" . #f))
+       '(("変化" #f "へんか") ("返歌" #f "へんか") ("変換" #f "へんかん") ("返還" #f "へんかん"))
        (henkan-okuri-nashi db "henka"))
 
 (test* "okuri nashi 3"
-       '(("変換" . #f) ("返還" . #f) ("変化" . #f) ("返歌" . #f))
+       '(("変換" #f "へんかん") ("返還" #f "へんかん") ("変化" #f "へんか") ("返歌" #f "へんか"))
        (henkan-okuri-nashi db "henkann"))
 
 (test* "okuri nashi 4"
-       '(("自然言語" . #f))
+       '(("自然言語" #f "しぜんげんご"))
        (henkan-okuri-nashi db "shizengengo"))
 
 (test* "okuri nashi 5"
-       '(("自然言語処理" . #f) ("自然言語" . #f))
+       '(("自然言語処理" #f "しぜんげんごしょり") ("自然言語" #f "しぜんげんご"))
        (henkan-okuri-nashi db "shizengengosyo"))
 
 (test* "okuri nashi 6"
-       '(("案" . #f))
+       '(("案" #f ">あん"))
        (henkan-okuri-nashi db ">an"))
 
 (test* "okuri nashi 7"
-       '(("案" . #f))
+       '(("案" #f ">あん"))
        (henkan-okuri-nashi db ">ann"))
 
 (test* "okuri nashi 8"
-       '(("デベロッパー" . #f) ("ディベロッパー" . #f) ("デベロッパ" . #f))
+       '(("デベロッパー" #f "developper") ("ディベロッパー" #f "developper") ("デベロッパ" #f "developper"))
        (henkan-okuri-nashi db "developper"))
 
 
@@ -136,35 +136,35 @@
        (approximate-search db "okonU" #t))
 
 (test* "okuri ari 1"
-       '(("私は" . #f))
+       '(("私は" #f "わたしh"))
        (henkan-okuri-ari db "watashiHa"))
 
 (test* "okuri ari 2"
-       '(("変化する" . #f))
+       '(("変化する" #f "へんかs"))
        (henkan-okuri-ari db "henkaSuru"))
 
 (test* "okuri ari 3"
-       '(("変化する" . #f))
+       '(("変化する" #f "へんかs"))
        (henkan-okuri-ari db "HenkaSuru"))
 
 (test* "okuri ari 4"
-       '(("変化する" . #f))
+       '(("変化する" #f "へんかs"))
        (henkan-okuri-ari db "HenkaSURU"))
 
 (test* "okuri ari 5"
-       '(("変化する" . #f))
+       '(("変化する" #f "へんかs"))
        (henkan-okuri-ari db "HenkaSuRu"))
 
 (test* "okuri ari 6"
-       '(("行う" . #f) ("行なう" . "※送り位置補正"))
+       '(("行う" #f "おこなu") ("行なう" "※送り位置補正" "おこなu"))
        (henkan-okuri-ari db "okonaU"))
 
 (test* "okuri ari 7"
-       '(("行う" . #f) ("行なう" . "※送り位置補正"))
+       '(("行う" #f "おこなu") ("行なう" "※送り位置補正" "おこなu"))
        (henkan-okuri-ari db "OkonaU"))
 
 (test* "okuri ari 8"
-       '(("行う" . #f) ("行なう" . "※送り位置補正"))
+       '(("行う" #f "おこなu") ("行なう" "※送り位置補正" "おこなu"))
        (henkan-okuri-ari db "okonU"))
 
 
@@ -188,19 +188,19 @@
 (test-section "henkan non-kanji")
 
 (test* "non-kanji 1"
-       '(("｛" . #f))
+       '(("｛" #f "{"))
        (henkan-non-kanji db "{"))
 
 (test* "non-kanji 2"
-       '(("！" . #f) ("感嘆符" . #f))
+       '(("！" #f "!") ("感嘆符" #f "!"))
        (henkan-non-kanji db "!"))
 
 (test* "non-kanji 3"
-       '(("／" . #f) ("÷" . #f))
+       '(("／" #f "/") ("÷" #f "/"))
        (henkan-non-kanji db "/"))
 
 (test* "non-kanji 4"
-       '(("≠" . #f))
+       '(("≠" #f "!="))
        (henkan-non-kanji db "!="))
 
 
