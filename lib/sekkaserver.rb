@@ -8,21 +8,20 @@ class SekkaServer
   def initialize
     @core = Nendo::Core.new()
     @core.loadInitFile
-    @core.evalStr( "(define (nendo_version) *nendo-version*)" )
-    @core.evalStr( "(export-to-ruby nendo_version)" )
-    @core.evalStr( "(define counter 0)" )
-    @core.evalStr( "(define (countup) (begin (set! counter (+ counter 1)) counter))" )
-    @core.evalStr( "(export-to-ruby countup)" )
+    @core.load( "./lib/henkan.nnd" )
+    @core.load( "./lib/jisyo-db.nnd" )
+    @core.evalStr( '(define (writeToString sexp) (write-to-string sexp))' )
+    @core.evalStr( '(export-to-ruby writeToString)' )
+    @db = @core.openSekkaJisyo( "./data/SEKKA-JISYO.S.201001" )
   end
+
   def call(env)
     req = Rack::Request.new(env)
     body = case req.request_method
-           when 'GET'
-             if req.path == "/count"
-               "counter " + @core.countup.to_s + ":" + req.path
-             else
-               "no message."
-             end
+           when 'POST'
+             @core.writeToString( @core.sekkaHenkan( @db, "nihongo"))
+           else
+             "no message."
            end
     res = Rack::Response.new { |r|
       r.status = 200

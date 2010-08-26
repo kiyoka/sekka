@@ -75,8 +75,7 @@
 
 (define (openSekkaJisyo basename)
   (let1 db (KyotoCabinet::DB.new)
-    (db.open (+ basename cabinet-ext))
-    (when (db.error)
+    (when (not (db.open (+ basename cabinet-ext)))
       (errorf "db error [%s]\n" (db.error)))
     (db.tune_encoding   "utf-8")
     db))

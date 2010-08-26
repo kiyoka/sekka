@@ -106,10 +106,14 @@
 
 ;; 平仮名の変換
 (define (henkan-hiragana db keyword)
-  (let1 str (keyword.downcase)
-    `(
-      ( ,(gen-roman->hiragana str) . #f )
-      ( ,(gen-roman->katakana str) . #f ))))
+  (let* ((str  (keyword.downcase))
+         (hira (gen-roman->hiragana str))
+         (kata (gen-roman->katakana str)))
+    (if hira
+        `(
+          ( ,hira #f ,keyword)
+          ( ,kata #f ,keyword))
+        `((,keyword #f ,keyword)))))
 
 
 ;; 記号を含むキーワードの変換
@@ -126,7 +130,7 @@
 
 
 ;; keyword には ローマ字のみを受け付ける
-(define (sekkaHenkan db keyword)
+(define (sekka-henkan db keyword)
   ;; キーワードの種別で処理を分割する
   (cond
    ((rxmatch #/[A-Z]/ keyword)
@@ -143,5 +147,11 @@
     (henkan-hiragana db keyword))
    (else
     (henkan-non-kanji db keyword))))
+;; conversion #f => nil for EmacsLisp
+(define (sekkaHenkan db keyword)
+  (map
+   (lambda (x)
+     (map (lambda (val) (if val val nil)) x))
+   (sekka-henkan db keyword)))
 ;; Export to Ruby world
 (export-to-ruby sekkaHenkan)

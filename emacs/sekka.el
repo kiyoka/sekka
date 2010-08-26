@@ -46,7 +46,7 @@
   :group 'input-method
   :group 'Japanese)
 
-(defcustom sekka-server-url "http://localhost/sekka/"
+(defcustom sekka-server-url "http://localhost:9292/henkan/"
   "SekkaサーバーのURLを指定する。"
   :type  'string
   :group 'sekka)
@@ -135,7 +135,7 @@
 
 
 ;;--- デバッグメッセージ出力
-(defvar sekka-psudo-server t)           ; クライアント単体で仮想的にサーバーに接続しているようにしてテストするモード
+(defvar sekka-psudo-server nil)         ; クライアント単体で仮想的にサーバーに接続しているようにしてテストするモード
 
 ;;--- デバッグメッセージ出力
 (defvar sekka-debug nil)		; デバッグフラグ
@@ -215,16 +215,15 @@
 	)
     
     ;; 実際のサーバに接続する
-    (let (
-	  (command
+    (let ((command
 	   (concat
 	    sekka-curl " --silent --show-error "
 	    (format " --max-time %d " sekka-server-timeout)
 	    " --insecure "
 	    (format " --header 'Content-Type: text/plain' ")
 	    (format "%s%s " sekka-server-url func-name)
-	    (format (concat "--data '%s' " query)))))
-      
+	    (format "--data '%s' " query))))
+
       (sekka-debug-print (format "curl-command :%s\n" command))
       
       (let (

@@ -172,16 +172,20 @@
 (test-section "henkan hiragana")
 
 (test* "hiragana 1"
-       '(("あいうえお" . #f) ("アイウエオ" . #f))
+       '(("あいうえお" #f "aiueo") ("アイウエオ" #f "aiueo"))
        (henkan-hiragana db "aiueo"))
 
 (test* "hiragana 2"
-       '(("の" . #f) ("ノ" . #f))
+       '(("の" #f "no") ("ノ" #f "no"))
        (henkan-hiragana db "no"))
 
 (test* "hiragana 3"
-       '((#f . #f) (#f . #f))
+       '(("b" #f "b"))
        (henkan-hiragana db "b"))
+
+(test* "hiragana 4"
+       '(("if" #f "if"))
+       (henkan-hiragana db "if"))
 
 ;;-------------------------------------------------------------------
 (test-section "henkan non-kanji")
@@ -208,18 +212,35 @@
 
 (test* "henkan toplevel 1"
        '(("＊" #f "*") ("※" #f "*") ("×" #f "*"))
-       (sekkaHenkan db "*"))
+       (sekka-henkan db "*"))
 
 (test* "henkan toplevel 2"
-       '(("しぜんげんごりか" . #f) ("シゼンゲンゴリカ" . #f))
-       (sekkaHenkan db "shizengengorika"))
+       '(("しぜんげんごりか" #f "shizengengorika") ("シゼンゲンゴリカ" #f "shizengengorika"))
+       (sekka-henkan db "shizengengorika"))
 
 (test* "henkan toplevel 3"
        '(("自然言語理解" #f "しぜんげんごりかい") ("自然言語" #f "しぜんげんご"))
-       (sekkaHenkan db "Shizengengorika"))
+       (sekka-henkan db "Shizengengorika"))
 
 (test* "henkan toplevel 4"
        '(("変化する" #f "へんかs"))
+       (sekka-henkan db "henkaSuru"))
+
+
+(test* "henkan toplevel(for Elisp) 1"
+       '(("＊" nil "*") ("※" nil "*") ("×" nil "*"))
+       (sekkaHenkan db "*"))
+
+(test* "henkan toplevel(for Elisp) 2"
+       '(("しぜんげんごりか" nil "shizengengorika") ("シゼンゲンゴリカ" nil "shizengengorika"))
+       (sekkaHenkan db "shizengengorika"))
+
+(test* "henkan toplevel(for Elisp) 3"
+       '(("自然言語理解" nil "しぜんげんごりかい") ("自然言語" nil "しぜんげんご"))
+       (sekkaHenkan db "Shizengengorika"))
+
+(test* "henkan toplevel(for Elisp) 4"
+       '(("変化する" nil "へんかs"))
        (sekkaHenkan db "henkaSuru"))
 
 
