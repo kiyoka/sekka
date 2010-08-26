@@ -209,20 +209,17 @@
 (defun sekka-rest-request (func-name query)
   (if sekka-psudo-server
       ;; クライアント単体で仮想的にサーバーに接続しているようにしてテストするモード
-      (progn
-	;;"((\"パイナップル\" nil \"ぱいなっぷる\") (\"ぱいなっぷる\" nil \"ぱいなっぷる\"))"
-	"((\"変換\" nil \"へんかん\") (\"変化\" nil \"へんか\"))"
-	)
-    
+      ;;"((\"パイナップル\" nil \"ぱいなっぷる\") (\"ぱいなっぷる\" nil \"ぱいなっぷる\"))"
+      "((\"変換\" nil \"へんかん\") (\"変化\" nil \"へんか\"))"
     ;; 実際のサーバに接続する
     (let ((command
 	   (concat
 	    sekka-curl " --silent --show-error "
 	    (format " --max-time %d " sekka-server-timeout)
 	    " --insecure "
-	    (format " --header 'Content-Type: text/plain' ")
-	    (format "%s%s " sekka-server-url func-name)
-	    (format "--data '%s' " query))))
+	    " --header 'Content-Type: application/x-www-form-urlencoded' "
+	    (format "%s " sekka-server-url)
+	    (format "--data '%s=%s' " func-name query))))
 
       (sekka-debug-print (format "curl-command :%s\n" command))
       
@@ -255,7 +252,7 @@
   (message "Requesting to sekka server...")
   
   (let (
-	(result (sekka-rest-request "henkan" yomi)))
+	(result (sekka-rest-request "query" yomi)))
     (sekka-debug-print (format "henkan-result:%S\n" result))
     (if (eq (string-to-char result) ?\( )
 	(progn

@@ -12,14 +12,14 @@ class SekkaServer
     @core.load( "./lib/jisyo-db.nnd" )
     @core.evalStr( '(define (writeToString sexp) (write-to-string sexp))' )
     @core.evalStr( '(export-to-ruby writeToString)' )
-    @db = @core.openSekkaJisyo( "./data/SEKKA-JISYO.S.201001" )
+    @db = @core.openSekkaJisyo( "./data/SEKKA-JISYO.L.201008" )
   end
 
   def call(env)
     req = Rack::Request.new(env)
     body = case req.request_method
            when 'POST'
-             @core.writeToString( @core.sekkaHenkan( @db, "nihongo"))
+             @core.writeToString( @core.sekkaHenkan( @db, req.params['query'] ))
            else
              "no message."
            end
