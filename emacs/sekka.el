@@ -46,94 +46,12 @@
   :group 'input-method
   :group 'Japanese)
 
-(defcustom sekka-server-url "https://sekka.org/cgi-bin/sekka/testing/sekka.cgi"
+(defcustom sekka-server-url "http://localhost/sekka/"
   "SekkaサーバーのURLを指定する。"
   :type  'string
   :group 'sekka)
 
-(defcustom sekka-server-cert-data
-  "-----BEGIN CERTIFICATE-----
-MIIE3jCCA8agAwIBAgICAwEwDQYJKoZIhvcNAQEFBQAwYzELMAkGA1UEBhMCVVMx
-ITAfBgNVBAoTGFRoZSBHbyBEYWRkeSBHcm91cCwgSW5jLjExMC8GA1UECxMoR28g
-RGFkZHkgQ2xhc3MgMiBDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eTAeFw0wNjExMTYw
-MTU0MzdaFw0yNjExMTYwMTU0MzdaMIHKMQswCQYDVQQGEwJVUzEQMA4GA1UECBMH
-QXJpem9uYTETMBEGA1UEBxMKU2NvdHRzZGFsZTEaMBgGA1UEChMRR29EYWRkeS5j
-b20sIEluYy4xMzAxBgNVBAsTKmh0dHA6Ly9jZXJ0aWZpY2F0ZXMuZ29kYWRkeS5j
-b20vcmVwb3NpdG9yeTEwMC4GA1UEAxMnR28gRGFkZHkgU2VjdXJlIENlcnRpZmlj
-YXRpb24gQXV0aG9yaXR5MREwDwYDVQQFEwgwNzk2OTI4NzCCASIwDQYJKoZIhvcN
-AQEBBQADggEPADCCAQoCggEBAMQt1RWMnCZM7DI161+4WQFapmGBWTtwY6vj3D3H
-KrjJM9N55DrtPDAjhI6zMBS2sofDPZVUBJ7fmd0LJR4h3mUpfjWoqVTr9vcyOdQm
-VZWt7/v+WIbXnvQAjYwqDL1CBM6nPwT27oDyqu9SoWlm2r4arV3aLGbqGmu75RpR
-SgAvSMeYddi5Kcju+GZtCpyz8/x4fKL4o/K1w/O5epHBp+YlLpyo7RJlbmr2EkRT
-cDCVw5wrWCs9CHRK8r5RsL+H0EwnWGu1NcWdrxcx+AuP7q2BNgWJCJjPOq8lh8BJ
-6qf9Z/dFjpfMFDniNoW1fho3/Rb2cRGadDAW/hOUoz+EDU8CAwEAAaOCATIwggEu
-MB0GA1UdDgQWBBT9rGEyk2xF1uLuhV+auud2mWjM5zAfBgNVHSMEGDAWgBTSxLDS
-kdRMEXGzYcs9of7dqGrU4zASBgNVHRMBAf8ECDAGAQH/AgEAMDMGCCsGAQUFBwEB
-BCcwJTAjBggrBgEFBQcwAYYXaHR0cDovL29jc3AuZ29kYWRkeS5jb20wRgYDVR0f
-BD8wPTA7oDmgN4Y1aHR0cDovL2NlcnRpZmljYXRlcy5nb2RhZGR5LmNvbS9yZXBv
-c2l0b3J5L2dkcm9vdC5jcmwwSwYDVR0gBEQwQjBABgRVHSAAMDgwNgYIKwYBBQUH
-AgEWKmh0dHA6Ly9jZXJ0aWZpY2F0ZXMuZ29kYWRkeS5jb20vcmVwb3NpdG9yeTAO
-BgNVHQ8BAf8EBAMCAQYwDQYJKoZIhvcNAQEFBQADggEBANKGwOy9+aG2Z+5mC6IG
-OgRQjhVyrEp0lVPLN8tESe8HkGsz2ZbwlFalEzAFPIUyIXvJxwqoJKSQ3kbTJSMU
-A2fCENZvD117esyfxVgqwcSeIaha86ykRvOe5GPLL5CkKSkB2XIsKd83ASe8T+5o
-0yGPwLPk9Qnt0hCqU7S+8MxZC9Y7lhyVJEnfzuz9p0iRFEUOOjZv2kWzRaJBydTX
-RE4+uXR21aITVSzGh6O1mawGhId/dQb8vxRMDsxuxN89txJx9OjxUUAiKEngHUuH
-qDTMBqLdElrRhjZkAzVvb3du6/KFUJheqwNTrZEjYx8WnM25sgVjOuH0aBsXBTWV
-U+4=
------END CERTIFICATE-----
------BEGIN CERTIFICATE-----
-MIIE+zCCBGSgAwIBAgICAQ0wDQYJKoZIhvcNAQEFBQAwgbsxJDAiBgNVBAcTG1Zh
-bGlDZXJ0IFZhbGlkYXRpb24gTmV0d29yazEXMBUGA1UEChMOVmFsaUNlcnQsIElu
-Yy4xNTAzBgNVBAsTLFZhbGlDZXJ0IENsYXNzIDIgUG9saWN5IFZhbGlkYXRpb24g
-QXV0aG9yaXR5MSEwHwYDVQQDExhodHRwOi8vd3d3LnZhbGljZXJ0LmNvbS8xIDAe
-BgkqhkiG9w0BCQEWEWluZm9AdmFsaWNlcnQuY29tMB4XDTA0MDYyOTE3MDYyMFoX
-DTI0MDYyOTE3MDYyMFowYzELMAkGA1UEBhMCVVMxITAfBgNVBAoTGFRoZSBHbyBE
-YWRkeSBHcm91cCwgSW5jLjExMC8GA1UECxMoR28gRGFkZHkgQ2xhc3MgMiBDZXJ0
-aWZpY2F0aW9uIEF1dGhvcml0eTCCASAwDQYJKoZIhvcNAQEBBQADggENADCCAQgC
-ggEBAN6d1+pXGEmhW+vXX0iG6r7d/+TvZxz0ZWizV3GgXne77ZtJ6XCAPVYYYwhv
-2vLM0D9/AlQiVBDYsoHUwHU9S3/Hd8M+eKsaA7Ugay9qK7HFiH7Eux6wwdhFJ2+q
-N1j3hybX2C32qRe3H3I2TqYXP2WYktsqbl2i/ojgC95/5Y0V4evLOtXiEqITLdiO
-r18SPaAIBQi2XKVlOARFmR6jYGB0xUGlcmIbYsUfb18aQr4CUWWoriMYavx4A6lN
-f4DD+qta/KFApMoZFv6yyO9ecw3ud72a9nmYvLEHZ6IVDd2gWMZEewo+YihfukEH
-U1jPEX44dMX4/7VpkI+EdOqXG68CAQOjggHhMIIB3TAdBgNVHQ4EFgQU0sSw0pHU
-TBFxs2HLPaH+3ahq1OMwgdIGA1UdIwSByjCBx6GBwaSBvjCBuzEkMCIGA1UEBxMb
-VmFsaUNlcnQgVmFsaWRhdGlvbiBOZXR3b3JrMRcwFQYDVQQKEw5WYWxpQ2VydCwg
-SW5jLjE1MDMGA1UECxMsVmFsaUNlcnQgQ2xhc3MgMiBQb2xpY3kgVmFsaWRhdGlv
-biBBdXRob3JpdHkxITAfBgNVBAMTGGh0dHA6Ly93d3cudmFsaWNlcnQuY29tLzEg
-MB4GCSqGSIb3DQEJARYRaW5mb0B2YWxpY2VydC5jb22CAQEwDwYDVR0TAQH/BAUw
-AwEB/zAzBggrBgEFBQcBAQQnMCUwIwYIKwYBBQUHMAGGF2h0dHA6Ly9vY3NwLmdv
-ZGFkZHkuY29tMEQGA1UdHwQ9MDswOaA3oDWGM2h0dHA6Ly9jZXJ0aWZpY2F0ZXMu
-Z29kYWRkeS5jb20vcmVwb3NpdG9yeS9yb290LmNybDBLBgNVHSAERDBCMEAGBFUd
-IAAwODA2BggrBgEFBQcCARYqaHR0cDovL2NlcnRpZmljYXRlcy5nb2RhZGR5LmNv
-bS9yZXBvc2l0b3J5MA4GA1UdDwEB/wQEAwIBBjANBgkqhkiG9w0BAQUFAAOBgQC1
-QPmnHfbq/qQaQlpE9xXUhUaJwL6e4+PrxeNYiY+Sn1eocSxI0YGyeR+sBjUZsE4O
-WBsUs5iB0QQeyAfJg594RAoYC5jcdnplDQ1tgMQLARzLrUc+cb53S8wGd9D0Vmsf
-SxOaFIqII6hR8INMqzW/Rn453HWkrugp++85j09VZw==
------END CERTIFICATE-----
------BEGIN CERTIFICATE-----
-MIIC5zCCAlACAQEwDQYJKoZIhvcNAQEFBQAwgbsxJDAiBgNVBAcTG1ZhbGlDZXJ0
-IFZhbGlkYXRpb24gTmV0d29yazEXMBUGA1UEChMOVmFsaUNlcnQsIEluYy4xNTAz
-BgNVBAsTLFZhbGlDZXJ0IENsYXNzIDIgUG9saWN5IFZhbGlkYXRpb24gQXV0aG9y
-aXR5MSEwHwYDVQQDExhodHRwOi8vd3d3LnZhbGljZXJ0LmNvbS8xIDAeBgkqhkiG
-9w0BCQEWEWluZm9AdmFsaWNlcnQuY29tMB4XDTk5MDYyNjAwMTk1NFoXDTE5MDYy
-NjAwMTk1NFowgbsxJDAiBgNVBAcTG1ZhbGlDZXJ0IFZhbGlkYXRpb24gTmV0d29y
-azEXMBUGA1UEChMOVmFsaUNlcnQsIEluYy4xNTAzBgNVBAsTLFZhbGlDZXJ0IENs
-YXNzIDIgUG9saWN5IFZhbGlkYXRpb24gQXV0aG9yaXR5MSEwHwYDVQQDExhodHRw
-Oi8vd3d3LnZhbGljZXJ0LmNvbS8xIDAeBgkqhkiG9w0BCQEWEWluZm9AdmFsaWNl
-cnQuY29tMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDOOnHK5avIWZJV16vY
-dA757tn2VUdZZUcOBVXc65g2PFxTXdMwzzjsvUGJ7SVCCSRrCl6zfN1SLUzm1NZ9
-WlmpZdRJEy0kTRxQb7XBhVQ7/nHk01xC+YDgkRoKWzk2Z/M/VXwbP7RfZHM047QS
-v4dk+NoS/zcnwbNDu+97bi5p9wIDAQABMA0GCSqGSIb3DQEBBQUAA4GBADt/UG9v
-UJSZSWI4OB9L+KXIPqeCgfYrx+jFzug6EILLGACOTb2oWH+heQC1u+mNr0HZDzTu
-IYEZoDJJKPTEjlbVUjP9UNV+mWwD5MlM/Mtsq2azSiGM5bUMMj4QssxsodyamEwC
-W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
------END CERTIFICATE-----
-"
-  "Sekkaサーバーと通信する時のSSL証明書データ。"
-  :type  'string
-  :group 'sekka)
-
-(defcustom sekka-server-use-cert t
+(defcustom sekka-server-use-cert nil
   "Sekkaサーバーと通信する時のSSL証明書を使うかどうか。"
   :type  'symbol
   :group 'sekka)
@@ -146,18 +64,6 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 (defcustom sekka-stop-chars ";:(){}<>"
   "*漢字変換文字列を取り込む時に変換範囲に含めない文字を設定する"
   :type  'string
-  :group 'sekka)
-
-(defcustom sekka-replace-keyword-list '(
-					 ("no" . "no.h")
-					 ("ha" . "ha.h")
-					 ("ga" . "ga.h")
-					 ("wo" . "wo.h")
-					 ("ni" . "ni.h")
-					 ("de" . "de.h"))
-
-  "Sekkaサーバーに文字列を送る前に置換するキーワードを設定する"
-  :type  'sexp
   :group 'sekka)
 
 (defcustom sekka-curl "curl"
@@ -183,16 +89,6 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 (defcustom sekka-history-filename  "~/.sekka_history"
   "ユーザー固有の変換履歴を保存するファイル名"
   :type  'string
-  :group 'sekka)
-
-(defcustom sekka-history-feature  t
-  "Non-nilであれば、ユーザー固有の変換履歴を有効にする"
-  :type  'boolean
-  :group 'sekka)
-
-(defcustom sekka-history-max  100
-  "ユーザー固有の変換履歴の最大保存件数を指定する(最新から指定件数のみが保存される)"
-  :type  'integer
   :group 'sekka)
 
 
@@ -223,10 +119,6 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 			(cons 'sekka-select-mode  sekka-select-mode-map))
 		  minor-mode-map-alist)))
 
-;; ユーザー学習辞書
-(defvar sekka-kakutei-history          '())    ;; ( ( unix時間 単語IDのリスト ) ( unix時間 9412 1028 ) )
-(defvar sekka-kakutei-history-saved    '())    ;; ファイルに保存されたほうのヒストリデータ)
-
 ;;;
 ;;; hooks
 ;;;
@@ -241,319 +133,9 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 (defconst sekka-candno-index 4)
 (defconst sekka-spaces-index 5)
 
-(defconst sekka-hiragana->katakana-table
-  (mapcar
-   (lambda (c)
-     (cons
-      (char-to-string c)
-      (char-to-string
-       (+ c
-	  (- 
-	   (string-to-char "ア")
-	   (string-to-char "あ"))))))
-   (string-to-list
-    (concat 
-     "あいうえお"
-     "ぁぃぅぇぉ"
-     "かきくけこ"
-     "がぎぐげご"
-     "さしすせそ"
-     "ざじずぜぞ"
-     "たちつてと"
-     "だづづでど"
-     "なにぬねの"
-     "はひふへほ"
-     "ばびぶべぼ"
-     "ぱぴぷぺぽ"
-     "まみむめも"
-     "やゆよ"
-     "ゃゅょ"
-     "らりるれろ"
-     "わを"
-     "っん"))))
 
-
-(defconst sekka-roman->kana-table
-  '(("kkya" . "っきゃ")
-    ("kkyu" . "っきゅ")
-    ("kkyo" . "っきょ")
-    ("ggya" . "っぎゃ")
-    ("ggyu" . "っぎゅ")
-    ("ggyo" . "っぎょ")
-    ("sshi" . "っし")
-    ("ssha" . "っしゃ")
-    ("sshu" . "っしゅ")
-    ("sshe" . "っしぇ")
-    ("ssho" . "っしょ")
-    ("cchi" . "っち")
-    ("ccha" . "っちゃ")
-    ("cchu" . "っちゅ")
-    ("cche" . "っちぇ")
-    ("ccho" . "っちょ")
-    ("ddya" . "っぢゃ")
-    ("ddyu" . "っぢゅ")
-    ("ddye" . "っぢぇ")
-    ("ddyo" . "っぢょ")
-    ("ttsu" . "っつ")
-    ("hhya" . "っひゃ")
-    ("hhyu" . "っひゅ")
-    ("hhyo" . "っひょ")
-    ("bbya" . "っびゃ")
-    ("bbyu" . "っびゅ")
-    ("bbyo" . "っびょ")
-    ("ppya" . "っぴゃ")
-    ("ppyu" . "っぴゅ")
-    ("ppyo" . "っぴょ")
-    ("rrya" . "っりゃ")
-    ("rryu" . "っりゅ")
-    ("rryo" . "っりょ")
-    ("ddyi" . "っでぃ")
-    ("ddhi" . "っでぃ")
-    ("xtsu" . "っ")
-    ("ttya" . "っちゃ")
-    ("ttyi" . "っち")
-    ("ttyu" . "っちゅ")
-    ("ttye" . "っちぇ")
-    ("ttyo" . "っちょ")
-    ("kya" . "きゃ")
-    ("kyu" . "きゅ")
-    ("kyo" . "きょ")
-    ("gya" . "ぎゃ")
-    ("gyu" . "ぎゅ")
-    ("gyo" . "ぎょ")
-    ("shi" . "し")
-    ("sha" . "しゃ")
-    ("shu" . "しゅ")
-    ("she" . "しぇ")
-    ("sho" . "しょ")
-    ("chi" . "ち")
-    ("cha" . "ちゃ")
-    ("chu" . "ちゅ")
-    ("che" . "ちぇ")
-    ("cho" . "ちょ")
-    ("dya" . "ぢゃ")
-    ("dyu" . "ぢゅ")
-    ("dye" . "ぢぇ")
-    ("dyo" . "ぢょ")
-    ("vvu" . "っう゛")
-    ("vva" . "っう゛ぁ")
-    ("vvi" . "っう゛ぃ")
-    ("vve" . "っう゛ぇ")
-    ("vvo" . "っう゛ぉ")
-    ("kka" . "っか")
-    ("gga" . "っが")
-    ("kki" . "っき")
-    ("ggi" . "っぎ")
-    ("kku" . "っく")
-    ("ggu" . "っぐ")
-    ("kke" . "っけ")
-    ("gge" . "っげ")
-    ("kko" . "っこ")
-    ("ggo" . "っご")
-    ("ssa" . "っさ")
-    ("zza" . "っざ")
-    ("jji" . "っじ")
-    ("jja" . "っじゃ")
-    ("jju" . "っじゅ")
-    ("jje" . "っじぇ")
-    ("jjo" . "っじょ")
-    ("ssu" . "っす")
-    ("zzu" . "っず")
-    ("sse" . "っせ")
-    ("zze" . "っぜ")
-    ("sso" . "っそ")
-    ("zzo" . "っぞ")
-    ("tta" . "った")
-    ("dda" . "っだ")
-    ("ddi" . "っぢ")
-    ("ddu" . "っづ")
-    ("tte" . "って")
-    ("dde" . "っで")
-    ("tto" . "っと")
-    ("ddo" . "っど")
-    ("hha" . "っは")
-    ("bba" . "っば")
-    ("ppa" . "っぱ")
-    ("hhi" . "っひ")
-    ("bbi" . "っび")
-    ("ppi" . "っぴ")
-    ("ffu" . "っふ")
-    ("ffa" . "っふぁ")
-    ("ffi" . "っふぃ")
-    ("ffe" . "っふぇ")
-    ("ffo" . "っふぉ")
-    ("bbu" . "っぶ")
-    ("ppu" . "っぷ")
-    ("hhe" . "っへ")
-    ("bbe" . "っべ")
-    ("ppe" . "っぺ")
-    ("hho" . "っほ")
-    ("bbo" . "っぼ")
-    ("ppo" . "っぽ")
-    ("yya" . "っや")
-    ("yyu" . "っゆ")
-    ("yyo" . "っよ")
-    ("rra" . "っら")
-    ("rri" . "っり")
-    ("rru" . "っる")
-    ("rre" . "っれ")
-    ("rro" . "っろ")
-    ("tsu" . "つ")
-    ("nya" . "にゃ")
-    ("nyu" . "にゅ")
-    ("nyo" . "にょ")
-    ("hya" . "ひゃ")
-    ("hyu" . "ひゅ")
-    ("hyo" . "ひょ")
-    ("bya" . "びゃ")
-    ("byu" . "びゅ")
-    ("byo" . "びょ")
-    ("pya" . "ぴゃ")
-    ("pyu" . "ぴゅ")
-    ("pyo" . "ぴょ")
-    ("mya" . "みゃ")
-    ("myu" . "みゅ")
-    ("myo" . "みょ")
-    ("xya" . "ゃ")
-    ("xyu" . "ゅ")
-    ("xyo" . "ょ")
-    ("rya" . "りゃ")
-    ("ryu" . "りゅ")
-    ("ryo" . "りょ")
-    ("xwa" . "ゎ")
-    ("dyi" . "でぃ")
-    ("thi" . "てぃ")
-    ("hhu" . "っふ")
-    ("shu" . "しゅ")
-    ("chu" . "ちゅ")
-    ("sya" . "しゃ")
-    ("syu" . "しゅ")
-    ("sye" . "しぇ")
-    ("syo" . "しょ")
-    ("jya" . "じゃ")
-    ("jyu" . "じゅ")
-    ("jye" . "じぇ")
-    ("jyo" . "じょ")
-    ("zya" . "じゃ")
-    ("zyu" . "じゅ")
-    ("zye" . "じぇ")
-    ("zyo" . "じょ")
-    ("tya" . "ちゃ")
-    ("tyi" . "ち")
-    ("tyu" . "ちゅ")
-    ("tye" . "ちぇ")
-    ("tyo" . "ちょ")
-    ("dhi" . "でぃ")
-    ("xtu" . "っ")
-    ("xa" . "ぁ")
-    ("xi" . "ぃ")
-    ("xu" . "ぅ")
-    ("vu" . "う゛")
-    ("va" . "う゛ぁ")
-    ("vi" . "う゛ぃ")
-    ("ve" . "う゛ぇ")
-    ("vo" . "う゛ぉ")
-    ("xe" . "ぇ")
-    ("xo" . "ぉ")
-    ("ka" . "か")
-    ("ga" . "が")
-    ("ki" . "き")
-    ("gi" . "ぎ")
-    ("ku" . "く")
-    ("gu" . "ぐ")
-    ("ke" . "け")
-    ("ge" . "げ")
-    ("ko" . "こ")
-    ("go" . "ご")
-    ("sa" . "さ")
-    ("za" . "ざ")
-    ("ji" . "じ")
-    ("ja" . "じゃ")
-    ("ju" . "じゅ")
-    ("je" . "じぇ")
-    ("jo" . "じょ")
-    ("su" . "す")
-    ("zu" . "ず")
-    ("se" . "せ")
-    ("ze" . "ぜ")
-    ("so" . "そ")
-    ("zo" . "ぞ")
-    ("ta" . "た")
-    ("da" . "だ")
-    ("di" . "ぢ")
-    ("tt" . "っ")
-    ("du" . "づ")
-    ("te" . "て")
-    ("de" . "で")
-    ("to" . "と")
-    ("do" . "ど")
-    ("na" . "な")
-    ("ni" . "に")
-    ("nu" . "ぬ")
-    ("ne" . "ね")
-    ("no" . "の")
-    ("ha" . "は")
-    ("ba" . "ば")
-    ("pa" . "ぱ")
-    ("hi" . "ひ")
-    ("bi" . "び")
-    ("pi" . "ぴ")
-    ("fu" . "ふ")
-    ("fa" . "ふぁ")
-    ("fi" . "ふぃ")
-    ("fe" . "ふぇ")
-    ("fo" . "ふぉ")
-    ("bu" . "ぶ")
-    ("pu" . "ぷ")
-    ("he" . "へ")
-    ("be" . "べ")
-    ("pe" . "ぺ")
-    ("ho" . "ほ")
-    ("bo" . "ぼ")
-    ("po" . "ぽ")
-    ("ma" . "ま")
-    ("mi" . "み")
-    ("mu" . "む")
-    ("me" . "め")
-    ("mo" . "も")
-    ("ya" . "や")
-    ("yu" . "ゆ")
-    ("yo" . "よ")
-    ("ra" . "ら")
-    ("ri" . "り")
-    ("ru" . "る")
-    ("re" . "れ")
-    ("ro" . "ろ")
-    ("wa" . "わ")
-    ("wi" . "ゐ")
-    ("we" . "ゑ")
-    ("wo" . "を")
-    ("n'" . "ん")
-    ("nn" . "ん")
-    ("ca" . "か")
-    ("ci" . "き")
-    ("cu" . "く")
-    ("ce" . "け")
-    ("co" . "こ")
-    ("si" . "し")
-    ("ti" . "ち")
-    ("hu" . "ふ")
-    ("tu" . "つ")
-    ("zi" . "じ")
-    ("la" . "ぁ")
-    ("li" . "ぃ")
-    ("lu" . "ぅ")
-    ("le" . "ぇ")
-    ("lo" . "ぉ")
-    ("a" . "あ")
-    ("i" . "い")
-    ("u" . "う")
-    ("e" . "え")
-    ("o" . "お")
-    ("n" . "ん")
-    ("-" . "ー")
-    ("^" . "ー")))
-
+;;--- デバッグメッセージ出力
+(defvar sekka-psudo-server t)           ; クライアント単体で仮想的にサーバーに接続しているようにしてテストするモード
 
 ;;--- デバッグメッセージ出力
 (defvar sekka-debug nil)		; デバッグフラグ
@@ -567,27 +149,24 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 
 
 ;;; sekka basic output
-(defvar sekka-fence-start nil)		; fence 始端位置
-(defvar sekka-fence-end nil)		; fence 終端位置
-(defvar sekka-henkan-separeter " ")	; fence mode separeter
-(defvar sekka-henkan-buffer nil)	; 表示用バッファ
-(defvar sekka-henkan-length nil)	; 表示用バッファ長
-(defvar sekka-henkan-revpos nil)	; 文節始端位置
-(defvar sekka-henkan-revlen nil)	; 文節長
+(defvar sekka-fence-start nil)          ; fence 始端位置
+(defvar sekka-fence-end nil)            ; fence 終端位置
+(defvar sekka-henkan-separeter " ")     ; fence mode separeter
+(defvar sekka-henkan-buffer nil)        ; 表示用バッファ
+(defvar sekka-henkan-length nil)        ; 表示用バッファ長
+(defvar sekka-henkan-revpos nil)        ; 文節始端位置
+(defvar sekka-henkan-revlen nil)        ; 文節長
 
 ;;; sekka basic local
-(defvar sekka-cand     nil)		; カレント文節番号
-(defvar sekka-cand-n   nil)		; 文節候補番号
-(defvar sekka-cand-n-backup   nil)	; 文節候補番号 ( 候補選択キャンセル用 )
-(defvar sekka-cand-max nil)		; 文節候補数
-(defvar sekka-last-fix "")		; 最後に確定した文字列
-(defvar sekka-henkan-list nil)		; 文節リスト
-(defvar sekka-repeat 0)		; 繰り返し回数
-(defvar sekka-marker-list '())		; 文節開始、終了位置リスト: 次のような形式 ( ( 1 . 2 ) ( 5 . 7 ) ... ) 
-(defvar sekka-timer    nil)            ; インターバルタイマー型変数
-(defvar sekka-timer-rest  0)           ; あと何回呼出されたら、インターバルタイマの呼出を止めるか
-(defvar sekka-guide-overlay   nil)     ; リアルタイムガイドに使用するオーバーレイ
-(defvar sekka-last-request-time 0)     ; Sekkaサーバーにリクエストした最後の時刻(単位は秒)
+(defvar sekka-cand-cur nil)             ; カレント候補番号
+(defvar sekka-cand-len nil)             ; 候補数
+(defvar sekka-last-fix "")              ; 最後に確定した文字列
+(defvar sekka-henkan-kouho-list nil)    ; 変換結果リスト(サーバから帰ってきたデータそのもの)
+(defvar sekka-marker-list '())          ; 文節開始、終了位置リスト: 次のような形式 ( ( 1 . 2 ) ( 5 . 7 ) ... ) 
+(defvar sekka-timer    nil)             ; インターバルタイマー型変数
+(defvar sekka-timer-rest  0)            ; あと何回呼出されたら、インターバルタイマの呼出を止めるか
+(defvar sekka-guide-overlay   nil)      ; リアルタイムガイドに使用するオーバーレイ
+(defvar sekka-last-request-time 0)      ; Sekkaサーバーにリクエストした最後の時刻(単位は秒)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -608,136 +187,49 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
   (defun sekka-take (arg-list n)
     (let ((lst '()))
       (dotimes (i n (reverse lst))
-	(let ((item (nth i arg-list)))
+        (let ((item (nth i arg-list)))
 	  (when item
 	    (push item lst))))))
-
-  ;; ヒストリファイルとメモリ中のヒストリデータをマージする
-  (defun sekka-merge-kakutei-history (base-list new-list)
-    (let ((merged-num  '())
-	  (merged-list '()))
-      (mapcar
-       (lambda (x)
-	 (when (not (member (car x) merged-num))
-	   (progn
-	     (push (car x) merged-num)
-	     (push      x  merged-list))))
-       (append
-	base-list
-	new-list))
-      merged-list))
-
-  ;; テンポラリファイルを作成する。
-  (defun sekka-make-temp-file (base)
-    (if	(functionp 'make-temp-file)
-	(make-temp-file base)
-      (concat "/tmp/" (make-temp-name base))))
-
+  
   (when (not sekka-init)
-    ;; SSL証明書ファイルをテンポラリファイルとして作成する。
-    (setq sekka-server-cert-file 
-	  (sekka-make-temp-file
-	   "sekka.certfile"))
-    (sekka-debug-print (format "cert-file :[%s]\n" sekka-server-cert-file))
-    (with-temp-buffer
-      (insert sekka-server-cert-data)
-      (write-region (point-min) (point-max) sekka-server-cert-file  nil nil))
-
-    (when (and
-	   sekka-history-feature
-	   (file-exists-p sekka-history-filename))
-      (progn
-	(load-file sekka-history-filename)
-	(setq sekka-kakutei-history sekka-kakutei-history-saved)))
-
-    ;; Emacs終了時SSL証明書ファイルを削除する。
+    ;; Emacs終了時の処理
     (add-hook 'kill-emacs-hook
 	      (lambda ()
-		;; ユーザー変換履歴をマージして保存する
-		(when sekka-history-feature
-		  (progn
-		    ;; 現在のファイルを再度読みこむ(別のEmacsプロセスが更新しているかも知れない為)
-		    (when (file-exists-p sekka-history-filename)
-		      (load-file sekka-history-filename))
-		    (with-temp-file
-			sekka-history-filename
-		      (insert (format "(setq sekka-kakutei-history-saved '%s)" 
-				      (let ((lst
-					     (sekka-take 
-					      (sekka-merge-kakutei-history
-					       sekka-kakutei-history-saved
-					       sekka-kakutei-history)
-					      sekka-history-max)))
-					(if (functionp 'pp-to-string)
-					    (pp-to-string lst)
-					  (prin1-to-string lst))))))))
-		;; SSL証明書のテンポラリファイルを削除する
-		(when (file-exists-p sekka-server-cert-file)
-		  (delete-file sekka-server-cert-file))))
-    
+		;; 何もすることは無い
+		t))
     ;; 初期化完了
     (setq sekka-init t)))
-
 
 ;;
 ;; ローマ字で書かれた文章をSekkaサーバーを使って変換する
 ;;
-(defun sekka-soap-request (func-name arg-list)
-  (let (
-	(command
-	 (concat
-	  sekka-curl " --silent --show-error "
-	  (format " --max-time %d " sekka-server-timeout)
-	  (if sekka-server-use-cert
-	    (if (not sekka-server-cert-file)
-		(error "Error : cert file create miss!")
-	      (format "--cacert '%s' " sekka-server-cert-file))
-	    " --insecure ")
-	  (format " --header 'Content-Type: text/xml' ")
-	  (format " --header 'SOAPAction:urn:SekkaConvert#%s' " func-name)
-	  sekka-server-url " "
-	  (format (concat "--data '"
-			  "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-			  "  <SOAP-ENV:Envelope xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\""
-			  "   SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\""
-			  "   xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\""
-			  "   xmlns:xsi=\"http://www.w3.org/1999/XMLSchema-instance\""
-			  "   xmlns:xsd=\"http://www.w3.org/1999/XMLSchema\">"
-			  "  <SOAP-ENV:Body>"
-			  "    <namesp1:%s xmlns:namesp1=\"urn:SekkaConvert\">"
-			  (mapconcat
-			   (lambda (x)
-			     (format "    <in xsi:type=\"xsd:string\">%s</in>" x))
-			   arg-list
-			   " ")
-			  "    </namesp1:%s>"
-			  "  </SOAP-ENV:Body>"
-			  "</SOAP-ENV:Envelope>"
-			  "' ")
-		  func-name
-		  func-name
-		  func-name
-		  func-name
-		  ))))
 
-    (sekka-debug-print (format "curl-command :%s\n" command))
 
-    (let* (
-	   (_xml
-	    (shell-command-to-string
-	     command))
-	   (_match
-	    (string-match "<s-gensym3[^>]+>\\(.+\\)</s-gensym3>" _xml)))
-	   
-      (sekka-debug-print (format "curl-result-xml :%s\n" _xml))
-
-      (if _match 
-	  (decode-coding-string
-	   (base64-decode-string 
-	    (match-string 1 _xml))
-	   'euc-jp)
-	_xml))))
-
+(defun sekka-rest-request (func-name query)
+  (if sekka-psudo-server
+      ;; クライアント単体で仮想的にサーバーに接続しているようにしてテストするモード
+      (progn
+	"((\"パイナップル\" nil \"ぱいなっぷる\") (\"ぱいなっぷる\" nil \"ぱいなっぷる\"))")
+    ;; 実際のサーバに接続する
+    (let (
+	  (command
+	   (concat
+	    sekka-curl " --silent --show-error "
+	    (format " --max-time %d " sekka-server-timeout)
+	    " --insecure "
+	    (format " --header 'Content-Type: text/plain' ")
+	    (format "%s%s " sekka-server-url func-name)
+	    (format (concat "--data '%s' " query)))))
+      
+      (sekka-debug-print (format "curl-command :%s\n" command))
+      
+      (let (
+	    (result
+	     (shell-command-to-string
+	      command)))
+	
+	(sekka-debug-print (format "curl-result-sexp :%s\n" result))
+	result))))
       
 ;;
 ;; 現在時刻をUNIXタイムを返す(単位は秒)
@@ -759,15 +251,11 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 
   (message "Requesting to sekka server...")
   
-  (let* (
-	 (result (sekka-soap-request "doSekkaConvertSexp" (list yomi
-								  ""
-								  (sekka-get-history-string
-								   sekka-kakutei-history)))))
+  (let (
+	(result (sekka-rest-request "henkan" yomi)))
     (sekka-debug-print (format "henkan-result:%S\n" result))
     (if (eq (string-to-char result) ?\( )
 	(progn
-	  (sekka-next-history)
 	  (message nil)
 	  (condition-case err
 	      (read result)
@@ -788,29 +276,6 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 	 (replace-regexp-in-string regexp replace str))))
 	
 
-;; 置換キーワードを解決する
-(defun sekka-replace-keyword (str)
-  (let (
-	;; 改行を一つのスペースに置換して、
-	;; キーワード置換処理の前処理として行頭と行末にスペースを追加する。
-	(replaced 
-	 (concat " " 
-		 (sekka-replace-regexp-in-string 
-		  "[\n]"
-		  " "
-		  str)
-		 " ")))
-
-    (mapcar
-     (lambda (x)
-       (setq replaced 
-	     (sekka-replace-regexp-in-string 
-	      (concat " " (car x) " ")
-	      (concat " " (cdr x) " ")
-	      replaced)))
-     sekka-replace-keyword-list)
-    replaced))
-
 ;; リージョンをローマ字漢字変換する関数
 (defun sekka-henkan-region (b e)
   "指定された region を漢字変換する"
@@ -818,25 +283,22 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
   (when (/= b e)
     (let* (
 	   (yomi (buffer-substring-no-properties b e))
-	   (henkan-list (sekka-henkan-request (sekka-replace-keyword yomi))))
+	   (henkan-list (sekka-henkan-request yomi)))
       
       (if henkan-list
 	  (condition-case err
 	      (progn
 		(setq
 		 ;; 変換結果の保持
-		 sekka-henkan-list henkan-list
+		 sekka-henkan-kouho-list henkan-list
 		 ;; 文節選択初期化
-		 sekka-cand-n   (make-list (length henkan-list) 0)
+		 sekka-cand-cur 0
 		 ;; 
-		 sekka-cand-max (mapcar
-				  (lambda (x)
-				    (length x))
-				  henkan-list))
+		 sekka-cand-len (length henkan-list))
 		
-		(sekka-debug-print (format "sekka-henkan-list:%s \n" sekka-henkan-list))
-		(sekka-debug-print (format "sekka-cand-n:%s \n" sekka-cand-n))
-		(sekka-debug-print (format "sekka-cand-max:%s \n" sekka-cand-max))
+		(sekka-debug-print (format "sekka-henkan-kouho-list:%s \n" sekka-henkan-kouho-list))
+		(sekka-debug-print (format "sekka-cand-cur:%s \n" sekka-cand-cur))
+		(sekka-debug-print (format "sekka-cand-len:%s \n" sekka-cand-len))
 		;;
 		t)
 	    (sekka-trap-server-down
@@ -891,21 +353,17 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 ;; 現在の変換エリアの表示を行う
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun sekka-get-display-string ()
-  (let ((cnt 0))
-    (mapconcat
-     (lambda (x)
-       ;; 変換結果文字列を返す。
-       (let ((word (nth (nth cnt sekka-cand-n) x)))
-	 (sekka-debug-print (format "word:[%d] %s\n" cnt word))
-	 (setq cnt (+ 1 cnt))
-	 (nth sekka-tango-index word)))
-     sekka-henkan-list
-     "")))
-
+  ;; 変換結果文字列を返す。
+  (let* ((kouho      (nth sekka-cand-cur sekka-henkan-kouho-list))
+	 (_          (sekka-debug-print (format "kouho=%s\n" kouho)))
+	 (word       (car kouho))
+	 (annotation (cadr kouho)))
+    (sekka-debug-print (format "word:[%d] %s(%s)\n" sekka-cand-cur word annotation))
+    word))
 
 (defun sekka-display-function (b e select-mode)
   (setq sekka-henkan-separeter (if sekka-use-fence " " ""))
-  (when sekka-henkan-list
+  (when sekka-henkan-kouho-list
     ;; UNDO抑制開始
     (sekka-disable-undo)
 
@@ -968,7 +426,7 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 	   (sekka-debug-print (format "insert:[%s] point:%d-%d\n" insert-word (marker-position start) (marker-position end))))
 	 (setq cnt (+ cnt 1)))
 
-       sekka-henkan-list))
+       sekka-henkan-kouho-list))
 
     ;; リストを逆順にする。
     (setq sekka-marker-list (reverse sekka-marker-list))
@@ -976,10 +434,10 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
     ;; fenceの範囲を設定する
     (when select-mode (insert "|"))
     (setq sekka-fence-end   (point-marker))
-
+    
     (sekka-debug-print (format "total-point:%d-%d\n"
-				(marker-position sekka-fence-start)
-				(marker-position sekka-fence-end)))
+			       (marker-position sekka-fence-start)
+			       (marker-position sekka-fence-end)))
     ;; UNDO再開
     (sekka-enable-undo)
     ))
@@ -1034,20 +492,6 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
    (marker-position sekka-fence-start)
    (marker-position sekka-fence-end)
    sekka-select-mode))
-
-
-;; 確定したIDリストを変換履歴に追加する
-(defun sekka-next-history ( )
-  (if sekka-history-feature
-      (progn
-	(push
-	 (cons 
-	  (sekka-current-unixtime)
-	  '())
-	 sekka-kakutei-history)
-	(sekka-debug-print (format "init:kakutei-history:%S\n" sekka-kakutei-history))
-	sekka-kakutei-history)
-    '()))
 
 
 ;; Sekkaサーバーに 送るヒストリリストを出す
@@ -1213,14 +657,6 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
   (interactive)
 ;  (print last-command)			; DEBUG
 
-  ;; 非SSLの警告を出す
-  (when (and (string-match "^[ ]*http:" sekka-server-url)
-	     (> 1 sekka-timer-rest))
-    (progn
-      ;; 警告を出してポーズする
-      (message "sekka.el: !! 非SSLで通信する設定になっています。 !!")
-      (sleep-for 2)))
-
   (cond 
    ;; タイマーイベントを設定しない条件
    ((or
@@ -1272,8 +708,9 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 	      (goto-char b)
 	      (insert (sekka-get-display-string))
 	      (setq e (point))
-	      (sekka-display-function b e nil)
-	      (sekka-select-kakutei))))))
+	      ;;(sekka-display-function b e nil)
+	      ;;(sekka-select-kakutei)
+	      )))))
 
      
      ((sekka-kanji (preceding-char))
