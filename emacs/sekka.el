@@ -158,11 +158,12 @@
 (defvar sekka-henkan-revlen nil)        ; 文節長
 
 ;;; sekka basic local
-(defvar sekka-cand-cur nil)             ; カレント候補番号
+(defvar sekka-cand-cur 0)               ; カレント候補番号
+(defvar sekka-cand-cur-backup 0)        ; カレント候補番号(UNDO用に退避する変数)
 (defvar sekka-cand-len nil)             ; 候補数
 (defvar sekka-last-fix "")              ; 最後に確定した文字列
 (defvar sekka-henkan-kouho-list nil)    ; 変換結果リスト(サーバから帰ってきたデータそのもの)
-(defvar sekka-marker-list '())          ; 文節開始、終了位置リスト: 次のような形式 ( ( 1 . 2 ) ( 5 . 7 ) ... ) 
+(defvar sekka-markers '())              ; 文節開始、終了位置のpair: 次のような形式 ( 1 . 2 )
 (defvar sekka-timer    nil)             ; インターバルタイマー型変数
 (defvar sekka-timer-rest  0)            ; あと何回呼出されたら、インターバルタイマの呼出を止めるか
 (defvar sekka-guide-overlay   nil)      ; リアルタイムガイドに使用するオーバーレイ
@@ -209,7 +210,10 @@
   (if sekka-psudo-server
       ;; クライアント単体で仮想的にサーバーに接続しているようにしてテストするモード
       (progn
-	"((\"パイナップル\" nil \"ぱいなっぷる\") (\"ぱいなっぷる\" nil \"ぱいなっぷる\"))")
+	;;"((\"パイナップル\" nil \"ぱいなっぷる\") (\"ぱいなっぷる\" nil \"ぱいなっぷる\"))"
+	"((\"変換\" nil \"へんかん\") (\"変化\" nil \"へんか\"))"
+	)
+    
     ;; 実際のサーバに接続する
     (let (
 	  (command
@@ -355,6 +359,7 @@
 (defun sekka-get-display-string ()
   ;; 変換結果文字列を返す。
   (let* ((kouho      (nth sekka-cand-cur sekka-henkan-kouho-list))
+	 (_          (sekka-debug-print (format "sekka-cand-cur=%s\n" sekka-cand-cur)))
 	 (_          (sekka-debug-print (format "kouho=%s\n" kouho)))
 	 (word       (car kouho))
 	 (annotation (cadr kouho)))
@@ -366,70 +371,38 @@
   (when sekka-henkan-kouho-list
     ;; UNDO抑制開始
     (sekka-disable-undo)
-
+    
     (delete-region b e)
 
     ;; リスト初期化
-    (setq sekka-marker-list '())
+    (setq sekka-markers '())
 
-    (let (
-	   (cnt 0))
+    (setq sekka-last-fix "")
 
-      (setq sekka-last-fix "")
-
-      ;; 変換したpointの保持
-      (setq sekka-fence-start (point-marker))
-      (when select-mode (insert "|"))
-
-      (mapcar
-       (lambda (x)
-	 (if (and
-	      (not (eq (preceding-char) ?\ ))
-	      (not (eq (point-at-bol) (point)))
-	      (eq (sekka-char-charset (preceding-char)) 'ascii)
-	      (and
-	       (< 0 (length (cadar x)))
-	       (eq (sekka-char-charset (string-to-char (cadar x))) 'ascii)))
-	     (insert " "))
-
-	 (let* (
-		(start       (point-marker))
-		(_n          (nth cnt sekka-cand-n))
-		(_max        (nth cnt sekka-cand-max))
-		(spaces      (nth sekka-spaces-index (nth _n x)))
-		(insert-word (nth sekka-tango-index  (nth _n x)))
-		(_insert-word
-		 ;; スペースが2個以上入れられたら、1個のスペースを入れる。(但し、auto-fill-modeが無効の場合のみ)
-		 (if (and (< 1 spaces) (not auto-fill-function))
-		     (concat " " insert-word)
-		   insert-word))
-		(ank-word    (cadr (assoc 'l x)))
-		(_     
-		 (if (eq cnt sekka-cand)
-		     (progn
-		       (insert _insert-word)
-		       (message (format "[%s] candidate (%d/%d)" insert-word (+ _n 1) _max)))
-		   (insert _insert-word)))
-		(end         (point-marker))
-		(ov          (make-overlay start end)))
-
-	   ;; 確定文字列の作成
-	   (setq sekka-last-fix (concat sekka-last-fix _insert-word))
+    ;; 変換したpointの保持
+    (setq sekka-fence-start (point-marker))
+    (when select-mode (insert "|"))
+    
+    (let* (
+	   (start       (point-marker))
+	   (_cur        sekka-cand-cur)
+	   (_len        sekka-cand-len)
+	   (insert-word (sekka-get-display-string)))
+      (progn
+	(insert insert-word)
+	(message (format "[%s] candidate (%d/%d)" insert-word (+ _cur 1) _len))
+	(let* ((end         (point-marker))
+	       (ov          (make-overlay start end)))
+	    
+	  ;; 確定文字列の作成
+	  (setq sekka-last-fix insert-word)
 	   
-	   ;; 選択中の場所を装飾する。
-	   (overlay-put ov 'face 'default)
-	   (when (and select-mode
-		      (eq cnt sekka-cand))
-	     (overlay-put ov 'face 'highlight))
-
-	   (push `(,start . ,end) sekka-marker-list)
-	   (sekka-debug-print (format "insert:[%s] point:%d-%d\n" insert-word (marker-position start) (marker-position end))))
-	 (setq cnt (+ cnt 1)))
-
-       sekka-henkan-kouho-list))
-
-    ;; リストを逆順にする。
-    (setq sekka-marker-list (reverse sekka-marker-list))
+	  ;; 選択中の場所を装飾する。
+	  (overlay-put ov 'face 'default)
+	  (when select-mode
+	    (overlay-put ov 'face 'highlight))
+	  (setq sekka-markers (cons start end))
+	  (sekka-debug-print (format "insert:[%s] point:%d-%d\n" insert-word (marker-position start) (marker-position end))))))
 
     ;; fenceの範囲を設定する
     (when select-mode (insert "|"))
@@ -439,9 +412,7 @@
 			       (marker-position sekka-fence-start)
 			       (marker-position sekka-fence-end)))
     ;; UNDO再開
-    (sekka-enable-undo)
-    ))
-
+    (sekka-enable-undo)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -467,7 +438,7 @@
 (define-key sekka-select-mode-map "e"                      'sekka-select-last-word)
 (define-key sekka-select-mode-map "p"                      'sekka-select-prev)
 (define-key sekka-select-mode-map "n"                      'sekka-select-next)
-(define-key sekka-select-mode-map sekka-rK-trans-key      'sekka-select-next)
+(define-key sekka-select-mode-map sekka-rK-trans-key       'sekka-select-next)
 (define-key sekka-select-mode-map " "                      'sekka-select-next)
 (define-key sekka-select-mode-map "j"                      'sekka-select-kanji)
 (define-key sekka-select-mode-map "h"                      'sekka-select-hiragana)
@@ -494,58 +465,15 @@
    sekka-select-mode))
 
 
-;; Sekkaサーバーに 送るヒストリリストを出す
-(defun sekka-get-history-string (kakutei-history)
-  (mapconcat
-   (lambda (entry)
-     (mapconcat
-      (lambda (x) (number-to-string x))
-      (cdr entry)
-      " "))
-   kakutei-history
-   ";"))
-
-;;(sekka-get-history-string
-;; '(
-;;   (1 2 3 4 5 6)
-;;   (10 20 30 40 50 60)))
-
-;; 確定したIDリストを更新する
-(defun sekka-update-history( cand-n )
-  (let* ((cnt 0)
-	 (result 
-	  (mapcar
-	   (lambda (x)
-	     ;; 変換結果文字列を返す。
-	     (let ((word (nth (nth cnt cand-n) x)))
-	       (sekka-debug-print (format "history-word:[%d] %s\n" cnt word))
-	       (setq cnt (+ 1 cnt))
-	       (nth sekka-id-index word)))
-	   sekka-henkan-list)))
-    ;; ヒストリデータを作り直す
-    (when sekka-history-feature
-      (setq sekka-kakutei-history
-	    (cons
-	     (cons
-	      (caar sekka-kakutei-history)
-	      result)
-	     (if (< 1 (length sekka-kakutei-history))
-		 (cdr sekka-kakutei-history)
-	       '())))
-      (sekka-debug-print (format "kakutei-history:%S\n" sekka-kakutei-history)))))
-  
-
-
 ;; 候補選択を確定する
 (defun sekka-select-kakutei ()
   "候補選択を確定する"
   (interactive)
   ;; 候補番号リストをバックアップする。
-  (setq sekka-cand-n-backup (copy-list sekka-cand-n))
+  (setq sekka-cand-cur-backup sekka-cand-cur)
   (setq sekka-select-mode nil)
   (run-hooks 'sekka-select-mode-end-hook)
-  (sekka-select-update-display)
-  (sekka-update-history sekka-cand-n))
+  (sekka-select-update-display))
 
 
 ;; 候補選択をキャンセルする
@@ -553,7 +481,7 @@
   "候補選択をキャンセルする"
   (interactive)
   ;; カレント候補番号をバックアップしていた候補番号で復元する。
-  (setq sekka-cand-n (copy-list sekka-cand-n-backup))
+  (setq sekka-cand-cur sekka-cand-cur-backup)
   (setq sekka-select-mode nil)
   (run-hooks 'sekka-select-mode-end-hook)
   (sekka-select-update-display))
@@ -575,44 +503,13 @@
 (defun sekka-select-next ()
   "次の候補に進める"
   (interactive)
-  (let (
-	(n sekka-cand))
-
-    ;; 次の候補に切りかえる
-    (setcar (nthcdr n sekka-cand-n) (+ 1 (nth n sekka-cand-n)))
-    (when (>= (nth n sekka-cand-n) (nth n sekka-cand-max))
-      (setcar (nthcdr n sekka-cand-n) 0))
-
-    (sekka-select-update-display)))
-
-;; 前の文節に移動する
-(defun sekka-select-prev-word ()
-  "前の文節に移動する"
-  (interactive)
-  (when (< 0 sekka-cand)
-    (setq sekka-cand (- sekka-cand 1)))
-  (sekka-select-update-display))
-
-;; 次の文節に移動する
-(defun sekka-select-next-word ()
-  "次の文節に移動する"
-  (interactive)
-  (when (< sekka-cand (- (length sekka-cand-n) 1))
-    (setq sekka-cand (+ 1 sekka-cand)))
-  (sekka-select-update-display))
-
-;; 最初の文節に移動する
-(defun sekka-select-first-word ()
-  "最初の文節に移動する"
-  (interactive)
-  (setq sekka-cand 0)
-  (sekka-select-update-display))
-
-;; 最後の文節に移動する
-(defun sekka-select-last-word ()
-  "最後の文節に移動する"
-  (interactive)
-  (setq sekka-cand (- (length sekka-cand-n) 1))
+  ;; 次の候補に切りかえる
+  (setq sekka-cand-cur 
+	(if (< sekka-cand-cur (- sekka-cand-len 1))
+	    (+ sekka-cand-cur 1)
+	  0))
+  (sekka-debug-print (format "sekka-select-next()  sekka-cand-cur=%d,  sekka-cand-len=%d\n" 
+			     sekka-cand-cur sekka-cand-len))
   (sekka-select-update-display))
 
 
@@ -708,8 +605,8 @@
 	      (goto-char b)
 	      (insert (sekka-get-display-string))
 	      (setq e (point))
-	      ;;(sekka-display-function b e nil)
-	      ;;(sekka-select-kakutei)
+	      (sekka-display-function b e nil)
+	      (sekka-select-kakutei)
 	      )))))
 
      
@@ -721,40 +618,18 @@
 	     (<= (marker-position sekka-fence-start) (point))
 	     (<= (point) (marker-position sekka-fence-end))
 	     (string-equal sekka-last-fix (buffer-substring 
-					    (marker-position sekka-fence-start)
-					    (marker-position sekka-fence-end))))
-					    
+					   (marker-position sekka-fence-start)
+					   (marker-position sekka-fence-end))))
 	;; 直前に変換したfenceの範囲に入っていたら、変換モードに移行する。
-	(let
-	    ((cnt 0))
-	  (setq sekka-select-mode t)
-	  (run-hooks 'sekka-select-mode-hook)
-	  (setq sekka-cand 0)		; 文節番号初期化
-	  
-	  (sekka-debug-print "henkan mode ON\n")
-	  
-	  ;; カーソル位置がどの文節に乗っているかを調べる。
-	  (mapcar
-	   (lambda (x)
-	     (let (
-		   (start (marker-position (car x)))
-		   (end   (marker-position (cdr x))))
-	       
-	       (when (and
-		      (< start (point))
-		      (<= (point) end))
-		 (setq sekka-cand cnt))
-	       (setq cnt (+ cnt 1))))
-	   sekka-marker-list)
+	(setq sekka-select-mode t)
+	(sekka-debug-print "henkan mode ON\n")
 
-	  (sekka-debug-print (format "sekka-cand = %d\n" sekka-cand))
-
-	  ;; 表示状態を候補選択モードに切替える。
-	  (sekka-display-function
-	   (marker-position sekka-fence-start)
-	   (marker-position sekka-fence-end)
-	   t))))
-     ))))
+	;; 表示状態を候補選択モードに切替える。
+	(sekka-display-function
+	 (marker-position sekka-fence-start)
+	 (marker-position sekka-fence-end)
+	 t))))
+     )))
 
 
 
