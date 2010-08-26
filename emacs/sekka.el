@@ -432,22 +432,10 @@
 (define-key sekka-select-mode-map "\C-e"                   'sekka-select-last-word)
 (define-key sekka-select-mode-map "\C-p"                   'sekka-select-prev)
 (define-key sekka-select-mode-map "\C-n"                   'sekka-select-next)
-(define-key sekka-select-mode-map "b"                      'sekka-select-prev-word)
-(define-key sekka-select-mode-map "f"                      'sekka-select-next-word)
-(define-key sekka-select-mode-map "a"                      'sekka-select-first-word)
-(define-key sekka-select-mode-map "e"                      'sekka-select-last-word)
-(define-key sekka-select-mode-map "p"                      'sekka-select-prev)
-(define-key sekka-select-mode-map "n"                      'sekka-select-next)
 (define-key sekka-select-mode-map sekka-rK-trans-key       'sekka-select-next)
 (define-key sekka-select-mode-map " "                      'sekka-select-next)
-(define-key sekka-select-mode-map "j"                      'sekka-select-kanji)
-(define-key sekka-select-mode-map "h"                      'sekka-select-hiragana)
-(define-key sekka-select-mode-map "k"                      'sekka-select-katakana)
-(define-key sekka-select-mode-map "u"                      'sekka-select-hiragana)
-(define-key sekka-select-mode-map "i"                      'sekka-select-katakana)
 (define-key sekka-select-mode-map "\C-u"                   'sekka-select-hiragana)
 (define-key sekka-select-mode-map "\C-i"                   'sekka-select-katakana)
-(define-key sekka-select-mode-map "l"                      'sekka-select-alphabet)
 
 
 ;; 変換を確定し入力されたキーを再入力する関数
