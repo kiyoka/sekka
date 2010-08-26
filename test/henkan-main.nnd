@@ -183,7 +183,6 @@
        '((#f . #f) (#f . #f))
        (henkan-hiragana db "b"))
 
-
 ;;-------------------------------------------------------------------
 (test-section "henkan non-kanji")
 
@@ -202,6 +201,26 @@
 (test* "non-kanji 4"
        '(("≠" #f "!="))
        (henkan-non-kanji db "!="))
+
+
+;;-------------------------------------------------------------------
+(test-section "sekka henkan toplevel")
+
+(test* "henkan toplevel 1"
+       '(("＊" #f "*") ("※" #f "*") ("×" #f "*"))
+       (sekkaHenkan db "*"))
+
+(test* "henkan toplevel 2"
+       '(("しぜんげんごりか" . #f) ("シゼンゲンゴリカ" . #f))
+       (sekkaHenkan db "shizengengorika"))
+
+(test* "henkan toplevel 3"
+       '(("自然言語理解" #f "しぜんげんごりかい") ("自然言語" #f "しぜんげんご"))
+       (sekkaHenkan db "Shizengengorika"))
+
+(test* "henkan toplevel 4"
+       '(("変化する" #f "へんかs"))
+       (sekkaHenkan db "henkaSuru"))
 
 
 ;;===================================================================

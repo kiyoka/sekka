@@ -126,7 +126,7 @@
 
 
 ;; keyword には ローマ字のみを受け付ける
-(define (sekka-henkan db keyword)
+(define (sekkaHenkan db keyword)
   ;; キーワードの種別で処理を分割する
   (cond
    ((rxmatch #/[A-Z]/ keyword)
@@ -143,4 +143,5 @@
     (henkan-hiragana db keyword))
    (else
     (henkan-non-kanji db keyword))))
-
+;; Export to Ruby world
+(export-to-ruby sekkaHenkan)

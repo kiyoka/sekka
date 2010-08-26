@@ -2,7 +2,8 @@
 
 (use srfi-1)
 (require "kyotocabinet")
-;;(enable-trace)
+
+(define cabinet-ext ".kct")
 
 (define alphabet-list (to-list (. "abcdefghijklmnopqrstuvwxyz>" split "")))
 (define alphabet-pairs (append-map
@@ -52,7 +53,6 @@
 
 
 (define (load-sekka-jisyo-f f basename)
-  (define cabinet-ext ".kct")
   (let1 err
       (KyotoCabinet::DB.process
        (+ basename cabinet-ext)
@@ -73,8 +73,12 @@
     #t))
 
 
-
-      
-
-
-
+(define (openSekkaJisyo basename)
+  (let1 db (KyotoCabinet::DB.new)
+    (db.open (+ basename cabinet-ext))
+    (when (db.error)
+      (errorf "db error [%s]\n" (db.error)))
+    (db.tune_encoding   "utf-8")
+    db))
+;; Export to Ruby world
+(export-to-ruby openSekkaJisyo)
