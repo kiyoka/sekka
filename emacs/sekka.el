@@ -1,15 +1,14 @@
 ;;;-*- mode: lisp-interaction; syntax: elisp ; coding: iso-2022-jp -*-"
 ;;
-;; "sumibi.el" is a client for Sumibi server.
+;; "sekka.el" is a client for Sekka server
 ;;
-;;   Copyright (C) 2002,2003,2004,2005 Kiyoka Nishiyama
-;;   This program was derived from yc.el-4.0.13(auther: knak)
+;;   Copyright (C) 2010 Kiyoka Nishiyama
+;;   This program was derived from sumibi.el and yc.el-4.0.13(auther: knak)
 ;;
-;;     $Date: 2007/07/23 15:40:49 $
 ;;
-;; This file is part of Sumibi
+;; This file is part of Sekka
 ;;
-;; Sumibi is free software; you can redistribute it and/or modify
+;; Sekka is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)
 ;; any later version.
@@ -25,15 +24,13 @@
 ;;
 
 ;;;     配布条件: GPL
-;;; 最新版配布元: http://sourceforge.jp/projects/sumibi/
+;;; 最新版配布元: 
 ;;; 
 ;;; 不明な点や改善したい点があればSumibiのメーリングリストに参加してフィードバックをおねがいします。
 ;;;
-;;; また、Sumibiに興味を持っていただいた方はどなたでも
+;;; また、Sekkaに興味を持っていただいた方はどなたでも
 ;;; 気軽にプロジェクトにご参加ください。
 ;;;
-;;; インストール方法、使いかたは以下のWebサイトにありますのであわせて参照してください。
-;;;   http://www.sumibi.org/
 ;;;
 
 ;;; Code:
@@ -44,17 +41,17 @@
 ;;;
 ;;; customize variables
 ;;;
-(defgroup sumibi nil
-  "Sumibi client."
+(defgroup sekka nil
+  "Sekka client."
   :group 'input-method
   :group 'Japanese)
 
-(defcustom sumibi-server-url "https://sumibi.org/cgi-bin/sumibi/testing/sumibi.cgi"
-  "SumibiサーバーのURLを指定する。"
+(defcustom sekka-server-url "https://sekka.org/cgi-bin/sekka/testing/sekka.cgi"
+  "SekkaサーバーのURLを指定する。"
   :type  'string
-  :group 'sumibi)
+  :group 'sekka)
 
-(defcustom sumibi-server-cert-data
+(defcustom sekka-server-cert-data
   "-----BEGIN CERTIFICATE-----
 MIIE3jCCA8agAwIBAgICAwEwDQYJKoZIhvcNAQEFBQAwYzELMAkGA1UEBhMCVVMx
 ITAfBgNVBAoTGFRoZSBHbyBEYWRkeSBHcm91cCwgSW5jLjExMC8GA1UECxMoR28g
@@ -132,26 +129,26 @@ IYEZoDJJKPTEjlbVUjP9UNV+mWwD5MlM/Mtsq2azSiGM5bUMMj4QssxsodyamEwC
 W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 -----END CERTIFICATE-----
 "
-  "Sumibiサーバーと通信する時のSSL証明書データ。"
+  "Sekkaサーバーと通信する時のSSL証明書データ。"
   :type  'string
-  :group 'sumibi)
+  :group 'sekka)
 
-(defcustom sumibi-server-use-cert t
-  "Sumibiサーバーと通信する時のSSL証明書を使うかどうか。"
+(defcustom sekka-server-use-cert t
+  "Sekkaサーバーと通信する時のSSL証明書を使うかどうか。"
   :type  'symbol
-  :group 'sumibi)
+  :group 'sekka)
 
-(defcustom sumibi-server-timeout 10
-  "Sumibiサーバーと通信する時のタイムアウトを指定する。(秒数)"
+(defcustom sekka-server-timeout 10
+  "Sekkaサーバーと通信する時のタイムアウトを指定する。(秒数)"
   :type  'integer
-  :group 'sumibi)
+  :group 'sekka)
  
-(defcustom sumibi-stop-chars ";:(){}<>"
+(defcustom sekka-stop-chars ";:(){}<>"
   "*漢字変換文字列を取り込む時に変換範囲に含めない文字を設定する"
   :type  'string
-  :group 'sumibi)
+  :group 'sekka)
 
-(defcustom sumibi-replace-keyword-list '(
+(defcustom sekka-replace-keyword-list '(
 					 ("no" . "no.h")
 					 ("ha" . "ha.h")
 					 ("ga" . "ga.h")
@@ -159,92 +156,92 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 					 ("ni" . "ni.h")
 					 ("de" . "de.h"))
 
-  "Sumibiサーバーに文字列を送る前に置換するキーワードを設定する"
+  "Sekkaサーバーに文字列を送る前に置換するキーワードを設定する"
   :type  'sexp
-  :group 'sumibi)
+  :group 'sekka)
 
-(defcustom sumibi-curl "curl"
+(defcustom sekka-curl "curl"
   "curlコマンドの絶対パスを設定する"
   :type  'string
-  :group 'sumibi)
+  :group 'sekka)
 
-(defcustom sumibi-use-viper nil
+(defcustom sekka-use-viper nil
   "*Non-nil であれば、VIPER に対応する"
   :type 'boolean
-  :group 'sumibi)
+  :group 'sekka)
 
-(defcustom sumibi-realtime-guide-running-seconds 60
+(defcustom sekka-realtime-guide-running-seconds 60
   "リアルタイムガイド表示の継続時間(秒数)・ゼロでガイド表示機能が無効になる"
   :type  'integer
-  :group 'sumibi)
+  :group 'sekka)
 
-(defcustom sumibi-realtime-guide-interval  0.5
+(defcustom sekka-realtime-guide-interval  0.5
   "リアルタイムガイド表示を更新する時間間隔"
   :type  'integer
-  :group 'sumibi)
+  :group 'sekka)
 
-(defcustom sumibi-history-filename  "~/.sumibi_history"
+(defcustom sekka-history-filename  "~/.sekka_history"
   "ユーザー固有の変換履歴を保存するファイル名"
   :type  'string
-  :group 'sumibi)
+  :group 'sekka)
 
-(defcustom sumibi-history-feature  t
+(defcustom sekka-history-feature  t
   "Non-nilであれば、ユーザー固有の変換履歴を有効にする"
   :type  'boolean
-  :group 'sumibi)
+  :group 'sekka)
 
-(defcustom sumibi-history-max  100
+(defcustom sekka-history-max  100
   "ユーザー固有の変換履歴の最大保存件数を指定する(最新から指定件数のみが保存される)"
   :type  'integer
-  :group 'sumibi)
+  :group 'sekka)
 
 
-(defface sumibi-guide-face
+(defface sekka-guide-face
   '((((class color) (background light)) (:background "#E0E0E0" :foreground "#F03030")))
   "リアルタイムガイドのフェイス(装飾、色などの指定)"
-  :group 'sumibi)
+  :group 'sekka)
 
 
-(defvar sumibi-mode nil             "漢字変換トグル変数")
-(defvar sumibi-mode-line-string     " Sumibi")
-(defvar sumibi-select-mode nil      "候補選択モード変数")
-(or (assq 'sumibi-mode minor-mode-alist)
+(defvar sekka-mode nil             "漢字変換トグル変数")
+(defvar sekka-mode-line-string     " Sekka")
+(defvar sekka-select-mode nil      "候補選択モード変数")
+(or (assq 'sekka-mode minor-mode-alist)
     (setq minor-mode-alist (cons
-			    '(sumibi-mode        sumibi-mode-line-string)
+			    '(sekka-mode        sekka-mode-line-string)
 			    minor-mode-alist)))
 
 
 ;; ローマ字漢字変換時、対象とするローマ字を設定するための変数
-(defvar sumibi-skip-chars "a-zA-Z0-9 .,\\-+!\\[\\]?")
-(defvar sumibi-mode-map        (make-sparse-keymap)         "漢字変換トグルマップ")
-(defvar sumibi-select-mode-map (make-sparse-keymap)         "候補選択モードマップ")
-(defvar sumibi-rK-trans-key "\C-j"
+(defvar sekka-skip-chars "a-zA-Z0-9 .,\\-+!\\[\\]?")
+(defvar sekka-mode-map        (make-sparse-keymap)         "漢字変換トグルマップ")
+(defvar sekka-select-mode-map (make-sparse-keymap)         "候補選択モードマップ")
+(defvar sekka-rK-trans-key "\C-j"
   "*漢字変換キーを設定する")
-(or (assq 'sumibi-mode minor-mode-map-alist)
+(or (assq 'sekka-mode minor-mode-map-alist)
     (setq minor-mode-map-alist
-	  (append (list (cons 'sumibi-mode         sumibi-mode-map)
-			(cons 'sumibi-select-mode  sumibi-select-mode-map))
+	  (append (list (cons 'sekka-mode         sekka-mode-map)
+			(cons 'sekka-select-mode  sekka-select-mode-map))
 		  minor-mode-map-alist)))
 
 ;; ユーザー学習辞書
-(defvar sumibi-kakutei-history          '())    ;; ( ( unix時間 単語IDのリスト ) ( unix時間 9412 1028 ) )
-(defvar sumibi-kakutei-history-saved    '())    ;; ファイルに保存されたほうのヒストリデータ)
+(defvar sekka-kakutei-history          '())    ;; ( ( unix時間 単語IDのリスト ) ( unix時間 9412 1028 ) )
+(defvar sekka-kakutei-history-saved    '())    ;; ファイルに保存されたほうのヒストリデータ)
 
 ;;;
 ;;; hooks
 ;;;
-(defvar sumibi-mode-hook nil)
-(defvar sumibi-select-mode-hook nil)
-(defvar sumibi-select-mode-end-hook nil)
+(defvar sekka-mode-hook nil)
+(defvar sekka-select-mode-hook nil)
+(defvar sekka-select-mode-end-hook nil)
 
-(defconst sumibi-kind-index   0)
-(defconst sumibi-tango-index  1)
-(defconst sumibi-id-index     2)
-(defconst sumibi-wordno-index 3)
-(defconst sumibi-candno-index 4)
-(defconst sumibi-spaces-index 5)
+(defconst sekka-kind-index   0)
+(defconst sekka-tango-index  1)
+(defconst sekka-id-index     2)
+(defconst sekka-wordno-index 3)
+(defconst sekka-candno-index 4)
+(defconst sekka-spaces-index 5)
 
-(defconst sumibi-hiragana->katakana-table
+(defconst sekka-hiragana->katakana-table
   (mapcar
    (lambda (c)
      (cons
@@ -276,7 +273,7 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
      "っん"))))
 
 
-(defconst sumibi-roman->kana-table
+(defconst sekka-roman->kana-table
   '(("kkya" . "っきゃ")
     ("kkyu" . "っきゅ")
     ("kkyo" . "っきょ")
@@ -559,56 +556,56 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 
 
 ;;--- デバッグメッセージ出力
-(defvar sumibi-debug nil)		; デバッグフラグ
-(defun sumibi-debug-print (string)
-  (if sumibi-debug
+(defvar sekka-debug nil)		; デバッグフラグ
+(defun sekka-debug-print (string)
+  (if sekka-debug
       (let
-	  ((buffer (get-buffer-create "*sumibi-debug*")))
+	  ((buffer (get-buffer-create "*sekka-debug*")))
 	(with-current-buffer buffer
 	  (goto-char (point-max))
 	  (insert string)))))
 
 
-;;; sumibi basic output
-(defvar sumibi-fence-start nil)		; fence 始端位置
-(defvar sumibi-fence-end nil)		; fence 終端位置
-(defvar sumibi-henkan-separeter " ")	; fence mode separeter
-(defvar sumibi-henkan-buffer nil)	; 表示用バッファ
-(defvar sumibi-henkan-length nil)	; 表示用バッファ長
-(defvar sumibi-henkan-revpos nil)	; 文節始端位置
-(defvar sumibi-henkan-revlen nil)	; 文節長
+;;; sekka basic output
+(defvar sekka-fence-start nil)		; fence 始端位置
+(defvar sekka-fence-end nil)		; fence 終端位置
+(defvar sekka-henkan-separeter " ")	; fence mode separeter
+(defvar sekka-henkan-buffer nil)	; 表示用バッファ
+(defvar sekka-henkan-length nil)	; 表示用バッファ長
+(defvar sekka-henkan-revpos nil)	; 文節始端位置
+(defvar sekka-henkan-revlen nil)	; 文節長
 
-;;; sumibi basic local
-(defvar sumibi-cand     nil)		; カレント文節番号
-(defvar sumibi-cand-n   nil)		; 文節候補番号
-(defvar sumibi-cand-n-backup   nil)	; 文節候補番号 ( 候補選択キャンセル用 )
-(defvar sumibi-cand-max nil)		; 文節候補数
-(defvar sumibi-last-fix "")		; 最後に確定した文字列
-(defvar sumibi-henkan-list nil)		; 文節リスト
-(defvar sumibi-repeat 0)		; 繰り返し回数
-(defvar sumibi-marker-list '())		; 文節開始、終了位置リスト: 次のような形式 ( ( 1 . 2 ) ( 5 . 7 ) ... ) 
-(defvar sumibi-timer    nil)            ; インターバルタイマー型変数
-(defvar sumibi-timer-rest  0)           ; あと何回呼出されたら、インターバルタイマの呼出を止めるか
-(defvar sumibi-guide-overlay   nil)     ; リアルタイムガイドに使用するオーバーレイ
-(defvar sumibi-last-request-time 0)     ; Sumibiサーバーにリクエストした最後の時刻(単位は秒)
+;;; sekka basic local
+(defvar sekka-cand     nil)		; カレント文節番号
+(defvar sekka-cand-n   nil)		; 文節候補番号
+(defvar sekka-cand-n-backup   nil)	; 文節候補番号 ( 候補選択キャンセル用 )
+(defvar sekka-cand-max nil)		; 文節候補数
+(defvar sekka-last-fix "")		; 最後に確定した文字列
+(defvar sekka-henkan-list nil)		; 文節リスト
+(defvar sekka-repeat 0)		; 繰り返し回数
+(defvar sekka-marker-list '())		; 文節開始、終了位置リスト: 次のような形式 ( ( 1 . 2 ) ( 5 . 7 ) ... ) 
+(defvar sekka-timer    nil)            ; インターバルタイマー型変数
+(defvar sekka-timer-rest  0)           ; あと何回呼出されたら、インターバルタイマの呼出を止めるか
+(defvar sekka-guide-overlay   nil)     ; リアルタイムガイドに使用するオーバーレイ
+(defvar sekka-last-request-time 0)     ; Sekkaサーバーにリクエストした最後の時刻(単位は秒)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 表示系関数群
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defvar sumibi-use-fence t)
-(defvar sumibi-use-color nil)
+(defvar sekka-use-fence t)
+(defvar sekka-use-color nil)
 
-(defvar sumibi-init nil)
-(defvar sumibi-server-cert-file nil)
+(defvar sekka-init nil)
+(defvar sekka-server-cert-file nil)
 
 ;;
 ;; 初期化
 ;;
-(defun sumibi-init ()
+(defun sekka-init ()
   ;; 最初の n 件のリストを取得する
-  (defun sumibi-take (arg-list n)
+  (defun sekka-take (arg-list n)
     (let ((lst '()))
       (dotimes (i n (reverse lst))
 	(let ((item (nth i arg-list)))
@@ -616,7 +613,7 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 	    (push item lst))))))
 
   ;; ヒストリファイルとメモリ中のヒストリデータをマージする
-  (defun sumibi-merge-kakutei-history (base-list new-list)
+  (defun sekka-merge-kakutei-history (base-list new-list)
     (let ((merged-num  '())
 	  (merged-list '()))
       (mapcar
@@ -631,74 +628,74 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
       merged-list))
 
   ;; テンポラリファイルを作成する。
-  (defun sumibi-make-temp-file (base)
+  (defun sekka-make-temp-file (base)
     (if	(functionp 'make-temp-file)
 	(make-temp-file base)
       (concat "/tmp/" (make-temp-name base))))
 
-  (when (not sumibi-init)
+  (when (not sekka-init)
     ;; SSL証明書ファイルをテンポラリファイルとして作成する。
-    (setq sumibi-server-cert-file 
-	  (sumibi-make-temp-file
-	   "sumibi.certfile"))
-    (sumibi-debug-print (format "cert-file :[%s]\n" sumibi-server-cert-file))
+    (setq sekka-server-cert-file 
+	  (sekka-make-temp-file
+	   "sekka.certfile"))
+    (sekka-debug-print (format "cert-file :[%s]\n" sekka-server-cert-file))
     (with-temp-buffer
-      (insert sumibi-server-cert-data)
-      (write-region (point-min) (point-max) sumibi-server-cert-file  nil nil))
+      (insert sekka-server-cert-data)
+      (write-region (point-min) (point-max) sekka-server-cert-file  nil nil))
 
     (when (and
-	   sumibi-history-feature
-	   (file-exists-p sumibi-history-filename))
+	   sekka-history-feature
+	   (file-exists-p sekka-history-filename))
       (progn
-	(load-file sumibi-history-filename)
-	(setq sumibi-kakutei-history sumibi-kakutei-history-saved)))
+	(load-file sekka-history-filename)
+	(setq sekka-kakutei-history sekka-kakutei-history-saved)))
 
     ;; Emacs終了時SSL証明書ファイルを削除する。
     (add-hook 'kill-emacs-hook
 	      (lambda ()
 		;; ユーザー変換履歴をマージして保存する
-		(when sumibi-history-feature
+		(when sekka-history-feature
 		  (progn
 		    ;; 現在のファイルを再度読みこむ(別のEmacsプロセスが更新しているかも知れない為)
-		    (when (file-exists-p sumibi-history-filename)
-		      (load-file sumibi-history-filename))
+		    (when (file-exists-p sekka-history-filename)
+		      (load-file sekka-history-filename))
 		    (with-temp-file
-			sumibi-history-filename
-		      (insert (format "(setq sumibi-kakutei-history-saved '%s)" 
+			sekka-history-filename
+		      (insert (format "(setq sekka-kakutei-history-saved '%s)" 
 				      (let ((lst
-					     (sumibi-take 
-					      (sumibi-merge-kakutei-history
-					       sumibi-kakutei-history-saved
-					       sumibi-kakutei-history)
-					      sumibi-history-max)))
+					     (sekka-take 
+					      (sekka-merge-kakutei-history
+					       sekka-kakutei-history-saved
+					       sekka-kakutei-history)
+					      sekka-history-max)))
 					(if (functionp 'pp-to-string)
 					    (pp-to-string lst)
 					  (prin1-to-string lst))))))))
 		;; SSL証明書のテンポラリファイルを削除する
-		(when (file-exists-p sumibi-server-cert-file)
-		  (delete-file sumibi-server-cert-file))))
+		(when (file-exists-p sekka-server-cert-file)
+		  (delete-file sekka-server-cert-file))))
     
     ;; 初期化完了
-    (setq sumibi-init t)))
+    (setq sekka-init t)))
 
 
 ;;
-;; ローマ字で書かれた文章をSumibiサーバーを使って変換する
+;; ローマ字で書かれた文章をSekkaサーバーを使って変換する
 ;;
-(defun sumibi-soap-request (func-name arg-list)
+(defun sekka-soap-request (func-name arg-list)
   (let (
 	(command
 	 (concat
-	  sumibi-curl " --silent --show-error "
-	  (format " --max-time %d " sumibi-server-timeout)
-	  (if sumibi-server-use-cert
-	    (if (not sumibi-server-cert-file)
+	  sekka-curl " --silent --show-error "
+	  (format " --max-time %d " sekka-server-timeout)
+	  (if sekka-server-use-cert
+	    (if (not sekka-server-cert-file)
 		(error "Error : cert file create miss!")
-	      (format "--cacert '%s' " sumibi-server-cert-file))
+	      (format "--cacert '%s' " sekka-server-cert-file))
 	    " --insecure ")
 	  (format " --header 'Content-Type: text/xml' ")
-	  (format " --header 'SOAPAction:urn:SumibiConvert#%s' " func-name)
-	  sumibi-server-url " "
+	  (format " --header 'SOAPAction:urn:SekkaConvert#%s' " func-name)
+	  sekka-server-url " "
 	  (format (concat "--data '"
 			  "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
 			  "  <SOAP-ENV:Envelope xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\""
@@ -707,7 +704,7 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 			  "   xmlns:xsi=\"http://www.w3.org/1999/XMLSchema-instance\""
 			  "   xmlns:xsd=\"http://www.w3.org/1999/XMLSchema\">"
 			  "  <SOAP-ENV:Body>"
-			  "    <namesp1:%s xmlns:namesp1=\"urn:SumibiConvert\">"
+			  "    <namesp1:%s xmlns:namesp1=\"urn:SekkaConvert\">"
 			  (mapconcat
 			   (lambda (x)
 			     (format "    <in xsi:type=\"xsd:string\">%s</in>" x))
@@ -723,7 +720,7 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 		  func-name
 		  ))))
 
-    (sumibi-debug-print (format "curl-command :%s\n" command))
+    (sekka-debug-print (format "curl-command :%s\n" command))
 
     (let* (
 	   (_xml
@@ -732,7 +729,7 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 	   (_match
 	    (string-match "<s-gensym3[^>]+>\\(.+\\)</s-gensym3>" _xml)))
 	   
-      (sumibi-debug-print (format "curl-result-xml :%s\n" _xml))
+      (sekka-debug-print (format "curl-result-xml :%s\n" _xml))
 
       (if _match 
 	  (decode-coding-string
@@ -745,7 +742,7 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 ;;
 ;; 現在時刻をUNIXタイムを返す(単位は秒)
 ;;
-(defun sumibi-current-unixtime ()
+(defun sekka-current-unixtime ()
   (let (
 	(_ (current-time)))
     (+
@@ -755,28 +752,28 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 
 
 ;;
-;; ローマ字で書かれた文章をSumibiサーバーを使って変換する
+;; ローマ字で書かれた文章をSekkaサーバーを使って変換する
 ;;
-(defun sumibi-henkan-request (yomi)
-  (sumibi-debug-print (format "henkan-input :[%s]\n"  yomi))
+(defun sekka-henkan-request (yomi)
+  (sekka-debug-print (format "henkan-input :[%s]\n"  yomi))
 
-  (message "Requesting to sumibi server...")
+  (message "Requesting to sekka server...")
   
   (let* (
-	 (result (sumibi-soap-request "doSumibiConvertSexp" (list yomi
+	 (result (sekka-soap-request "doSekkaConvertSexp" (list yomi
 								  ""
-								  (sumibi-get-history-string
-								   sumibi-kakutei-history)))))
-    (sumibi-debug-print (format "henkan-result:%S\n" result))
+								  (sekka-get-history-string
+								   sekka-kakutei-history)))))
+    (sekka-debug-print (format "henkan-result:%S\n" result))
     (if (eq (string-to-char result) ?\( )
 	(progn
-	  (sumibi-next-history)
+	  (sekka-next-history)
 	  (message nil)
 	  (condition-case err
 	      (read result)
 	    (end-of-file
 	     (progn
-	       (message "Parse error for parsing result of Sumibi Server.")
+	       (message "Parse error for parsing result of Sekka Server.")
 	       nil))))
       (progn
 	(message result)
@@ -784,7 +781,7 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 
 
 ;; ポータブル文字列置換( EmacsとXEmacsの両方で動く )
-(defun sumibi-replace-regexp-in-string (regexp replace str)
+(defun sekka-replace-regexp-in-string (regexp replace str)
   (cond ((featurep 'xemacs)
 	 (replace-in-string str regexp replace))
 	(t
@@ -792,13 +789,13 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 	
 
 ;; 置換キーワードを解決する
-(defun sumibi-replace-keyword (str)
+(defun sekka-replace-keyword (str)
   (let (
 	;; 改行を一つのスペースに置換して、
 	;; キーワード置換処理の前処理として行頭と行末にスペースを追加する。
 	(replaced 
 	 (concat " " 
-		 (sumibi-replace-regexp-in-string 
+		 (sekka-replace-regexp-in-string 
 		  "[\n]"
 		  " "
 		  str)
@@ -807,46 +804,46 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
     (mapcar
      (lambda (x)
        (setq replaced 
-	     (sumibi-replace-regexp-in-string 
+	     (sekka-replace-regexp-in-string 
 	      (concat " " (car x) " ")
 	      (concat " " (cdr x) " ")
 	      replaced)))
-     sumibi-replace-keyword-list)
+     sekka-replace-keyword-list)
     replaced))
 
 ;; リージョンをローマ字漢字変換する関数
-(defun sumibi-henkan-region (b e)
+(defun sekka-henkan-region (b e)
   "指定された region を漢字変換する"
-  (sumibi-init)
+  (sekka-init)
   (when (/= b e)
     (let* (
 	   (yomi (buffer-substring-no-properties b e))
-	   (henkan-list (sumibi-henkan-request (sumibi-replace-keyword yomi))))
+	   (henkan-list (sekka-henkan-request (sekka-replace-keyword yomi))))
       
       (if henkan-list
 	  (condition-case err
 	      (progn
 		(setq
 		 ;; 変換結果の保持
-		 sumibi-henkan-list henkan-list
+		 sekka-henkan-list henkan-list
 		 ;; 文節選択初期化
-		 sumibi-cand-n   (make-list (length henkan-list) 0)
+		 sekka-cand-n   (make-list (length henkan-list) 0)
 		 ;; 
-		 sumibi-cand-max (mapcar
+		 sekka-cand-max (mapcar
 				  (lambda (x)
 				    (length x))
 				  henkan-list))
 		
-		(sumibi-debug-print (format "sumibi-henkan-list:%s \n" sumibi-henkan-list))
-		(sumibi-debug-print (format "sumibi-cand-n:%s \n" sumibi-cand-n))
-		(sumibi-debug-print (format "sumibi-cand-max:%s \n" sumibi-cand-max))
+		(sekka-debug-print (format "sekka-henkan-list:%s \n" sekka-henkan-list))
+		(sekka-debug-print (format "sekka-cand-n:%s \n" sekka-cand-n))
+		(sekka-debug-print (format "sekka-cand-max:%s \n" sekka-cand-max))
 		;;
 		t)
-	    (sumibi-trap-server-down
+	    (sekka-trap-server-down
 	     (beep)
 	     (message (error-message-string err))
-	     (setq sumibi-select-mode nil))
-	    (run-hooks 'sumibi-select-mode-end-hook))
+	     (setq sekka-select-mode nil))
+	    (run-hooks 'sekka-select-mode-end-hook))
 	nil))))
 
 
@@ -854,11 +851,11 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 (eval-and-compile
   (if (>= emacs-major-version 20)
       (progn
-	(defalias 'sumibi-char-charset (symbol-function 'char-charset))
+	(defalias 'sekka-char-charset (symbol-function 'char-charset))
 	(when (and (boundp 'byte-compile-depth)
 		   (not (fboundp 'char-category)))
 	  (defalias 'char-category nil))) ; for byte compiler
-    (defun sumibi-char-charset (ch)
+    (defun sekka-char-charset (ch)
       (cond ((equal (char-category ch) "a") 'ascii)
 	    ((equal (char-category ch) "k") 'katakana-jisx0201)
 	    ((string-match "[SAHK]j" (char-category ch)) 'japanese-jisx0208)
@@ -869,61 +866,61 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 ;; undo 情報の制御
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; undo buffer 退避用変数
-(defvar sumibi-buffer-undo-list nil)
-(make-variable-buffer-local 'sumibi-buffer-undo-list)
-(defvar sumibi-buffer-modified-p nil)
-(make-variable-buffer-local 'sumibi-buffer-modified-p)
+(defvar sekka-buffer-undo-list nil)
+(make-variable-buffer-local 'sekka-buffer-undo-list)
+(defvar sekka-buffer-modified-p nil)
+(make-variable-buffer-local 'sekka-buffer-modified-p)
 
-(defvar sumibi-blink-cursor nil)
-(defvar sumibi-cursor-type nil)
+(defvar sekka-blink-cursor nil)
+(defvar sekka-cursor-type nil)
 ;; undo buffer を退避し、undo 情報の蓄積を停止する関数
-(defun sumibi-disable-undo ()
+(defun sekka-disable-undo ()
   (when (not (eq buffer-undo-list t))
-    (setq sumibi-buffer-undo-list buffer-undo-list)
-    (setq sumibi-buffer-modified-p (buffer-modified-p))
+    (setq sekka-buffer-undo-list buffer-undo-list)
+    (setq sekka-buffer-modified-p (buffer-modified-p))
     (setq buffer-undo-list t)))
 
 ;; 退避した undo buffer を復帰し、undo 情報の蓄積を再開する関数
-(defun sumibi-enable-undo ()
-  (when (not sumibi-buffer-modified-p) (set-buffer-modified-p nil))
-  (when sumibi-buffer-undo-list
-    (setq buffer-undo-list sumibi-buffer-undo-list)))
+(defun sekka-enable-undo ()
+  (when (not sekka-buffer-modified-p) (set-buffer-modified-p nil))
+  (when sekka-buffer-undo-list
+    (setq buffer-undo-list sekka-buffer-undo-list)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 現在の変換エリアの表示を行う
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun sumibi-get-display-string ()
+(defun sekka-get-display-string ()
   (let ((cnt 0))
     (mapconcat
      (lambda (x)
        ;; 変換結果文字列を返す。
-       (let ((word (nth (nth cnt sumibi-cand-n) x)))
-	 (sumibi-debug-print (format "word:[%d] %s\n" cnt word))
+       (let ((word (nth (nth cnt sekka-cand-n) x)))
+	 (sekka-debug-print (format "word:[%d] %s\n" cnt word))
 	 (setq cnt (+ 1 cnt))
-	 (nth sumibi-tango-index word)))
-     sumibi-henkan-list
+	 (nth sekka-tango-index word)))
+     sekka-henkan-list
      "")))
 
 
-(defun sumibi-display-function (b e select-mode)
-  (setq sumibi-henkan-separeter (if sumibi-use-fence " " ""))
-  (when sumibi-henkan-list
+(defun sekka-display-function (b e select-mode)
+  (setq sekka-henkan-separeter (if sekka-use-fence " " ""))
+  (when sekka-henkan-list
     ;; UNDO抑制開始
-    (sumibi-disable-undo)
+    (sekka-disable-undo)
 
     (delete-region b e)
 
     ;; リスト初期化
-    (setq sumibi-marker-list '())
+    (setq sekka-marker-list '())
 
     (let (
 	   (cnt 0))
 
-      (setq sumibi-last-fix "")
+      (setq sekka-last-fix "")
 
       ;; 変換したpointの保持
-      (setq sumibi-fence-start (point-marker))
+      (setq sekka-fence-start (point-marker))
       (when select-mode (insert "|"))
 
       (mapcar
@@ -931,18 +928,18 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 	 (if (and
 	      (not (eq (preceding-char) ?\ ))
 	      (not (eq (point-at-bol) (point)))
-	      (eq (sumibi-char-charset (preceding-char)) 'ascii)
+	      (eq (sekka-char-charset (preceding-char)) 'ascii)
 	      (and
 	       (< 0 (length (cadar x)))
-	       (eq (sumibi-char-charset (string-to-char (cadar x))) 'ascii)))
+	       (eq (sekka-char-charset (string-to-char (cadar x))) 'ascii)))
 	     (insert " "))
 
 	 (let* (
 		(start       (point-marker))
-		(_n          (nth cnt sumibi-cand-n))
-		(_max        (nth cnt sumibi-cand-max))
-		(spaces      (nth sumibi-spaces-index (nth _n x)))
-		(insert-word (nth sumibi-tango-index  (nth _n x)))
+		(_n          (nth cnt sekka-cand-n))
+		(_max        (nth cnt sekka-cand-max))
+		(spaces      (nth sekka-spaces-index (nth _n x)))
+		(insert-word (nth sekka-tango-index  (nth _n x)))
 		(_insert-word
 		 ;; スペースが2個以上入れられたら、1個のスペースを入れる。(但し、auto-fill-modeが無効の場合のみ)
 		 (if (and (< 1 spaces) (not auto-fill-function))
@@ -950,7 +947,7 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 		   insert-word))
 		(ank-word    (cadr (assoc 'l x)))
 		(_     
-		 (if (eq cnt sumibi-cand)
+		 (if (eq cnt sekka-cand)
 		     (progn
 		       (insert _insert-word)
 		       (message (format "[%s] candidate (%d/%d)" insert-word (+ _n 1) _max)))
@@ -959,32 +956,32 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 		(ov          (make-overlay start end)))
 
 	   ;; 確定文字列の作成
-	   (setq sumibi-last-fix (concat sumibi-last-fix _insert-word))
+	   (setq sekka-last-fix (concat sekka-last-fix _insert-word))
 	   
 	   ;; 選択中の場所を装飾する。
 	   (overlay-put ov 'face 'default)
 	   (when (and select-mode
-		      (eq cnt sumibi-cand))
+		      (eq cnt sekka-cand))
 	     (overlay-put ov 'face 'highlight))
 
-	   (push `(,start . ,end) sumibi-marker-list)
-	   (sumibi-debug-print (format "insert:[%s] point:%d-%d\n" insert-word (marker-position start) (marker-position end))))
+	   (push `(,start . ,end) sekka-marker-list)
+	   (sekka-debug-print (format "insert:[%s] point:%d-%d\n" insert-word (marker-position start) (marker-position end))))
 	 (setq cnt (+ cnt 1)))
 
-       sumibi-henkan-list))
+       sekka-henkan-list))
 
     ;; リストを逆順にする。
-    (setq sumibi-marker-list (reverse sumibi-marker-list))
+    (setq sekka-marker-list (reverse sekka-marker-list))
 
     ;; fenceの範囲を設定する
     (when select-mode (insert "|"))
-    (setq sumibi-fence-end   (point-marker))
+    (setq sekka-fence-end   (point-marker))
 
-    (sumibi-debug-print (format "total-point:%d-%d\n"
-				(marker-position sumibi-fence-start)
-				(marker-position sumibi-fence-end)))
+    (sekka-debug-print (format "total-point:%d-%d\n"
+				(marker-position sekka-fence-start)
+				(marker-position sekka-fence-end)))
     ;; UNDO再開
-    (sumibi-enable-undo)
+    (sekka-enable-undo)
     ))
 
 
@@ -994,67 +991,67 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (let ((i 0))
   (while (<= i ?\177)
-    (define-key sumibi-select-mode-map (char-to-string i)
-      'sumibi-kakutei-and-self-insert)
+    (define-key sekka-select-mode-map (char-to-string i)
+      'sekka-kakutei-and-self-insert)
     (setq i (1+ i))))
-(define-key sumibi-select-mode-map "\C-m"                   'sumibi-select-kakutei)
-(define-key sumibi-select-mode-map "\C-g"                   'sumibi-select-cancel)
-(define-key sumibi-select-mode-map "q"                      'sumibi-select-cancel)
-(define-key sumibi-select-mode-map "\C-b"                   'sumibi-select-prev-word)
-(define-key sumibi-select-mode-map "\C-f"                   'sumibi-select-next-word)
-(define-key sumibi-select-mode-map "\C-a"                   'sumibi-select-first-word)
-(define-key sumibi-select-mode-map "\C-e"                   'sumibi-select-last-word)
-(define-key sumibi-select-mode-map "\C-p"                   'sumibi-select-prev)
-(define-key sumibi-select-mode-map "\C-n"                   'sumibi-select-next)
-(define-key sumibi-select-mode-map "b"                      'sumibi-select-prev-word)
-(define-key sumibi-select-mode-map "f"                      'sumibi-select-next-word)
-(define-key sumibi-select-mode-map "a"                      'sumibi-select-first-word)
-(define-key sumibi-select-mode-map "e"                      'sumibi-select-last-word)
-(define-key sumibi-select-mode-map "p"                      'sumibi-select-prev)
-(define-key sumibi-select-mode-map "n"                      'sumibi-select-next)
-(define-key sumibi-select-mode-map sumibi-rK-trans-key      'sumibi-select-next)
-(define-key sumibi-select-mode-map " "                      'sumibi-select-next)
-(define-key sumibi-select-mode-map "j"                      'sumibi-select-kanji)
-(define-key sumibi-select-mode-map "h"                      'sumibi-select-hiragana)
-(define-key sumibi-select-mode-map "k"                      'sumibi-select-katakana)
-(define-key sumibi-select-mode-map "u"                      'sumibi-select-hiragana)
-(define-key sumibi-select-mode-map "i"                      'sumibi-select-katakana)
-(define-key sumibi-select-mode-map "\C-u"                   'sumibi-select-hiragana)
-(define-key sumibi-select-mode-map "\C-i"                   'sumibi-select-katakana)
-(define-key sumibi-select-mode-map "l"                      'sumibi-select-alphabet)
+(define-key sekka-select-mode-map "\C-m"                   'sekka-select-kakutei)
+(define-key sekka-select-mode-map "\C-g"                   'sekka-select-cancel)
+(define-key sekka-select-mode-map "q"                      'sekka-select-cancel)
+(define-key sekka-select-mode-map "\C-b"                   'sekka-select-prev-word)
+(define-key sekka-select-mode-map "\C-f"                   'sekka-select-next-word)
+(define-key sekka-select-mode-map "\C-a"                   'sekka-select-first-word)
+(define-key sekka-select-mode-map "\C-e"                   'sekka-select-last-word)
+(define-key sekka-select-mode-map "\C-p"                   'sekka-select-prev)
+(define-key sekka-select-mode-map "\C-n"                   'sekka-select-next)
+(define-key sekka-select-mode-map "b"                      'sekka-select-prev-word)
+(define-key sekka-select-mode-map "f"                      'sekka-select-next-word)
+(define-key sekka-select-mode-map "a"                      'sekka-select-first-word)
+(define-key sekka-select-mode-map "e"                      'sekka-select-last-word)
+(define-key sekka-select-mode-map "p"                      'sekka-select-prev)
+(define-key sekka-select-mode-map "n"                      'sekka-select-next)
+(define-key sekka-select-mode-map sekka-rK-trans-key      'sekka-select-next)
+(define-key sekka-select-mode-map " "                      'sekka-select-next)
+(define-key sekka-select-mode-map "j"                      'sekka-select-kanji)
+(define-key sekka-select-mode-map "h"                      'sekka-select-hiragana)
+(define-key sekka-select-mode-map "k"                      'sekka-select-katakana)
+(define-key sekka-select-mode-map "u"                      'sekka-select-hiragana)
+(define-key sekka-select-mode-map "i"                      'sekka-select-katakana)
+(define-key sekka-select-mode-map "\C-u"                   'sekka-select-hiragana)
+(define-key sekka-select-mode-map "\C-i"                   'sekka-select-katakana)
+(define-key sekka-select-mode-map "l"                      'sekka-select-alphabet)
 
 
 ;; 変換を確定し入力されたキーを再入力する関数
-(defun sumibi-kakutei-and-self-insert (arg)
+(defun sekka-kakutei-and-self-insert (arg)
   "候補選択を確定し、入力された文字を入力する"
   (interactive "P")
-  (sumibi-select-kakutei)
+  (sekka-select-kakutei)
   (setq unread-command-events (list last-command-event)))
 
 ;; 候補選択状態での表示更新
-(defun sumibi-select-update-display ()
-  (sumibi-display-function
-   (marker-position sumibi-fence-start)
-   (marker-position sumibi-fence-end)
-   sumibi-select-mode))
+(defun sekka-select-update-display ()
+  (sekka-display-function
+   (marker-position sekka-fence-start)
+   (marker-position sekka-fence-end)
+   sekka-select-mode))
 
 
 ;; 確定したIDリストを変換履歴に追加する
-(defun sumibi-next-history ( )
-  (if sumibi-history-feature
+(defun sekka-next-history ( )
+  (if sekka-history-feature
       (progn
 	(push
 	 (cons 
-	  (sumibi-current-unixtime)
+	  (sekka-current-unixtime)
 	  '())
-	 sumibi-kakutei-history)
-	(sumibi-debug-print (format "init:kakutei-history:%S\n" sumibi-kakutei-history))
-	sumibi-kakutei-history)
+	 sekka-kakutei-history)
+	(sekka-debug-print (format "init:kakutei-history:%S\n" sekka-kakutei-history))
+	sekka-kakutei-history)
     '()))
 
 
-;; Sumibiサーバーに 送るヒストリリストを出す
-(defun sumibi-get-history-string (kakutei-history)
+;; Sekkaサーバーに 送るヒストリリストを出す
+(defun sekka-get-history-string (kakutei-history)
   (mapconcat
    (lambda (entry)
      (mapconcat
@@ -1064,171 +1061,171 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
    kakutei-history
    ";"))
 
-;;(sumibi-get-history-string
+;;(sekka-get-history-string
 ;; '(
 ;;   (1 2 3 4 5 6)
 ;;   (10 20 30 40 50 60)))
 
 ;; 確定したIDリストを更新する
-(defun sumibi-update-history( cand-n )
+(defun sekka-update-history( cand-n )
   (let* ((cnt 0)
 	 (result 
 	  (mapcar
 	   (lambda (x)
 	     ;; 変換結果文字列を返す。
 	     (let ((word (nth (nth cnt cand-n) x)))
-	       (sumibi-debug-print (format "history-word:[%d] %s\n" cnt word))
+	       (sekka-debug-print (format "history-word:[%d] %s\n" cnt word))
 	       (setq cnt (+ 1 cnt))
-	       (nth sumibi-id-index word)))
-	   sumibi-henkan-list)))
+	       (nth sekka-id-index word)))
+	   sekka-henkan-list)))
     ;; ヒストリデータを作り直す
-    (when sumibi-history-feature
-      (setq sumibi-kakutei-history
+    (when sekka-history-feature
+      (setq sekka-kakutei-history
 	    (cons
 	     (cons
-	      (caar sumibi-kakutei-history)
+	      (caar sekka-kakutei-history)
 	      result)
-	     (if (< 1 (length sumibi-kakutei-history))
-		 (cdr sumibi-kakutei-history)
+	     (if (< 1 (length sekka-kakutei-history))
+		 (cdr sekka-kakutei-history)
 	       '())))
-      (sumibi-debug-print (format "kakutei-history:%S\n" sumibi-kakutei-history)))))
+      (sekka-debug-print (format "kakutei-history:%S\n" sekka-kakutei-history)))))
   
 
 
 ;; 候補選択を確定する
-(defun sumibi-select-kakutei ()
+(defun sekka-select-kakutei ()
   "候補選択を確定する"
   (interactive)
   ;; 候補番号リストをバックアップする。
-  (setq sumibi-cand-n-backup (copy-list sumibi-cand-n))
-  (setq sumibi-select-mode nil)
-  (run-hooks 'sumibi-select-mode-end-hook)
-  (sumibi-select-update-display)
-  (sumibi-update-history sumibi-cand-n))
+  (setq sekka-cand-n-backup (copy-list sekka-cand-n))
+  (setq sekka-select-mode nil)
+  (run-hooks 'sekka-select-mode-end-hook)
+  (sekka-select-update-display)
+  (sekka-update-history sekka-cand-n))
 
 
 ;; 候補選択をキャンセルする
-(defun sumibi-select-cancel ()
+(defun sekka-select-cancel ()
   "候補選択をキャンセルする"
   (interactive)
   ;; カレント候補番号をバックアップしていた候補番号で復元する。
-  (setq sumibi-cand-n (copy-list sumibi-cand-n-backup))
-  (setq sumibi-select-mode nil)
-  (run-hooks 'sumibi-select-mode-end-hook)
-  (sumibi-select-update-display))
+  (setq sekka-cand-n (copy-list sekka-cand-n-backup))
+  (setq sekka-select-mode nil)
+  (run-hooks 'sekka-select-mode-end-hook)
+  (sekka-select-update-display))
 
 ;; 前の候補に進める
-(defun sumibi-select-prev ()
+(defun sekka-select-prev ()
   "前の候補に進める"
   (interactive)
   (let (
-	(n sumibi-cand))
+	(n sekka-cand))
 
     ;; 前の候補に切りかえる
-    (setcar (nthcdr n sumibi-cand-n) (- (nth n sumibi-cand-n) 1))
-    (when (> 0 (nth n sumibi-cand-n))
-      (setcar (nthcdr n sumibi-cand-n) (- (nth n sumibi-cand-max) 1)))
-    (sumibi-select-update-display)))
+    (setcar (nthcdr n sekka-cand-n) (- (nth n sekka-cand-n) 1))
+    (when (> 0 (nth n sekka-cand-n))
+      (setcar (nthcdr n sekka-cand-n) (- (nth n sekka-cand-max) 1)))
+    (sekka-select-update-display)))
 
 ;; 次の候補に進める
-(defun sumibi-select-next ()
+(defun sekka-select-next ()
   "次の候補に進める"
   (interactive)
   (let (
-	(n sumibi-cand))
+	(n sekka-cand))
 
     ;; 次の候補に切りかえる
-    (setcar (nthcdr n sumibi-cand-n) (+ 1 (nth n sumibi-cand-n)))
-    (when (>= (nth n sumibi-cand-n) (nth n sumibi-cand-max))
-      (setcar (nthcdr n sumibi-cand-n) 0))
+    (setcar (nthcdr n sekka-cand-n) (+ 1 (nth n sekka-cand-n)))
+    (when (>= (nth n sekka-cand-n) (nth n sekka-cand-max))
+      (setcar (nthcdr n sekka-cand-n) 0))
 
-    (sumibi-select-update-display)))
+    (sekka-select-update-display)))
 
 ;; 前の文節に移動する
-(defun sumibi-select-prev-word ()
+(defun sekka-select-prev-word ()
   "前の文節に移動する"
   (interactive)
-  (when (< 0 sumibi-cand)
-    (setq sumibi-cand (- sumibi-cand 1)))
-  (sumibi-select-update-display))
+  (when (< 0 sekka-cand)
+    (setq sekka-cand (- sekka-cand 1)))
+  (sekka-select-update-display))
 
 ;; 次の文節に移動する
-(defun sumibi-select-next-word ()
+(defun sekka-select-next-word ()
   "次の文節に移動する"
   (interactive)
-  (when (< sumibi-cand (- (length sumibi-cand-n) 1))
-    (setq sumibi-cand (+ 1 sumibi-cand)))
-  (sumibi-select-update-display))
+  (when (< sekka-cand (- (length sekka-cand-n) 1))
+    (setq sekka-cand (+ 1 sekka-cand)))
+  (sekka-select-update-display))
 
 ;; 最初の文節に移動する
-(defun sumibi-select-first-word ()
+(defun sekka-select-first-word ()
   "最初の文節に移動する"
   (interactive)
-  (setq sumibi-cand 0)
-  (sumibi-select-update-display))
+  (setq sekka-cand 0)
+  (sekka-select-update-display))
 
 ;; 最後の文節に移動する
-(defun sumibi-select-last-word ()
+(defun sekka-select-last-word ()
   "最後の文節に移動する"
   (interactive)
-  (setq sumibi-cand (- (length sumibi-cand-n) 1))
-  (sumibi-select-update-display))
+  (setq sekka-cand (- (length sekka-cand-n) 1))
+  (sekka-select-update-display))
 
 
 ;; 指定された type の候補に強制的に切りかえる
-(defun sumibi-select-by-type ( _type )
+(defun sekka-select-by-type ( _type )
   (let* (
-	 (n sumibi-cand)
-	 (kouho (nth n sumibi-henkan-list))
+	 (n sekka-cand)
+	 (kouho (nth n sekka-henkan-list))
 	 (_element (assoc _type kouho)))
 
     ;; 連想リストから _type で引いた index 番号を設定するだけで良い。
     (when _element
-      (setcar (nthcdr n sumibi-cand-n) (nth sumibi-candno-index _element))
-      (sumibi-select-update-display))))
+      (setcar (nthcdr n sekka-cand-n) (nth sekka-candno-index _element))
+      (sekka-select-update-display))))
 
-(defun sumibi-select-kanji ()
+(defun sekka-select-kanji ()
   "漢字候補に強制的に切りかえる"
   (interactive)
-  (sumibi-select-by-type 'j))
+  (sekka-select-by-type 'j))
 
-(defun sumibi-select-hiragana ()
+(defun sekka-select-hiragana ()
   "ひらがな候補に強制的に切りかえる"
   (interactive)
-  (sumibi-select-by-type 'h))
+  (sekka-select-by-type 'h))
 
-(defun sumibi-select-katakana ()
+(defun sekka-select-katakana ()
   "カタカナ候補に強制的に切りかえる"
   (interactive)
-  (sumibi-select-by-type 'k))
+  (sekka-select-by-type 'k))
 
-(defun sumibi-select-alphabet ()
+(defun sekka-select-alphabet ()
   "アルファベット候補に強制的に切りかえる"
   (interactive)
-  (sumibi-select-by-type 'l))
+  (sekka-select-by-type 'l))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ローマ字漢字変換関数
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun sumibi-rK-trans ()
+(defun sekka-rK-trans ()
   "ローマ字漢字変換をする。
 ・カーソルから行頭方向にローマ字列が続く範囲でローマ字漢字変換を行う。"
   (interactive)
 ;  (print last-command)			; DEBUG
 
   ;; 非SSLの警告を出す
-  (when (and (string-match "^[ ]*http:" sumibi-server-url)
-	     (> 1 sumibi-timer-rest))
+  (when (and (string-match "^[ ]*http:" sekka-server-url)
+	     (> 1 sekka-timer-rest))
     (progn
       ;; 警告を出してポーズする
-      (message "sumibi.el: !! 非SSLで通信する設定になっています。 !!")
+      (message "sekka.el: !! 非SSLで通信する設定になっています。 !!")
       (sleep-for 2)))
 
   (cond 
    ;; タイマーイベントを設定しない条件
    ((or
-     sumibi-timer
-     (> 1 sumibi-realtime-guide-running-seconds)
+     sekka-timer
+     (> 1 sekka-realtime-guide-running-seconds)
      ))
    (t
     ;; タイマーイベント関数の登録
@@ -1238,66 +1235,66 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 	    (save-excursion
 	      (forward-line 1)
 	      (point))))
-	  (setq sumibi-guide-overlay
+	  (setq sekka-guide-overlay
 			(make-overlay ov-point ov-point (current-buffer))))
-      (setq sumibi-timer
-			(run-at-time 0.1 sumibi-realtime-guide-interval
-						 'sumibi-realtime-guide)))))
+      (setq sekka-timer
+			(run-at-time 0.1 sekka-realtime-guide-interval
+						 'sekka-realtime-guide)))))
 
   ;; ガイド表示継続回数の更新
-  (when (< 0 sumibi-realtime-guide-running-seconds)
-    (setq sumibi-timer-rest  
-	  (/ sumibi-realtime-guide-running-seconds
-	     sumibi-realtime-guide-interval)))
+  (when (< 0 sekka-realtime-guide-running-seconds)
+    (setq sekka-timer-rest  
+	  (/ sekka-realtime-guide-running-seconds
+	     sekka-realtime-guide-interval)))
 
   (cond
-   (sumibi-select-mode
+   (sekka-select-mode
     ;; 変換中に呼出されたら、候補選択モードに移行する。
-    (funcall (lookup-key sumibi-select-mode-map sumibi-rK-trans-key)))
+    (funcall (lookup-key sekka-select-mode-map sekka-rK-trans-key)))
 
 
    (t
     (cond
 
-     ((eq (sumibi-char-charset (preceding-char)) 'ascii)
+     ((eq (sekka-char-charset (preceding-char)) 'ascii)
       ;; カーソル直前が alphabet だったら
       (let ((end (point))
-	    (gap (sumibi-skip-chars-backward)))
+	    (gap (sekka-skip-chars-backward)))
 	(when (/= gap 0)
 	  ;; 意味のある入力が見つかったので変換する
 	  (let (
 		(b (+ end gap))
 		(e end))
-	    (when (sumibi-henkan-region b e)
+	    (when (sekka-henkan-region b e)
 	      (if (eq (char-before b) ?/)
 		  (setq b (- b 1)))
 	      (delete-region b e)
 	      (goto-char b)
-	      (insert (sumibi-get-display-string))
+	      (insert (sekka-get-display-string))
 	      (setq e (point))
-	      (sumibi-display-function b e nil)
-	      (sumibi-select-kakutei))))))
+	      (sekka-display-function b e nil)
+	      (sekka-select-kakutei))))))
 
      
-     ((sumibi-kanji (preceding-char))
+     ((sekka-kanji (preceding-char))
     
       ;; カーソル直前が 全角で漢字以外 だったら候補選択モードに移行する。
       ;; また、最後に確定した文字列と同じかどうかも確認する。
       (when (and
-	     (<= (marker-position sumibi-fence-start) (point))
-	     (<= (point) (marker-position sumibi-fence-end))
-	     (string-equal sumibi-last-fix (buffer-substring 
-					    (marker-position sumibi-fence-start)
-					    (marker-position sumibi-fence-end))))
+	     (<= (marker-position sekka-fence-start) (point))
+	     (<= (point) (marker-position sekka-fence-end))
+	     (string-equal sekka-last-fix (buffer-substring 
+					    (marker-position sekka-fence-start)
+					    (marker-position sekka-fence-end))))
 					    
 	;; 直前に変換したfenceの範囲に入っていたら、変換モードに移行する。
 	(let
 	    ((cnt 0))
-	  (setq sumibi-select-mode t)
-	  (run-hooks 'sumibi-select-mode-hook)
-	  (setq sumibi-cand 0)		; 文節番号初期化
+	  (setq sekka-select-mode t)
+	  (run-hooks 'sekka-select-mode-hook)
+	  (setq sekka-cand 0)		; 文節番号初期化
 	  
-	  (sumibi-debug-print "henkan mode ON\n")
+	  (sekka-debug-print "henkan mode ON\n")
 	  
 	  ;; カーソル位置がどの文節に乗っているかを調べる。
 	  (mapcar
@@ -1309,39 +1306,39 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 	       (when (and
 		      (< start (point))
 		      (<= (point) end))
-		 (setq sumibi-cand cnt))
+		 (setq sekka-cand cnt))
 	       (setq cnt (+ cnt 1))))
-	   sumibi-marker-list)
+	   sekka-marker-list)
 
-	  (sumibi-debug-print (format "sumibi-cand = %d\n" sumibi-cand))
+	  (sekka-debug-print (format "sekka-cand = %d\n" sekka-cand))
 
 	  ;; 表示状態を候補選択モードに切替える。
-	  (sumibi-display-function
-	   (marker-position sumibi-fence-start)
-	   (marker-position sumibi-fence-end)
+	  (sekka-display-function
+	   (marker-position sekka-fence-start)
+	   (marker-position sekka-fence-end)
 	   t))))
      ))))
 
 
 
 ;; 全角で漢字以外の判定関数
-(defun sumibi-nkanji (ch)
-  (and (eq (sumibi-char-charset ch) 'japanese-jisx0208)
+(defun sekka-nkanji (ch)
+  (and (eq (sekka-char-charset ch) 'japanese-jisx0208)
        (not (string-match "[亜-瑤]" (char-to-string ch)))))
 
-(defun sumibi-kanji (ch)
-  (eq (sumibi-char-charset ch) 'japanese-jisx0208))
+(defun sekka-kanji (ch)
+  (eq (sekka-char-charset ch) 'japanese-jisx0208))
 
 
 ;; ローマ字漢字変換時、変換対象とするローマ字を読み飛ばす関数
-(defun sumibi-skip-chars-backward ()
+(defun sekka-skip-chars-backward ()
   (let* (
 	 (skip-chars
 	  (if auto-fill-function
 	      ;; auto-fill-mode が有効になっている場合改行があってもskipを続ける
-	      (concat sumibi-skip-chars "\n")
+	      (concat sekka-skip-chars "\n")
 	    ;; auto-fill-modeが無効の場合はそのまま
-	    sumibi-skip-chars))
+	    sekka-skip-chars))
 	    
 	 ;; マークされている位置を求める。
 	 (pos (or (and (markerp (mark-marker)) (marker-position (mark-marker)))
@@ -1365,10 +1362,10 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 	      (setq limit-point
 		    (+
 		     start-point
-		     (skip-chars-forward (concat "\t " sumibi-stop-chars) (point-at-eol))))))
+		     (skip-chars-forward (concat "\t " sekka-stop-chars) (point-at-eol))))))
 
-	  ;; (sumibi-debug-print (format "(point) = %d  result = %d  limit-point = %d\n" (point) result limit-point))
-	  ;; (sumibi-debug-print (format "a = %d b = %d \n" (+ (point) result) limit-point))
+	  ;; (sekka-debug-print (format "(point) = %d  result = %d  limit-point = %d\n" (point) result limit-point))
+	  ;; (sekka-debug-print (format "a = %d b = %d \n" (+ (point) result) limit-point))
 
 	  ;; パラグラフ位置でストップする
 	  (if (< (+ (point) result) limit-point)
@@ -1386,10 +1383,10 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 	    (setq limit-point
 		  (+ 
 		   start-point
-		   (skip-chars-forward (concat "\t " sumibi-stop-chars) (point-at-eol))))))
+		   (skip-chars-forward (concat "\t " sekka-stop-chars) (point-at-eol))))))
 
-	;; (sumibi-debug-print (format "(point) = %d  result = %d  limit-point = %d\n" (point) result limit-point))
-	;; (sumibi-debug-print (format "a = %d b = %d \n" (+ (point) result) limit-point))
+	;; (sekka-debug-print (format "(point) = %d  result = %d  limit-point = %d\n" (point) result limit-point))
+	;; (sekka-debug-print (format "a = %d b = %d \n" (+ (point) result) limit-point))
 
 	(if (< (+ (point) result) limit-point)
 	    ;; インデント位置でストップする。
@@ -1437,7 +1434,7 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
 ;;; with viper
 ;;;
 ;; code from skk-viper.el
-(defun sumibi-viper-normalize-map ()
+(defun sekka-viper-normalize-map ()
   (let ((other-buffer
 	 (if (featurep 'xemacs)
 	     (local-variable-p 'minor-mode-map-alist nil t)
@@ -1451,36 +1448,36 @@ W/POuZ6lcg5Ktz885hZo+L7tdEy8W9ViH0Pd
       ;; the minor-mode-map-alist localized by Viper.
       (dolist (buf (buffer-list))
 	(with-current-buffer buf
-	  (unless (assq 'sumibi-mode minor-mode-map-alist)
+	  (unless (assq 'sekka-mode minor-mode-map-alist)
 	    (setq minor-mode-map-alist
-		  (append (list (cons 'sumibi-mode sumibi-mode-map)
-				(cons 'sumibi-select-mode
-				      sumibi-select-mode-map))
+		  (append (list (cons 'sekka-mode sekka-mode-map)
+				(cons 'sekka-select-mode
+				      sekka-select-mode-map))
 			  minor-mode-map-alist)))
 	  (viper-normalize-minor-mode-map-alist))))))
 
-(defun sumibi-viper-init-function ()
-  (sumibi-viper-normalize-map)
-  (remove-hook 'sumibi-mode-hook 'sumibi-viper-init-function))
+(defun sekka-viper-init-function ()
+  (sekka-viper-normalize-map)
+  (remove-hook 'sekka-mode-hook 'sekka-viper-init-function))
 
 
 
-(defun sumibi-realtime-guide ()
+(defun sekka-realtime-guide ()
   "リアルタイムで変換中のガイドを出す
-sumibi-modeがONの間中呼び出される可能性がある・"
+sekka-modeがONの間中呼び出される可能性がある・"
   (cond
-   ((or (null sumibi-mode)
-	(> 1 sumibi-timer-rest))
-    (cancel-timer sumibi-timer)
-    (setq sumibi-timer nil)
-    (delete-overlay sumibi-guide-overlay))
-   (sumibi-guide-overlay
+   ((or (null sekka-mode)
+	(> 1 sekka-timer-rest))
+    (cancel-timer sekka-timer)
+    (setq sekka-timer nil)
+    (delete-overlay sekka-guide-overlay))
+   (sekka-guide-overlay
     ;; 残り回数のデクリメント
-    (setq sumibi-timer-rest (- sumibi-timer-rest 1))
+    (setq sekka-timer-rest (- sekka-timer-rest 1))
 
     (let* (
 	   (end (point))
-	   (gap (sumibi-skip-chars-backward))
+	   (gap (sekka-skip-chars-backward))
 	   (prev-line-existp
 	    (not (= (point-at-bol) (point-min))))
 	   (next-line-existp
@@ -1507,7 +1504,7 @@ sumibi-modeがONの間中呼び出される可能性がある・"
 	    (not prev-line-point))
 	   (= gap 0))
 	  ;; 上下スペースが無い または 変換対象が無しならガイドは表示しない。
-	  (overlay-put sumibi-guide-overlay 'before-string "")
+	  (overlay-put sekka-guide-overlay 'before-string "")
 	;; 意味のある入力が見つかったのでガイドを表示する。
 	(let* (
 	       (b (+ end gap))
@@ -1522,7 +1519,7 @@ sumibi-modeがONの間中呼び出される可能性がある・"
 			   (when (< 1 (length l))
 			     (cadr l)))
 			  (hira
-			   (romkan-convert sumibi-roman->kana-table
+			   (romkan-convert sekka-roman->kana-table
 					   (car l))))
 		     (cond
 		      ((string-match "[a-z]+" hira)
@@ -1534,122 +1531,122 @@ sumibi-modeがONの間中呼び出される可能性がある・"
 		      ((or (string-equal "e" method) (string-equal "l" method))
 		       (car l))
 		      ((string-equal "k" method)
-		       (romkan-convert sumibi-hiragana->katakana-table
+		       (romkan-convert sekka-hiragana->katakana-table
 				       hira))
 		      (t
 		       x))))
 		 l
 		 " ")))
-	  (move-overlay sumibi-guide-overlay 
+	  (move-overlay sekka-guide-overlay 
 			disp-point (min (point-max) (+ disp-point 1)) (current-buffer))
-	  (overlay-put sumibi-guide-overlay 'before-string mess))))
-    (overlay-put sumibi-guide-overlay 'face 'sumibi-guide-face))))
+	  (overlay-put sekka-guide-overlay 'before-string mess))))
+    (overlay-put sekka-guide-overlay 'face 'sekka-guide-face))))
 
 
 ;;;
 ;;; human interface
 ;;;
-(define-key sumibi-mode-map sumibi-rK-trans-key 'sumibi-rK-trans)
-(define-key sumibi-mode-map "\M-j" 'sumibi-rHkA-trans)
-(or (assq 'sumibi-mode minor-mode-map-alist)
+(define-key sekka-mode-map sekka-rK-trans-key 'sekka-rK-trans)
+(define-key sekka-mode-map "\M-j" 'sekka-rHkA-trans)
+(or (assq 'sekka-mode minor-mode-map-alist)
     (setq minor-mode-map-alist
 	  (append (list 
-		   (cons 'sumibi-mode         sumibi-mode-map))
+		   (cons 'sekka-mode         sekka-mode-map))
 		  minor-mode-map-alist)))
 
 
 
-;; sumibi-mode の状態変更関数
-;;  正の引数の場合、常に sumibi-mode を開始する
-;;  {負,0}の引数の場合、常に sumibi-mode を終了する
-;;  引数無しの場合、sumibi-mode をトグルする
+;; sekka-mode の状態変更関数
+;;  正の引数の場合、常に sekka-mode を開始する
+;;  {負,0}の引数の場合、常に sekka-mode を終了する
+;;  引数無しの場合、sekka-mode をトグルする
 
-;; buffer 毎に sumibi-mode を変更する
-(defun sumibi-mode (&optional arg)
-  "Sumibi mode は ローマ字から直接漢字変換するための minor mode です。
-引数に正数を指定した場合は、Sumibi mode を有効にします。
+;; buffer 毎に sekka-mode を変更する
+(defun sekka-mode (&optional arg)
+  "Sekka mode は ローマ字から直接漢字変換するための minor mode です。
+引数に正数を指定した場合は、Sekka mode を有効にします。
 
-Sumibi モードが有効になっている場合 \\<sumibi-mode-map>\\[sumibi-rK-trans] で
+Sekka モードが有効になっている場合 \\<sekka-mode-map>\\[sekka-rK-trans] で
 point から行頭方向に同種の文字列が続く間を漢字変換します。
 
 同種の文字列とは以下のものを指します。
-・半角カタカナとsumibi-stop-chars に指定した文字を除く半角文字
+・半角カタカナとsekka-stop-chars に指定した文字を除く半角文字
 ・漢字を除く全角文字"
   (interactive "P")
-  (sumibi-mode-internal arg nil))
+  (sekka-mode-internal arg nil))
 
-;; 全バッファで sumibi-mode を変更する
-(defun global-sumibi-mode (&optional arg)
-  "Sumibi mode は ローマ字から直接漢字変換するための minor mode です。
-引数に正数を指定した場合は、Sumibi mode を有効にします。
+;; 全バッファで sekka-mode を変更する
+(defun global-sekka-mode (&optional arg)
+  "Sekka mode は ローマ字から直接漢字変換するための minor mode です。
+引数に正数を指定した場合は、Sekka mode を有効にします。
 
-Sumibi モードが有効になっている場合 \\<sumibi-mode-map>\\[sumibi-rK-trans] で
+Sekka モードが有効になっている場合 \\<sekka-mode-map>\\[sekka-rK-trans] で
 point から行頭方向に同種の文字列が続く間を漢字変換します。
 
 同種の文字列とは以下のものを指します。
-・半角カタカナとsumibi-stop-chars に指定した文字を除く半角文字
+・半角カタカナとsekka-stop-chars に指定した文字を除く半角文字
 ・漢字を除く全角文字"
   (interactive "P")
-  (sumibi-mode-internal arg t))
+  (sekka-mode-internal arg t))
 
 
-;; sumibi-mode を変更する共通関数
-(defun sumibi-mode-internal (arg global)
-  (or (local-variable-p 'sumibi-mode (current-buffer))
-      (make-local-variable 'sumibi-mode))
+;; sekka-mode を変更する共通関数
+(defun sekka-mode-internal (arg global)
+  (or (local-variable-p 'sekka-mode (current-buffer))
+      (make-local-variable 'sekka-mode))
   (if global
       (progn
-	(setq-default sumibi-mode (if (null arg) (not sumibi-mode)
+	(setq-default sekka-mode (if (null arg) (not sekka-mode)
 				    (> (prefix-numeric-value arg) 0)))
-	(sumibi-kill-sumibi-mode))
-    (setq sumibi-mode (if (null arg) (not sumibi-mode)
+	(sekka-kill-sekka-mode))
+    (setq sekka-mode (if (null arg) (not sekka-mode)
 			(> (prefix-numeric-value arg) 0))))
-  (when sumibi-use-viper
-    (add-hook 'sumibi-mode-hook 'sumibi-viper-init-function))
-  (when sumibi-mode (run-hooks 'sumibi-mode-hook)))
+  (when sekka-use-viper
+    (add-hook 'sekka-mode-hook 'sekka-viper-init-function))
+  (when sekka-mode (run-hooks 'sekka-mode-hook)))
 
 
-;; buffer local な sumibi-mode を削除する関数
-(defun sumibi-kill-sumibi-mode ()
+;; buffer local な sekka-mode を削除する関数
+(defun sekka-kill-sekka-mode ()
   (let ((buf (buffer-list)))
     (while buf
       (set-buffer (car buf))
-      (kill-local-variable 'sumibi-mode)
+      (kill-local-variable 'sekka-mode)
       (setq buf (cdr buf)))))
 
 
-;; 全バッファで sumibi-input-mode を変更する
-(defun sumibi-input-mode (&optional arg)
+;; 全バッファで sekka-input-mode を変更する
+(defun sekka-input-mode (&optional arg)
   "入力モード変更"
   (interactive "P")
   (if (< 0 arg)
       (progn
-	(setq inactivate-current-input-method-function 'sumibi-inactivate)
-	(setq sumibi-mode t))
+	(setq inactivate-current-input-method-function 'sekka-inactivate)
+	(setq sekka-mode t))
     (setq inactivate-current-input-method-function nil)
-    (setq sumibi-mode nil)))
+    (setq sekka-mode nil)))
 
 
 ;; input method 対応
-(defun sumibi-activate (&rest arg)
-  (sumibi-input-mode 1))
-(defun sumibi-inactivate (&rest arg)
-  (sumibi-input-mode -1))
+(defun sekka-activate (&rest arg)
+  (sekka-input-mode 1))
+(defun sekka-inactivate (&rest arg)
+  (sekka-input-mode -1))
 (register-input-method
- "japanese-sumibi" "Japanese" 'sumibi-activate
+ "japanese-sekka" "Japanese" 'sekka-activate
  "" "Roman -> Kanji&Kana"
  nil)
 
 ;; input-method として登録する。
-(set-language-info "Japanese" 'input-method "japanese-sumibi")
-(setq default-input-method "japanese-sumibi")
+(set-language-info "Japanese" 'input-method "japanese-sekka")
+(setq default-input-method "japanese-sekka")
 
-(defconst sumibi-version
+(defconst sekka-version
   " $Date: 2007/07/23 15:40:49 $ on CVS " ;;VERSION;;
   )
-(defun sumibi-version (&optional arg)
+(defun sekka-version (&optional arg)
   "入力モード変更"
   (interactive "P")
-  (message sumibi-version))
+  (message sekka-version))
 
-(provide 'sumibi)
+(provide 'sekka)
