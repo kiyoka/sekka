@@ -25,8 +25,8 @@ task :jisyo do
 end
 
 task :load do
-  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.S.201001"
-#  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.L.201008"
+#  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.S.201001"
+  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.L.201008"
 end
 
 task :demo do
