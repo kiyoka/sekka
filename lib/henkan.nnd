@@ -80,7 +80,7 @@
 (define (henkan-okuri-ari db keyword)
   (let1 m (rxmatch #/^([a-zA-Z])([a-z\-^]+)([A-Z])([a-zA-Z]*)$/ keyword)
     (if (not m)
-        (errorf "henkan-okuri-ari: requires xxxxXx or XxxxxXx ascii format.  got:[%s] " keyword)
+        (errorf "henkan-okuri-ari: requires xxxxZx or ZxxxxZx ascii format.  got:[%s] " keyword)
         (let* ((result (approximate-search db
                                            (+ (. (rxmatch-substring m 1) downcase)
                                               (rxmatch-substring m 2)
@@ -135,7 +135,7 @@
   (cond
    ((rxmatch #/[A-Z]/ keyword)
     (cond
-     ((rxmatch #/[A-Z]/ (keyword.slice 1 keyword.size))
+     ((rxmatch #/[a-z][A-Z]/ keyword)
       ;; 送りあり
       ;;(let1 result (approximate-search db keyword #t)  (disp-search-result result))
       (henkan-okuri-ari db keyword))

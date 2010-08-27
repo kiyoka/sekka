@@ -226,6 +226,18 @@
        '(("変化する" #f "へんかs"))
        (sekka-henkan db "henkaSuru"))
 
+(test* "henkan toplevel 5"
+       '(("変換" #f "へんかん") ("返還" #f "へんかん") ("変化" #f "へんか") ("返歌" #f "へんか"))
+       (sekka-henkan db "Henkan"))
+
+(test* "henkan toplevel 6"
+       '(("変換" #f "へんかん") ("返還" #f "へんかん") ("変化" #f "へんか") ("返歌" #f "へんか"))
+       (sekka-henkan db "HEnkan"))
+
+(test* "henkan toplevel 7"
+       '(("変換" #f "へんかん") ("返還" #f "へんかん") ("変化" #f "へんか") ("返歌" #f "へんか"))
+       (sekka-henkan db "HENkan"))
+
 
 (test* "henkan toplevel(for Elisp) 1"
        '(("＊" nil "*") ("※" nil "*") ("×" nil "*"))
@@ -243,6 +255,9 @@
        '(("変化する" nil "へんかs"))
        (sekkaHenkan db "henkaSuru"))
 
+(test* "henkan toplevel(for Elisp) 5"
+       '(("変換" #f "へんかん") ("返還" #f "へんかん") ("変化" #f "へんか") ("返歌" #f "へんか"))
+       (sekka-henkan db "Henkan"))
 
 ;;===================================================================
 (test-end)
