@@ -206,6 +206,10 @@
        '(("≠" #f "!="))
        (henkan-non-kanji db "!="))
 
+(test* "non-kanji 5"
+       '(("．" #f ".") ("・" #f ".") ("。" #f ".") ("…" "..." "."))
+       (henkan-non-kanji db "."))
+
 
 ;;-------------------------------------------------------------------
 (test-section "sekka henkan toplevel")
@@ -256,8 +260,30 @@
        (sekkaHenkan db "henkaSuru"))
 
 (test* "henkan toplevel(for Elisp) 5"
-       '(("変換" #f "へんかん") ("返還" #f "へんかん") ("変化" #f "へんか") ("返歌" #f "へんか"))
-       (sekka-henkan db "Henkan"))
+       '(("変換" nil "へんかん") ("返還" nil "へんかん") ("変化" nil "へんか") ("返歌" nil "へんか"))
+       (sekkaHenkan db "Henkan"))
+
+
+;;-------------------------------------------------------------------
+(test-section "henkan kakutei")
+(test* "henkan kakutei(for Elisp) 1"
+       '(("返還" nil "へんかん") ("変換" nil "へんかん") ("変化" nil "へんか") ("返歌" nil "へんか"))
+       (begin
+         (sekkaKakutei db "へんかん" "返還")
+         (sekkaHenkan db "Henkan")))
+
+(test* "henkan kakutei(for Elisp) 2"
+       '(("デベロッパ" nil "developer") ("デベロッパー" nil "developer") ("ディベロッパー" nil "developer"))
+       (begin
+         (sekkaKakutei db "developer" "デベロッパ")
+         (sekkaHenkan db "developer")))
+
+(test* "henkan kakutei(for Elisp) 3"
+       '(("。" nil ".") ("．" nil ".") ("・" nil ".") ("…" "..." "."))
+       (begin
+         (sekkaKakutei db "." "。")
+         (sekkaHenkan db ".")))
+
 
 ;;===================================================================
 (test-end)

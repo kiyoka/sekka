@@ -155,3 +155,42 @@
    (sekka-henkan db keyword)))
 ;; Export to Ruby world
 (export-to-ruby sekkaHenkan)
+
+
+;; 確定処理: 最終確定語を変換候補の先頭に持ってくる。
+;;  key   ... "developer" や "へんかん" など、変換候補レコードのキーとなる文字列
+;;  tango ... "変換" など、変換候補から最終確定した、変換候補の文字列
+(define (sekkaKakutei db key tango)
+  (define (fetch db key)
+    (hash-table-get db key #f))
+
+  (define (overwrite db key value)
+    (hash-table-put! db key value))
+
+  (define (join-henkan-kouho lst)
+    (+ "/"
+       (string-join
+        (map
+         (lambda (x)
+           (if (second x)
+               (+ (first x) ";" (second x))
+               (first x)))
+         lst)
+        "/")
+       "/"))
+
+  (if-let1 kouho-str (fetch db key)
+    (let* ((kouho-lst (split-henkan-kouho kouho-str key))
+           (no1
+            (filter (lambda (x)
+                      (eq? (car x) tango))
+                    kouho-lst))
+           (other
+            (filter (lambda (x)
+                      (not (eq? (car x) tango)))
+                    kouho-lst)))
+      (overwrite db key
+                 (join-henkan-kouho (append no1 other))))
+    (errorf "Error: no such entry in DB key=[%s] \n" key)))
+;; Export to Ruby world
+(export-to-ruby sekkaKakutei)
