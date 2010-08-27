@@ -191,7 +191,8 @@
                       (not (eq? (car x) tango)))
                     kouho-lst)))
       (overwrite db key
-                 (join-henkan-kouho (append no1 other))))
+                 (join-henkan-kouho (append no1 other)))
+      tango)
     nil))
 ;; Export to Ruby world
 (export-to-ruby sekkaKakutei)

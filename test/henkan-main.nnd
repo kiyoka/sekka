@@ -285,10 +285,12 @@
          (sekkaHenkan db ".")))
 
 (test* "henkan kakutei(for Elisp) 4"
-       nil
-       (begin
-         (sekkaKakutei db "developper" "デベロッパ")))
+       "。"
+       (sekkaKakutei db "." "。"))
 
+(test* "henkan kakutei(for Elisp) 5"
+       nil
+       (sekkaKakutei db "developper" "デベロッパ"))
 
 
 ;;===================================================================
