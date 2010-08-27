@@ -46,7 +46,7 @@
   :group 'input-method
   :group 'Japanese)
 
-(defcustom sekka-server-url "http://localhost:9292/henkan/"
+(defcustom sekka-server-url "http://localhost:9292/"
   "SekkaサーバーのURLを指定する。"
   :type  'string
   :group 'sekka)
@@ -206,7 +206,7 @@
 ;;
 
 
-(defun sekka-rest-request (func-name query)
+(defun sekka-rest-request (func-name arg)
   (if sekka-psudo-server
       ;; クライアント単体で仮想的にサーバーに接続しているようにしてテストするモード
       ;;"((\"パイナップル\" nil \"ぱいなっぷる\") (\"ぱいなっぷる\" nil \"ぱいなっぷる\"))"
@@ -218,8 +218,8 @@
 	    (format " --max-time %d " sekka-server-timeout)
 	    " --insecure "
 	    " --header 'Content-Type: application/x-www-form-urlencoded' "
-	    (format "%s " sekka-server-url)
-	    (format "--data '%s=%s' " func-name query))))
+	    (format "%s%s " sekka-server-url func-name)
+	    (format "--data 'arg=%s' " arg))))
 
       (sekka-debug-print (format "curl-command :%s\n" command))
       
@@ -252,7 +252,7 @@
   (message "Requesting to sekka server...")
   
   (let (
-	(result (sekka-rest-request "query" yomi)))
+	(result (sekka-rest-request "henkan" yomi)))
     (sekka-debug-print (format "henkan-result:%S\n" result))
     (if (eq (string-to-char result) ?\( )
 	(progn
@@ -266,6 +266,19 @@
       (progn
 	(message result)
 	nil))))
+
+;;
+;; 確定した単語をサーバーに伝達する
+;;
+(defun sekka-kakutei-request (key tango)
+  (sekka-debug-print (format "henkan-kakutei key=[%s] tango=[%s]\n" key tango))
+  
+  (message "Requesting to sekka server...")
+  
+  (let ((result (sekka-rest-request "kakutei" (concat key " " tango))))
+    (sekka-debug-print (format "kakutei-result:%S\n" result))
+    (message result)
+    t))
 
 
 ;; ポータブル文字列置換( EmacsとXEmacsの両方で動く )
@@ -455,6 +468,13 @@
   (interactive)
   ;; 候補番号リストをバックアップする。
   (setq sekka-cand-cur-backup sekka-cand-cur)
+  ;; サーバーに確定した単語を伝える(辞書学習)
+  (let* ((kouho      (nth sekka-cand-cur sekka-henkan-kouho-list))
+	 (_          (sekka-debug-print (format "2:sekka-cand-cur=%s\n" sekka-cand-cur)))
+	 (_          (sekka-debug-print (format "2:kouho=%s\n" kouho)))
+	 (tango      (car kouho))
+	 (key        (caddr kouho)))
+    (sekka-kakutei-request key tango))
   (setq sekka-select-mode nil)
   (run-hooks 'sekka-select-mode-end-hook)
   (sekka-select-update-display))
