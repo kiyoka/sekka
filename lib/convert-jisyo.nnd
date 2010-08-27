@@ -32,7 +32,8 @@
         ;; コメント行
         #f
         )
-       ((rxmatch #/^[>あ-ん]+$/ (first fields))
+       ((or (is-hiragana (first fields))
+            (rxmatch #/^([>あ-ん]+)$/ (first fields)))
         ;; 送り仮名なしデータ
         (expand-okuri-nashi-entry (first fields) (second fields)))
        ((rxmatch #/^([>あ-ん]+)([a-z])$/ (first fields))

@@ -25,6 +25,9 @@
 (test* "kana->roman 4"
        '("chi" "ti" "tyi")
        (hash-table-get sekka-kana->roman-hash "ち" #f))
+(test* "kana->roman 5"
+       '("-" "^")
+       (hash-table-get sekka-kana->roman-hash "ー" #f))
 
 ;;-------------------------------------------------------------------
 (test-section "roman->kana conversion hash")
@@ -41,6 +44,10 @@
 (test* "roman->kana 4"
        '("っ")
        (hash-table-get sekka-roman->kana-hash "xtsu" #f))
+(test* "roman->kana 5"
+       '("ー")
+       (hash-table-get sekka-roman->kana-hash "-" #f))
+
 
 ;;-------------------------------------------------------------------
 (test-section "hiragana<->katanaka conversion functions")
@@ -83,6 +90,9 @@
 (test* "is katakana 6"
        #f
        (is-katakana "アメニEモマケズ"))
+(test* "is katakana 7"
+       #t
+       (is-katakana "コーヒー"))
 (test* "is hiragana 1"
        #t
        (is-hiragana "ひらがなのぶんしょう"))
@@ -101,6 +111,9 @@
 (test* "is hiragana 6"
        #f
        (is-hiragana "あア"))
+(test* "is hiragana 7"
+       #t
+       (is-hiragana "こーひー"))
 
 
 ;;-------------------------------------------------------------------
