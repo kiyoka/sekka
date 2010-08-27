@@ -17,6 +17,10 @@ task :check do
   sh "cat test.record" 
 end
 
+task :katanakago do
+  sh "/usr/share/skktools/filters/abbrev-convert.rb -k ./data/SKK-JISYO.L.201008 | skkdic-expr2 > SKK-JISYO.hira-kata"
+end
+
 task :jisyo do
   sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.S.201001 > ./data/SEKKA-JISYO.S.201001"
 #  sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.L.201008 > ./data/SEKKA-JISYO.L.201008"
