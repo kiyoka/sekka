@@ -160,6 +160,7 @@
 ;; 確定処理: 最終確定語を変換候補の先頭に持ってくる。
 ;;  key   ... "developer" や "へんかん" など、変換候補レコードのキーとなる文字列
 ;;  tango ... "変換" など、変換候補から最終確定した、変換候補の文字列
+;;  登録失敗したら nil を返す
 (define (sekkaKakutei db key tango)
   (define (fetch db key)
     (hash-table-get db key #f))
@@ -191,6 +192,6 @@
                     kouho-lst)))
       (overwrite db key
                  (join-henkan-kouho (append no1 other))))
-    (errorf "Error: no such entry in DB key=[%s] \n" key)))
+    nil))
 ;; Export to Ruby world
 (export-to-ruby sekkaKakutei)
