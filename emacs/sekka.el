@@ -173,6 +173,8 @@
 (defvar sekka-timer-rest  0)            ; あと何回呼出されたら、インターバルタイマの呼出を止めるか
 (defvar sekka-guide-overlay   nil)      ; リアルタイムガイドに使用するオーバーレイ
 (defvar sekka-last-request-time 0)      ; Sekkaサーバーにリクエストした最後の時刻(単位は秒)
+(defvar sekka-guide-lastquery  "")      ; Sekkaサーバーにリクエストした最後のクエリ文字列
+(defvar sekka-guide-lastresult '())     ; Sekkaサーバーにリクエストした最後のクエリ文字列
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -808,7 +810,7 @@
 
 (defun sekka-realtime-guide ()
   "リアルタイムで変換中のガイドを出す
-sekka-modeがONの間中呼び出される可能性がある・"
+sekka-modeがONの間中呼び出される可能性がある。"
   (cond
    ((or (null sekka-mode)
 	(> 1 sekka-timer-rest))
@@ -853,36 +855,22 @@ sekka-modeがONの間中呼び出される可能性がある・"
 	(let* (
 	       (b (+ end gap))
 	       (e end)
-	       (str (buffer-substring b e))
-	       (l (split-string str))
+	       (str (buffer-substring-no-properties b e))
+	       (lst (if (string= str sekka-guide-lastquery)
+			sekka-guide-lastresult
+		      (progn
+			(setq sekka-guide-lastquery str)
+			(setq sekka-guide-lastresult (sekka-henkan-request str))
+			sekka-guide-lastresult)))
 	       (mess
-		(mapconcat
-		 (lambda (x)
-		   (let* ((l (split-string x "\\."))
-			  (method
-			   (when (< 1 (length l))
-			     (cadr l)))
-			  (hira
-			   (romkan-convert sekka-roman->kana-table
-					   (car l))))
-		     (cond
-		      ((string-match "[a-z]+" hira)
-		       x)
-		      ((not method)
-		       hira)
-		      ((or (string-equal "j" method) (string-equal "h" method))
-		       hira)
-		      ((or (string-equal "e" method) (string-equal "l" method))
-		       (car l))
-		      ((string-equal "k" method)
-		       (romkan-convert sekka-hiragana->katakana-table
-				       hira))
-		      (t
-		       x))))
-		 l
-		 " ")))
+		(if (< 0 (length lst))
+		    (concat "(" (caar lst) ")")
+		  "")))
+	  (sekka-debug-print (format "realtime guide [%s]" str))
 	  (move-overlay sekka-guide-overlay 
-			disp-point (min (point-max) (+ disp-point 1)) (current-buffer))
+			;; disp-point (min (point-max) (+ disp-point 1))
+			b e
+			(current-buffer))
 	  (overlay-put sekka-guide-overlay 'before-string mess))))
     (overlay-put sekka-guide-overlay 'face 'sekka-guide-face))))
 
