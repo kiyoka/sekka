@@ -76,6 +76,11 @@
   :type 'boolean
   :group 'sekka)
 
+(defcustom sekka-sticky-shift nil
+  "*Non-nil であれば、Sticky-Shiftを有効にする"
+  :type 'boolean
+  :group 'sekka)
+
 (defcustom sekka-realtime-guide-running-seconds 60
   "リアルタイムガイド表示の継続時間(秒数)・ゼロでガイド表示機能が無効になる"
   :type  'integer
@@ -171,9 +176,25 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Skicky-shift
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defvar sticky-key ";")
+(defvar sticky-list
+  '(("a" . "A")("b" . "B")("c" . "C")("d" . "D")("e" . "E")("f" . "F")("g" . "G")
+    ("h" . "H")("i" . "I")("j" . "J")("k" . "K")("l" . "L")("m" . "M")("n" . "N")
+    ("o" . "O")("p" . "P")("q" . "Q")("r" . "R")("s" . "S")("t" . "T")("u" . "U")
+    ("v" . "V")("w" . "W")("x" . "X")("y" . "Y")("z" . "Z")
+    ("1" . "!")("2" . "\"")("3" . "#")("4" . "$")("5" . "%")("6" . "&")("7" . "'")
+    ("8" . "(")("9" . ")")
+    ("`" . "@")("[" . "{")("]" . "}")("-" . "=")("^" . "~")("\\" . "|")("." . ">")
+    ("/" . "?")(";" . ";")(":" . "*")
+    ))
+(defvar sticky-map (make-sparse-keymap))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 表示系関数群
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (defvar sekka-use-fence t)
 (defvar sekka-use-color nil)
 
@@ -204,8 +225,6 @@
 ;;
 ;; ローマ字で書かれた文章をSekkaサーバーを使って変換する
 ;;
-
-
 (defun sekka-rest-request (func-name arg)
   (if sekka-psudo-server
       ;; クライアント単体で仮想的にサーバーに接続しているようにしてテストするモード
@@ -776,7 +795,16 @@
   (sekka-viper-normalize-map)
   (remove-hook 'sekka-mode-hook 'sekka-viper-init-function))
 
-
+(defun sekka-sticky-shift-init-function ()
+  ;; sticky-shift
+  (define-key global-map sticky-key sticky-map)
+  (mapcar (lambda (pair)
+	    (define-key sticky-map (car pair)
+	      `(lambda()(interactive)
+		 (setq unread-command-events
+		       (cons ,(string-to-char (cdr pair)) unread-command-events)))))
+	  sticky-list)
+  (define-key sticky-map sticky-key '(lambda ()(interactive)(insert sticky-key))))
 
 (defun sekka-realtime-guide ()
   "リアルタイムで変換中のガイドを出す
@@ -919,6 +947,8 @@ point から行頭方向に同種の文字列が続く間を漢字変換します。
 			(> (prefix-numeric-value arg) 0))))
   (when sekka-use-viper
     (add-hook 'sekka-mode-hook 'sekka-viper-init-function))
+  (when sekka-sticky-shift
+    (add-hook 'sekka-mode-hook 'sekka-sticky-shift-init-function))
   (when sekka-mode (run-hooks 'sekka-mode-hook)))
 
 

@@ -14,6 +14,7 @@ class SekkaServer
     @core.evalStr( '(define (writeToString sexp) (write-to-string sexp))' )
     @core.evalStr( '(export-to-ruby writeToString)' )
     @db = @core.openSekkaJisyo( "./data/SEKKA-JISYO.L.201008" )
+#    @db = @core.openSekkaJisyo( "./data/SEKKA-JISYO.S.201001" )
   end
 
   def call(env)
