@@ -61,7 +61,7 @@
   :type  'integer
   :group 'sekka)
  
-(defcustom sekka-stop-chars ";:(){}<>"
+(defcustom sekka-stop-chars ";:(){}<> "
   "*漢字変換文字列を取り込む時に変換範囲に含めない文字を設定する"
   :type  'string
   :group 'sekka)
@@ -108,7 +108,7 @@
 
 
 ;; ローマ字漢字変換時、対象とするローマ字を設定するための変数
-(defvar sekka-skip-chars "a-zA-Z0-9 .,\\-+!\\[\\]?")
+(defvar sekka-skip-chars "a-zA-Z0-9.,\\-+!\\[\\]?")
 (defvar sekka-mode-map        (make-sparse-keymap)         "漢字変換トグルマップ")
 (defvar sekka-select-mode-map (make-sparse-keymap)         "候補選択モードマップ")
 (defvar sekka-rK-trans-key "\C-j"
