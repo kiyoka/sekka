@@ -5,24 +5,26 @@
 (use srfi-1)
 (require "kyotocabinet")
 (require "amatch")
+(load "./lib/util.nnd")
 (load "./lib/roman-lib.nnd")
 (require "./lib/approximatesearch")
-
-(define (string-drop str n)
-  (or (str.slice n (str.size))
-      ""))
 
 ;; 曖昧検索
 ;;  リストで返す。 (ソート済み検索結果)
 (define (approximate-search db keyword okuri-ari-flag)
   (define jarow-shikii 0.94)
   (let* ((a-search (ApproximateSearch.new jarow-shikii))
-         (lst      (map
+         (lst      (append-map
                     (lambda (x)
                       (let* ((val (vector-ref x 0))
                              (k   (vector-ref x 1))
-                             (v   (hash-table-get db k)))
-                        (list val k v)))
+                             (v   (hash-table-get db k))
+                             (v-first (v.slice 0 1))
+                             (v-rest  (v.slice 1 v.size)))
+                        (map
+                         (lambda (element)
+                           (list val k (+ v-first element)))
+                         (to-list (v-rest.split "/")))))
                     (to-list (a-search.search db keyword okuri-ari-flag))))
          (sorted-lst  (sort-by lst (lambda (item) (- 1.0 (car item))))))
     sorted-lst))
@@ -39,7 +41,7 @@
 ;; split "/a;annotation/b/c/" into `(("a" "annotation" ,src) ("b" #f ,src) ("c" #f ,src))  alist
 (define (split-henkan-kouho str src . okuri)
   (let* ((trimmed (cond
-                   ((rxmatch #/^[\/](.+)[\/]?$/ str)
+                   ((rxmatch #/^[\/](.+)$/ str)
                     => (lambda (m)
                          (rxmatch-substring m 1)))
                    (else

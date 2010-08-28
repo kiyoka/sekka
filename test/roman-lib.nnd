@@ -125,25 +125,25 @@
   (test* "kana->roman key duplicate check" 233 (length (uniq (sort hira-list)))))
 
 (test* "hiragana -> roman-pattern1"
-       '(("he") ("n") ("ka" "ca") ("n"))
+       '(("he") ("nn" "n") ("ka" "ca") ("nn" "n"))
        (gen-hiragana->roman-pattens "へんかん"))
 (test* "hiragana -> roman-pattern2"
-       '(("ka" "ca") ("n") ("ji" "zi") ("he") ("n") ("ka" "ca") ("n"))
+       '(("ka" "ca") ("nn" "n") ("ji" "zi") ("he") ("nn" "n") ("ka" "ca") ("nn" "n"))
        (gen-hiragana->roman-pattens "かんじへんかん"))
 (test* "hiragana -> roman-pattern3"
-       '(("shi" "si") ("ze") ("n") ("ge") ("n") ("go") ("sho" "syo") ("ri"))
+       '(("shi" "si") ("ze") ("nn" "n") ("ge") ("nn" "n") ("go") ("sho" "syo") ("ri"))
        (gen-hiragana->roman-pattens "しぜんげんごしょり"))
 
 (test* "patterns -> roman-list1"
-       '("kanji" "kanzi" "canji" "canzi")
-       (patterns->roman-list  '(("ka" "ca") ("n") ("ji" "zi"))))
+       '("kannji" "kannzi" "kanji" "kanzi" "cannji" "cannzi" "canji" "canzi")
+       (patterns->roman-list  '(("ka" "ca") ("nn" "n") ("ji" "zi"))))
 
 (test* "patterns -> roman-list2"
-       '("shizengengoshori" "shizengengosyori" "sizengengoshori" "sizengengosyori")
-       (patterns->roman-list  '(("shi" "si") ("ze") ("n") ("ge") ("n") ("go") ("sho" "syo") ("ri"))))
-
+       '("shizenngenngoshori" "shizenngenngosyori" "shizenngengoshori" "shizenngengosyori" "shizengenngoshori" "shizengenngosyori" "shizengengoshori" "shizengengosyori" "sizenngenngoshori" "sizenngenngosyori" "sizenngengoshori" "sizenngengosyori" "sizengenngoshori" "sizengenngosyori" "sizengengoshori" "sizengengosyori")
+       (patterns->roman-list  '(("shi" "si") ("ze") ("nn" "n") ("ge") ("nn" "n") ("go") ("sho" "syo") ("ri"))))
+                              
 (test* "hiragana -> roman-list1"
-       '("kanji" "kanzi" "canji" "canzi")
+       '("kannji" "kannzi" "kanji" "kanzi" "cannji" "cannzi" "canji" "canzi")
        (gen-hiragana->roman-list "かんじ"))
 
 (test* "hiragana -> roman-list2"

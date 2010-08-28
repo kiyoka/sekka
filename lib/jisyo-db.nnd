@@ -2,6 +2,7 @@
 
 (use srfi-1)
 (require "kyotocabinet")
+(load "./lib/util.nnd")
 
 (define cabinet-ext ".kct")
 
@@ -64,7 +65,11 @@
               (let1 fields (to-list (line.split " "))
                 (hash-table-put! db
                                  (first fields)
-                                 (second fields))))
+                                 (if-let1 curval (hash-table-get db (first fields) #f)
+                                   (+ curval "/" (if-let1 m (rxmatch #/^C(.+)$/ (second fields))
+                                                   (rxmatch-substring m 1)
+                                                   (second fields)))
+                                   (second fields)))))
             (f.readlines.to_list))
            (setup-ready-made-keylist db))))
     (when err

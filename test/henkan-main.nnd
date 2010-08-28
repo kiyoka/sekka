@@ -38,10 +38,12 @@
                   "/ /／/÷/"
                   "!= /≠/"
                   "こーひー /コーヒー/"
+                  "かに /蟹/可児/蠏/"
+                  "かんい /簡易/官位/冠位;-十二階/漢医;漢方医/敢為/官医/寛衣/換位/簡意/"
                   )
                 "\n")))
       (sekka-jisyo-data
-       '("watashiH Cわたしh" "watasiH Cわたしh" "わたしh /私/" "okonaU Cおこなu" "oconaU Cおこなu" "おこなu /行/行な;※送り位置補正/" "henkan Cへんかん" "hencan Cへんかん" "へんかん /変換/返還/" "henka Cへんか" "henca Cへんか" "へんか /変化/返歌/" "henkaS Cへんかs" "hencaS Cへんかs" "へんかs /変化/" "shizengengo Cしぜんげんご" "sizengengo Cしぜんげんご" "しぜんげんご /自然言語/" "shizengengoshori Cしぜんげんごしょり" "shizengengosyori Cしぜんげんごしょり" "sizengengoshori Cしぜんげんごしょり" "sizengengosyori Cしぜんげんごしょり" "しぜんげんごしょり /自然言語処理/" "shizengengorikai Cしぜんげんごりかい" "shizengengoricai Cしぜんげんごりかい" "sizengengorikai Cしぜんげんごりかい" "sizengengoricai Cしぜんげんごりかい" "しぜんげんごりかい /自然言語理解/" "developer /デベロッパー/ディベロッパー/デベロッパ/" ">an C>あん" ">あん /案/" "{ /｛/" "kakko Cかっこ" "cakko Cかっこ" "かっこ /確固/括弧/各個/各戸/確乎/羯鼓;雅楽の打楽器/格好/『/』;二重鉤括弧/【/】;隅付き括弧/［/］;大括弧(bracket)/〔/〕;亀甲括弧/〈/〉;山括弧/《/》;二重山括弧/｛/｝;中括弧(brace)/「/」;鉤括弧/（/）;小括弧,丸括弧(parenthesis)/‘/’;singlequote/“/”;doublequote/『』/【】/［］/〔〕/〈〉/《》/｛｝/「」/（）/‘’/“”/" "kokka Cこっか" "cokka Cこっか" "こっか /国家;state/国歌;anthem.「-斉唱」/国花/骨化/國家;「国」旧字/黒化/刻下/】/）/］/』/" "! /！/感嘆符/" ". /．/・/。/…;.../" "* /＊/※/×/" "? /？/" "/ /／/÷/" "!= /≠/" "ko-hi- Cこーひー" "ko-hi^ Cこーひー" "ko^hi- Cこーひー" "ko^hi^ Cこーひー" "co-hi- Cこーひー" "co-hi^ Cこーひー" "co^hi- Cこーひー" "co^hi^ Cこーひー" "こーひー /コーヒー/")
+       '("watashiH Cわたしh" "watasiH Cわたしh" "わたしh /私" "okonaU Cおこなu" "oconaU Cおこなu" "おこなu /行/行な;※送り位置補正" "hennkann Cへんかん" "hennkan Cへんかん" "henncann Cへんかん" "henncan Cへんかん" "henkann Cへんかん" "henkan Cへんかん" "hencann Cへんかん" "hencan Cへんかん" "へんかん /変換/返還" "hennka Cへんか" "hennca Cへんか" "henka Cへんか" "henca Cへんか" "へんか /変化/返歌" "hennkaS Cへんかs" "henncaS Cへんかs" "henkaS Cへんかs" "hencaS Cへんかs" "へんかs /変化" "shizenngenngo Cしぜんげんご" "shizenngengo Cしぜんげんご" "shizengenngo Cしぜんげんご" "shizengengo Cしぜんげんご" "sizenngenngo Cしぜんげんご" "sizenngengo Cしぜんげんご" "sizengenngo Cしぜんげんご" "sizengengo Cしぜんげんご" "しぜんげんご /自然言語" "shizenngenngoshori Cしぜんげんごしょり" "shizenngenngosyori Cしぜんげんごしょり" "shizenngengoshori Cしぜんげんごしょり" "shizenngengosyori Cしぜんげんごしょり" "shizengenngoshori Cしぜんげんごしょり" "shizengenngosyori Cしぜんげんごしょり" "shizengengoshori Cしぜんげんごしょり" "shizengengosyori Cしぜんげんごしょり" "sizenngenngoshori Cしぜんげんごしょり" "sizenngenngosyori Cしぜんげんごしょり" "sizenngengoshori Cしぜんげんごしょり" "sizenngengosyori Cしぜんげんごしょり" "sizengenngoshori Cしぜんげんごしょり" "sizengenngosyori Cしぜんげんごしょり" "sizengengoshori Cしぜんげんごしょり" "sizengengosyori Cしぜんげんごしょり" "しぜんげんごしょり /自然言語処理" "shizenngenngorikai Cしぜんげんごりかい" "shizenngenngoricai Cしぜんげんごりかい" "shizenngengorikai Cしぜんげんごりかい" "shizenngengoricai Cしぜんげんごりかい" "shizengenngorikai Cしぜんげんごりかい" "shizengenngoricai Cしぜんげんごりかい" "shizengengorikai Cしぜんげんごりかい" "shizengengoricai Cしぜんげんごりかい" "sizenngenngorikai Cしぜんげんごりかい" "sizenngenngoricai Cしぜんげんごりかい" "sizenngengorikai Cしぜんげんごりかい" "sizenngengoricai Cしぜんげんごりかい" "sizengenngorikai Cしぜんげんごりかい" "sizengenngoricai Cしぜんげんごりかい" "sizengengorikai Cしぜんげんごりかい" "sizengengoricai Cしぜんげんごりかい" "しぜんげんごりかい /自然言語理解" "developer /デベロッパー/ディベロッパー/デベロッパ" ">ann C>あん" ">an C>あん" ">あん /案" "{ /｛" "kakko Cかっこ" "cakko Cかっこ" "かっこ /確固/括弧/各個/各戸/確乎/羯鼓;雅楽の打楽器/格好/『/』;二重鉤括弧/【/】;隅付き括弧/［/］;大括弧(bracket)/〔/〕;亀甲括弧/〈/〉;山括弧/《/》;二重山括弧/｛/｝;中括弧(brace)/「/」;鉤括弧/（/）;小括弧,丸括弧(parenthesis)/‘/’;singlequote/“/”;doublequote/『』/【】/［］/〔〕/〈〉/《》/｛｝/「」/（）/‘’/“”" "kokka Cこっか" "cokka Cこっか" "こっか /国家;state/国歌;anthem.「-斉唱」/国花/骨化/國家;「国」旧字/黒化/刻下/】/）/］/』" "! /！/感嘆符" ". /．/・/。/…;..." "* /＊/※/×" "? /？" "/ /／/÷" "!= /≠" "ko-hi- Cこーひー" "ko-hi^ Cこーひー" "ko^hi- Cこーひー" "ko^hi^ Cこーひー" "co-hi- Cこーひー" "co-hi^ Cこーひー" "co^hi- Cこーひー" "co^hi^ Cこーひー" "こーひー /コーヒー" "kani Cかに" "cani Cかに" "かに /蟹/可児/蠏" "kanni Cかんい" "kani Cかんい" "canni Cかんい" "cani Cかんい" "かんい /簡易/官位/冠位;-十二階/漢医;漢方医/敢為/官医/寛衣/換位/簡意")
        ))
        
   (test* "Create test jisyo"
@@ -62,23 +64,69 @@
 (test* "DB tune_encoding to utf-8"       #t    (db.tune_encoding   "utf-8"))
 
 ;;-------------------------------------------------------------------
+(test-section "symbol db fetch")
+(test* "db fetch 1"
+       "Cへんかん"
+       (hash-table-get db "henkan" #f))
+
+(test* "db fetch 2"
+       "Cかに/かんい"
+       (hash-table-get db "kani" #f))
+
+(test* "db fetch 3"
+       "Cかんい"
+       (hash-table-get db "kanni" #f))
+
+(test* "db fetch 4"
+       #f
+       (hash-table-get db "aaaa" #f))
+
+;;-------------------------------------------------------------------
 (test-section "approximate-search core")
 
 (test* "search keyword list 1"
-       '#(#(0.9666666669978037 "henka") #(1.0 "henkan"))
+       '#(#(0.9666666669978037 "henka") #(1.0 "henkan") #(0.9714285717124032 "henkann") #(0.961111111773385 "hennka"))
        (a-search.search db "henkan" #f))
 
 (test* "search keyword list 2"
-       '#(#(0.9714285717124032 "henkaS"))       
+       '#(#(0.96666666723433 "henkann") #(0.9428571434248061 "henncan") #(0.9714285717124032 "hennka") #(1.0 "hennkan") #(0.9750000002483528 "hennkann"))
+       (a-search.search db "hennkan" #f))
+
+(test* "search keyword list 3"
+       '#(#(0.9428571434248061 "henka") #(0.9714285717124032 "henkan") #(1.0 "henkann") #(0.96666666723433 "hennkan"))
+       (a-search.search db "henkann" #f))
+
+(test* "search keyword list 4"
+       '#(#(0.9500000004967053 "henncann") #(0.9500000004967053 "hennka") #(0.9750000002483528 "hennkan") #(1.0 "hennkann"))
+       (a-search.search db "hennkann" #f))
+
+(test* "search keyword list 5"
+       '#(#(0.9714285717124032 "henkaS") #(0.96666666723433 "hennkaS"))
        (a-search.search db "henkanS" #t))
 
+(test* "search keyword list 6"
+       '#(#(0.9416666676600773 "henkaS") #(0.9750000002483528 "hennkaS"))
+       (a-search.search db "hennkanS" #t))
+
 (test* "approximate search 1"
-       '((1.0 "henka" "Cへんか") (0.9666666669978037 "henkan" "Cへんかん"))
+       '((1.0 "henka" "Cへんか") (0.9666666669978037 "henkan" "Cへんかん") (0.961111111773385 "hennka" "Cへんか") (0.9428571434248061 "henkann" "Cへんかん"))
        (approximate-search db "henka" #f))
 
 (test* "approximate search 2"
+       '((1.0 "hennka" "Cへんか") (0.9714285717124032 "hennkan" "Cへんかん") (0.961111111773385 "henka" "Cへんか") (0.961111111773385 "henkan" "Cへんかん") (0.9500000004967053 "hennkann" "Cへんかん"))
+       (approximate-search db "hennka" #f))
+
+(test* "approximate search 3"
        '((0.9666666669978037 "henka" "Cへんか"))
        (approximate-search db "henkaS" #f))
+
+(test* "approximate search 4"
+       '((0.9714285717124032 "hennka" "Cへんか") (0.9428571434248061 "hennkan" "Cへんかん"))
+       (approximate-search db "hennkaS" #f))
+
+(test* "approximate search 5"
+       '((1.0 "kani" "Cかに") (1.0 "kani" "Cかんい") (0.9533333341280619 "kanni" "Cかんい"))
+       (approximate-search db "kani" #f))
 
 
 ;;-------------------------------------------------------------------
@@ -97,35 +145,51 @@
        (henkan-okuri-nashi db "henkann"))
 
 (test* "okuri nashi 4"
+       '(("変換" #f "へんかん") ("返還" #f "へんかん") ("変化" #f "へんか") ("返歌" #f "へんか"))
+       (henkan-okuri-nashi db "hennkan"))
+
+(test* "okuri nashi 5"
+       '(("変換" #f "へんかん") ("返還" #f "へんかん") ("変化" #f "へんか") ("返歌" #f "へんか"))
+       (henkan-okuri-nashi db "hennkann"))
+
+(test* "okuri nashi 6"
        '(("自然言語" #f "しぜんげんご"))
        (henkan-okuri-nashi db "shizengengo"))
 
-(test* "okuri nashi 5"
+(test* "okuri nashi 7"
        '(("自然言語処理" #f "しぜんげんごしょり") ("自然言語" #f "しぜんげんご"))
        (henkan-okuri-nashi db "shizengengosyo"))
 
-(test* "okuri nashi 6"
+(test* "okuri nashi 8"
        '(("案" #f ">あん"))
        (henkan-okuri-nashi db ">an"))
 
-(test* "okuri nashi 7"
+(test* "okuri nashi 9"
        '(("案" #f ">あん"))
        (henkan-okuri-nashi db ">ann"))
 
-(test* "okuri nashi 8"
+(test* "okuri nashi 10"
        '(("デベロッパー" #f "developper") ("ディベロッパー" #f "developper") ("デベロッパ" #f "developper"))
        (henkan-okuri-nashi db "developper"))
+
+(test* "okuri nashi 11"
+       '(("蟹" #f "かに") ("可児" #f "かに") ("蠏" #f "かに") ("簡易" #f "かんい") ("官位" #f "かんい") ("冠位" "-十二階" "かんい") ("漢医" "漢方医" "かんい") ("敢為" #f "かんい") ("官医" #f "かんい") ("寛衣" #f "かんい") ("換位" #f "かんい") ("簡意" #f "かんい"))
+       (henkan-okuri-nashi db "kani"))
+
+(test* "okuri nashi 12"
+       '(("簡易" #f "かんい") ("官位" #f "かんい") ("冠位" "-十二階" "かんい") ("漢医" "漢方医" "かんい") ("敢為" #f "かんい") ("官医" #f "かんい") ("寛衣" #f "かんい") ("換位" #f "かんい") ("簡意" #f "かんい") ("蟹" #f "かに") ("可児" #f "かに") ("蠏" #f "かに"))
+       (henkan-okuri-nashi db "kanni"))
 
 
 ;;-------------------------------------------------------------------
 (test-section "henkan (okuri ari)")
 
 (test* "approximate search 1"
-       '((1.0 "henkaS" "Cへんかs"))
+       '((1.0 "henkaS" "Cへんかs") (0.96666666723433 "hennkaS" "Cへんかs"))
        (approximate-search db "henkaS" #t))
 
 (test* "approximate search 2"
-       '((0.9714285717124032 "henkaS" "Cへんかs"))
+       '((0.9714285717124032 "henkaS" "Cへんかs") (0.96666666723433 "hennkaS" "Cへんかs"))
        (approximate-search db "henkanS" #t))
 
 (test* "approximate search 3"

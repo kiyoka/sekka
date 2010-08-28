@@ -26,7 +26,8 @@
 
 (define (convert-skk-jisyo-f f)
   (define (gen-sekka-entries line)
-    (let1 fields (to-list (line.split " "))
+    (let* ((line   (line.sub #/\/$/ ""))
+           (fields (to-list (line.split " "))))
       (cond
        ((rxmatch #/^\;/ line)
         ;; コメント行

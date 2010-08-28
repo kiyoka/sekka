@@ -1,0 +1,5 @@
+:; #-*- mode: nendo; syntax: scheme -*-;;
+;;
+(define (string-drop str n)
+  (or (str.slice n (str.size))
+      ""))
