@@ -91,11 +91,6 @@
   :type  'integer
   :group 'sekka)
 
-(defcustom sekka-history-filename  "~/.sekka_history"
-  "ユーザー固有の変換履歴を保存するファイル名"
-  :type  'string
-  :group 'sekka)
-
 
 (defface sekka-guide-face
   '((((class color) (background light)) (:background "#E0E0E0" :foreground "#F03030")))
@@ -864,7 +859,7 @@ sekka-modeがONの間中呼び出される可能性がある。"
 			sekka-guide-lastresult)))
 	       (mess
 		(if (< 0 (length lst))
-		    (concat "(" (caar lst) ")")
+		    (concat "[" (caar lst) "]")
 		  "")))
 	  (sekka-debug-print (format "realtime guide [%s]" str))
 	  (move-overlay sekka-guide-overlay 
