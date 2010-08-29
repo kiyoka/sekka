@@ -46,7 +46,9 @@
                          (rxmatch-substring m 1)))
                    (else
                     (errorf "split-henkan-kouho got [%s]. it requires /a/b/c/ format string" str))))
-         (splitted (to-list (trimmed.split "/")))
+         (splitted (filter
+                    (lambda (str) (< 0 str.size))
+                    (to-list (trimmed.split "/"))))
          (okuri    (get-optional okuri "")))
     ;; pickup annotation
     (map
