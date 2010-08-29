@@ -56,6 +56,17 @@
 
 
 ;;-------------------------------------------------------------------
+(require "digest/sha1")
+(test-section "dump db")
+(let1 _output (StringIO.new)
+  (_output.set_encoding "utf-8")
+  (test* "dump DB to SEKKA jisyo file. (1)"
+         "745acfb9fc1fb48c269de4f5c9390449bf269320"
+         (begin
+           (dump-sekka-jisyo-f _output "./test")
+           (Digest::SHA1.hexdigest ( _output.string)))))
+
+;;-------------------------------------------------------------------
 (test-section "Open the test-suite DB")
 (require "kyotocabinet")
 (define db (KyotoCabinet::DB.new))

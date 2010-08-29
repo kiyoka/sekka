@@ -59,6 +59,7 @@
        (+ basename cabinet-ext)
        (&block (db)
          (db.tune_encoding   "utf-8")
+         (db.clear)
          (begin
            (for-each
             (lambda (line)
@@ -72,6 +73,21 @@
                                    (second fields)))))
             (f.readlines.to_list))
            (setup-ready-made-keylist db))))
+    (when err
+      (printf "db error [%s]\n" err)
+      (exit 1))
+    #t))
+
+
+(define (dump-sekka-jisyo-f f basename)
+  (let1 err
+      (KyotoCabinet::DB.process
+       (+ basename cabinet-ext)
+       (&block (db)
+         (db.tune_encoding   "utf-8")
+         (db.each
+          (&block (key value)
+            (f.puts (+ key " " value))))))
     (when err
       (printf "db error [%s]\n" err)
       (exit 1))

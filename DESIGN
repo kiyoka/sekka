@@ -67,6 +67,7 @@ Sekkaはモードレスなローマ字かな漢字変換エンジンです。SKK
   1) 辞書メンテナンスツール
      - sekka-jisyo convert    SKK-JISYO.L を読み込み、SEKKA-JISYO.L などを生成する
      - sekka-jisyo load       SEKKA-JISYO.L を読み込みマスター辞書とする
+     - sekka-jisyo dump       DBの状態を SEKKA-JISYO形式でダンプ出力する
      - sekka-jisyo merge      SEKKA-JISYO.L や SEKKA-JISYO.U(ユーザ辞書) を現在のマスター辞書にマージする
      - sekka-jisyo learn      コーパス(テキストファイル)を読み込み、マスター辞書の変換候補表示順を単語の出現順序にする。
 
