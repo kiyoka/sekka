@@ -67,7 +67,7 @@
                 (hash-table-put! db
                                  (first fields)
                                  (if-let1 curval (hash-table-get db (first fields) #f)
-                                   (+ curval "/" (if-let1 m (rxmatch #/^C(.+)$/ (second fields))
+                                   (+ curval "/" (if-let1 m (rxmatch #/^[C\/](.+)$/ (second fields))
                                                    (rxmatch-substring m 1)
                                                    (second fields)))
                                    (second fields)))))
