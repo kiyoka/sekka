@@ -99,7 +99,7 @@
 
 
 (define (openSekkaJisyo basename)
-  (let1 db (KyotoCabinet::DB.new)
+  (let1 db (KyotoCabinet::DB.new KyotoCabinet::DB::GCONCURRENT)
     (when (not (db.open (+ basename cabinet-ext)))
       (errorf "db error [%s]\n" (db.error)))
     (db.tune_encoding   "utf-8")
