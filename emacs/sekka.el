@@ -265,7 +265,7 @@
 (defun sekka-henkan-request (yomi)
   (sekka-debug-print (format "henkan-input :[%s]\n"  yomi))
 
-  (message "Requesting to sekka server...")
+  ;;(message "Requesting to sekka server...")
   
   (let (
 	(result (sekka-rest-request "henkan" yomi)))
