@@ -1,0 +1,43 @@
+;;-*- mode: nendo; syntax: scheme -*-;;
+;; test for sekka jisyo library
+
+(use nendo.test)
+(load "./lib/util.nnd")
+
+(test-start "util")
+
+;;===================================================================
+
+;;-------------------------------------------------------------------
+(test-section "string librarys")
+
+(test* "string-drop 1"
+       "2345"
+       (string-drop "12345" 1))
+(test* "string-drop 2"
+       ""
+       (string-drop "12345" 5))
+(test* "string-drop 3"
+       ""
+       (string-drop "12345" 6))
+(test* "string-drop 4"
+       "本語"
+       (string-drop "日本語" 1))
+(test* "string-drop 5"
+       "自然言語処理"
+       (string-drop "統計的自然言語処理" 3))
+(test* "string-split-first-and-rest 1"
+       '("1" . "2345")
+       (string-split-first-and-rest "12345"))
+(test* "string-split-first-and-rest 2"
+       '("1" . "")
+       (string-split-first-and-rest "1"))
+(test* "string-split-first-and-rest 3"
+       '("" . "")
+       (string-split-first-and-rest ""))
+(test* "string-split-first-and-rest 4"
+       '("頭" . "とシッポ")
+       (string-split-first-and-rest "頭とシッポ"))
+
+;;===================================================================
+(test-end)

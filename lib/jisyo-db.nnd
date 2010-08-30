@@ -6,14 +6,16 @@
 
 (define cabinet-ext ".kct")
 
-(define alphabet-list (to-list (. "abcdefghijklmnopqrstuvwxyz>" split "")))
+(define alphabet-string "abcdefghijklmnopqrstuvwxyz>")
+(define alphabet-lower-list (to-list (alphabet-string.split "")))
+(define alphabet-upper-list (to-list (alphabet-string.upcase.split "")))
 (define alphabet-pairs (append-map
                         (lambda (a)
                           (map
                            (lambda (b)
                              (+ a b))
-                           alphabet-list))
-                        alphabet-list))
+                           (append alphabet-upper-list alphabet-lower-list)))
+                        alphabet-lower-list))
 
 (define (setup-ready-made-keylist db)
   (letrec ((lst-okuri-nashi '())
@@ -43,12 +45,14 @@
          (set! lst-okuri-ari   '())
          (cur.jump ab)
          (create-lst-with-cursor! cur ab)
-         (hash-table-put! db
-                          (+ "(" ab.upcase ")")
-                          (string-join (reverse lst-okuri-ari) " "))
-         (hash-table-put! db
-                          (+ "(" ab        ")")
-                          (string-join (reverse lst-okuri-nashi) " ")))
+         (let ((fetched-okuri-ari   (hash-table-get db (+ "(" ab.upcase ")") ""))
+               (fetched-okuri-nashi (hash-table-get db (+ "(" ab.upcase ")") "")))
+           (hash-table-put! db
+                            (+ "(" ab.upcase ")")
+                            (+ fetched-okuri-ari   " " (string-join (reverse lst-okuri-ari) " ")))
+           (hash-table-put! db
+                            (+ "(" ab.downcase ")")
+                            (+ fetched-okuri-nashi " " (string-join (reverse lst-okuri-nashi) " ")))))
        alphabet-pairs)
       (cur.disable))))
 

@@ -3,3 +3,10 @@
 (define (string-drop str n)
   (or (str.slice n (str.size))
       ""))
+
+;; "string" => (cons "s" "tring")
+(define (string-split-first-and-rest str)
+  (if (= 0 str.size)
+      (cons "" "")
+      (cons (str.slice 0 1)
+            (str.slice 1 str.size))))

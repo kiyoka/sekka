@@ -27,6 +27,6 @@ class ApproximateSearch
     str = db.get( readymade_key )
     #printf( "%s : %s\n", readymade_key, str )
 
-    filtering( db, keyword, str.split( " " ))
+    filtering( db, keyword, str.split( /[ ]+/ ))
   end
 end

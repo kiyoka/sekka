@@ -82,11 +82,14 @@
 
 ;; 送り仮名ありの変換
 (define (henkan-okuri-ari db keyword)
-  (let1 m (rxmatch #/^([a-zA-Z])([a-z\-^]+)([A-Z])([a-zA-Z]*)$/ keyword)
+  (let* ((keyword  (let1 _pair (string-split-first-and-rest keyword)
+                     (+ (. (car _pair) downcase)
+                        (cdr _pair))))
+         (m        (rxmatch #/^([a-z])([a-z\-^]*)([A-Z])([a-zA-Z]*)$/ keyword)))
     (if (not m)
         (errorf "henkan-okuri-ari: requires xxxxZx or ZxxxxZx ascii format.  got:[%s] " keyword)
         (let* ((result (approximate-search db
-                                           (+ (. (rxmatch-substring m 1) downcase)
+                                           (+ (rxmatch-substring m 1)
                                               (rxmatch-substring m 2)
                                               (rxmatch-substring m 3))
                                            #t))
