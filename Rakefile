@@ -8,7 +8,8 @@ task :check do
   sh "/bin/rm -f test.record"
   sh "/bin/rm -f test.kct"
   sh "echo > test.log"
-  [ "./test/roman-lib.nnd", 
+  [ "./test/util.nnd", 
+    "./test/roman-lib.nnd", 
     "./test/jisyo.nnd", 
     "./test/henkan-main.nnd"
   ].each {|filename|
@@ -25,8 +26,13 @@ task :jisyo do
 end
 
 task :load do
-#  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.S.201001"
+  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.S.201001"
   sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.L.201008"
+end
+
+task :dump do
+  sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.S.201001 > ./data/SEKKA-JISYO.S.201001.dump"
+  sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.L.201008 > ./data/SEKKA-JISYO.L.201008.dump"
 end
 
 task :demo do
