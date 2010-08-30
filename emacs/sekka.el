@@ -818,31 +818,11 @@ sekka-modeがONの間中呼び出される可能性がある。"
 
     (let* (
 	   (end (point))
-	   (gap (sekka-skip-chars-backward))
-	   (prev-line-existp
-	    (not (= (point-at-bol) (point-min))))
-	   (next-line-existp
-	    (not (= (point-at-eol) (point-max))))
-	   (prev-line-point
-	    (when prev-line-existp
-	      (save-excursion
-		(forward-line -1)
-		(point))))
-	   (next-line-point
-	    (when next-line-existp
-	      (save-excursion
-		(forward-line 1)
-		(point))))
-	   (disp-point
-	    (or next-line-point prev-line-point)))
-
+	   (gap (sekka-skip-chars-backward)))
       (if 
 	  (or 
 	   (when (fboundp 'minibufferp)
 	     (minibufferp))
-	   (and
-	    (not next-line-point)
-	    (not prev-line-point))
 	   (= gap 0))
 	  ;; 上下スペースが無い または 変換対象が無しならガイドは表示しない。
 	  (overlay-put sekka-guide-overlay 'before-string "")
