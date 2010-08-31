@@ -18,9 +18,10 @@
                     (lambda (x)
                       (let* ((val (vector-ref x 0))
                              (k   (vector-ref x 1))
-                             (v   (hash-table-get db k))
-                             (v-first (v.slice 0 1))
-                             (v-rest  (v.slice 1 v.size)))
+                             (v   (hash-table-get db k ""))
+                             (v-pair (string-split-first-and-rest v))
+                             (v-first (car v-pair))
+                             (v-rest  (cdr v-pair)))
                         (map
                          (lambda (element)
                            (list val k (+ v-first element)))
