@@ -394,6 +394,10 @@
        nil
        (sekkaKakutei db "developper" "デベロッパ"))
 
+(test* "henkan kakutei(for Elisp) 6"
+       nil
+       (sekkaKakutei db "wo" "を"))
+
 
 ;;===================================================================
 (test-end)
