@@ -6,7 +6,6 @@ require 'rake'
 
 task :check do
   sh "/bin/rm -f test.record"
-  sh "/bin/rm -f test.kct"
   sh "echo > test.log"
   [ "./test/util.nnd", 
     "./test/roman-lib.nnd", 
