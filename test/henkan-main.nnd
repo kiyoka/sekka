@@ -7,8 +7,6 @@
 (load "./lib/convert-jisyo.nnd")
 (load "./lib/henkan.nnd")
 
-(define debug-print-length 2000)
-
 (test-start "henkan engine")
 ;;===================================================================
 
@@ -102,49 +100,83 @@
 ;;-------------------------------------------------------------------
 (test-section "approximate-search core")
 
+(define (arr->list arr)
+  (map
+   (lambda (element)
+     (element.to_list))
+   (arr.to_list)))
+
+(define (my-round value)
+  (define significant-digits 10000.0)
+  (let1 intval (. (* value significant-digits) round)
+    (/ intval significant-digits)))
+
+(define (my-round-map lst)
+  (map
+   (lambda (x)
+     (cons (my-round (car x)) (cdr x)))
+   lst))
+
 (test* "search keyword list 1"
-       '#(#(0.9666666669978037 "henka") #(1.0 "henkan") #(0.9714285717124032 "henkann") #(0.961111111773385 "hennka"))
-       (a-search.search db "henkan" #f))
+       '((0.9667 "henka") (1.0 "henkan") (0.9714 "henkann") (0.9611 "hennka"))
+       (my-round-map
+        (arr->list
+         (a-search.search db "henkan" #f))))
 
 (test* "search keyword list 2"
-       '#(#(0.96666666723433 "henkann") #(0.9428571434248061 "henncan") #(0.9714285717124032 "hennka") #(1.0 "hennkan") #(0.9750000002483528 "hennkann"))
-       (a-search.search db "hennkan" #f))
+       '((0.9667 "henkann") (0.9429 "henncan") (0.9714 "hennka") (1.0 "hennkan") (0.975 "hennkann"))
+       (my-round-map
+        (arr->list
+         (a-search.search db "hennkan" #f))))
 
 (test* "search keyword list 3"
-       '#(#(0.9428571434248061 "henka") #(0.9714285717124032 "henkan") #(1.0 "henkann") #(0.96666666723433 "hennkan"))
-       (a-search.search db "henkann" #f))
+       '((0.9429 "henka") (0.9714 "henkan") (1.0 "henkann") (0.9667 "hennkan"))
+       (my-round-map
+        (arr->list
+         (a-search.search db "henkann" #f))))
 
 (test* "search keyword list 4"
-       '#(#(0.9500000004967053 "henncann") #(0.9500000004967053 "hennka") #(0.9750000002483528 "hennkan") #(1.0 "hennkann"))
-       (a-search.search db "hennkann" #f))
+       '((0.95 "henncann") (0.95 "hennka") (0.975 "hennkan") (1.0 "hennkann"))
+       (my-round-map
+        (arr->list
+         (a-search.search db "hennkann" #f))))
 
 (test* "search keyword list 5"
-       '#(#(0.9714285717124032 "henkaS") #(0.96666666723433 "hennkaS"))
-       (a-search.search db "henkanS" #t))
+       '((0.9714 "henkaS") (0.9667 "hennkaS"))
+       (my-round-map
+        (arr->list
+         (a-search.search db "henkanS" #t))))
 
 (test* "search keyword list 6"
-       '#(#(0.9416666676600773 "henkaS") #(0.9750000002483528 "hennkaS"))
-       (a-search.search db "hennkanS" #t))
+       '((0.9417 "henkaS") (0.975 "hennkaS"))
+       (my-round-map
+        (arr->list
+         (a-search.search db "hennkanS" #t))))
 
 (test* "approximate search 1"
-       '((1.0 "henka" "Cへんか") (0.9666666669978037 "henkan" "Cへんかん") (0.961111111773385 "hennka" "Cへんか") (0.9428571434248061 "henkann" "Cへんかん"))
-       (approximate-search db "henka" #f))
+       '((1.0 "henka" "Cへんか") (0.9667 "henkan" "Cへんかん") (0.9611 "hennka" "Cへんか") (0.9429 "henkann" "Cへんかん"))
+       (my-round-map
+        (approximate-search db "henka" #f)))
 
 (test* "approximate search 2"
-       '((1.0 "hennka" "Cへんか") (0.9714285717124032 "hennkan" "Cへんかん") (0.961111111773385 "henka" "Cへんか") (0.961111111773385 "henkan" "Cへんかん") (0.9500000004967053 "hennkann" "Cへんかん"))
-       (approximate-search db "hennka" #f))
+       '((1.0 "hennka" "Cへんか") (0.9714 "hennkan" "Cへんかん") (0.9611 "henka" "Cへんか") (0.9611 "henkan" "Cへんかん") (0.95 "hennkann" "Cへんかん"))
+       (my-round-map
+        (approximate-search db "hennka" #f)))
 
 (test* "approximate search 3"
-       '((0.9666666669978037 "henka" "Cへんか"))
-       (approximate-search db "henkaS" #f))
+       '((0.9667 "henka" "Cへんか"))
+       (my-round-map
+        (approximate-search db "henkaS" #f)))
 
 (test* "approximate search 4"
-       '((0.9714285717124032 "hennka" "Cへんか") (0.9428571434248061 "hennkan" "Cへんかん"))
-       (approximate-search db "hennkaS" #f))
+       '((0.9714 "hennka" "Cへんか") (0.9429 "hennkan" "Cへんかん"))
+       (my-round-map
+        (approximate-search db "hennkaS" #f)))
 
 (test* "approximate search 5"
-       '((1.0 "kani" "Cかに") (1.0 "kani" "Cかんい") (0.9533333341280619 "kanni" "Cかんい"))
-       (approximate-search db "kani" #f))
+       '((1.0 "kani" "Cかに") (1.0 "kani" "Cかんい") (0.9533 "kanni" "Cかんい"))
+       (my-round-map
+        (approximate-search db "kani" #f)))
 
 
 ;;-------------------------------------------------------------------
@@ -203,24 +235,29 @@
 (test-section "henkan (okuri ari)")
 
 (test* "approximate search 1"
-       '((1.0 "henkaS" "Cへんかs") (0.96666666723433 "hennkaS" "Cへんかs"))
-       (approximate-search db "henkaS" #t))
+       '((1.0 "henkaS" "Cへんかs") (0.9667 "hennkaS" "Cへんかs"))
+       (my-round-map
+        (approximate-search db "henkaS" #t)))
 
 (test* "approximate search 2"
-       '((0.9714285717124032 "henkaS" "Cへんかs") (0.96666666723433 "hennkaS" "Cへんかs"))
-       (approximate-search db "henkanS" #t))
+       '((0.9714 "henkaS" "Cへんかs") (0.9667 "hennkaS" "Cへんかs"))
+       (my-round-map
+        (approximate-search db "henkanS" #t)))
 
 (test* "approximate search 3"
        '((1.0 "okonaU" "Cおこなu"))
-       (approximate-search db "okonaU" #t))
+       (my-round-map
+        (approximate-search db "okonaU" #t)))
 
 (test* "approximate search 4"
-       '((0.9666666669978037 "okonaU" "Cおこなu"))
-       (approximate-search db "okonU" #t))
+       '((0.9667 "okonaU" "Cおこなu"))
+       (my-round-map
+        (approximate-search db "okonU" #t)))
 
 (test* "approximate search 5"
        '((1.0 "eR" "Cえr"))
-       (approximate-search db "eR" #t))
+       (my-round-map
+        (approximate-search db "eR" #t)))
 
 (test* "okuri ari 1"
        '(("私は" #f "わたしh"))
