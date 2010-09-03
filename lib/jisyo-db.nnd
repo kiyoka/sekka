@@ -18,43 +18,42 @@
                         alphabet-lower-list))
 
 (define (setup-ready-made-keylist db)
-  (letrec ((lst-okuri-nashi '())
-           (lst-okuri-ari   '())
-           (create-lst-with-cursor!
-            (lambda (cur ab)
-              (let loop ((k (cur.get_key)))
-                (let1 k2 (k.slice 0 2)
-                  (if (and (cur.step)
-                           (eq? ab k2))
-                      (begin
-                        (if (rxmatch #/[A-Z]$/ k)
-                            (set! lst-okuri-ari   (cons k lst-okuri-ari))
-                            (set! lst-okuri-nashi (cons k lst-okuri-nashi)))
-                        (loop (cur.get_key)))))))))
+  (define lst-okuri-nashi '())
+  (define lst-okuri-ari   '())
+  (define (create-lst-with-cursor! cur ab)
+    (let loop ((k (cur.get_key)))
+      (let1 k2 (k.slice 0 2)
+        (if (and (cur.step)
+                 (eq? ab k2))
+            (begin
+              (if (rxmatch #/[A-Z]$/ k)
+                  (set! lst-okuri-ari   (cons k lst-okuri-ari))
+                  (set! lst-okuri-nashi (cons k lst-okuri-nashi)))
+              (loop (cur.get_key)))))))
 
-    (for-each
-     (lambda (key)
-       (unless (hash-table-get db key #f)
-         (hash-table-put! db key "")))
-     alphabet-pairs)
+  (for-each
+   (lambda (key)
+     (unless (hash-table-get db key #f)
+       (hash-table-put! db key "")))
+   alphabet-pairs)
   
-    (let1 cur (db.cursor)
-      (for-each
-       (lambda (ab)
-         (set! lst-okuri-nashi '())
-         (set! lst-okuri-ari   '())
-         (cur.jump ab)
-         (create-lst-with-cursor! cur ab)
-         (let ((fetched-okuri-ari   (hash-table-get db (+ "(" ab.upcase ")") ""))
-               (fetched-okuri-nashi (hash-table-get db (+ "(" ab.upcase ")") "")))
-           (hash-table-put! db
-                            (+ "(" ab.upcase ")")
-                            (+ fetched-okuri-ari   " " (string-join (reverse lst-okuri-ari) " ")))
-           (hash-table-put! db
-                            (+ "(" ab.downcase ")")
-                            (+ fetched-okuri-nashi " " (string-join (reverse lst-okuri-nashi) " ")))))
-       alphabet-pairs)
-      (cur.disable))))
+  (let1 cur (db.cursor)
+    (for-each
+     (lambda (ab)
+       (set! lst-okuri-nashi '())
+       (set! lst-okuri-ari   '())
+       (cur.jump ab)
+       (create-lst-with-cursor! cur ab)
+       (let ((fetched-okuri-ari   (hash-table-get db (+ "(" ab.upcase ")") ""))
+             (fetched-okuri-nashi (hash-table-get db (+ "(" ab.upcase ")") "")))
+         (hash-table-put! db
+                          (+ "(" ab.upcase ")")
+                          (+ fetched-okuri-ari   " " (string-join (reverse lst-okuri-ari) " ")))
+         (hash-table-put! db
+                          (+ "(" ab.downcase ")")
+                          (+ fetched-okuri-nashi " " (string-join (reverse lst-okuri-nashi) " ")))))
+     alphabet-pairs)
+    (cur.disable)))
 
 
 (define (load-sekka-jisyo-f f basename)
