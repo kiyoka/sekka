@@ -10,3 +10,9 @@
       (cons "" "")
       (cons (str.slice 0 1)
             (str.slice 1 str.size))))
+
+(define (string-downcase-first str)
+  (let1 _pair (string-split-first-and-rest str)
+    (+ (. (car _pair) downcase)
+       (cdr _pair))))
+

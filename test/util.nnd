@@ -39,5 +39,30 @@
        '("頭" . "とシッポ")
        (string-split-first-and-rest "頭とシッポ"))
 
+(test* "string-downcase-first 1"
+       "aBCDE"
+       (string-downcase-first "ABCDE"))
+
+(test* "string-downcase-first 2"
+       "abcde"
+       (string-downcase-first "abcde"))
+
+(test* "string-downcase-first 3"
+       "abcde"
+       (string-downcase-first "Abcde"))
+
+(test* "string-downcase-first 4"
+       "a"
+       (string-downcase-first "A"))
+
+(test* "string-downcase-first 5"
+       "あいうえお"
+       (string-downcase-first "あいうえお"))
+
+(test* "string-downcase-first 6"
+       "aあいう"
+       (string-downcase-first "Aあいう"))
+
+
 ;;===================================================================
 (test-end)

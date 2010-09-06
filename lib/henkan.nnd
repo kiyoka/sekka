@@ -142,15 +142,16 @@
   ;; キーワードの種別で処理を分割する
   (cond
    ((rxmatch #/[A-Z]/ keyword)
-    (cond
-     ((rxmatch #/[a-z][A-Z]/ keyword)
-      ;; 送りあり
-      ;;(let1 result (approximate-search db keyword #t)  (disp-search-result result))
-      (henkan-okuri-ari db keyword))
-     (else
-      ;; 送りなし
-      ;;(let1 result (approximate-search db keyword #f)  (disp-search-result result))
-      (henkan-okuri-nashi db keyword))))
+    (let1 keyword (string-downcase-first keyword)
+      (cond
+       ((rxmatch #/[a-z][A-Z]/ keyword)
+        ;; 送りあり
+        ;;(let1 result (approximate-search db keyword #t)  (disp-search-result result))
+        (henkan-okuri-ari db keyword))
+       (else
+        ;; 送りなし
+        ;;(let1 result (approximate-search db keyword #f)  (disp-search-result result))
+        (henkan-okuri-nashi db keyword)))))
    ((gen-roman->hiragana keyword)
     (henkan-hiragana db keyword))
    (else

@@ -359,11 +359,11 @@
        (sekka-henkan db "Henkan"))
 
 (test* "henkan toplevel 6"
-       '(("変換" #f "へんかん") ("返還" #f "へんかん") ("変化" #f "へんか") ("返歌" #f "へんか"))
+       '()
        (sekka-henkan db "HEnkan"))
 
 (test* "henkan toplevel 7"
-       '(("変換" #f "へんかん") ("返還" #f "へんかん") ("変化" #f "へんか") ("返歌" #f "へんか"))
+       '()
        (sekka-henkan db "HENkan"))
 
 (test* "henkan toplevel 8"
@@ -375,7 +375,7 @@
        (sekka-henkan db "eRu"))
 
 (test* "henkan toplevel 10"
-       '()
+       '(("得る" #f "えr") ("獲る" "NB:「とr」と同形" "えr") ("選る" "NB:「よr」「すぐr」と同形" "えr"))
        (sekka-henkan db "ERu"))
 
 (test* "henkan toplevel 11"
