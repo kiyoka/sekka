@@ -88,7 +88,7 @@
                         (cdr _pair))))
          (m        (rxmatch #/^([a-z])([a-z\-^]*)([A-Z])([a-zA-Z]*)$/ keyword)))
     (if (not m)
-        (errorf "henkan-okuri-ari: requires xxxxZx or ZxxxxZx ascii format.  got:[%s] " keyword)
+        '() ;; 変換候補無し
         (let* ((result (approximate-search db
                                            (+ (rxmatch-substring m 1)
                                               (rxmatch-substring m 2)
@@ -153,7 +153,9 @@
         ;;(let1 result (approximate-search db keyword #f)  (disp-search-result result))
         (henkan-okuri-nashi db keyword)))))
    ((gen-roman->hiragana keyword)
-    (henkan-hiragana db keyword))
+    (append
+     (henkan-hiragana db keyword)
+     (henkan-okuri-nashi db keyword)))
    (else
     (henkan-non-kanji db keyword))))
 ;; conversion #f => nil for EmacsLisp

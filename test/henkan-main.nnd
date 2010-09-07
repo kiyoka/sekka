@@ -343,7 +343,7 @@
        (sekka-henkan db "*"))
 
 (test* "henkan toplevel 2"
-       '(("しぜんげんごりか" #f "shizengengorika") ("シゼンゲンゴリカ" #f "shizengengorika"))
+       '(("しぜんげんごりか" #f "shizengengorika") ("シゼンゲンゴリカ" #f "shizengengorika") ("自然言語理解" #f "しぜんげんごりかい") ("自然言語" #f "しぜんげんご"))
        (sekka-henkan db "shizengengorika"))
 
 (test* "henkan toplevel 3"
@@ -379,7 +379,7 @@
        (sekka-henkan db "ERu"))
 
 (test* "henkan toplevel 11"
-       '(("を" #f "wo") ("ヲ" #f "wo"))
+       '(("を" #f "wo") ("ヲ" #f "wo") ("小" #f "を") ("緒" #f "を") ("雄" #f "を") ("男" #f "を") ("牡" #f "を") ("尾" #f "を") ("悪" #f "を") ("汚" #f "を") ("惡" "「悪」の旧字(人名用漢字)" "を"))
        (sekka-henkan db "wo"))
 
 (test* "henkan toplevel 12"
@@ -390,12 +390,20 @@
        '()
        (sekka-henkan db "H"))
 
+(test* "henkan toplevel 13"
+       '()
+       (sekka-henkan db "gitHuB"))
+
+(test* "henkan toplevel 14"
+       '()
+       (sekka-henkan db "ChangeLog"))
+
 (test* "henkan toplevel(for Elisp) 1"
        '(("＊" nil "*") ("※" nil "*") ("×" nil "*"))
        (sekkaHenkan db "*"))
 
 (test* "henkan toplevel(for Elisp) 2"
-       '(("しぜんげんごりか" nil "shizengengorika") ("シゼンゲンゴリカ" nil "shizengengorika"))
+       '(("しぜんげんごりか" nil "shizengengorika") ("シゼンゲンゴリカ" nil "shizengengorika") ("自然言語理解" nil "しぜんげんごりかい") ("自然言語" nil "しぜんげんご"))
        (sekkaHenkan db "shizengengorika"))
 
 (test* "henkan toplevel(for Elisp) 3"
