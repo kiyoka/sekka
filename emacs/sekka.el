@@ -81,7 +81,7 @@
   :type 'boolean
   :group 'sekka)
 
-(defcustom sekka-realtime-guide-running-seconds 60
+(defcustom sekka-realtime-guide-running-seconds 30
   "リアルタイムガイド表示の継続時間(秒数)・ゼロでガイド表示機能が無効になる"
   :type  'integer
   :group 'sekka)
