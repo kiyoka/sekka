@@ -510,26 +510,21 @@
 (defun sekka-select-prev ()
   "前の候補に進める"
   (interactive)
-  (let (
-	(n sekka-cand))
-
-    ;; 前の候補に切りかえる
-    (setcar (nthcdr n sekka-cand-n) (- (nth n sekka-cand-n) 1))
-    (when (> 0 (nth n sekka-cand-n))
-      (setcar (nthcdr n sekka-cand-n) (- (nth n sekka-cand-max) 1)))
-    (sekka-select-update-display)))
+  ;; 前の候補に切りかえる
+  (decf sekka-cand-cur)
+  (when (> 0 sekka-cand-cur)
+    (setq sekka-cand-cur (- sekka-cand-len 1)))
+  (sekka-select-update-display))
 
 ;; 次の候補に進める
 (defun sekka-select-next ()
   "次の候補に進める"
   (interactive)
   ;; 次の候補に切りかえる
-  (setq sekka-cand-cur 
+  (setq sekka-cand-cur
 	(if (< sekka-cand-cur (- sekka-cand-len 1))
 	    (+ sekka-cand-cur 1)
 	  0))
-  (sekka-debug-print (format "sekka-select-next()  sekka-cand-cur=%d,  sekka-cand-len=%d\n" 
-			     sekka-cand-cur sekka-cand-len))
   (sekka-select-update-display))
 
 
