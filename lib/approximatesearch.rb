@@ -13,7 +13,7 @@ class ApproximateSearch
     arr.map { |str|
       val = jarow.match( str )
       (val > @jarow_shikii) ? [ val, str ] : false
-    }.select { |v| v }
+    }.select { |v| v }.sort_by {|item| 1.0 - item[0]}
   end
 
   def search( db, keyword, okuri_ari )

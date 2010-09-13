@@ -63,7 +63,7 @@
 (let1 _output (StringIO.new)
   (_output.set_encoding "utf-8")
   (test* "dump DB to SEKKA jisyo file. (1)"
-         "5ece36f895f8ccaaff5ece1c0f6d935b93c614b9"
+         "c2578c97075fceeb93b61ec87d9949c27bb7665b"
          (begin
            (dump-sekka-jisyo-f _output "./test")
            (Digest::SHA1.hexdigest (_output.string))
@@ -118,25 +118,25 @@
    lst))
 
 (test* "search keyword list 1"
-       '((0.9667 "henka") (1.0 "henkan") (0.9714 "henkann") (0.9611 "hennka"))
+       '((1.0 "henkan") (0.9714 "henkann") (0.9667 "henka") (0.9611 "hennka"))
        (my-round-map
         (arr->list
          (a-search.search db "henkan" #f))))
 
 (test* "search keyword list 2"
-       '((0.9667 "henkann") (0.9429 "henncan") (0.9714 "hennka") (1.0 "hennkan") (0.975 "hennkann"))
+       '((1.0 "hennkan") (0.975 "hennkann") (0.9714 "hennka") (0.9667 "henkann") (0.9429 "henncan"))
        (my-round-map
         (arr->list
          (a-search.search db "hennkan" #f))))
 
 (test* "search keyword list 3"
-       '((0.9429 "henka") (0.9714 "henkan") (1.0 "henkann") (0.9667 "hennkan"))
+       '((1.0 "henkann") (0.9714 "henkan") (0.9667 "hennkan") (0.9429 "henka"))
        (my-round-map
         (arr->list
          (a-search.search db "henkann" #f))))
 
 (test* "search keyword list 4"
-       '((0.95 "henncann") (0.95 "hennka") (0.975 "hennkan") (1.0 "hennkann"))
+       '((1.0 "hennkann") (0.975 "hennkan") (0.95 "henncann") (0.95 "hennka"))
        (my-round-map
         (arr->list
          (a-search.search db "hennkann" #f))))
@@ -148,7 +148,7 @@
          (a-search.search db "henkanS" #t))))
 
 (test* "search keyword list 6"
-       '((0.9417 "henkaS") (0.975 "hennkaS"))
+       '((0.975 "hennkaS") (0.9417 "henkaS"))
        (my-round-map
         (arr->list
          (a-search.search db "hennkanS" #t))))
@@ -159,7 +159,7 @@
         (approximate-search db "henka" #f)))
 
 (test* "approximate search 2"
-       '((1.0 "hennka" "Cへんか") (0.9714 "hennkan" "Cへんかん") (0.9611 "henka" "Cへんか") (0.9611 "henkan" "Cへんかん") (0.95 "hennkann" "Cへんかん"))
+       '((1.0 "hennka" "Cへんか") (0.9714 "hennkan" "Cへんかん") (0.9611 "henkan" "Cへんかん") (0.9611 "henka" "Cへんか") (0.95 "hennkann" "Cへんかん"))
        (my-round-map
         (approximate-search db "hennka" #f)))
 

@@ -1,10 +1,8 @@
 :; #-*- mode: nendo; syntax: scheme -*-;;
 
 (use srfi-1)
-(require "kyotocabinet")
+(require "./lib/kvs")
 (load "./lib/util.nnd")
-
-(define cabinet-ext ".kct")
 
 (define alphabet-string "abcdefghijklmnopqrstuvwxyz>")
 (define alphabet-lower-list (to-list (alphabet-string.split "")))
@@ -17,91 +15,82 @@
                            (append alphabet-upper-list alphabet-lower-list)))
                         alphabet-lower-list))
 
-(define (setup-ready-made-keylist db)
-  (define lst-okuri-nashi '())
-  (define lst-okuri-ari   '())
-  (define (create-lst-with-cursor! cur ab)
-    (let loop ((k (cur.get_key)))
-      (let1 k2 (k.slice 0 2)
-        (if (and (cur.step)
-                 (eq? ab k2))
-            (begin
-              (if (rxmatch #/[A-Z]$/ k)
-                  (set! lst-okuri-ari   (cons k lst-okuri-ari))
-                  (set! lst-okuri-nashi (cons k lst-okuri-nashi)))
-              (loop (cur.get_key)))))))
+(define (create-2char-hash kvs keylist)
+  (let ((okuri-ari-hash   (make-hash-table))
+        (okuri-nashi-hash (make-hash-table)))
+    (for-each
+     (lambda (k)
+       (when (rxmatch #/^[a-zA-Z^>-]+$/ k)
+         (let1 sliced (k.slice 0 2)
+           (when (= 2 sliced.size)
+             (if (rxmatch #/[A-Z]$/ k)
+                 (hash-table-push! okuri-ari-hash   sliced k)
+                 (hash-table-push! okuri-nashi-hash sliced k))))))
+     keylist)
+    (values okuri-ari-hash
+            okuri-nashi-hash)))
 
+(define (setup-ready-made-keylist kvs keylist)
   (for-each
    (lambda (key)
-     (unless (hash-table-get db key #f)
-       (hash-table-put! db key "")))
+     (unless (kvs.get key #f)
+       (kvs.put! key "")))
    alphabet-pairs)
   
-  (let1 cur (db.cursor)
+  (receive (okuri-ari-hash
+            okuri-nashi-hash)
+      (create-2char-hash kvs keylist)
+
+    ;; OKURI-ARI
     (for-each
-     (lambda (ab)
-       (set! lst-okuri-nashi '())
-       (set! lst-okuri-ari   '())
-       (cur.jump ab)
-       (create-lst-with-cursor! cur ab)
-       (let ((fetched-okuri-ari   (hash-table-get db (+ "(" ab.upcase ")") ""))
-             (fetched-okuri-nashi (hash-table-get db (+ "(" ab.upcase ")") "")))
-         (hash-table-put! db
-                          (+ "(" ab.upcase ")")
-                          (+ fetched-okuri-ari   " " (string-join (reverse lst-okuri-ari) " ")))
-         (hash-table-put! db
-                          (+ "(" ab.downcase ")")
-                          (+ fetched-okuri-nashi " " (string-join (reverse lst-okuri-nashi) " ")))))
-     alphabet-pairs)
-    (cur.disable)))
+     (lambda (key)
+       (kvs.put! (+ "(" key.upcase ")")
+                 (string-join (delete-duplicates (hash-table-get okuri-ari-hash key)) " ")))
+     (hash-table-keys okuri-ari-hash))
+
+    ;; OKURI-NASHI
+    (for-each
+     (lambda (key)
+       (kvs.put! (+ "(" key.downcase ")")
+                 (string-join (delete-duplicates (hash-table-get okuri-nashi-hash key)) " ")))
+     (hash-table-keys okuri-nashi-hash))))
 
 
 (define (load-sekka-jisyo-f f basename)
-  (let1 err
-      (KyotoCabinet::DB.process
-       (+ basename cabinet-ext)
-       (&block (db)
-         (db.tune_encoding   "utf-8")
-         (db.clear)
-         (begin
-           (for-each
-            (lambda (line)
-              (let1 fields (to-list (line.split " "))
-                (hash-table-put! db
-                                 (first fields)
-                                 (if-let1 curval (hash-table-get db (first fields) #f)
-                                   (+ curval "/" (if-let1 m (rxmatch #/^[C\/](.+)$/ (second fields))
-                                                   (rxmatch-substring m 1)
-                                                   (second fields)))
-                                   (second fields)))))
-            (f.readlines.to_list))
-           (setup-ready-made-keylist db))))
-    (when err
-      (printf "db error [%s]\n" err)
-      (exit 1))
-    #t))
+  (let1 kvs (Kvs.new 'kyotocabinet)
+    (kvs.open basename)
+    (kvs.clear)
+    (let1 keylist '()
+      (for-each
+       (lambda (line)
+         (let1 fields (to-list (line.split " "))
+           (set! keylist (cons (first fields) keylist))
+           (kvs.put!
+            (first fields)
+            (if-let1 curval (kvs.get (first fields) #f)
+              (+ curval "/" (if-let1 m (rxmatch #/^[C\/](.+)$/ (second fields))
+                              (rxmatch-substring m 1)
+                              (second fields)))
+              (second fields)))))
+       (f.readlines.to_list))
+      (setup-ready-made-keylist kvs keylist))
+    (kvs.close)))
 
 
 (define (dump-sekka-jisyo-f f basename)
-  (let1 err
-      (KyotoCabinet::DB.process
-       (+ basename cabinet-ext)
-       (&block (db)
-         (db.tune_encoding   "utf-8")
-         (db.each
-          (&block (key value)
-            (f.puts (+ key " " value))))))
-    (when err
-      (printf "db error [%s]\n" err)
-      (exit 1))
-    #t))
+  (let1 kvs (Kvs.new 'kyotocabinet)
+    (kvs.open basename)
+    (for-each
+     (lambda (key)
+       (f.puts (+ key " " (kvs.get key))))
+     (to-list (kvs.keys)))
+    (kvs.close)))
 
 
 (define (openSekkaJisyo basename)
-  (let1 db (KyotoCabinet::DB.new KyotoCabinet::DB::GCONCURRENT)
-    (when (not (db.open (+ basename cabinet-ext)))
-      (errorf "db error [%s]\n" (db.error)))
-    (db.tune_encoding   "utf-8")
-    db))
+  (let1 kvs (Kvs.new 'kyotocabinet)
+    (kvs.open basename)
+    kvs))
+
 ;; Export to Ruby world
 (export-to-ruby openSekkaJisyo)
