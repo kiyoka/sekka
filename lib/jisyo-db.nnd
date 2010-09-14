@@ -57,14 +57,14 @@
     (for-each
      (lambda (key)
        (kvs.put! (+ "(" key.upcase ")")
-                 (string-join (delete-duplicates (hash-table-get okuri-ari-hash key)) " ")))
+                 (string-join (uniq (sort (hash-table-get okuri-ari-hash key))) " ")))
      (hash-table-keys okuri-ari-hash))
 
     ;; OKURI-NASHI
     (for-each
      (lambda (key)
        (kvs.put! (+ "(" key.downcase ")")
-                 (string-join (delete-duplicates (hash-table-get okuri-nashi-hash key)) " ")))
+                 (string-join (uniq (sort (hash-table-get okuri-nashi-hash key))) " ")))
      (hash-table-keys okuri-nashi-hash))))
 
 
