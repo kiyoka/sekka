@@ -4,12 +4,12 @@ require 'memcache'
 
 class Kvs
   def initialize( dbtype )
+    @dbtype = dbtype
     case dbtype
     when :kyotocabinet
-      @dbtype = dbtype
       @db = KyotoCabinet::DB.new( )
     when :memcache
-      raise ArgumentError
+      # do nothing
     else
       raise ArgumentError, "Kvs.new() requires reserved DB typename"
     end
@@ -18,25 +18,28 @@ class Kvs
   def open( name )
     case @dbtype
     when :kyotocabinet
-      if @db.open( name + ".kct" )
+      if @db.open( name )
         @db.tune_encoding "utf-8"
       else
-        raise RuntimeError, sprintf( "KyotoCabinet::DB.open error: file=%s", name + ".kct" )
+        raise RuntimeError, sprintf( "KyotoCabinet::DB.open error: file=%s", name )
       end
     when :memcache
+      p "kiyoka!"
+      @db = MemCache.new( name )
+    else
       raise RuntimeError
     end
   end
 
   def put!( key, value )
-    # p "put! " + key + ":" + value
-    @db.store( key, value )
+    p "put! " + key + ":" + value
+    @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"))
   end
 
   def get( key, fallback = false )
     val = @db.get( key )
     if val
-      val
+      val.force_encoding("UTF-8")
     else
       fallback
     end
@@ -47,6 +50,8 @@ class Kvs
     when :kyotocabinet
       @db.clear
     when :memcache 
+      # do nothing
+    else
       raise RuntimeError
     end
   end
@@ -61,15 +66,26 @@ class Kvs
       }
       arr
     when :memcache 
-      raise RuntimeError, "Kvs#keys not implemented for memcache."
+      raise RuntimeError, "Kvs#keys method was not implemented for memcache."
+    else
+      raise RuntimeError
     end
   end
 
   def close()
     case @dbtype
-    when :kyotocabinet, :memcache
+    when :kyotocabinet
       @db.close
+    when :memcache
+      # do nothign
+    else
+      raise RuntimeError
     end
+  end
+  
+  ## for testing
+  def _db()
+    @db
   end
 end
 

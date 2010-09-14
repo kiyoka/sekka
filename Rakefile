@@ -7,11 +7,13 @@ require 'rake'
 task :check do
   sh "/bin/rm -f test.record"
   sh "echo > test.log"
-  [ "./test/util.nnd", 
-    "./test/roman-lib.nnd", 
-    "./test/jisyo.nnd", 
-    "./test/henkan-main.nnd"
-  ].each {|filename|
+  files = []
+  files << "./test/util.nnd"
+  files << "./test/roman-lib.nnd"
+  files << "./test/jisyo.nnd" 
+  files << "./test/henkan-main.nnd  kyotocabinet"
+  #files << "./test/henkan-main.nnd  memcache"
+  files.each {|filename|
     sh  sprintf( "ruby -I ./lib /usr/local/bin/nendo %s", filename )
   }
   sh "cat test.record" 

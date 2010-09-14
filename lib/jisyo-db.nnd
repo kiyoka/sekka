@@ -15,6 +15,16 @@
                            (append alphabet-upper-list alphabet-lower-list)))
                         alphabet-lower-list))
 
+;; KVS type setting
+(define *kvs-type* 'kyotocabinet)  ;; default
+(define (set-kvs-type type)
+  (if (not (symbol? type))
+      (error "Error: set-kvs-type requires symbol argument.")
+      (set! *kvs-type* type)))
+(define (get-kvs-type)
+  *kvs-type*)
+
+
 (define (create-2char-hash kvs keylist)
   (let ((okuri-ari-hash   (make-hash-table))
         (okuri-nashi-hash (make-hash-table)))
@@ -56,9 +66,9 @@
      (hash-table-keys okuri-nashi-hash))))
 
 
-(define (load-sekka-jisyo-f f basename)
-  (let1 kvs (Kvs.new 'kyotocabinet)
-    (kvs.open basename)
+(define (load-sekka-jisyo-f f filename)
+  (let1 kvs (Kvs.new *kvs-type*)
+    (kvs.open filename)
     (kvs.clear)
     (let1 keylist '()
       (for-each
@@ -77,9 +87,9 @@
     (kvs.close)))
 
 
-(define (dump-sekka-jisyo-f f basename)
-  (let1 kvs (Kvs.new 'kyotocabinet)
-    (kvs.open basename)
+(define (dump-sekka-jisyo-f f filename)
+  (let1 kvs (Kvs.new *kvs-type*)
+    (kvs.open filename)
     (for-each
      (lambda (key)
        (f.puts (+ key " " (kvs.get key))))
@@ -87,9 +97,9 @@
     (kvs.close)))
 
 
-(define (openSekkaJisyo basename)
-  (let1 kvs (Kvs.new 'kyotocabinet)
-    (kvs.open basename)
+(define (openSekkaJisyo filename)
+  (let1 kvs (Kvs.new *kvs-type*)
+    (kvs.open filename)
     kvs))
 
 ;; Export to Ruby world

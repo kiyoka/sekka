@@ -3,7 +3,6 @@
 ;;      石火変換ライブラリ
 ;;
 (use srfi-1)
-(require "kyotocabinet")
 (require "amatch")
 (load "./lib/util.nnd")
 (load "./lib/roman-lib.nnd")
@@ -11,14 +10,14 @@
 
 ;; 曖昧検索
 ;;  リストで返す。 (ソート済み検索結果)
-(define (approximate-search db keyword okuri-ari-flag)
+(define (approximate-search kvs keyword okuri-ari-flag)
   (define jarow-shikii 0.94)
   (let* ((a-search (ApproximateSearch.new jarow-shikii))
          (lst      (append-map
                     (lambda (x)
                       (let* ((val (vector-ref x 0))
                              (k   (vector-ref x 1))
-                             (v   (hash-table-get db k ""))
+                             (v   (kvs.get k ""))
                              (v-pair (string-split-first-and-rest v))
                              (v-first (car v-pair))
                              (v-rest  (cdr v-pair)))
@@ -26,14 +25,14 @@
                          (lambda (element)
                            (list val k (+ v-first element)))
                          (to-list (v-rest.split "/")))))
-                    (to-list (a-search.search db keyword okuri-ari-flag))))
+                    (to-list (a-search.search kvs keyword okuri-ari-flag))))
          (sorted-lst  (sort-by lst (lambda (item) (- 1.0 (car item))))))
     sorted-lst))
 
 
 ;; 厳密検索
-(define (exact-search db keyword)
-  (let1 v (hash-table-get db keyword #f)
+(define (exact-search kvs keyword)
+  (let1 v (kvs.get keyword #f)
     (if v
         `((1.0 ,keyword ,v))
         '())))
@@ -62,8 +61,8 @@
 
 
 ;; 送り仮名なしの変換
-(define (henkan-okuri-nashi db keyword)
-  (let* ((result (approximate-search db keyword #f))
+(define (henkan-okuri-nashi kvs keyword)
+  (let* ((result (approximate-search kvs keyword #f))
          (kouho  (uniq (map
                         (lambda (x)
                           (third x))
@@ -72,7 +71,7 @@
      (lambda (value)
        (if-let1 m (rxmatch #/^C(.+)$/ value)
          (split-henkan-kouho
-          (hash-table-get db (string-drop value 1))
+          (kvs.get (string-drop value 1))
           (rxmatch-substring m 1)
           ) ;; continue to fetch
          (split-henkan-kouho
@@ -82,14 +81,14 @@
 
 
 ;; 送り仮名ありの変換
-(define (henkan-okuri-ari db keyword)
+(define (henkan-okuri-ari kvs keyword)
   (let* ((keyword  (let1 _pair (string-split-first-and-rest keyword)
                      (+ (. (car _pair) downcase)
                         (cdr _pair))))
          (m        (rxmatch #/^([a-z])([a-z\-^]*)([A-Z])([a-zA-Z]*)$/ keyword)))
     (if (not m)
         '() ;; 変換候補無し
-        (let* ((result (approximate-search db
+        (let* ((result (approximate-search kvs
                                            (+ (rxmatch-substring m 1)
                                               (rxmatch-substring m 2)
                                               (rxmatch-substring m 3))
@@ -105,7 +104,7 @@
            (lambda (value)
              (if-let1 m (rxmatch #/^C(.+)$/ value)
                (split-henkan-kouho
-                (hash-table-get db (string-drop value 1))
+                (kvs.get (string-drop value 1))
                 (rxmatch-substring m 1)
                 okurigana) ;; continue to fetch
                (split-henkan-kouho value keyword okurigana)))
@@ -113,7 +112,7 @@
 
 
 ;; 平仮名の変換
-(define (henkan-hiragana db keyword)
+(define (henkan-hiragana kvs keyword)
   (let* ((str  (keyword.downcase))
          (hira (gen-roman->hiragana str))
          (kata (gen-roman->katakana str)))
@@ -125,8 +124,8 @@
 
 
 ;; 記号を含むキーワードの変換
-(define (henkan-non-kanji db keyword)
-  (let* ((result (exact-search db keyword))
+(define (henkan-non-kanji kvs keyword)
+  (let* ((result (exact-search kvs keyword))
          (kouho  (map
                   (lambda (x)
                     (third x))
@@ -138,7 +137,7 @@
 
 
 ;; keyword には ローマ字のみを受け付ける
-(define (sekka-henkan db keyword)
+(define (sekka-henkan kvs keyword)
   ;; キーワードの種別で処理を分割する
   (cond
    ((rxmatch #/[A-Z]/ keyword)
@@ -147,23 +146,23 @@
        ((rxmatch #/[a-z][A-Z]/ keyword)
         ;; 送りあり
         ;;(let1 result (approximate-search db keyword #t)  (disp-search-result result))
-        (henkan-okuri-ari db keyword))
+        (henkan-okuri-ari kvs keyword))
        (else
         ;; 送りなし
         ;;(let1 result (approximate-search db keyword #f)  (disp-search-result result))
-        (henkan-okuri-nashi db keyword)))))
+        (henkan-okuri-nashi kvs keyword)))))
    ((gen-roman->hiragana keyword)
     (append
-     (henkan-hiragana db keyword)
-     (henkan-okuri-nashi db keyword)))
+     (henkan-hiragana kvs keyword)
+     (henkan-okuri-nashi kvs keyword)))
    (else
-    (henkan-non-kanji db keyword))))
+    (henkan-non-kanji kvs keyword))))
 ;; conversion #f => nil for EmacsLisp
-(define (sekkaHenkan db keyword)
+(define (sekkaHenkan kvs keyword)
   (map
    (lambda (x)
      (map (lambda (val) (if val val nil)) x))
-   (sekka-henkan db keyword)))
+   (sekka-henkan kvs keyword)))
 ;; Export to Ruby world
 (export-to-ruby sekkaHenkan)
 
@@ -172,12 +171,12 @@
 ;;  key   ... "developer" や "へんかん" など、変換候補レコードのキーとなる文字列
 ;;  tango ... "変換" など、変換候補から最終確定した、変換候補の文字列
 ;;  登録失敗したら nil を返す
-(define (sekkaKakutei db key tango)
-  (define (fetch db key)
-    (hash-table-get db key #f))
+(define (sekkaKakutei kvs key tango)
+  (define (fetch kvs key)
+    (kvs.get key #f))
 
-  (define (overwrite db key value)
-    (hash-table-put! db key value))
+  (define (overwrite kvs key value)
+    (kvs.put! key value))
 
   (define (join-henkan-kouho lst)
     (+ "/"
@@ -191,7 +190,7 @@
         "/")
        "/"))
 
-  (if-let1 kouho-str (fetch db key)
+  (if-let1 kouho-str (fetch kvs key)
     (if (rxmatch #/^\// kouho-str)
         (let* ((kouho-lst (split-henkan-kouho kouho-str key))
                (no1
@@ -202,7 +201,7 @@
                 (filter (lambda (x)
                           (not (eq? (car x) tango)))
                         kouho-lst)))
-          (overwrite db key
+          (overwrite kvs key
                      (join-henkan-kouho (append no1 other)))
           tango)
         nil)
