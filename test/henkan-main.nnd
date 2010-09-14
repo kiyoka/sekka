@@ -83,7 +83,7 @@
   (let1 _output (StringIO.new)
     (_output.set_encoding "utf-8")
     (test* "dump DB to SEKKA jisyo file. (1)"
-           "9e7829337185a9b1357d7a8ee840a5154d8a0f07"
+           "355e3e98e761073698f0fa65f19b1d0c952cd887"
            (begin
              (dump-sekka-jisyo-f _output target)
              (Digest::SHA1.hexdigest (_output.string))
@@ -164,7 +164,7 @@
          (a-search.search kvs "henkann" #f))))
 
 (test* "search keyword list 4"
-       '((1.0 "hennkann") (0.975 "hennkan") (0.95 "henncann") (0.95 "hennka"))
+       '((1.0 "hennkann") (0.975 "hennkan") (0.95 "hennka") (0.95 "henncann"))
        (my-round-map
         (arr->list
          (a-search.search kvs "hennkann" #f))))
