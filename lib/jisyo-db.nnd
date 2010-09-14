@@ -66,6 +66,23 @@
      (hash-table-keys okuri-nashi-hash))))
 
 
+(define (append-entry kvs key value)
+  (if-let1 got (kvs.get key #f)
+    (let* ((first1 (car (string-split-first-and-rest got)))
+           (trimmed-a (if-let1 m (rxmatch #/^[C\/](.+)$/ got)
+                        (rxmatch-substring m 1)
+                        got))
+           (trimmed-b (if-let1 m (rxmatch #/^[C\/](.+)$/ value)
+                        (rxmatch-substring m 1)
+                        value))
+           (lst (delete-duplicates (append (to-list (trimmed-a.split "/"))
+                                           (to-list (trimmed-b.split "/"))))))
+      (if (= trimmed-a trimmed-b)
+          (kvs.put! key value)
+          (kvs.put! key (+ first1 (string-join lst "/")))))
+    (kvs.put! key value)))
+
+
 (define (load-sekka-jisyo-f f filename)
   (let1 kvs (Kvs.new *kvs-type*)
     (kvs.open filename)
@@ -75,13 +92,7 @@
        (lambda (line)
          (let1 fields (to-list (line.split " "))
            (set! keylist (cons (first fields) keylist))
-           (kvs.put!
-            (first fields)
-            (if-let1 curval (kvs.get (first fields) #f)
-              (+ curval "/" (if-let1 m (rxmatch #/^[C\/](.+)$/ (second fields))
-                              (rxmatch-substring m 1)
-                              (second fields)))
-              (second fields)))))
+           (append-entry kvs (first fields) (second fields))))
        (f.readlines.to_list))
       (setup-ready-made-keylist kvs keylist))
     (kvs.close)))

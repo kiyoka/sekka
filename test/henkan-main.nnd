@@ -83,7 +83,7 @@
   (let1 _output (StringIO.new)
     (_output.set_encoding "utf-8")
     (test* "dump DB to SEKKA jisyo file. (1)"
-           "c2578c97075fceeb93b61ec87d9949c27bb7665b"
+           "9e7829337185a9b1357d7a8ee840a5154d8a0f07"
            (begin
              (dump-sekka-jisyo-f _output target)
              (Digest::SHA1.hexdigest (_output.string))
@@ -481,4 +481,12 @@
 
 
 ;;===================================================================
+
+;; ---後処理---
+;; 変換確定して変換候補の順番が入れかわっているエントリを削除しておく
+(for-each
+ (lambda (key)
+   (kvs.delete key))
+ '("へんかん" "developer" "."))
+
 (test-end)

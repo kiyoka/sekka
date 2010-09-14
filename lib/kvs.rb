@@ -24,7 +24,6 @@ class Kvs
         raise RuntimeError, sprintf( "KyotoCabinet::DB.open error: file=%s", name )
       end
     when :memcache
-      p "kiyoka!"
       @db = MemCache.new( name )
     else
       raise RuntimeError
@@ -43,6 +42,10 @@ class Kvs
     else
       fallback
     end
+  end
+
+  def delete( key )
+    @db.delete( key )
   end
 
   def clear()
