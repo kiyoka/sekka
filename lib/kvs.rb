@@ -32,7 +32,7 @@ class Kvs
   end
 
   def put!( key, value )
-    p "put! " + key + ":" + value
+    #p "put! " + key + ":" + value
     @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"))
   end
 

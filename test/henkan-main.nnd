@@ -111,15 +111,15 @@
 (test-section "simple db fetch")
 (test* "db fetch 1"
        "Cへんかん"
-       (hash-table-get db "henkan" #f))
+       (. (hash-table-get db "henkan" #f) force_encoding "UTF-8"))
 
 (test* "db fetch 2"
        "Cかに/かんい"
-       (hash-table-get db "kani" #f))
+       (. (hash-table-get db "kani" #f) force_encoding "UTF-8"))
 
 (test* "db fetch 3"
        "Cかんい"
-       (hash-table-get db "kanni" #f))
+       (. (hash-table-get db "kanni" #f) force_encoding "UTF-8"))
 
 (test* "db fetch 4"
        #f

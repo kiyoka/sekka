@@ -12,7 +12,7 @@ task :check do
   files << "./test/roman-lib.nnd"
   files << "./test/jisyo.nnd" 
   files << "./test/henkan-main.nnd  kyotocabinet"
-  #files << "./test/henkan-main.nnd  memcache"
+  files << "./test/henkan-main.nnd  memcache"
   files.each {|filename|
     sh  sprintf( "ruby -I ./lib /usr/local/bin/nendo %s", filename )
   }
