@@ -18,12 +18,12 @@
   (with-open
    sekka-file
    (lambda (f)
-     (load-sekka-jisyo-f f sekka-file))))
+     (load-sekka-jisyo-f f (+ sekka-file ".kct")))))
 
 
 (define (dump-sekka-jisyo sekka-file)
   (let1 f STDOUT
-    (dump-sekka-jisyo-f f sekka-file)))
+    (dump-sekka-jisyo-f f (+ sekka-file ".kct"))))
 
 
 (define (display-help)
