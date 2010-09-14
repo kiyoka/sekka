@@ -25,9 +25,10 @@
   *kvs-type*)
 
 
-(define (create-2char-hash kvs keylist)
-  (let ((okuri-ari-hash   (make-hash-table))
-        (okuri-nashi-hash (make-hash-table)))
+(define (create-2char-hash keylist)
+  (define okuri-ari-hash   (make-hash-table))
+  (define okuri-nashi-hash (make-hash-table))
+  (define (create-hash keylist)
     (for-each
      (lambda (k)
        (when (rxmatch #/^[a-zA-Z^>-]+$/ k)
@@ -36,9 +37,10 @@
              (if (rxmatch #/[A-Z]$/ k)
                  (hash-table-push! okuri-ari-hash   sliced k)
                  (hash-table-push! okuri-nashi-hash sliced k))))))
-     keylist)
-    (values okuri-ari-hash
-            okuri-nashi-hash)))
+     keylist))
+  (create-hash keylist)
+  (values okuri-ari-hash
+          okuri-nashi-hash))
 
 (define (setup-ready-made-keylist kvs keylist)
   (for-each
@@ -49,7 +51,7 @@
   
   (receive (okuri-ari-hash
             okuri-nashi-hash)
-      (create-2char-hash kvs keylist)
+      (create-2char-hash keylist)
 
     ;; OKURI-ARI
     (for-each
@@ -84,17 +86,19 @@
 
 
 (define (load-sekka-jisyo-f f filename)
+  (define keylist '())
+  (define (create-keylist kvs lines)
+    (for-each
+     (lambda (line)
+       (let1 fields (to-list (line.split " "))
+         (set! keylist (cons (first fields) keylist))
+         (append-entry kvs (first fields) (second fields))))
+     lines))
   (let1 kvs (Kvs.new *kvs-type*)
     (kvs.open filename)
     (kvs.clear)
-    (let1 keylist '()
-      (for-each
-       (lambda (line)
-         (let1 fields (to-list (line.split " "))
-           (set! keylist (cons (first fields) keylist))
-           (append-entry kvs (first fields) (second fields))))
-       (f.readlines.to_list))
-      (setup-ready-made-keylist kvs keylist))
+    (create-keylist kvs (f.readlines.to_list))
+    (setup-ready-made-keylist kvs keylist)
     (kvs.close)))
 
 
