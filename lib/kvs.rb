@@ -30,17 +30,30 @@ class Kvs
     end
   end
 
-  def put!( key, value )
-    #p "put! " + key + ":" + value
-    @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"))
+  def put!( key, value, timeout = 0 )
+    if 0 < key.size
+      #p "put! " + key + ":" + value
+      case @dbtype
+      when :kyotocabinet
+        @db.set( key, value )
+      when :memcache
+        @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"), timeout )
+      else
+        raise RuntimeError
+      end
+    end
   end
 
   def get( key, fallback = false )
-    val = @db.get( key )
-    if val
-      val.force_encoding("UTF-8")
-    else
+    if 0 == key.size
       fallback
+    else
+      val = @db.get( key )
+      if val
+        val.force_encoding("UTF-8")
+      else
+        fallback
+      end
     end
   end
 

@@ -428,23 +428,23 @@
 
 (test* "henkan toplevel(for Elisp) 1"
        '(("＊" nil "*") ("※" nil "*") ("×" nil "*"))
-       (sekkaHenkan kvs "*"))
+       (sekkaHenkan kvs #f "*"))
 
 (test* "henkan toplevel(for Elisp) 2"
        '(("しぜんげんごりか" nil "shizengengorika") ("シゼンゲンゴリカ" nil "shizengengorika") ("自然言語理解" nil "しぜんげんごりかい") ("自然言語" nil "しぜんげんご"))
-       (sekkaHenkan kvs "shizengengorika"))
+       (sekkaHenkan kvs #f "shizengengorika"))
 
 (test* "henkan toplevel(for Elisp) 3"
        '(("自然言語理解" nil "しぜんげんごりかい") ("自然言語" nil "しぜんげんご"))
-       (sekkaHenkan kvs "Shizengengorika"))
+       (sekkaHenkan kvs #f "Shizengengorika"))
 
 (test* "henkan toplevel(for Elisp) 4"
        '(("変化する" nil "へんかs"))
-       (sekkaHenkan kvs "henkaSuru"))
+       (sekkaHenkan kvs #f "henkaSuru"))
 
 (test* "henkan toplevel(for Elisp) 5"
        '(("変換" nil "へんかん") ("返還" nil "へんかん") ("変化" nil "へんか") ("返歌" nil "へんか"))
-       (sekkaHenkan kvs "Henkan"))
+       (sekkaHenkan kvs #f "Henkan"))
 
 
 ;;-------------------------------------------------------------------
@@ -452,32 +452,32 @@
 (test* "henkan kakutei(for Elisp) 1"
        '(("返還" nil "へんかん") ("変換" nil "へんかん") ("変化" nil "へんか") ("返歌" nil "へんか"))
        (begin
-         (sekkaKakutei kvs "へんかん" "返還")
-         (sekkaHenkan kvs "Henkan")))
+         (sekkaKakutei kvs #f "へんかん" "返還")
+         (sekkaHenkan kvs #f "Henkan")))
 
 (test* "henkan kakutei(for Elisp) 2"
        '(("デベロッパ" nil "developer") ("デベロッパー" nil "developer") ("ディベロッパー" nil "developer"))
        (begin
-         (sekkaKakutei kvs "developer" "デベロッパ")
-         (sekkaHenkan kvs "developer")))
+         (sekkaKakutei kvs #f "developer" "デベロッパ")
+         (sekkaHenkan kvs #f "developer")))
 
 (test* "henkan kakutei(for Elisp) 3"
        '(("。" nil ".") ("．" nil ".") ("・" nil ".") ("…" "..." "."))
        (begin
-         (sekkaKakutei kvs "." "。")
-         (sekkaHenkan kvs ".")))
+         (sekkaKakutei kvs #f "." "。")
+         (sekkaHenkan kvs #f ".")))
 
 (test* "henkan kakutei(for Elisp) 4"
        "。"
-       (sekkaKakutei kvs "." "。"))
+       (sekkaKakutei kvs #f "." "。"))
 
 (test* "henkan kakutei(for Elisp) 5"
        nil
-       (sekkaKakutei kvs "developper" "デベロッパ"))
+       (sekkaKakutei kvs #f "developper" "デベロッパ"))
 
 (test* "henkan kakutei(for Elisp) 6"
        nil
-       (sekkaKakutei kvs "wo" "を"))
+       (sekkaKakutei kvs #f "wo" "を"))
 
 
 ;;===================================================================

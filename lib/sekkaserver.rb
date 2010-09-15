@@ -5,7 +5,7 @@ require 'rack'
 require 'nendo'
 
 class SekkaServer
-  def initialize( dictSource )
+  def initialize( dictSource, cacheSource = false)
     @core = Nendo::Core.new()
     @core.loadInitFile
     @core.evalStr( "(use debug.syslog)" )
@@ -13,7 +13,9 @@ class SekkaServer
     @core.load( "./lib/jisyo-db.nnd" )
     @core.evalStr( '(define (writeToString sexp) (write-to-string sexp))' )
     @core.evalStr( '(export-to-ruby writeToString)' )
-    @db = @core.openSekkaJisyo( dictSource )
+    arr = @core.openSekkaJisyo( dictSource, cacheSource )
+    @kvs     = arr[0]
+    @cachesv = arr[1]
   end
 
   def call(env)
@@ -22,11 +24,11 @@ class SekkaServer
            when 'POST'
              case req.path
              when "/henkan"
-               @core.writeToString( @core.sekkaHenkan( @db, req.params['arg'] ))
+               @core.writeToString( @core.sekkaHenkan( @kvs, @cachesv, req.params['arg'] ))
              when "/kakutei"
                arg = req.params['arg'].force_encoding("UTF-8")
                arr = arg.split( /[ ]+/ )
-               @core.sekkaKakutei( @db, arr[0], arr[1] )
+               @core.sekkaKakutei( @kvs, @cachesv, arr[0], arr[1] )
              else
                sprintf( "unknown path name. [%s]", req.path )
              end

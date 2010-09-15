@@ -45,7 +45,7 @@
                     => (lambda (m)
                          (rxmatch-substring m 1)))
                    (else
-                    (errorf "split-henkan-kouho got [%s]. it requires /a/b/c/ format string" str))))
+                    "")))
          (splitted (filter
                     (lambda (str) (< 0 str.size))
                     (to-list (trimmed.split "/"))))
@@ -157,12 +157,24 @@
      (henkan-okuri-nashi kvs keyword)))
    (else
     (henkan-non-kanji kvs keyword))))
+
+
 ;; conversion #f => nil for EmacsLisp
-(define (sekkaHenkan kvs keyword)
-  (map
-   (lambda (x)
-     (map (lambda (val) (if val val nil)) x))
-   (sekka-henkan kvs keyword)))
+(define (sekkaHenkan kvs cachesv keyword)
+  (let1 keyword (keyword.strip)
+    (if-let1 fetched (and cachesv
+                          (cachesv.get keyword #f))
+      (begin
+        keyword
+        (read-from-string fetched))
+      (let1 henkan-result (map
+                           (lambda (x)
+                             (map (lambda (val) (if val val nil)) x))
+                           (sekka-henkan kvs keyword))
+        (and cachesv
+             (not (null? henkan-result))
+             (cachesv.put! keyword (write-to-string henkan-result)))
+        henkan-result))))
 ;; Export to Ruby world
 (export-to-ruby sekkaHenkan)
 
@@ -171,7 +183,7 @@
 ;;  key   ... "developer" や "へんかん" など、変換候補レコードのキーとなる文字列
 ;;  tango ... "変換" など、変換候補から最終確定した、変換候補の文字列
 ;;  登録失敗したら nil を返す
-(define (sekkaKakutei kvs key tango)
+(define (sekkaKakutei kvs cachesv key tango)
   (define (fetch kvs key)
     (kvs.get key #f))
 

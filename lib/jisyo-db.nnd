@@ -21,8 +21,7 @@
   (if (not (symbol? type))
       (error "Error: set-kvs-type requires symbol argument.")
       (set! *kvs-type* type)))
-(define (get-kvs-type)
-  *kvs-type*)
+(define (get-kvs-type)  *kvs-type*)
 
 
 (define (create-2char-hash keylist)
@@ -112,12 +111,17 @@
     (kvs.close)))
 
 
-(define (openSekkaJisyo dictSource)
-  (when (not (rxmatch #/.kct/ dictSource))
+(define (openSekkaJisyo dictSource cacheSource)
+  (when (not (rxmatch #/kct$/ dictSource))
     (set-kvs-type 'memcache))
-  (let1 kvs (Kvs.new (get-kvs-type))
-    (kvs.open dictSource)
-    kvs))
+  (let1 kvs   (Kvs.new (get-kvs-type))
+    (kvs.open     #?=dictSource)
+    (let1 cachesv (if cacheSource
+                      (let1 obj (Kvs.new 'memcache)
+                        (obj.open cacheSource)
+                        obj)
+                      #f)
+      (to-arr (list kvs cachesv)))))
 
 ;; Export to Ruby world
 (export-to-ruby openSekkaJisyo)
