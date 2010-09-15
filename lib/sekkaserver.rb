@@ -5,7 +5,7 @@ require 'rack'
 require 'nendo'
 
 class SekkaServer
-  def initialize
+  def initialize( dictSource )
     @core = Nendo::Core.new()
     @core.loadInitFile
     @core.evalStr( "(use debug.syslog)" )
@@ -13,8 +13,7 @@ class SekkaServer
     @core.load( "./lib/jisyo-db.nnd" )
     @core.evalStr( '(define (writeToString sexp) (write-to-string sexp))' )
     @core.evalStr( '(export-to-ruby writeToString)' )
-    @db = @core.openSekkaJisyo( "./data/SEKKA-JISYO.L.201008" )
-#    @db = @core.openSekkaJisyo( "./data/SEKKA-JISYO.S.201001" )
+    @db = @core.openSekkaJisyo( dictSource )
   end
 
   def call(env)

@@ -14,11 +14,13 @@
     (for-each print lines)))
 
 
-(define (load-sekka-jisyo sekka-file)
+(define (load-sekka-jisyo sekka-file target)
   (with-open
    sekka-file
    (lambda (f)
-     (load-sekka-jisyo-f f (+ sekka-file ".kct")))))
+     (when (not (rxmatch #/.kct$/ target))
+       (set-kvs-type 'memcache))
+     (load-sekka-jisyo-f f target))))
 
 
 (define (dump-sekka-jisyo sekka-file)
@@ -28,9 +30,10 @@
 
 (define (display-help)
   (print "Usage : ")
-  (print "  sekka-jisyo convert [SKK-JISYO.L]    ... output SEKKA-JISYO to STDOUT")
-  (print "  sekka-jisyo load    [SEKKA-JISYO.L]  ... load   SEKKA-JISYO to DB(*.kct)")
-  (print "  sekka-jisyo dump    [SEKKA-JISYO.L]  ... dump   DB(*.kct) to SEKKA-JISYO(STDOUT)"))
+  (print "  sekka-jisyo convert SKK-JISYO.L                        ... output SEKKA-JISYO to STDOUT")
+  (print "  sekka-jisyo load    SEKKA-JISYO.L  SEKKA-JISYO.L.kct   ... load   SEKKA-JISYO to DB(*.kct)")
+  (print "  sekka-jisyo load    SEKKA-JISYO.L  localhost:21201     ... load   SEKKA-JISYO to memcachedb server")
+  (print "  sekka-jisyo dump    SEKKA-JISYO.L                      ... dump   DB(*.kct) to SEKKA-JISYO(STDOUT)"))
 
 
 (define (main argv)
@@ -45,9 +48,9 @@
             (display-help)
             (convert-skk-jisyo (second argv))))
        ((eq? 'load command)
-        (if (< (length argv) 2)
+        (if (< (length argv) 3)
             (display-help)
-            (load-sekka-jisyo (second argv))))
+            (load-sekka-jisyo (second argv) (third argv))))
        ((eq? 'dump command)
         (if (< (length argv) 2)
             (display-help)

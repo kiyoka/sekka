@@ -94,7 +94,7 @@
          (set! keylist (cons (first fields) keylist))
          (append-entry kvs (first fields) (second fields))))
      lines))
-  (let1 kvs (Kvs.new *kvs-type*)
+  (let1 kvs (Kvs.new (get-kvs-type))
     (kvs.open filename)
     (kvs.clear)
     (create-keylist kvs (f.readlines.to_list))
@@ -103,7 +103,7 @@
 
 
 (define (dump-sekka-jisyo-f f filename)
-  (let1 kvs (Kvs.new *kvs-type*)
+  (let1 kvs (Kvs.new (get-kvs-type))
     (kvs.open filename)
     (for-each
      (lambda (key)
@@ -112,9 +112,11 @@
     (kvs.close)))
 
 
-(define (openSekkaJisyo filename)
-  (let1 kvs (Kvs.new *kvs-type*)
-    (kvs.open filename)
+(define (openSekkaJisyo dictSource)
+  (when (not (rxmatch #/.kct/ dictSource))
+    (set-kvs-type 'memcache))
+  (let1 kvs (Kvs.new (get-kvs-type))
+    (kvs.open dictSource)
     kvs))
 
 ;; Export to Ruby world
