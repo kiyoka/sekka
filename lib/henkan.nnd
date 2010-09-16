@@ -93,9 +93,11 @@
                                               (rxmatch-substring m 2)
                                               (rxmatch-substring m 3))
                                            #t))
-               (okurigana  (gen-roman->hiragana (. (+
-                                                    (rxmatch-substring m 3)
-                                                    (rxmatch-substring m 4)) downcase)))
+               (okurigana  (or
+                            (gen-roman->hiragana (. (+
+                                                     (rxmatch-substring m 3)
+                                                     (rxmatch-substring m 4)) downcase))
+                            ""))
                (kouho      (uniq (map
                                   (lambda (x)
                                     (third x))
@@ -163,7 +165,7 @@
 (define (sekkaHenkan kvs cachesv keyword)
   (define cache-exp-second (* 60 60))
   (let* ((keyword (keyword.strip))
-         (sekka-keyword (+ "sekka::" #?=keyword)))
+         (sekka-keyword (+ "sekka::" keyword)))
     (if-let1 fetched (and cachesv
                           (cachesv.get sekka-keyword #f))
       (begin
@@ -176,7 +178,7 @@
         (and cachesv
              (not (null? henkan-result))
              (let1 fetched2 (cachesv.get  "sekka::(keys)" #f)
-               (cachesv.put! #?=sekka-keyword (write-to-string henkan-result) cache-exp-second)
+               (cachesv.put! sekka-keyword (write-to-string henkan-result) cache-exp-second)
                (cachesv.put! "sekka::(keys)" (if fetched2
                                                  (+ fetched2 " " sekka-keyword)
                                                  sekka-keyword))
