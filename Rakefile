@@ -13,8 +13,9 @@ task :check do
   files << "./test/jisyo.nnd" 
   files << "./test/henkan-main.nnd  kyotocabinet"
   files << "./test/henkan-main.nnd  memcache"
+  files << "./test/approximate-bench.nnd  memcache"
   files.each {|filename|
-    sh  sprintf( "ruby -I ./lib /usr/local/bin/nendo %s", filename )
+    sh  sprintf( "time ruby -I ./lib /usr/local/bin/nendo %s", filename )
   }
   sh "cat test.record" 
 end

@@ -7,6 +7,7 @@
 (load "./lib/jisyo-db.nnd")
 (load "./lib/convert-jisyo.nnd")
 (load "./lib/henkan.nnd")
+(load "./test/common.nnd")
 
 (define dbtype (string->symbol (first *argv*)))
 
@@ -127,23 +128,6 @@
 
 ;;-------------------------------------------------------------------
 (test-section "approximate-search core")
-
-(define (arr->list arr)
-  (map
-   (lambda (element)
-     (element.to_list))
-   (arr.to_list)))
-
-(define (my-round value)
-  (define significant-digits 10000.0)
-  (let1 intval (. (* value significant-digits) round)
-    (/ intval significant-digits)))
-
-(define (my-round-map lst)
-  (map
-   (lambda (x)
-     (cons (my-round (car x)) (cdr x)))
-   lst))
 
 (test* "search keyword list 1"
        '((1.0 "henkan") (0.9714 "henkann") (0.9667 "henka") (0.9611 "hennka"))

@@ -1,0 +1,20 @@
+;;-*- mode: nendo; syntax: scheme -*-;;
+;;-* encode : utf-8 -*-
+;; benchmark for approximate search performance
+
+(define (arr->list arr)
+  (map
+   (lambda (element)
+     (element.to_list))
+   (arr.to_list)))
+
+(define (my-round value)
+  (define significant-digits 10000.0)
+  (let1 intval (. (* value significant-digits) round)
+    (/ intval significant-digits)))
+
+(define (my-round-map lst)
+  (map
+   (lambda (x)
+     (cons (my-round (car x)) (cdr x)))
+   lst))

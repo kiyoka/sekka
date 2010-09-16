@@ -9,10 +9,12 @@ class ApproximateSearch
 
   def filtering( keyword, arr )
     jarow = Amatch::JaroWinkler.new keyword
-    arr.map { |str|
+    newarr = arr.map { |str|
       val = jarow.match( str )
       (val > @jarow_shikii) ? [ val, str ] : false
     }.select { |v| v }.sort_by {|item| 1.0 - item[0]}
+    jarow = nil
+    newarr
   end
 
   def search( kvs, keyword, okuri_ari )
