@@ -10,31 +10,24 @@
 
 ;; 曖昧検索
 ;;  リストで返す。 (ソート済み検索結果)
-(define (approximate-search kvs cachesv keyword okuri-ari-flag)
-  (define cache-exp-second (* 60 60))
+(define (approximate-search kvs keyword okuri-ari-flag)
   (define jarow-shikii 0.94)
-  (let1 sekka-keyword (+ "sekka:" keyword)
-    (if-let1 str (and cachesv
-                      (cachesv.get sekka-keyword #f))
-      (read-from-string str)
-      (let* ((a-search (ApproximateSearch.new jarow-shikii))
-             (lst      (append-map
-                        (lambda (x)
-                          (let* ((val (vector-ref x 0))
-                                 (k   (vector-ref x 1))
-                                 (v   (kvs.get k ""))
-                                 (v-pair (string-split-first-and-rest v))
-                                 (v-first (car v-pair))
-                                 (v-rest  (cdr v-pair)))
-                            (map
-                             (lambda (element)
-                               (list val k (+ v-first element)))
-                             (to-list (v-rest.split "/")))))
-                        (to-list (a-search.search kvs keyword okuri-ari-flag))))
-             (sorted-lst  (sort-by lst (lambda (item) (- 1.0 (car item))))))
-        (and cachesv
-             (cachesv.put! sekka-keyword (write-to-string sorted-lst) cache-exp-second))
-        sorted-lst))))
+  (let* ((a-search (ApproximateSearch.new jarow-shikii))
+         (lst      (append-map
+                    (lambda (x)
+                      (let* ((val (vector-ref x 0))
+                             (k   (vector-ref x 1))
+                             (v   (kvs.get k ""))
+                             (v-pair (string-split-first-and-rest v))
+                             (v-first (car v-pair))
+                             (v-rest  (cdr v-pair)))
+                        (map
+                         (lambda (element)
+                           (list val k (+ v-first element)))
+                         (to-list (v-rest.split "/")))))
+                    (to-list (a-search.search kvs keyword okuri-ari-flag))))
+         (sorted-lst  (sort-by lst (lambda (item) (- 1.0 (car item))))))
+    sorted-lst))
 
 
 ;; 厳密検索
@@ -68,8 +61,8 @@
 
 
 ;; 送り仮名なしの変換
-(define (henkan-okuri-nashi kvs cachesv keyword)
-  (let* ((result (approximate-search kvs cachesv keyword #f))
+(define (henkan-okuri-nashi kvs keyword)
+  (let* ((result (approximate-search kvs keyword #f))
          (kouho  (uniq (map
                         (lambda (x)
                           (third x))
@@ -88,14 +81,14 @@
 
 
 ;; 送り仮名ありの変換
-(define (henkan-okuri-ari kvs cachesv keyword)
+(define (henkan-okuri-ari kvs keyword)
   (let* ((keyword  (let1 _pair (string-split-first-and-rest keyword)
                      (+ (. (car _pair) downcase)
                         (cdr _pair))))
          (m        (rxmatch #/^([a-z])([a-z\-^]*)([A-Z])([a-zA-Z]*)$/ keyword)))
     (if (not m)
         '() ;; 変換候補無し
-        (let* ((result (approximate-search kvs cachesv
+        (let* ((result (approximate-search kvs
                                            (+ (rxmatch-substring m 1)
                                               (rxmatch-substring m 2)
                                               (rxmatch-substring m 3))
@@ -144,7 +137,7 @@
 
 
 ;; keyword には ローマ字のみを受け付ける
-(define (sekka-henkan kvs cachesv keyword)
+(define (sekka-henkan kvs keyword)
   ;; キーワードの種別で処理を分割する
   (cond
    ((rxmatch #/[A-Z]/ keyword)
@@ -153,25 +146,46 @@
        ((rxmatch #/[a-z][A-Z]/ keyword)
         ;; 送りあり
         ;;(let1 result (approximate-search db keyword #t)  (disp-search-result result))
-        (henkan-okuri-ari kvs cachesv keyword))
+        (henkan-okuri-ari kvs keyword))
        (else
         ;; 送りなし
         ;;(let1 result (approximate-search db keyword #f)  (disp-search-result result))
-        (henkan-okuri-nashi kvs cachesv keyword)))))
+        (henkan-okuri-nashi kvs keyword)))))
    ((gen-roman->hiragana keyword)
     (append
      (henkan-hiragana kvs keyword)
-     (henkan-okuri-nashi kvs cachesv keyword)))
+     (henkan-okuri-nashi kvs keyword)))
    (else
     (henkan-non-kanji kvs keyword))))
 
 
 ;; conversion #f => nil for EmacsLisp
 (define (sekkaHenkan kvs cachesv keyword)
-  (map
-   (lambda (x)
-     (map (lambda (val) (if val val nil)) x))
-   (sekka-henkan kvs cachesv keyword)))
+  (define cache-exp-second (* 60 60))
+  (let* ((keyword (keyword.strip))
+         (sekka-keyword (+ "sekka::" #?=keyword)))
+    (if-let1 fetched (and cachesv
+                          (cachesv.get sekka-keyword #f))
+      (begin
+        keyword
+        (read-from-string fetched))
+      (let1 henkan-result (map
+                           (lambda (x)
+                             (map (lambda (val) (if val val nil)) x))
+                           (sekka-henkan kvs keyword))
+        (and cachesv
+             (not (null? henkan-result))
+             (let1 fetched2 (cachesv.get  "sekka::(keys)" #f)
+               (cachesv.put! #?=sekka-keyword (write-to-string henkan-result) cache-exp-second)
+               (cachesv.put! "sekka::(keys)" (if fetched2
+                                                 (+ fetched2 " " sekka-keyword)
+                                                 sekka-keyword))
+               (if-let1 v (cachesv.get  "sekka::(keys)" #f)
+                 (begin
+                   #?=(v.size)
+                   #?=v)
+                 #f)))
+        henkan-result))))
 ;; Export to Ruby world
 (export-to-ruby sekkaHenkan)
 
@@ -180,7 +194,7 @@
 ;;  key   ... "developer" や "へんかん" など、変換候補レコードのキーとなる文字列
 ;;  tango ... "変換" など、変換候補から最終確定した、変換候補の文字列
 ;;  登録失敗したら nil を返す
-(define (sekkaKakutei kvs key tango)
+(define (sekkaKakutei kvs cachesv key tango)
   (define (fetch kvs key)
     (kvs.get key #f))
 

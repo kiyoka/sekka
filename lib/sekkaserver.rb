@@ -28,7 +28,7 @@ class SekkaServer
              when "/kakutei"
                arg = req.params['arg'].force_encoding("UTF-8")
                arr = arg.split( /[ ]+/ )
-               @core.sekkaKakutei( @kvs, arr[0], arr[1] )
+               @core.sekkaKakutei( @kvs, @cachesv, arr[0], arr[1] )
              else
                sprintf( "unknown path name. [%s]", req.path )
              end
