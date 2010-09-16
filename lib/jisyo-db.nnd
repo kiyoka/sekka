@@ -31,7 +31,7 @@
     (for-each
      (lambda (k)
        (when (rxmatch #/^[a-zA-Z^>-]+$/ k)
-         (let1 sliced (k.slice 0 2)
+         (let1 sliced (. (k.slice 0 2) downcase)
            (when (= 2 sliced.size)
              (if (rxmatch #/[A-Z]$/ k)
                  (hash-table-push! okuri-ari-hash   sliced k)
