@@ -13,9 +13,7 @@ class SekkaServer
     @core.load( "./lib/jisyo-db.nnd" )
     @core.evalStr( '(define (writeToString sexp) (write-to-string sexp))' )
     @core.evalStr( '(export-to-ruby writeToString)' )
-    arr = @core.openSekkaJisyo( dictSource, cacheSource )
-    @kvs     = arr[0]
-    @cachesv = arr[1]
+    (@kvs,@cachesv) = @core.openSekkaJisyo( dictSource, cacheSource )
   end
 
   def call(env)

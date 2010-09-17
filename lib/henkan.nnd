@@ -181,7 +181,8 @@
                (cachesv.put! sekka-keyword (write-to-string henkan-result) cache-exp-second)
                (cachesv.put! "sekka::(keys)" (if fetched2
                                                  (+ fetched2 " " sekka-keyword)
-                                                 sekka-keyword))
+                                                 sekka-keyword)
+                             cache-exp-second)
                (if-let1 v (cachesv.get  "sekka::(keys)" #f)
                  (begin
                    #?=(v.size)
@@ -190,6 +191,19 @@
         henkan-result))))
 ;; Export to Ruby world
 (export-to-ruby sekkaHenkan)
+
+
+;; Flush henkan-result cache data on cachesv(memcached)
+(define (flush-cachesv cachesv)
+  #?="--- do (flush-cachesv) ---"
+  (if-let1 fetched (cachesv.get  "sekka::(keys)" #f)
+    (begin
+      (for-each
+       (lambda (x)
+         (cachesv.delete  #?=x))
+       (to-list (fetched.split #/[ ]+/)))
+      (cachesv.delete "sekka::(keys)"))
+    #f))
 
 
 ;; 確定処理: 最終確定語を変換候補の先頭に持ってくる。
@@ -212,8 +226,7 @@
                (+ (first x) ";" (second x))
                (first x)))
          lst)
-        "/")
-       "/"))
+        "/")))
 
   (if-let1 kouho-str (fetch kvs key)
     (if (rxmatch #/^\// kouho-str)
@@ -225,10 +238,16 @@
                (other
                 (filter (lambda (x)
                           (not (eq? (car x) tango)))
-                        kouho-lst)))
-          (overwrite kvs key
-                     (join-henkan-kouho (append no1 other)))
-          tango)
+                        kouho-lst))
+               (new-houho-str
+                (join-henkan-kouho (append no1 other))))
+          (if (not (= #?=kouho-str #?=new-houho-str))
+              (begin
+                (overwrite kvs key new-houho-str)
+                (and cachesv
+                     (flush-cachesv cachesv))
+                tango)
+              nil))
         nil)
     nil))
 ;; Export to Ruby world

@@ -460,7 +460,7 @@
          (sekkaHenkan kvs #f ".")))
 
 (test* "henkan kakutei(for Elisp) 4"
-       "。"
+       nil
        (sekkaKakutei kvs #f "." "。"))
 
 (test* "henkan kakutei(for Elisp) 5"
