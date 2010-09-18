@@ -76,11 +76,6 @@
   :type 'boolean
   :group 'sekka)
 
-(defcustom sekka-sticky-shift nil
-  "*Non-nil であれば、Sticky-Shiftを有効にする"
-  :type 'boolean
-  :group 'sekka)
-
 (defcustom sekka-realtime-guide-running-seconds 30
   "リアルタイムガイド表示の継続時間(秒数)・ゼロでガイド表示機能が無効になる"
   :type  'integer
@@ -98,6 +93,7 @@
   :group 'sekka)
 
 
+(defvar sekka-sticky-shift nil     "*Non-nil であれば、Sticky-Shiftを有効にする")
 (defvar sekka-mode nil             "漢字変換トグル変数")
 (defvar sekka-mode-line-string     " Sekka")
 (defvar sekka-select-mode nil      "候補選択モード変数")
