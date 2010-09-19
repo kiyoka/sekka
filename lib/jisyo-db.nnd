@@ -16,7 +16,7 @@
                         alphabet-lower-list))
 
 ;; KVS type setting
-(define *kvs-type* 'kyotocabinet)  ;; default
+(define *kvs-type* 'tokyocabinet)  ;; default
 (define (set-kvs-type type)
   (if (not (symbol? type))
       (error "Error: set-kvs-type requires symbol argument.")
@@ -121,7 +121,7 @@
 
 
 (define (openSekkaJisyo dictSource cacheSource)
-  (when (not (rxmatch #/kct$/ dictSource))
+  (when (not (rxmatch #/tch$/ dictSource))
     (set-kvs-type 'memcache))
   (let1 kvs   (Kvs.new (get-kvs-type))
     (kvs.open     #?=dictSource)

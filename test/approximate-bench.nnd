@@ -16,8 +16,8 @@
 ;;-------------------------------------------------------------------
 (define target   nil)
 (cond
- ((eq? dbtype 'kyotocabinet)
-  (set! target "./test.kct"))
+ ((eq? dbtype 'tokyocabinet)
+  (set! target "./test.tch"))
  ((eq? dbtype 'memcache)
   (set! target "localhost:11211"))
  (else
@@ -28,9 +28,9 @@
 (define a-search (ApproximateSearch.new 0.94))
 (define kvs      (Kvs.new dbtype))
 (cond
- ((eq? dbtype 'kyotocabinet)
+ ((eq? dbtype 'tokyocabinet)
   (kvs.open target)
-  (require "kyotocabinet"))
+  (require "tokyocabinet"))
  ((eq? dbtype 'memcache)
   (kvs.open target)
   (require "memcache"))

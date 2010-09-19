@@ -52,7 +52,7 @@
 
 
 (define (main argv)
-  (define cabinet-ext ".kct")
+  (define cabinet-ext ".tch")
   (cond
    ((eq? 0 (length argv))
     (display-help))

@@ -1,4 +1,4 @@
-require 'kyotocabinet'
+require 'tokyocabinet'
 require 'memcache'
 
 
@@ -6,8 +6,8 @@ class Kvs
   def initialize( dbtype )
     @dbtype = dbtype
     case dbtype
-    when :kyotocabinet
-      @db = KyotoCabinet::DB.new( )
+    when :tokyocabinet
+      @db = TokyoCabinet::HDB.new( )
     when :memcache
       # do nothing
     else
@@ -17,11 +17,9 @@ class Kvs
 
   def open( name )
     case @dbtype
-    when :kyotocabinet
-      if @db.open( name )
-        @db.tune_encoding "utf-8"
-      else
-        raise RuntimeError, sprintf( "KyotoCabinet::DB.open error: file=%s", name )
+    when :tokyocabinet
+      if not @db.open( name, TokyoCabinet::HDB::OWRITER | TokyoCabinet::HDB::OCREAT )
+        raise RuntimeError, sprintf( "TokyoCabinet::HDB.open error: file=%s", name )
       end
     when :memcache
       @db = MemCache.new( name )
@@ -34,8 +32,8 @@ class Kvs
     if 0 < key.size
       #p "put! " + key + ":" + value
       case @dbtype
-      when :kyotocabinet
-        @db.set( key, value )
+      when :tokyocabinet
+        @db[ key.force_encoding("ASCII-8BIT") ] = value.force_encoding("ASCII-8BIT")
       when :memcache
         @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"), timeout )
       else
@@ -63,7 +61,7 @@ class Kvs
 
   def clear()
     case @dbtype
-    when :kyotocabinet
+    when :tokyocabinet
       @db.clear
     when :memcache 
       # do nothing
@@ -75,12 +73,10 @@ class Kvs
   # return array of key string
   def keys()
     case @dbtype
-    when :kyotocabinet
-      arr = []
-      @db.each { |key,value|
-        arr << key
+    when :tokyocabinet
+      @db.keys.map { |k|
+        k.force_encoding("UTF-8")
       }
-      arr
     when :memcache 
       raise RuntimeError, "Kvs#keys method was not implemented for memcache."
     else
@@ -90,7 +86,7 @@ class Kvs
 
   def close()
     case @dbtype
-    when :kyotocabinet
+    when :tokyocabinet
       @db.close
     when :memcache
       # do nothign

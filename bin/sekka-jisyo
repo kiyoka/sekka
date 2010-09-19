@@ -18,22 +18,22 @@
   (with-open
    sekka-file
    (lambda (f)
-     (when (not (rxmatch #/.kct$/ target))
+     (when (not (rxmatch #/.tch$/ target))
        (set-kvs-type 'memcache))
      (load-sekka-jisyo-f f target))))
 
 
 (define (dump-sekka-jisyo sekka-file)
   (let1 f STDOUT
-    (dump-sekka-jisyo-f f (+ sekka-file ".kct"))))
+    (dump-sekka-jisyo-f f (+ sekka-file ".tch"))))
 
 
 (define (display-help)
   (print "Usage : ")
   (print "  sekka-jisyo convert SKK-JISYO.L                        ... output SEKKA-JISYO to STDOUT")
-  (print "  sekka-jisyo load    SEKKA-JISYO.L  SEKKA-JISYO.L.kct   ... load   SEKKA-JISYO to DB(*.kct)")
+  (print "  sekka-jisyo load    SEKKA-JISYO.L  SEKKA-JISYO.L.tch   ... load   SEKKA-JISYO to DB(*.tch)")
   (print "  sekka-jisyo load    SEKKA-JISYO.L  localhost:21201     ... load   SEKKA-JISYO to memcachedb server")
-  (print "  sekka-jisyo dump    SEKKA-JISYO.L                      ... dump   DB(*.kct) to SEKKA-JISYO(STDOUT)"))
+  (print "  sekka-jisyo dump    SEKKA-JISYO.L                      ... dump   DB(*.tch) to SEKKA-JISYO(STDOUT)"))
 
 
 (define (main argv)

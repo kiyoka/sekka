@@ -11,7 +11,7 @@ task :check do
   files << "./test/util.nnd"
   files << "./test/roman-lib.nnd"
   files << "./test/jisyo.nnd" 
-  files << "./test/henkan-main.nnd  kyotocabinet"
+  files << "./test/henkan-main.nnd  tokyocabinet"
   files << "./test/henkan-main.nnd  memcache"
   files << "./test/approximate-bench.nnd  memcache"
   files.each {|filename|
@@ -28,8 +28,8 @@ task :jisyo do
 end
 
 task :load do
-  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.S.201001 ./data/SEKKA-JISYO.S.201001.kct"
-  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.L.201008 ./data/SEKKA-JISYO.L.201008.kct"
+  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.S.201001 ./data/SEKKA-JISYO.S.201001.tch"
+  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.L.201008 ./data/SEKKA-JISYO.L.201008.tch"
 end
 
 task :load_memcachedb do

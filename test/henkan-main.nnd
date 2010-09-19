@@ -17,8 +17,8 @@
 ;;-------------------------------------------------------------------
 (define target   nil)
 (cond
- ((eq? dbtype 'kyotocabinet)
-  (set! target "./test.kct"))
+ ((eq? dbtype 'tokyocabinet)
+  (set! target "./test.tch"))
  ((eq? dbtype 'memcache)
   (set! target "localhost:11211"))
  (else
@@ -70,7 +70,7 @@
          sekka-jisyo-data          
          (convert-skk-jisyo-f _input))
 
-  (test* "default KVS type" 'kyotocabinet (get-kvs-type))
+  (test* "default KVS type" 'tokyocabinet (get-kvs-type))
 
   (set-kvs-type dbtype)
   (test* "changed KVS type" dbtype (get-kvs-type))
@@ -81,13 +81,13 @@
 
 
 ;;-------------------------------------------------------------------
-(when (eq? dbtype 'kyotocabinet)
+(when (eq? dbtype 'tokyocabinet)
   (require "digest/sha1")
   (test-section "dump db")
   (let1 _output (StringIO.new)
     (_output.set_encoding "utf-8")
     (test* "dump DB to SEKKA jisyo file. (1)"
-           "c00806ef387eb93cdbccb363561a9e5c573f2048"
+           "2aa0f9b6a90535811cc11c55b8d8270426879f6f"
            (begin
              (dump-sekka-jisyo-f _output target)
              (Digest::SHA1.hexdigest (_output.string))
@@ -100,9 +100,9 @@
 (define a-search (ApproximateSearch.new 0.94))
 (define kvs      (Kvs.new dbtype))
 (cond
- ((eq? dbtype 'kyotocabinet)
+ ((eq? dbtype 'tokyocabinet)
   (kvs.open target)
-  (require "kyotocabinet"))
+  (require "tokyocabinet"))
  ((eq? dbtype 'memcache)
   (kvs.open target)
   (require "memcache"))
