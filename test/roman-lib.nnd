@@ -3,9 +3,6 @@
 
 (use nendo.test)
 (load "./lib/roman-lib.nnd")
-
-(define debug-print-length 2000)
-
 (test-start "roman-lib")
 
 ;;===================================================================
