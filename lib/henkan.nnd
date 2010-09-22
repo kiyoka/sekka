@@ -297,6 +297,7 @@
       (convert-skk-jisyo-f (StringIO.new str))
     (insert-to-db sekka-jisyo-data)
     (_create-ready-made-keylist user-keylist)
-    (length sekka-jisyo-data)))
+    #?=(+ "user dict loaded userid=[" userid "]")
+    #?=(length sekka-jisyo-data)))
 ;; Export to Ruby world
 (export-to-ruby loadUserJisyo)

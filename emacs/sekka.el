@@ -209,6 +209,9 @@
 	    (push item lst))))))
   
   (when (not sekka-init)
+    ;; ユーザー辞書のロード + サーバーへのアップロード
+    (sekka-upload-userdict-internal)
+
     ;; Emacs終了時の処理
     (add-hook 'kill-emacs-hook
 	      (lambda ()
@@ -220,7 +223,7 @@
 ;;
 ;; ローマ字で書かれた文章をSekkaサーバーを使って変換する
 ;;
-(defun sekka-rest-request (func-name arg)
+(defun sekka-rest-request (func-name arg &optional max-time)
   (if sekka-psudo-server
       ;; クライアント単体で仮想的にサーバーに接続しているようにしてテストするモード
       ;;"((\"パイナップル\" nil \"ぱいなっぷる\") (\"ぱいなっぷる\" nil \"ぱいなっぷる\"))"
@@ -229,7 +232,8 @@
     (let ((command
 	   (concat
 	    sekka-curl " --silent --show-error "
-	    (format " --max-time %d " sekka-server-timeout)
+	    (format " --max-time %d " (or max-time
+					  sekka-server-timeout))
 	    " --insecure "
 	    " --header 'Content-Type: application/x-www-form-urlencoded' "
 	    (format "%s%s " sekka-server-url func-name)
@@ -293,6 +297,52 @@
     (sekka-debug-print (format "kakutei-result:%S\n" result))
     (message result)
     t))
+
+;;
+;; ユーザー辞書をサーバーに再度アップロードする
+;;
+(defun sekka-upload-userdict (&optional arg)
+  "ユーザー辞書をサーバーに再度アップロードする"
+  (interactive "P")
+  (sekka-upload-userdict-internal))
+
+  
+;;
+;; ユーザー辞書をサーバーにアップロードする
+;;
+(defun sekka-upload-userdict-internal ()
+  (let ((str (sekka-get-jisyo-str "~/.sekka-jisyo")))
+    (when str
+      (message "Requesting to sekka server...")
+      (sekka-debug-print (format "upload [%s]\n" str))
+      (let ((result (sekka-rest-request "upload" str 60)))
+	(sekka-debug-print (format "upload-result:%S\n" result))
+	(message result)
+	t))))
+
+
+(defun sekka-get-jisyo-str (file &optional nomsg)
+  "FILE を開いて SKK 辞書バッファを作り、バッファを返す。
+オプション引数の NOMSG を指定するとファイル読み込みの際のメッセージを表示しな
+い。"
+  (when file
+    (let* ((file (or (car-safe file)
+		     file))
+	   (file (expand-file-name file)))
+      (if (not (file-exists-p file))
+	  (progn
+	    (message (format "SKK 辞書 %s が存在しません..." file))
+	    nil)
+	(let ((str "")
+	      (buf-name (file-name-nondirectory file)))
+	  (find-file-read-only-other-window file)
+	  (setq str (with-current-buffer (get-buffer buf-name)
+		      (buffer-substring-no-properties (point-min) (point-max))))
+	  (message (format "SKK 辞書 %s を開いています...完了！" (file-name-nondirectory file)))
+	  (kill-buffer buf-name)
+	  str)))))
+
+;;(sekka-get-jisyo-str "~/.sekka-jisyo")
 
 
 ;; ポータブル文字列置換( EmacsとXEmacsの両方で動く )
