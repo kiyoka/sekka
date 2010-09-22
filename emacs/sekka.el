@@ -122,6 +122,8 @@
 (defvar sekka-select-mode-hook nil)
 (defvar sekka-select-mode-end-hook nil)
 
+(defconst sekka-login-name   (user-login-name))
+
 (defconst sekka-kind-index   0)
 (defconst sekka-tango-index  1)
 (defconst sekka-id-index     2)
@@ -231,8 +233,8 @@
 	    " --insecure "
 	    " --header 'Content-Type: application/x-www-form-urlencoded' "
 	    (format "%s%s " sekka-server-url func-name)
-	    (format "--data 'arg=%s' " arg))))
-
+	    (format "--data 'arg=%s' --data 'userid=%s' " arg sekka-login-name))))
+      
       (sekka-debug-print (format "curl-command :%s\n" command))
       
       (let (
