@@ -112,7 +112,23 @@
 
 (define db (kvs._db))
 
- ;;-------------------------------------------------------------------
+
+
+;;-------------------------------------------------------------------
+(test-section "load User dict")
+(test* "load user dict 1"
+       76
+       (loadUserJisyo userid kvs (string-join
+                                  '(
+                                    "まじぱねぇ /マジパネェ/"
+                                    "ぶろぐr /ブログ/"
+                                    "ぶろぐt /ブログ/"
+                                    "へんかんえんじん /変換エンジン/"
+                                    "はてぶ /はてブ/はてなブックマーク/"
+                                    )
+                                  "\n")))
+
+;;-------------------------------------------------------------------
 (test-section "simple db fetch")
 (test* "db fetch 1"
        "Cへんかん"
@@ -129,6 +145,11 @@
 (test* "db fetch 4"
        #f
        (hash-table-get db "MASTER::aaaa" #f))
+
+(test* "db fetch 5"
+       "Cへんかんえんじん"
+       (. (hash-table-get db "dummy::henkanenjin" #f) force_encoding "UTF-8"))
+
 
 ;;-------------------------------------------------------------------
 (test-section "approximate-search core")
@@ -421,6 +442,7 @@
        '()
        (sekka-henkan userid kvs "ChangeLog"))
 
+
 (test* "henkan toplevel 15"
        '(("訳" #f "わけ") ("和気" "地名" "わけ") ("理由" "当て字" "わけ") ("分け" #f "わけ") ("分" #f "わけ") ("譯" "「訳」の旧字" "わけ") ("戯奴" #f "わけ"))
        (sekka-henkan userid kvs "Wake"))
@@ -444,6 +466,26 @@
 (test* "henkan toplevel(for Elisp) 5"
        '(("変換" nil "へんかん") ("返還" nil "へんかん") ("変化" nil "へんか") ("返歌" nil "へんか"))
        (sekkaHenkan userid kvs #f "Henkan"))
+
+(test* "henkan toplevel(for Elisp) 6"
+       '(("マジパネェ" nil "まじぱねぇ"))
+       (sekkaHenkan userid kvs #f "Majipanee"))
+
+(test* "henkan toplevel(for Elisp) 7"
+       '(("変換エンジン" nil "へんかんえんじん") ("変換" nil "へんかん") ("返還" nil "へんかん"))
+       (sekkaHenkan userid kvs #f "Henkanenji"))
+
+(test* "henkan toplevel(for Elisp) 8"
+       '(("ブログった" nil "ぶろぐt") ("ブログった" nil "ぶろぐr"))
+       (sekkaHenkan userid kvs #f "buroguTta"))
+
+(test* "henkan toplevel(for Elisp) 9"
+       '(("ブログりました" nil "ぶろぐr") ("ブログりました" nil "ぶろぐt"))
+       (sekkaHenkan userid kvs #f "buroguRimashita"))
+
+(test* "henkan toplevel(for Elisp) 10"
+       '(("はてブ" nil "はてぶ") ("はてなブックマーク" nil "はてぶ"))
+       (sekkaHenkan userid kvs #f "Hatebu"))
 
 
 ;;-------------------------------------------------------------------
@@ -492,28 +534,32 @@
        nil
        (sekkaKakutei userid kvs #f "wo" "を"))
 
-
-
 (test* "henkan kakutei(for Elisp) 8"
-       '(("．" nil ".") ("・" nil ".") ("。" nil ".") ("…" "..." "."))
+       '(("はてなブックマーク" nil "はてぶ") ("はてブ" nil "はてぶ"))
        (begin
-         (sekkaHenkan userid2 kvs #f ".")))                  ;; userid2
+         (sekkaKakutei userid kvs #f "はてぶ" "はてなブックマーク")
+         (sekkaHenkan userid kvs #f "Hatebu")))
+
 
 (test* "henkan kakutei(for Elisp) 9"
-       '(("。" nil ".") ("．" nil ".") ("・" nil ".") ("…" "..." "."))
+       '(("．" nil ".") ("・" nil ".") ("。" nil ".") ("…" "..." "."))
        (begin
-         (sekkaKakutei userid2 kvs #f "." "。")              ;; userid2
          (sekkaHenkan userid2 kvs #f ".")))                  ;; userid2
 
 (test* "henkan kakutei(for Elisp) 10"
        '(("。" nil ".") ("．" nil ".") ("・" nil ".") ("…" "..." "."))
        (begin
+         (sekkaKakutei userid2 kvs #f "." "。")              ;; userid2
          (sekkaHenkan userid2 kvs #f ".")))                  ;; userid2
 
 (test* "henkan kakutei(for Elisp) 11"
+       '(("。" nil ".") ("．" nil ".") ("・" nil ".") ("…" "..." "."))
+       (begin
+         (sekkaHenkan userid2 kvs #f ".")))                  ;; userid2
+
+(test* "henkan kakutei(for Elisp) 12"
        nil
        (sekkaKakutei userid2 kvs #f "wo" "を"))              ;; userid2
-
 
 
 ;;===================================================================
@@ -521,6 +567,6 @@
 ;; ---後処理---
 ;; 最終的な辞書の状態を見たい時、dumpしてみること。
 (db.close)
-(dump-sekka-jisyo-f STDOUT target)
+;;(dump-sekka-jisyo-f STDOUT target)
 
 (test-end)

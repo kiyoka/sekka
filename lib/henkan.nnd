@@ -5,7 +5,7 @@
 (use srfi-1)
 (require "amatch")
 (load "./lib/util.nnd")
-(load "./lib/roman-lib.nnd")
+(load "./lib/convert-jisyo.nnd")
 (load "./lib/jisyo-db.nnd")
 (require "./lib/approximatesearch")
 
@@ -254,3 +254,49 @@
     nil))
 ;; Export to Ruby world
 (export-to-ruby sekkaKakutei)
+
+;; ユーザー定義辞書のロード
+(define (loadUserJisyo userid kvs str)
+  (define user-keylist '())
+  (define (insert-to-db sekka-jisyo-data)
+    (for-each
+     (lambda (entry)
+       (let* ((kv (to-list (entry.split #/[ ]+/)))
+              (k (first  kv))
+              (v (second kv)))
+         (set! user-keylist (cons k user-keylist))
+         (append-entry userid kvs k v)))
+     sekka-jisyo-data))
+    
+  (define (_create-ready-made-keylist keylist)
+    (receive (okuri-ari-hash
+              okuri-nashi-hash)
+        (create-2char-hash keylist)
+      
+      ;; OKURI-ARI
+      (for-each
+       (lambda (key)
+         (let1 master (kvs.get  (+ masterid "::" "(" key.upcase ")") "")
+           (kvs.put! (+ userid "::" "(" key.upcase ")")
+                     (string-join (uniq (sort (append (to-list (master.split #/[ ]+/))
+                                                      (hash-table-get okuri-ari-hash key))))
+                                  " "))))
+       (hash-table-keys okuri-ari-hash))
+      
+      ;; OKURI-NASHI
+      (for-each
+       (lambda (key)
+         (let1 master (kvs.get  (+ masterid "::" "(" key.downcase ")") "")
+           (kvs.put! (+ userid "::" "(" key.downcase ")")
+                     (string-join (uniq (sort (append (to-list (master.split #/[ ]+/))
+                                                      (hash-table-get okuri-nashi-hash key))))
+                                  " "))))
+       (hash-table-keys okuri-nashi-hash))))
+         
+  (let1 sekka-jisyo-data
+      (convert-skk-jisyo-f (StringIO.new str))
+    (insert-to-db sekka-jisyo-data)
+    (_create-ready-made-keylist user-keylist)
+    (length sekka-jisyo-data)))
+;; Export to Ruby world
+(export-to-ruby loadUserJisyo)

@@ -4,7 +4,7 @@
 (require "./lib/kvs")
 (load "./lib/util.nnd")
 
-(define master-key-prefix "MASTER::")
+(define masterid "MASTER")
 
 (define alphabet-string "abcdefghijklmnopqrstuvwxyz>")
 (define alphabet-lower-list (to-list (alphabet-string.split "")))
@@ -32,7 +32,7 @@
 (define (dict-get userid kvs key . fallback)
   (if-let1 value
       (or (kvs.get (+ userid "::" key) #f)
-          (kvs.get (+ master-key-prefix key) #f))
+          (kvs.get (+ masterid "::" key) #f))
     value
     (let1 opt (get-optional fallback #f)
       opt)))
@@ -57,7 +57,7 @@
 (define (setup-ready-made-keylist kvs keylist)
   (for-each
    (lambda (key)
-     (let1 key (+ master-key-prefix key)
+     (let1 key (+ masterid "::" key)
        (unless (kvs.get key #f)
          (kvs.put! key ""))))
    alphabet-pairs)
@@ -69,20 +69,20 @@
     ;; OKURI-ARI
     (for-each
      (lambda (key)
-       (kvs.put! (+ master-key-prefix "(" key.upcase ")")
+       (kvs.put! (+ masterid "::" "(" key.upcase ")")
                  (string-join (uniq (sort (hash-table-get okuri-ari-hash key))) " ")))
      (hash-table-keys okuri-ari-hash))
 
     ;; OKURI-NASHI
     (for-each
      (lambda (key)
-       (kvs.put! (+ master-key-prefix "(" key.downcase ")")
+       (kvs.put! (+ masterid "::" "(" key.downcase ")")
                  (string-join (uniq (sort (hash-table-get okuri-nashi-hash key))) " ")))
      (hash-table-keys okuri-nashi-hash))))
 
 
-(define (append-entry kvs key value)
-  (let1 key (+ master-key-prefix key)
+(define (append-entry userid kvs key value)
+  (let1 key (+ userid "::" key)
     (if-let1 got (kvs.get key #f)
       (let* ((trimmed-a-first1 (car (string-split-first-and-rest  got)))
              (trimmed-a        (if-let1 m (rxmatch #/^[C\/](.+)$/ got)
@@ -115,7 +115,7 @@
      (lambda (line)
        (let1 fields (to-list (line.split " "))
          (set! keylist (cons (first fields) keylist))
-         (append-entry kvs (first fields) (second fields))))
+         (append-entry masterid kvs (first fields) (second fields))))
      lines))
   (let1 kvs (Kvs.new (get-kvs-type))
     (kvs.open filename)
@@ -146,8 +146,5 @@
                         obj)
                       #f)
       (to-arr (list kvs cachesv)))))
-
-
-
 ;; Export to Ruby world
 (export-to-ruby openSekkaJisyo)
