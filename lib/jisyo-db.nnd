@@ -4,6 +4,8 @@
 (require "./lib/kvs")
 (load "./lib/util.nnd")
 
+(define master-key-prefix "MASTER::")
+
 (define alphabet-string "abcdefghijklmnopqrstuvwxyz>")
 (define alphabet-lower-list (to-list (alphabet-string.split "")))
 (define alphabet-upper-list (to-list (alphabet-string.upcase.split "")))
@@ -23,6 +25,17 @@
       (set! *kvs-type* type)))
 (define (get-kvs-type)  *kvs-type*)
 
+
+;; dict-get search sequence
+;;   (1) try "userid::keyword" key
+;;   (2) try "MASTER::keyword" key
+(define (dict-get userid kvs key . fallback)
+  (if-let1 value
+      (or (kvs.get (+ userid "::" key) #f)
+          (kvs.get (+ master-key-prefix key) #f))
+    value
+    (let1 opt (get-optional fallback #f)
+      opt)))
 
 (define (create-2char-hash keylist)
   (define okuri-ari-hash   (make-hash-table))
@@ -44,8 +57,9 @@
 (define (setup-ready-made-keylist kvs keylist)
   (for-each
    (lambda (key)
-     (unless (kvs.get key #f)
-       (kvs.put! key "")))
+     (let1 key (+ master-key-prefix key)
+       (unless (kvs.get key #f)
+         (kvs.put! key ""))))
    alphabet-pairs)
   
   (receive (okuri-ari-hash
@@ -55,42 +69,43 @@
     ;; OKURI-ARI
     (for-each
      (lambda (key)
-       (kvs.put! (+ "(" key.upcase ")")
+       (kvs.put! (+ master-key-prefix "(" key.upcase ")")
                  (string-join (uniq (sort (hash-table-get okuri-ari-hash key))) " ")))
      (hash-table-keys okuri-ari-hash))
 
     ;; OKURI-NASHI
     (for-each
      (lambda (key)
-       (kvs.put! (+ "(" key.downcase ")")
+       (kvs.put! (+ master-key-prefix "(" key.downcase ")")
                  (string-join (uniq (sort (hash-table-get okuri-nashi-hash key))) " ")))
      (hash-table-keys okuri-nashi-hash))))
 
 
 (define (append-entry kvs key value)
-  (if-let1 got (kvs.get key #f)
-    (let* ((trimmed-a-first1 (car (string-split-first-and-rest  got)))
-           (trimmed-a        (if-let1 m (rxmatch #/^[C\/](.+)$/ got)
-                               (rxmatch-substring m 1)
-                               got))
-           (trimmed-b-first1 (car (string-split-first-and-rest  value)))
-           (trimmed-b        (if-let1 m (rxmatch #/^[C\/](.+)$/ value)
-                               (rxmatch-substring m 1)
-                               value))
-           (lst (delete-duplicates (append (to-list (trimmed-a.split "/"))
-                                           (to-list (trimmed-b.split "/"))))))
-      (if (= trimmed-a-first1 trimmed-b-first1)
-          (kvs.put! key (+ trimmed-a-first1 (string-join lst "/")))
-          (begin
-            ;; "/" よりも "C" を優先する
-            (cond
-             ((= "C" trimmed-a-first1) ;; aを優先
-              (kvs.put! key got))
-             ((= "C" trimmed-b-first1) ;; bを優先
-              (kvs.put! key value))
-             (else
-              (errorf "Error: [%s] entry is wrong format" value))))))
-    (kvs.put! key value)))
+  (let1 key (+ master-key-prefix key)
+    (if-let1 got (kvs.get key #f)
+      (let* ((trimmed-a-first1 (car (string-split-first-and-rest  got)))
+             (trimmed-a        (if-let1 m (rxmatch #/^[C\/](.+)$/ got)
+                                 (rxmatch-substring m 1)
+                                 got))
+             (trimmed-b-first1 (car (string-split-first-and-rest  value)))
+             (trimmed-b        (if-let1 m (rxmatch #/^[C\/](.+)$/ value)
+                                 (rxmatch-substring m 1)
+                                 value))
+             (lst (delete-duplicates (append (to-list (trimmed-a.split "/"))
+                                             (to-list (trimmed-b.split "/"))))))
+        (if (= trimmed-a-first1 trimmed-b-first1)
+            (kvs.put! key (+ trimmed-a-first1 (string-join lst "/")))
+            (begin
+              ;; "/" よりも "C" を優先する
+              (cond
+               ((= "C" trimmed-a-first1) ;; aを優先
+                (kvs.put! key got))
+               ((= "C" trimmed-b-first1) ;; bを優先
+                (kvs.put! key value))
+               (else
+                (errorf "Error: [%s] entry is wrong format" value))))))
+      (kvs.put! key value))))
 
 
 (define (load-sekka-jisyo-f f filename)
@@ -131,6 +146,8 @@
                         obj)
                       #f)
       (to-arr (list kvs cachesv)))))
+
+
 
 ;; Export to Ruby world
 (export-to-ruby openSekkaJisyo)

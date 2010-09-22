@@ -6,18 +6,20 @@
 (require "amatch")
 (load "./lib/util.nnd")
 (load "./lib/roman-lib.nnd")
+(load "./lib/jisyo-db.nnd")
 (require "./lib/approximatesearch")
+
 
 ;; 曖昧検索
 ;;  リストで返す。 (ソート済み検索結果)
-(define (approximate-search kvs keyword okuri-ari-flag)
+(define (approximate-search userid kvs keyword okuri-ari-flag)
   (define jarow-shikii 0.94)
   (let* ((a-search (ApproximateSearch.new jarow-shikii))
          (lst      (append-map
                     (lambda (x)
                       (let* ((val (vector-ref x 0))
                              (k   (vector-ref x 1))
-                             (v   (kvs.get k ""))
+                             (v   (dict-get userid kvs k ""))
                              (v-pair (string-split-first-and-rest v))
                              (v-first (car v-pair))
                              (v-rest  (cdr v-pair)))
@@ -25,14 +27,14 @@
                          (lambda (element)
                            (list val k (+ v-first element)))
                          (to-list (v-rest.split "/")))))
-                    (to-list (a-search.search kvs keyword okuri-ari-flag))))
+                    (to-list (a-search.search userid kvs keyword okuri-ari-flag))))
          (sorted-lst  (sort-by lst (lambda (item) (- 1.0 (car item))))))
     sorted-lst))
 
 
 ;; 厳密検索
-(define (exact-search kvs keyword)
-  (let1 v (kvs.get keyword #f)
+(define (exact-search userid kvs keyword)
+  (let1 v (dict-get userid kvs keyword #f)
     (if v
         `((1.0 ,keyword ,v))
         '())))
@@ -61,8 +63,8 @@
 
 
 ;; 送り仮名なしの変換
-(define (henkan-okuri-nashi kvs keyword)
-  (let* ((result (approximate-search kvs keyword #f))
+(define (henkan-okuri-nashi userid kvs keyword)
+  (let* ((result (approximate-search userid kvs keyword #f))
          (kouho  (uniq (map
                         (lambda (x)
                           (third x))
@@ -71,7 +73,7 @@
      (lambda (value)
        (if-let1 m (rxmatch #/^C(.+)$/ value)
          (split-henkan-kouho
-          (kvs.get (string-drop value 1))
+          (dict-get userid kvs (string-drop value 1))
           (rxmatch-substring m 1)
           ) ;; continue to fetch
          (split-henkan-kouho
@@ -81,14 +83,14 @@
 
 
 ;; 送り仮名ありの変換
-(define (henkan-okuri-ari kvs keyword)
+(define (henkan-okuri-ari userid kvs keyword)
   (let* ((keyword  (let1 _pair (string-split-first-and-rest keyword)
                      (+ (. (car _pair) downcase)
                         (cdr _pair))))
          (m        (rxmatch #/^([a-z])([a-z\-^]*)([A-Z])([a-zA-Z]*)$/ keyword)))
     (if (not m)
         '() ;; 変換候補無し
-        (let* ((result (approximate-search kvs
+        (let* ((result (approximate-search userid kvs
                                            (+ (rxmatch-substring m 1)
                                               (rxmatch-substring m 2)
                                               (rxmatch-substring m 3))
@@ -106,7 +108,7 @@
            (lambda (value)
              (if-let1 m (rxmatch #/^C(.+)$/ value)
                (split-henkan-kouho
-                (kvs.get (string-drop value 1))
+                (dict-get userid kvs (string-drop value 1))
                 (rxmatch-substring m 1)
                 okurigana) ;; continue to fetch
                (split-henkan-kouho value keyword okurigana)))
@@ -126,8 +128,8 @@
 
 
 ;; 記号を含むキーワードの変換
-(define (henkan-non-kanji kvs keyword)
-  (let* ((result (exact-search kvs keyword))
+(define (henkan-non-kanji userid kvs keyword)
+  (let* ((result (exact-search userid kvs keyword))
          (kouho  (map
                   (lambda (x)
                     (third x))
@@ -139,7 +141,7 @@
 
 
 ;; keyword には ローマ字のみを受け付ける
-(define (sekka-henkan kvs keyword)
+(define (sekka-henkan userid kvs keyword)
   ;; キーワードの種別で処理を分割する
   (cond
    ((rxmatch #/[A-Z]/ keyword)
@@ -148,21 +150,21 @@
        ((rxmatch #/[a-z][A-Z]/ keyword)
         ;; 送りあり
         ;;(let1 result (approximate-search db keyword #t)  (disp-search-result result))
-        (henkan-okuri-ari kvs keyword))
+        (henkan-okuri-ari userid kvs keyword))
        (else
         ;; 送りなし
         ;;(let1 result (approximate-search db keyword #f)  (disp-search-result result))
-        (henkan-okuri-nashi kvs keyword)))))
+        (henkan-okuri-nashi userid kvs keyword)))))
    ((gen-roman->hiragana keyword)
     (append
      (henkan-hiragana kvs keyword)
-     (henkan-okuri-nashi kvs keyword)))
+     (henkan-okuri-nashi userid kvs keyword)))
    (else
-    (henkan-non-kanji kvs keyword))))
+    (henkan-non-kanji userid kvs keyword))))
 
 
 ;; conversion #f => nil for EmacsLisp
-(define (sekkaHenkan kvs cachesv keyword)
+(define (sekkaHenkan userid kvs cachesv keyword)
   (define cache-exp-second (* 60 60))
   (let* ((keyword (keyword.strip))
          (sekka-keyword (+ "sekka::" keyword)))
@@ -174,7 +176,7 @@
       (let1 henkan-result (map
                            (lambda (x)
                              (map (lambda (val) (if val val nil)) x))
-                           (sekka-henkan kvs keyword))
+                           (sekka-henkan userid kvs keyword))
         (and cachesv
              (not (null? henkan-result))
              (let1 fetched2 (cachesv.get  "sekka::(keys)" #f)
@@ -210,12 +212,12 @@
 ;;  key   ... "developer" や "へんかん" など、変換候補レコードのキーとなる文字列
 ;;  tango ... "変換" など、変換候補から最終確定した、変換候補の文字列
 ;;  登録失敗したら nil を返す
-(define (sekkaKakutei kvs cachesv key tango)
-  (define (fetch kvs key)
-    (kvs.get key #f))
+(define (sekkaKakutei userid kvs cachesv key tango)
+  (define (fetch userid kvs key)
+    (dict-get userid kvs key #f))
 
-  (define (overwrite kvs key value)
-    (kvs.put! key value))
+  (define (write-user-entry userid kvs key value)
+    (kvs.put! (+ userid "::" key) value))
 
   (define (join-henkan-kouho lst)
     (+ "/"
@@ -228,7 +230,7 @@
          lst)
         "/")))
 
-  (if-let1 kouho-str (fetch kvs key)
+  (if-let1 kouho-str (fetch userid kvs key)
     (if (rxmatch #/^\// kouho-str)
         (let* ((kouho-lst (split-henkan-kouho kouho-str key))
                (no1
@@ -239,11 +241,11 @@
                 (filter (lambda (x)
                           (not (eq? (car x) tango)))
                         kouho-lst))
-               (new-houho-str
+               (new-kouho-str
                 (join-henkan-kouho (append no1 other))))
-          (if (not (= #?=kouho-str #?=new-houho-str))
+          (if (not (= kouho-str new-kouho-str))
               (begin
-                (overwrite kvs key new-houho-str)
+                (write-user-entry userid kvs key new-kouho-str)
                 (and cachesv
                      (flush-cachesv cachesv))
                 tango)

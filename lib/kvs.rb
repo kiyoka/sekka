@@ -100,4 +100,3 @@ class Kvs
     @db
   end
 end
-

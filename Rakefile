@@ -12,8 +12,8 @@ task :check do
   files << "./test/roman-lib.nnd"
   files << "./test/jisyo.nnd" 
   files << "./test/henkan-main.nnd  tokyocabinet"
-  files << "./test/henkan-main.nnd  memcache"
-  files << "./test/approximate-bench.nnd  memcache"
+#  files << "./test/henkan-main.nnd  memcache"
+#  files << "./test/approximate-bench.nnd  memcache"
   files.each {|filename|
     sh  sprintf( "time ruby -I ./lib /usr/local/bin/nendo %s", filename )
   }
@@ -41,11 +41,6 @@ end
 task :dump do
   sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.S.201001 > ./data/SEKKA-JISYO.S.201001.dump"
   sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.L.201008 > ./data/SEKKA-JISYO.L.201008.dump"
-end
-
-task :demo do
-#  sh "./bin/sekka-engine ./data/SEKKA-JISYO.S.201001"
-  sh "./bin/sekka-engine ./data/SEKKA-JISYO.L.201008"
 end
 
 task :rackup do

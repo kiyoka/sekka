@@ -4,7 +4,6 @@
 
 (use nendo.test)
 (require "./lib/kvs")
-(load "./lib/jisyo-db.nnd")
 (load "./lib/henkan.nnd")
 (load "./test/common.nnd")
 

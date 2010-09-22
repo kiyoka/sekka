@@ -4,12 +4,13 @@
 
 (use nendo.test)
 (require "./lib/kvs")
-(load "./lib/jisyo-db.nnd")
 (load "./lib/convert-jisyo.nnd")
 (load "./lib/henkan.nnd")
 (load "./test/common.nnd")
 
-(define dbtype (string->symbol (first *argv*)))
+(define dbtype   (string->symbol (first *argv*)))
+(define userid   "dummy")
+(define userid2  "dummy2")
 
 (test-start "henkan engine")
 ;;===================================================================
@@ -87,7 +88,7 @@
   (let1 _output (StringIO.new)
     (_output.set_encoding "utf-8")
     (test* "dump DB to SEKKA jisyo file. (1)"
-           "2aa0f9b6a90535811cc11c55b8d8270426879f6f"
+           "4932dd5ff608c29338882dbf5e87514f55cc7310"
            (begin
              (dump-sekka-jisyo-f _output target)
              (Digest::SHA1.hexdigest (_output.string))
@@ -115,19 +116,19 @@
 (test-section "simple db fetch")
 (test* "db fetch 1"
        "Cへんかん"
-       (. (hash-table-get db "henkan" #f) force_encoding "UTF-8"))
+       (. (hash-table-get db "MASTER::henkan" #f) force_encoding "UTF-8"))
 
 (test* "db fetch 2"
        "Cかに/かんい"
-       (. (hash-table-get db "kani" #f) force_encoding "UTF-8"))
+       (. (hash-table-get db "MASTER::kani" #f) force_encoding "UTF-8"))
 
 (test* "db fetch 3"
        "Cかんい"
-       (. (hash-table-get db "kanni" #f) force_encoding "UTF-8"))
+       (. (hash-table-get db "MASTER::kanni" #f) force_encoding "UTF-8"))
 
 (test* "db fetch 4"
        #f
-       (hash-table-get db "aaaa" #f))
+       (hash-table-get db "MASTER::aaaa" #f))
 
 ;;-------------------------------------------------------------------
 (test-section "approximate-search core")
@@ -136,62 +137,62 @@
        '((1.0 "henkan") (0.9714 "henkann") (0.9667 "henka") (0.9611 "hennka"))
        (my-round-map
         (arr->list
-         (a-search.search kvs "henkan" #f))))
+         (a-search.search userid kvs "henkan" #f))))
 
 (test* "search keyword list 2"
        '((1.0 "hennkan") (0.975 "hennkann") (0.9714 "hennka") (0.9667 "henkann") (0.9429 "henncan"))
        (my-round-map
         (arr->list
-         (a-search.search kvs "hennkan" #f))))
+         (a-search.search userid kvs "hennkan" #f))))
 
 (test* "search keyword list 3"
        '((1.0 "henkann") (0.9714 "henkan") (0.9667 "hennkan") (0.9429 "henka"))
        (my-round-map
         (arr->list
-         (a-search.search kvs "henkann" #f))))
+         (a-search.search userid kvs "henkann" #f))))
 
 (test* "search keyword list 4"
        '((1.0 "hennkann") (0.975 "hennkan") (0.95 "hennka") (0.95 "henncann"))
        (my-round-map
         (arr->list
-         (a-search.search kvs "hennkann" #f))))
+         (a-search.search userid kvs "hennkann" #f))))
 
 (test* "search keyword list 5"
        '((0.9714 "henkaS") (0.9667 "hennkaS"))
        (my-round-map
         (arr->list
-         (a-search.search kvs "henkanS" #t))))
+         (a-search.search userid kvs "henkanS" #t))))
 
 (test* "search keyword list 6"
        '((0.975 "hennkaS") (0.9417 "henkaS"))
        (my-round-map
         (arr->list
-         (a-search.search kvs "hennkanS" #t))))
+         (a-search.search userid kvs "hennkanS" #t))))
 
 (test* "approximate search 1"
        '((1.0 "henka" "Cへんか") (0.9667 "henkan" "Cへんかん") (0.9611 "hennka" "Cへんか") (0.9429 "henkann" "Cへんかん"))
        (my-round-map
-        (approximate-search kvs "henka" #f)))
+        (approximate-search userid kvs "henka" #f)))
 
 (test* "approximate search 2"
        '((1.0 "hennka" "Cへんか") (0.9714 "hennkan" "Cへんかん") (0.9611 "henkan" "Cへんかん") (0.9611 "henka" "Cへんか") (0.95 "hennkann" "Cへんかん"))
        (my-round-map
-        (approximate-search kvs "hennka" #f)))
+        (approximate-search userid kvs "hennka" #f)))
 
 (test* "approximate search 3"
        '((0.9667 "henka" "Cへんか"))
        (my-round-map
-        (approximate-search kvs "henkaS" #f)))
+        (approximate-search userid kvs "henkaS" #f)))
 
 (test* "approximate search 4"
        '((0.9714 "hennka" "Cへんか") (0.9429 "hennkan" "Cへんかん"))
        (my-round-map
-        (approximate-search kvs "hennkaS" #f)))
+        (approximate-search userid kvs "hennkaS" #f)))
 
 (test* "approximate search 5"
        '((1.0 "kani" "Cかに") (1.0 "kani" "Cかんい") (0.9533 "kanni" "Cかんい"))
        (my-round-map
-        (approximate-search kvs "kani" #f)))
+        (approximate-search userid kvs "kani" #f)))
 
 
 ;;-------------------------------------------------------------------
@@ -199,51 +200,51 @@
 
 (test* "okuri nashi 1"
        '(("変換" #f "へんかん") ("返還" #f "へんかん") ("変化" #f "へんか") ("返歌" #f "へんか"))
-       (henkan-okuri-nashi kvs "henkan"))
+       (henkan-okuri-nashi userid kvs "henkan"))
 
 (test* "okuri nashi 2"
        '(("変化" #f "へんか") ("返歌" #f "へんか") ("変換" #f "へんかん") ("返還" #f "へんかん"))
-       (henkan-okuri-nashi kvs "henka"))
+       (henkan-okuri-nashi userid kvs "henka"))
 
 (test* "okuri nashi 3"
        '(("変換" #f "へんかん") ("返還" #f "へんかん") ("変化" #f "へんか") ("返歌" #f "へんか"))
-       (henkan-okuri-nashi kvs "henkann"))
+       (henkan-okuri-nashi userid kvs "henkann"))
 
 (test* "okuri nashi 4"
        '(("変換" #f "へんかん") ("返還" #f "へんかん") ("変化" #f "へんか") ("返歌" #f "へんか"))
-       (henkan-okuri-nashi kvs "hennkan"))
+       (henkan-okuri-nashi userid kvs "hennkan"))
 
 (test* "okuri nashi 5"
        '(("変換" #f "へんかん") ("返還" #f "へんかん") ("変化" #f "へんか") ("返歌" #f "へんか"))
-       (henkan-okuri-nashi kvs "hennkann"))
+       (henkan-okuri-nashi userid kvs "hennkann"))
 
 (test* "okuri nashi 6"
        '(("自然言語" #f "しぜんげんご"))
-       (henkan-okuri-nashi kvs "shizengengo"))
+       (henkan-okuri-nashi userid kvs "shizengengo"))
 
 (test* "okuri nashi 7"
        '(("自然言語処理" #f "しぜんげんごしょり") ("自然言語" #f "しぜんげんご"))
-       (henkan-okuri-nashi kvs "shizengengosyo"))
+       (henkan-okuri-nashi userid kvs "shizengengosyo"))
 
 (test* "okuri nashi 8"
        '(("案" #f ">あん"))
-       (henkan-okuri-nashi kvs ">an"))
+       (henkan-okuri-nashi userid kvs ">an"))
 
 (test* "okuri nashi 9"
        '(("案" #f ">あん"))
-       (henkan-okuri-nashi kvs ">ann"))
+       (henkan-okuri-nashi userid kvs ">ann"))
 
 (test* "okuri nashi 10"
        '(("デベロッパー" #f "developper") ("ディベロッパー" #f "developper") ("デベロッパ" #f "developper"))
-       (henkan-okuri-nashi kvs "developper"))
+       (henkan-okuri-nashi userid kvs "developper"))
 
 (test* "okuri nashi 11"
        '(("蟹" #f "かに") ("可児" #f "かに") ("蠏" #f "かに") ("簡易" #f "かんい") ("官位" #f "かんい") ("冠位" "-十二階" "かんい") ("漢医" "漢方医" "かんい") ("敢為" #f "かんい") ("官医" #f "かんい") ("寛衣" #f "かんい") ("換位" #f "かんい") ("簡意" #f "かんい"))
-       (henkan-okuri-nashi kvs "kani"))
+       (henkan-okuri-nashi userid kvs "kani"))
 
 (test* "okuri nashi 12"
        '(("簡易" #f "かんい") ("官位" #f "かんい") ("冠位" "-十二階" "かんい") ("漢医" "漢方医" "かんい") ("敢為" #f "かんい") ("官医" #f "かんい") ("寛衣" #f "かんい") ("換位" #f "かんい") ("簡意" #f "かんい") ("蟹" #f "かに") ("可児" #f "かに") ("蠏" #f "かに"))
-       (henkan-okuri-nashi kvs "kanni"))
+       (henkan-okuri-nashi userid kvs "kanni"))
 
 
 ;;-------------------------------------------------------------------
@@ -252,67 +253,67 @@
 (test* "approximate search 1"
        '((1.0 "henkaS" "Cへんかs") (0.9667 "hennkaS" "Cへんかs"))
        (my-round-map
-        (approximate-search kvs "henkaS" #t)))
+        (approximate-search userid kvs "henkaS" #t)))
 
 (test* "approximate search 2"
        '((0.9714 "henkaS" "Cへんかs") (0.9667 "hennkaS" "Cへんかs"))
        (my-round-map
-        (approximate-search kvs "henkanS" #t)))
+        (approximate-search userid kvs "henkanS" #t)))
 
 (test* "approximate search 3"
        '((1.0 "okonaU" "Cおこなu"))
        (my-round-map
-        (approximate-search kvs "okonaU" #t)))
+        (approximate-search userid kvs "okonaU" #t)))
 
 (test* "approximate search 4"
        '((0.9667 "okonaU" "Cおこなu"))
        (my-round-map
-        (approximate-search kvs "okonU" #t)))
+        (approximate-search userid kvs "okonU" #t)))
 
 (test* "approximate search 5"
        '((1.0 "eR" "Cえr"))
        (my-round-map
-        (approximate-search kvs "eR" #t)))
+        (approximate-search userid kvs "eR" #t)))
 
 (test* "okuri ari 1"
        '(("私は" #f "わたしh"))
-       (henkan-okuri-ari kvs "watashiHa"))
+       (henkan-okuri-ari userid kvs "watashiHa"))
 
 (test* "okuri ari 2"
        '(("変化する" #f "へんかs"))
-       (henkan-okuri-ari kvs "henkaSuru"))
+       (henkan-okuri-ari userid kvs "henkaSuru"))
 
 (test* "okuri ari 3"
        '(("変化する" #f "へんかs"))
-       (henkan-okuri-ari kvs "HenkaSuru"))
+       (henkan-okuri-ari userid kvs "HenkaSuru"))
 
 (test* "okuri ari 4"
        '(("変化する" #f "へんかs"))
-       (henkan-okuri-ari kvs "HenkaSURU"))
+       (henkan-okuri-ari userid kvs "HenkaSURU"))
 
 (test* "okuri ari 5"
        '(("変化する" #f "へんかs"))
-       (henkan-okuri-ari kvs "HenkaSuRu"))
+       (henkan-okuri-ari userid kvs "HenkaSuRu"))
 
 (test* "okuri ari 6"
        '(("行う" #f "おこなu") ("行なう" "※送り位置補正" "おこなu"))
-       (henkan-okuri-ari kvs "okonaU"))
+       (henkan-okuri-ari userid kvs "okonaU"))
 
 (test* "okuri ari 7"
        '(("行う" #f "おこなu") ("行なう" "※送り位置補正" "おこなu"))
-       (henkan-okuri-ari kvs "OkonaU"))
+       (henkan-okuri-ari userid kvs "OkonaU"))
 
 (test* "okuri ari 8"
        '(("行う" #f "おこなu") ("行なう" "※送り位置補正" "おこなu"))
-       (henkan-okuri-ari kvs "okonU"))
+       (henkan-okuri-ari userid kvs "okonU"))
 
 (test* "okuri ari 9"
        '(("見る" #f "みr") ("観る" "(字義:みわたす)" "みr") ("視る" "(字義:じっとみる)" "みr") ("診る" "(diagnose)" "みr"))
-       (henkan-okuri-ari kvs "miRu"))
+       (henkan-okuri-ari userid kvs "miRu"))
 
 (test* "okuri ari 10"
        '(("見" #f "みr") ("観" "(字義:みわたす)" "みr") ("視" "(字義:じっとみる)" "みr") ("診" "(diagnose)" "みr"))
-       (henkan-okuri-ari kvs "miR"))
+       (henkan-okuri-ari userid kvs "miR"))
 
 ;;-------------------------------------------------------------------
 (test-section "henkan hiragana")
@@ -338,23 +339,23 @@
 
 (test* "non-kanji 1"
        '(("｛" #f "{"))
-       (henkan-non-kanji kvs "{"))
+       (henkan-non-kanji userid kvs "{"))
 
 (test* "non-kanji 2"
        '(("！" #f "!") ("感嘆符" #f "!"))
-       (henkan-non-kanji kvs "!"))
+       (henkan-non-kanji userid kvs "!"))
 
 (test* "non-kanji 3"
        '(("／" #f "/") ("÷" #f "/"))
-       (henkan-non-kanji kvs "/"))
+       (henkan-non-kanji userid kvs "/"))
 
 (test* "non-kanji 4"
        '(("≠" #f "!="))
-       (henkan-non-kanji kvs "!="))
+       (henkan-non-kanji userid kvs "!="))
 
 (test* "non-kanji 5"
        '(("．" #f ".") ("・" #f ".") ("。" #f ".") ("…" "..." "."))
-       (henkan-non-kanji kvs "."))
+       (henkan-non-kanji userid kvs "."))
 
 
 ;;-------------------------------------------------------------------
@@ -362,87 +363,87 @@
 
 (test* "henkan toplevel 1"
        '(("＊" #f "*") ("※" #f "*") ("×" #f "*"))
-       (sekka-henkan kvs "*"))
+       (sekka-henkan userid kvs "*"))
 
 (test* "henkan toplevel 2"
        '(("しぜんげんごりか" #f "shizengengorika") ("シゼンゲンゴリカ" #f "shizengengorika") ("自然言語理解" #f "しぜんげんごりかい") ("自然言語" #f "しぜんげんご"))
-       (sekka-henkan kvs "shizengengorika"))
+       (sekka-henkan userid kvs "shizengengorika"))
 
 (test* "henkan toplevel 3"
        '(("自然言語理解" #f "しぜんげんごりかい") ("自然言語" #f "しぜんげんご"))
-       (sekka-henkan kvs "Shizengengorika"))
+       (sekka-henkan userid kvs "Shizengengorika"))
 
 (test* "henkan toplevel 4"
        '(("変化する" #f "へんかs"))
-       (sekka-henkan kvs "henkaSuru"))
+       (sekka-henkan userid kvs "henkaSuru"))
 
 (test* "henkan toplevel 5"
        '(("変換" #f "へんかん") ("返還" #f "へんかん") ("変化" #f "へんか") ("返歌" #f "へんか"))
-       (sekka-henkan kvs "Henkan"))
+       (sekka-henkan userid kvs "Henkan"))
 
 (test* "henkan toplevel 6"
        '()
-       (sekka-henkan kvs "HEnkan"))
+       (sekka-henkan userid kvs "HEnkan"))
 
 (test* "henkan toplevel 7"
        '()
-       (sekka-henkan kvs "HENkan"))
+       (sekka-henkan userid kvs "HENkan"))
 
 (test* "henkan toplevel 8"
        '(("コーヒー" #f "こーひー"))
-       (sekka-henkan kvs "Ko-hi-"))
+       (sekka-henkan userid kvs "Ko-hi-"))
 
 (test* "henkan toplevel 9"
        '(("得る" #f "えr") ("獲る" "NB:「とr」と同形" "えr") ("選る" "NB:「よr」「すぐr」と同形" "えr"))
-       (sekka-henkan kvs "eRu"))
+       (sekka-henkan userid kvs "eRu"))
 
 (test* "henkan toplevel 10"
        '(("得る" #f "えr") ("獲る" "NB:「とr」と同形" "えr") ("選る" "NB:「よr」「すぐr」と同形" "えr"))
-       (sekka-henkan kvs "ERu"))
+       (sekka-henkan userid kvs "ERu"))
 
 (test* "henkan toplevel 11"
        '(("を" #f "wo") ("ヲ" #f "wo") ("小" #f "を") ("緒" #f "を") ("雄" #f "を") ("男" #f "を") ("牡" #f "を") ("尾" #f "を") ("悪" #f "を") ("汚" #f "を") ("惡" "「悪」の旧字(人名用漢字)" "を"))
-       (sekka-henkan kvs "wo"))
+       (sekka-henkan userid kvs "wo"))
 
 (test* "henkan toplevel 12"
        '()
-       (sekka-henkan kvs "S"))
+       (sekka-henkan userid kvs "S"))
 
 (test* "henkan toplevel 12"
        '()
-       (sekka-henkan kvs "H"))
+       (sekka-henkan userid kvs "H"))
 
 (test* "henkan toplevel 13"
        '()
-       (sekka-henkan kvs "gitHuB"))
+       (sekka-henkan userid kvs "gitHuB"))
 
 (test* "henkan toplevel 14"
        '()
-       (sekka-henkan kvs "ChangeLog"))
+       (sekka-henkan userid kvs "ChangeLog"))
 
 (test* "henkan toplevel 15"
        '(("訳" #f "わけ") ("和気" "地名" "わけ") ("理由" "当て字" "わけ") ("分け" #f "わけ") ("分" #f "わけ") ("譯" "「訳」の旧字" "わけ") ("戯奴" #f "わけ"))
-       (sekka-henkan kvs "Wake"))
+       (sekka-henkan userid kvs "Wake"))
 
 (test* "henkan toplevel(for Elisp) 1"
        '(("＊" nil "*") ("※" nil "*") ("×" nil "*"))
-       (sekkaHenkan kvs #f "*"))
+       (sekkaHenkan userid kvs #f "*"))
 
 (test* "henkan toplevel(for Elisp) 2"
        '(("しぜんげんごりか" nil "shizengengorika") ("シゼンゲンゴリカ" nil "shizengengorika") ("自然言語理解" nil "しぜんげんごりかい") ("自然言語" nil "しぜんげんご"))
-       (sekkaHenkan kvs #f "shizengengorika"))
+       (sekkaHenkan userid kvs #f "shizengengorika"))
 
 (test* "henkan toplevel(for Elisp) 3"
        '(("自然言語理解" nil "しぜんげんごりかい") ("自然言語" nil "しぜんげんご"))
-       (sekkaHenkan kvs #f "Shizengengorika"))
+       (sekkaHenkan userid kvs #f "Shizengengorika"))
 
 (test* "henkan toplevel(for Elisp) 4"
        '(("変化する" nil "へんかs"))
-       (sekkaHenkan kvs #f "henkaSuru"))
+       (sekkaHenkan userid kvs #f "henkaSuru"))
 
 (test* "henkan toplevel(for Elisp) 5"
        '(("変換" nil "へんかん") ("返還" nil "へんかん") ("変化" nil "へんか") ("返歌" nil "へんか"))
-       (sekkaHenkan kvs #f "Henkan"))
+       (sekkaHenkan userid kvs #f "Henkan"))
 
 
 ;;-------------------------------------------------------------------
@@ -450,41 +451,76 @@
 (test* "henkan kakutei(for Elisp) 1"
        '(("返還" nil "へんかん") ("変換" nil "へんかん") ("変化" nil "へんか") ("返歌" nil "へんか"))
        (begin
-         (sekkaKakutei kvs #f "へんかん" "返還")
-         (sekkaHenkan kvs #f "Henkan")))
+         (sekkaKakutei userid kvs #f "へんかん" "返還")
+         (sekkaHenkan userid kvs #f "Henkan")))
+
+(test* "DB check after henkan kakutei 1"
+       "/返還/変換"
+       (. (hash-table-get db (+ userid "::へんかん") #f) force_encoding "UTF-8"))
 
 (test* "henkan kakutei(for Elisp) 2"
-       '(("デベロッパ" nil "developer") ("デベロッパー" nil "developer") ("ディベロッパー" nil "developer"))
+       '(("変換" nil "へんかん") ("返還" nil "へんかん") ("変化" nil "へんか") ("返歌" nil "へんか"))
        (begin
-         (sekkaKakutei kvs #f "developer" "デベロッパ")
-         (sekkaHenkan kvs #f "developer")))
+         (sekkaKakutei userid kvs #f "へんかん" "変換")
+         (sekkaHenkan userid kvs #f "Henkan")))
+
+(test* "DB check after henkan kakutei 2"
+       "/変換/返還"
+       (. (hash-table-get db (+ userid "::へんかん") #f) force_encoding "UTF-8"))
 
 (test* "henkan kakutei(for Elisp) 3"
-       '(("。" nil ".") ("．" nil ".") ("・" nil ".") ("…" "..." "."))
+       '(("デベロッパ" nil "developer") ("デベロッパー" nil "developer") ("ディベロッパー" nil "developer"))
        (begin
-         (sekkaKakutei kvs #f "." "。")
-         (sekkaHenkan kvs #f ".")))
+         (sekkaKakutei userid kvs #f "developer" "デベロッパ")
+         (sekkaHenkan userid kvs #f "developer")))
 
 (test* "henkan kakutei(for Elisp) 4"
-       nil
-       (sekkaKakutei kvs #f "." "。"))
+       '(("。" nil ".") ("．" nil ".") ("・" nil ".") ("…" "..." "."))
+       (begin
+         (sekkaKakutei userid kvs #f "." "。")
+         (sekkaHenkan userid kvs #f ".")))
 
 (test* "henkan kakutei(for Elisp) 5"
        nil
-       (sekkaKakutei kvs #f "developper" "デベロッパ"))
+       (sekkaKakutei userid kvs #f "." "。"))
 
 (test* "henkan kakutei(for Elisp) 6"
        nil
-       (sekkaKakutei kvs #f "wo" "を"))
+       (sekkaKakutei userid kvs #f "developper" "デベロッパ"))
+
+(test* "henkan kakutei(for Elisp) 7"
+       nil
+       (sekkaKakutei userid kvs #f "wo" "を"))
+
+
+
+(test* "henkan kakutei(for Elisp) 8"
+       '(("．" nil ".") ("・" nil ".") ("。" nil ".") ("…" "..." "."))
+       (begin
+         (sekkaHenkan userid2 kvs #f ".")))                  ;; userid2
+
+(test* "henkan kakutei(for Elisp) 9"
+       '(("。" nil ".") ("．" nil ".") ("・" nil ".") ("…" "..." "."))
+       (begin
+         (sekkaKakutei userid2 kvs #f "." "。")              ;; userid2
+         (sekkaHenkan userid2 kvs #f ".")))                  ;; userid2
+
+(test* "henkan kakutei(for Elisp) 10"
+       '(("。" nil ".") ("．" nil ".") ("・" nil ".") ("…" "..." "."))
+       (begin
+         (sekkaHenkan userid2 kvs #f ".")))                  ;; userid2
+
+(test* "henkan kakutei(for Elisp) 11"
+       nil
+       (sekkaKakutei userid2 kvs #f "wo" "を"))              ;; userid2
+
 
 
 ;;===================================================================
 
 ;; ---後処理---
-;; 変換確定して変換候補の順番が入れかわっているエントリを削除しておく
-(for-each
- (lambda (key)
-   (kvs.delete key))
- '("へんかん" "developer" "."))
+;; 最終的な辞書の状態を見たい時、dumpしてみること。
+(db.close)
+(dump-sekka-jisyo-f STDOUT target)
 
 (test-end)

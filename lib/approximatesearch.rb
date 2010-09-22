@@ -17,7 +17,7 @@ class ApproximateSearch
     newarr
   end
 
-  def search( kvs, keyword, okuri_ari )
+  def search( userid, kvs, keyword, okuri_ari )
     readymade_key = if okuri_ari
                       keyword.slice( 0, 2 ).upcase
                     else
@@ -25,7 +25,11 @@ class ApproximateSearch
                     end
     readymade_key = "(" + readymade_key + ")"
     
-    str = kvs.get( readymade_key )
+    str = kvs.get( userid + "::" + readymade_key, false )
+    if not str 
+      str = kvs.get( "MASTER::" + readymade_key )
+    end
+    
     #printf( "#readymade_key %s : %s\n", readymade_key, str )
     if str
       filtering( keyword, str.split( /[ ]+/ ))
