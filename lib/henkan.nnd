@@ -255,8 +255,39 @@
 ;; Export to Ruby world
 (export-to-ruby sekkaKakutei)
 
-;; ユーザー定義辞書のロード
-(define (loadUserJisyo userid kvs str)
+
+;; "ユーザー語彙の "(queue)" か "(stored)" にpush!する"
+(define (kvs-push! userid where kvs entry-str)
+  (let* ((orig (kvs.get (+ userid "::" where) "()"))
+         (orig (read-from-string orig)))
+    (kvs.put! (+ userid "::" where) (write-to-string (append orig (list entry-str))))
+    entry-str))
+
+;; "ユーザー語彙の "(queue)" か "(stored)" からpop!する
+(define (kvs-pop!  userid where kvs)
+  (let* ((orig (kvs.get (+ userid "::" where) "()"))
+         (orig (read-from-string orig)))
+    (if (null? orig)
+        #f
+        (let1 top (first orig)
+          (kvs.put! (+ userid "::" where) (write-to-string (cdr orig)))
+          top))))
+
+
+;; ユーザー定義語彙の登録依頼(キューへの追記のみ)
+(define (registerUserJisyo userid kvs str)
+  (let1 queue-data (to-list (str.split "\n"))
+    (for-each
+     (lambda (x)
+       (kvs-push! userid "(queue)" kvs x))
+     queue-data)
+    (length queue-data)))
+;; Export to Ruby world
+(export-to-ruby registerUserJisyo)
+
+
+;; ユーザー定義語彙の登録処理(キューの内容を実際にユーザー辞書に反映する)
+(define (processUserJisyo userid kvs)
   (define user-keylist '())
   (define (insert-to-db sekka-jisyo-data)
     (for-each
@@ -293,11 +324,18 @@
                                   " "))))
        (hash-table-keys okuri-nashi-hash))))
          
-  (let1 sekka-jisyo-data
-      (convert-skk-jisyo-f (StringIO.new str))
-    (insert-to-db sekka-jisyo-data)
-    (_create-ready-made-keylist user-keylist)
-    #?=(+ "user dict loaded userid=[" userid "]")
-    #?=(length sekka-jisyo-data)))
+  (let loop ((top (kvs-pop! userid "(queue)" kvs)))
+    (if top
+        (cond
+         ((memv top (read-from-string (kvs.get (+ userid "::(stored)") "()")))
+          #?=(+ "already stored userid=[" userid "] tango=[" top "]")
+          nil)
+         (else
+          (insert-to-db (convert-skk-jisyo-f (StringIO.new (+ top "\n"))))
+          (_create-ready-made-keylist user-keylist)
+          (kvs-push! userid "(stored)" kvs top)
+          #?=(+ "user dict stored userid=[" userid "] tango=[" top "]")
+          top))
+        nil)))
 ;; Export to Ruby world
-(export-to-ruby loadUserJisyo)
+(export-to-ruby processUserJisyo)

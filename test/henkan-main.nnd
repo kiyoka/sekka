@@ -115,18 +115,81 @@
 
 
 ;;-------------------------------------------------------------------
-(test-section "load User dict")
-(test* "load user dict 1"
-       76
-       (loadUserJisyo userid kvs (string-join
-                                  '(
-                                    "まじぱねぇ /マジパネェ/"
-                                    "ぶろぐr /ブログ/"
-                                    "ぶろぐt /ブログ/"
-                                    "へんかんえんじん /変換エンジン/"
-                                    "はてぶ /はてブ/はてなブックマーク/"
-                                    )
-                                  "\n")))
+(test-section "User dict's Queue utility")
+
+(test* "pop 1"  #f    (kvs-pop! userid "(queue)"  kvs))
+(test* "pop 2"  #f    (kvs-pop! userid "(stored)" kvs))
+
+(test* "push 1"
+       "100"
+       (kvs-push! userid "(queue)"  kvs "100"))
+(test* "push 2"
+       "200"
+       (kvs-push! userid "(queue)" kvs "200"))
+(test* "pop 3"
+       "100"
+       (kvs-pop! userid "(queue)"  kvs)
+       eq?)
+(test* "pop 4"
+       "200"
+       (kvs-pop! userid "(queue)"  kvs))
+(test* "pop 5"
+       #f
+       (kvs-pop! userid "(queue)"  kvs))
+
+(test* "push 3"
+       "aaaa"
+       (kvs-push! userid "(stored)"  kvs "aaaa"))
+(test* "pop 6"
+       #f
+       (kvs-pop! userid2 "(stored)"  kvs))    ;; userid2
+(test* "pop 7"
+       "aaaa"
+       (kvs-pop! userid "(stored)"  kvs))
+(test* "pop 8"
+       #f
+       (kvs-pop! userid "(stored)"  kvs))
+
+
+(test-section "Register User dict")
+(test* "register queue dict 1"
+       4
+       (registerUserJisyo userid kvs (string-join
+                                      '(
+                                        "まじぱねぇ /マジパネェ/"
+                                        "ぶろぐr /ブログ/"
+                                        "ぶろぐt /ブログ/"
+                                        "へんかんえんじん /変換エンジン/"
+                                        )
+                                      "\n")))
+(test* "register queue user dict 2"
+       1
+       (registerUserJisyo userid kvs "はてぶ /はてブ/はてなブックマーク/\n"))
+
+(test* "register queue user dict 3"
+       1
+       (registerUserJisyo userid kvs "はてぶ /はてブ/はてなブックマーク/\n"))
+
+(test* "register queue user dict 4"
+       1
+       (registerUserJisyo userid kvs "まじぱねぇ /マジパネェ/まじパネェ/マジ半端ネェ/まじ半端ネェ/\n"))
+
+(for-each
+ (lambda (str n)
+   (test* (sprintf "store user dict %d" n)
+          str
+          (processUserJisyo userid kvs)))
+ '("まじぱねぇ /マジパネェ/"
+   "ぶろぐr /ブログ/"
+   "ぶろぐt /ブログ/"
+   "へんかんえんじん /変換エンジン/"
+   "はてぶ /はてブ/はてなブックマーク/"
+   nil
+   "まじぱねぇ /マジパネェ/まじパネェ/マジ半端ネェ/まじ半端ネェ/"
+   nil
+   nil)
+ (range 10 1))
+
 
 ;;-------------------------------------------------------------------
 (test-section "simple db fetch")
@@ -468,7 +531,7 @@
        (sekkaHenkan userid kvs #f "Henkan"))
 
 (test* "henkan toplevel(for Elisp) 6"
-       '(("マジパネェ" nil "まじぱねぇ"))
+       '(("マジパネェ" nil "まじぱねぇ") ("まじパネェ" nil "まじぱねぇ") ("マジ半端ネェ" nil "まじぱねぇ") ("まじ半端ネェ" nil "まじぱねぇ"))
        (sekkaHenkan userid kvs #f "Majipanee"))
 
 (test* "henkan toplevel(for Elisp) 7"
@@ -476,11 +539,11 @@
        (sekkaHenkan userid kvs #f "Henkanenji"))
 
 (test* "henkan toplevel(for Elisp) 8"
-       '(("ブログった" nil "ぶろぐt") ("ブログった" nil "ぶろぐr"))
+       '(("ブログった" nil "ぶろぐt"))
        (sekkaHenkan userid kvs #f "buroguTta"))
 
 (test* "henkan toplevel(for Elisp) 9"
-       '(("ブログりました" nil "ぶろぐr") ("ブログりました" nil "ぶろぐt"))
+       '(("ブログりました" nil "ぶろぐt"))
        (sekkaHenkan userid kvs #f "buroguRimashita"))
 
 (test* "henkan toplevel(for Elisp) 10"

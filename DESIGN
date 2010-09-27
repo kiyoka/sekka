@@ -97,9 +97,24 @@ Sekkaはモードレスなローマ字かな漢字変換エンジンです。SKK
      niから始まる語彙のインデックスも更新され、下記のようになる。
        (user名がuuuuの場合)
       [key]               [value]
-     "master:(ni)"        ni ni-  nihongo nihongoca nihongoka nihongonyuuryocu  niwa niwatori nizi 
-     "uuuu:(ni)"          ni ni-  nihongo nihongonyuuryokumesoddo nihongoca nihongoka nihongonyuuryocu  niwa niwatori nizi 
+     "master::(ni)"        ni ni-  nihongo nihongoca nihongoka nihongonyuuryocu  niwa niwatori nizi 
+     "uuuu::(ni)"          ni ni-  nihongo nihongonyuuryokumesoddo nihongoca nihongoka nihongonyuuryocu  niwa niwatori nizi 
 
+
+6. ユーザー語彙登録処理のバックグラウンド処理
+  1) ユーザー語彙登録キュー
+     クライアント(Emacs)からはユーザー語彙をキューに詰むインタフェースを叩く。
+     キューの形式は以下の通り。value側はSKK辞書の1行を1つの文字列としたS式で保持する。
+       (user名がuuuuの場合)
+      [key]               [value]
+     "uuuu::(queue)"      ("ぶろぐr /ブログ/" "ぶろぐt /ブログ/" "はてぶ /はてブ/はてなブックマーク/")
+     "uuuu::(stored)"      ()
+
+  2) 登録キューの消化処理
+     Rubyのeventmachineモジュールのインターバルタイマーでキューを監視する。
+     キューに一件でも依頼が蓄積されていれば、全データを一気に登録する。
+     全データの処理が完了したら、(stored) 側に追記する。
+     ※ もし、queueに入ってきた語彙で(stored)に登録済みであればその語彙は無視される。
 
 
 [EOF]

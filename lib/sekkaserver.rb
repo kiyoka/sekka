@@ -26,12 +26,12 @@ class SekkaServer
                arg = req.params['arg'].force_encoding("UTF-8")
                arr = arg.split( /[ ]+/ )
                @core.sekkaKakutei( req.params['userid'], @kvs, @cachesv, arr[0], arr[1] )
-             when "/upload"
-               result = @core.loadUserJisyo( req.params['userid'], @kvs, req.params['arg'].force_encoding( "UTF-8" ))
+             when "/register"
+               result = @core.registerUserJisyo( req.params['userid'], @kvs, req.params['arg'].force_encoding( "UTF-8" ))
                if 0 < result
-                 sprintf( "upload successful (%s) words", result )
+                 sprintf( "register request successful (%s) words", result )
                else
-                 "upload failed..."
+                 "register failed..."
                end
              else
                sprintf( "unknown path name. [%s]", req.path )

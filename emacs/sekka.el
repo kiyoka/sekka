@@ -61,8 +61,8 @@
   :type  'integer
   :group 'sekka)
 
-(defcustom sekka-server-upload-timeout 60
-  "Sekkaサーバーに辞書をアップロードする際のタイムアウトを指定する。(秒数)"
+(defcustom sekka-server-register-timeout 60
+  "Sekkaサーバーにユーザー語彙を登録する際のタイムアウトを指定する。(秒数)"
   :type  'integer
   :group 'sekka)
  
@@ -214,8 +214,8 @@
 	    (push item lst))))))
   
   (when (not sekka-init)
-    ;; ユーザー辞書のロード + サーバーへのアップロード
-    (sekka-upload-userdict-internal)
+    ;; ユーザー語彙のロード + サーバーへの登録
+    (sekka-register-userdict-internal)
 
     ;; Emacs終了時の処理
     (add-hook 'kill-emacs-hook
@@ -304,24 +304,24 @@
     t))
 
 ;;
-;; ユーザー辞書をサーバーに再度アップロードする
+;; ユーザー語彙をサーバーに再度登録する。
 ;;
-(defun sekka-upload-userdict (&optional arg)
+(defun sekka-register-userdict (&optional arg)
   "ユーザー辞書をサーバーに再度アップロードする"
   (interactive "P")
-  (sekka-upload-userdict-internal))
+  (sekka-register-userdict-internal))
 
   
 ;;
-;; ユーザー辞書をサーバーにアップロードする
+;; ユーザー語彙をサーバーに登録する。
 ;;
-(defun sekka-upload-userdict-internal ()
+(defun sekka-register-userdict-internal ()
   (let ((str (sekka-get-jisyo-str "~/.sekka-jisyo")))
     (when str
       (message "Requesting to sekka server...")
-      (sekka-debug-print (format "upload [%s]\n" str))
-      (let ((result (sekka-rest-request "upload" str sekka-server-upload-timeout)))
-	(sekka-debug-print (format "upload-result:%S\n" result))
+      (sekka-debug-print (format "register [%s]\n" str))
+      (let ((result (sekka-rest-request "register" str sekka-server-register-timeout)))
+	(sekka-debug-print (format "register-result:%S\n" result))
 	(message result)
 	t))))
 
@@ -340,11 +340,12 @@
 	    nil)
 	(let ((str "")
 	      (buf-name (file-name-nondirectory file)))
-	  (find-file-read-only-other-window file)
-	  (setq str (with-current-buffer (get-buffer buf-name)
-		      (buffer-substring-no-properties (point-min) (point-max))))
-	  (message (format "SKK 辞書 %s を開いています...完了！" (file-name-nondirectory file)))
-	  (kill-buffer buf-name)
+	  (save-excursion
+	    (find-file-read-only-other-window file)
+	    (setq str (with-current-buffer (get-buffer buf-name)
+			(buffer-substring-no-properties (point-min) (point-max))))
+	    (message (format "SKK 辞書 %s を開いています...完了！" (file-name-nondirectory file)))
+	    (kill-buffer-if-not-modified (get-buffer buf-name)))
 	  str)))))
 
 ;;(sekka-get-jisyo-str "~/.sekka-jisyo")
