@@ -880,12 +880,14 @@ sekka-modeがONの間中呼び出される可能性がある。"
 	       (b (+ end gap))
 	       (e end)
 	       (str (buffer-substring-no-properties b e))
-	       (lst (if (string= str sekka-guide-lastquery)
-			sekka-guide-lastresult
-		      (progn
-			(setq sekka-guide-lastquery str)
-			(setq sekka-guide-lastresult (sekka-henkan-request str))
-			sekka-guide-lastresult)))
+	       (lst (if (string-match "^[\s\t]+$" str)
+			'()
+		      (if (string= str sekka-guide-lastquery)
+			  sekka-guide-lastresult
+			(progn
+			  (setq sekka-guide-lastquery str)
+			  (setq sekka-guide-lastresult (sekka-henkan-request str))
+			  sekka-guide-lastresult))))
 	       (mess
 		(if (< 0 (length lst))
 		    (concat "[" (caar lst) "]")
