@@ -60,6 +60,11 @@
   "Sekkaサーバーと通信する時のタイムアウトを指定する。(秒数)"
   :type  'integer
   :group 'sekka)
+
+(defcustom sekka-server-upload-timeout 60
+  "Sekkaサーバーに辞書をアップロードする際のタイムアウトを指定する。(秒数)"
+  :type  'integer
+  :group 'sekka)
  
 (defcustom sekka-stop-chars ";:(){}<> "
   "*漢字変換文字列を取り込む時に変換範囲に含めない文字を設定する"
@@ -315,7 +320,7 @@
     (when str
       (message "Requesting to sekka server...")
       (sekka-debug-print (format "upload [%s]\n" str))
-      (let ((result (sekka-rest-request "upload" str 60)))
+      (let ((result (sekka-rest-request "upload" str sekka-server-upload-timeout)))
 	(sekka-debug-print (format "upload-result:%S\n" result))
 	(message result)
 	t))))
