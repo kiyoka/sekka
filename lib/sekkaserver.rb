@@ -22,7 +22,6 @@ class SekkaServer
         Thread.pass
         EventMachine::run {
           EventMachine::PeriodicTimer.new( 5 ) do
-            puts "queue size = " + @queue.size.to_s
             while not @queue.empty?
               @queue.pop { |word| 
                 arr = word.split( /[ ]+/ )

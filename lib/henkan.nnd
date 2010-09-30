@@ -42,6 +42,12 @@
 
 ;; split "/a;annotation/b/c/" into `(("a" "annotation" ,src) ("b" #f ,src) ("c" #f ,src))  alist
 (define (split-henkan-kouho str src . okuri)
+  (define (append-j-type lst)
+    (map
+     (lambda (x)
+       (append x (list 'j)))
+     lst))
+    
   (let* ((trimmed (cond
                    ((rxmatch #/^[\/](.+)$/ str)
                     => (lambda (m)
@@ -53,13 +59,14 @@
                     (to-list (trimmed.split "/"))))
          (okuri    (get-optional okuri "")))
     ;; pickup annotation
-    (map
-     (lambda (entry)
-       (let1 vec (entry.split ";")
-         (list (+ (vector-ref vec 0) okuri)
-               (vector-ref vec 1 #f)
-               src)))
-     splitted)))
+    (append-j-type
+     (map
+      (lambda (entry)
+        (let1 vec (entry.split ";")
+          (list (+ (vector-ref vec 0) okuri)
+                (vector-ref vec 1 #f)
+                src)))
+      splitted))))
 
 
 ;; 送り仮名なしの変換
@@ -122,9 +129,9 @@
          (kata (gen-roman->katakana str)))
     (if hira
         `(
-          ( ,hira #f ,keyword)
-          ( ,kata #f ,keyword))
-        `((,keyword #f ,keyword)))))
+          ( ,hira #f ,keyword h)
+          ( ,kata #f ,keyword k))
+        `((,keyword #f ,keyword j)))))
 
 
 ;; 記号を含むキーワードの変換
@@ -142,25 +149,44 @@
 
 ;; keyword には ローマ字のみを受け付ける
 (define (sekka-henkan userid kvs keyword)
+  ;; Nendoにmap-with-indexgが無いので、即席で作る
+  (define (my-map-with-index pred lst)
+    (map
+     pred
+     (range (length lst))
+     lst))
+
+  ;; 変換候補にindex番号を付加する
+  (define (append-index-number kouho-list)
+    (my-map-with-index
+     (lambda (index x)
+       (append x (list index)))
+     kouho-list))
+  
   ;; キーワードの種別で処理を分割する
-  (cond
-   ((rxmatch #/[A-Z]/ keyword)
-    (let1 keyword (string-downcase-first keyword)
-      (cond
-       ((rxmatch #/[a-z][A-Z]/ keyword)
-        ;; 送りあり
-        ;;(let1 result (approximate-search db keyword #t)  (disp-search-result result))
-        (henkan-okuri-ari userid kvs keyword))
-       (else
-        ;; 送りなし
-        ;;(let1 result (approximate-search db keyword #f)  (disp-search-result result))
-        (henkan-okuri-nashi userid kvs keyword)))))
-   ((gen-roman->hiragana keyword)
-    (append
-     (henkan-hiragana kvs keyword)
-     (henkan-okuri-nashi userid kvs keyword)))
-   (else
-    (henkan-non-kanji userid kvs keyword))))
+  (append-index-number
+   (cond
+    ((rxmatch #/[A-Z]/ keyword)
+     (let1 keyword (string-downcase-first keyword)
+       (cond
+        ((rxmatch #/[a-z][A-Z]/ keyword)
+         ;; 送りあり
+         ;;(let1 result (approximate-search db keyword #t)  (disp-search-result result))
+         (henkan-okuri-ari userid kvs keyword))
+        (else
+         ;; 送りなし
+         ;;(let1 result (approximate-search db keyword #f)  (disp-search-result result))
+         (append
+          (henkan-okuri-nashi userid kvs keyword)
+          (if (gen-roman->hiragana keyword)
+              (henkan-hiragana kvs keyword)
+              '()))))))
+    ((gen-roman->hiragana keyword)
+     (append
+      (henkan-hiragana kvs keyword)
+      (henkan-okuri-nashi userid kvs keyword)))
+    (else
+     (henkan-non-kanji userid kvs keyword)))))
 
 
 ;; conversion #f => nil for EmacsLisp
