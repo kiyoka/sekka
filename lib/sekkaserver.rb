@@ -25,7 +25,14 @@ class SekkaServer
             while not @queue.empty?
               @queue.pop { |word| 
                 arr = word.split( /[ ]+/ )
-                break if @core.registerUserJisyo(arr[0], @kvs, arr[1] + " " + arr[2] )
+                userid   = arr[0]
+                dictline = arr[1] + " " + arr[2]
+                registered = @core.registerUserJisyo(userid, @kvs, dictline)
+                if registered
+                  puts "Info: added to dict           userid[" + userid + "] dictline[" + dictline + "]"
+                else
+                  puts "Info: ignored (already added) userid[" + userid + "] dictline[" + dictline + "]"
+                end
               }
             end
           end

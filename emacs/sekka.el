@@ -46,7 +46,7 @@
   :group 'input-method
   :group 'Japanese)
 
-(defcustom sekka-server-url "http://localhost:9292/"
+(defcustom sekka-server-url "http://localhost:12929/"
   "SekkaサーバーのURLを指定する。"
   :type  'string
   :group 'sekka)
@@ -129,13 +129,8 @@
 
 (defconst sekka-login-name   (user-login-name))
 
-(defconst sekka-kind-index   0)
-(defconst sekka-tango-index  1)
-(defconst sekka-id-index     2)
-(defconst sekka-wordno-index 3)
-(defconst sekka-candno-index 4)
-(defconst sekka-spaces-index 5)
-
+(defconst sekka-kind-index   3)
+(defconst sekka-id-index     4)
 
 ;;--- デバッグメッセージ出力
 (defvar sekka-psudo-server nil)         ; クライアント単体で仮想的にサーバーに接続しているようにしてテストするモード
@@ -231,8 +226,8 @@
 (defun sekka-rest-request (func-name arg &optional max-time)
   (if sekka-psudo-server
       ;; クライアント単体で仮想的にサーバーに接続しているようにしてテストするモード
-      ;;"((\"パイナップル\" nil \"ぱいなっぷる\") (\"ぱいなっぷる\" nil \"ぱいなっぷる\"))"
-      "((\"変換\" nil \"へんかん\") (\"変化\" nil \"へんか\"))"
+      "((\"変換\" nil \"へんかん\" j 0) (\"変化\" nil \"へんか\" j 1) (\"ヘンカン\" nil \"へんかん\" k 2) (\"へんかん\" nil \"へんかん\" h 3))"
+      ;;"((\"変換\" nil \"へんかん\" j 0) (\"変化\" nil \"へんか\" j 1))"
     ;; 実際のサーバに接続する
     (let ((command
 	   (concat
@@ -543,8 +538,10 @@
 	 (_          (sekka-debug-print (format "2:sekka-cand-cur=%s\n" sekka-cand-cur)))
 	 (_          (sekka-debug-print (format "2:kouho=%s\n" kouho)))
 	 (tango      (car kouho))
-	 (key        (caddr kouho)))
-    (sekka-kakutei-request key tango))
+	 (key        (caddr kouho))
+	 (kind (nth sekka-kind-index kouho)))
+    (when (eq 'j kind)
+      (sekka-kakutei-request key tango)))
   (setq sekka-select-mode nil)
   (run-hooks 'sekka-select-mode-end-hook)
   (sekka-select-update-display))
@@ -581,18 +578,30 @@
 	  0))
   (sekka-select-update-display))
 
-
+;; 指定された type の候補を抜き出す
+(defun sekka-select-by-type-filter ( _type )
+  (let ((lst '()))
+    (mapcar
+     (lambda (x)
+       (let ((sym (nth sekka-kind-index x)))
+	 (when (eq sym _type)
+	   (push x lst))))
+     sekka-henkan-kouho-list)
+    (sekka-debug-print (format "filterd-lst = %S" lst))
+    (car lst)))
+    
 ;; 指定された type の候補に強制的に切りかえる
 (defun sekka-select-by-type ( _type )
-  (let* (
-	 (n sekka-cand)
-	 (kouho (nth n sekka-henkan-list))
-	 (_element (assoc _type kouho)))
-
-    ;; 連想リストから _type で引いた index 番号を設定するだけで良い。
-    (when _element
-      (setcar (nthcdr n sekka-cand-n) (nth sekka-candno-index _element))
-      (sekka-select-update-display))))
+  (let ((kouho (sekka-select-by-type-filter _type)))
+    (if (null kouho)
+	(cond 
+	 ((eq _type 'h)
+	  (message "Sekka: ひらがなの候補はありません。"))
+	 ((eq _type 'k)
+	  (message "Sekka: カタカナの候補はありません。")))
+      (let ((num   (nth sekka-id-index kouho)))
+	(setq sekka-cand-cur num)
+	(sekka-select-update-display)))))
 
 (defun sekka-select-kanji ()
   "漢字候補に強制的に切りかえる"
@@ -608,11 +617,6 @@
   "カタカナ候補に強制的に切りかえる"
   (interactive)
   (sekka-select-by-type 'k))
-
-(defun sekka-select-alphabet ()
-  "アルファベット候補に強制的に切りかえる"
-  (interactive)
-  (sekka-select-by-type 'l))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ローマ字漢字変換関数

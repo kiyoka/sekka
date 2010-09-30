@@ -13,7 +13,7 @@ task :check do
   files << "./test/jisyo.nnd" 
   files << "./test/henkan-main.nnd  tokyocabinet"
 #  files << "./test/henkan-main.nnd  memcache"
-#  files << "./test/approximate-bench.nnd  memcache"
+  files << "./test/approximate-bench.nnd  memcache"
   files.each {|filename|
     sh  sprintf( "time ruby -I ./lib /usr/local/bin/nendo %s", filename )
   }
@@ -44,7 +44,7 @@ task :dump do
 end
 
 task :rackup do
-  sh "rackup ./lib/sekka.ru"
+  sh "rackup --port 12929 ./lib/sekka.ru"
 end
 
 task :katakanago do
