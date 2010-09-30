@@ -149,19 +149,15 @@
 
 ;; keyword には ローマ字のみを受け付ける
 (define (sekka-henkan userid kvs keyword)
-  ;; Nendoにmap-with-indexgが無いので、即席で作る
-  (define (my-map-with-index pred lst)
-    (map
-     pred
-     (range (length lst))
-     lst))
-
   ;; 変換候補にindex番号を付加する
   (define (append-index-number kouho-list)
-    (my-map-with-index
-     (lambda (index x)
-       (append x (list index)))
-     kouho-list))
+    (let1 count 0
+      (map
+       (lambda (x)
+         (begin0
+           (append x (list count))
+           (set! count (+ count 1))))
+       kouho-list)))
   
   ;; キーワードの種別で処理を分割する
   (append-index-number
