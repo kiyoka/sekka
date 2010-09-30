@@ -336,7 +336,7 @@
 	(let ((str "")
 	      (buf-name (file-name-nondirectory file)))
 	  (save-excursion
-	    (find-file-read-only-other-window file)
+	    (find-file-read-only file)
 	    (setq str (with-current-buffer (get-buffer buf-name)
 			(buffer-substring-no-properties (point-min) (point-max))))
 	    (message (format "SKK 辞書 %s を開いています...完了！" (file-name-nondirectory file)))
