@@ -97,7 +97,7 @@ Sekkaはモードレスなローマ字かな漢字変換エンジンです。SKK
      niから始まる語彙のインデックスも更新され、下記のようになる。
        (user名がuuuuの場合)
       [key]               [value]
-     "master::(ni)"        ni ni-  nihongo nihongoca nihongoka nihongonyuuryocu  niwa niwatori nizi 
+     "MASTER::(ni)"        ni ni-  nihongo nihongoca nihongoka nihongonyuuryocu  niwa niwatori nizi 
      "uuuu::(ni)"          ni ni-  nihongo nihongonyuuryokumesoddo nihongoca nihongoka nihongonyuuryocu  niwa niwatori nizi 
 
 
@@ -105,16 +105,21 @@ Sekkaはモードレスなローマ字かな漢字変換エンジンです。SKK
   1) ユーザー語彙登録キュー
      クライアント(Emacs)からはユーザー語彙をキューに詰むインタフェースを叩く。
      キューの形式は以下の通り。value側はSKK辞書の1行を1つの文字列としたS式で保持する。
-       (user名がuuuuの場合)
+     キューは、TokyoCabinetではなくEventMachineのキューを使う。
+     (user名がuuuuの場合)
+
+     i) キューの内容
+        第一フィールドにユーザ名を付加する。
+        "uuuu ぶろぐr /ブログ/", "uuuu ぶろぐt /ブログ/", "uuuu はてぶ /はてブ/はてなブックマーク/", ...
+
+     ii) 登録済み語彙の保存先
       [key]               [value]
-     "uuuu::(queue)"      ("ぶろぐr /ブログ/" "ぶろぐt /ブログ/" "はてぶ /はてブ/はてなブックマーク/")
-     "uuuu::(stored)"      ()
+     "uuuu::(stored)"     ("uuuu ブログr /ブログ/")
 
   2) 登録キューの消化処理
-     Rubyのeventmachineモジュールのインターバルタイマーでキューを監視する。
-     キューに一件でも依頼が蓄積されていれば、全データを一気に登録する。
-     全データの処理が完了したら、(stored) 側に追記する。
+     Rackとは別スレッドにて、10秒に1回程度のペースでキューを1件づつ消化する。
+     登録処理が完了した語彙は、"ユーザID::(stored)" 側に追記する。
      ※ もし、queueに入ってきた語彙で(stored)に登録済みであればその語彙は無視される。
-
+        但し、"たんご /単語/" と "たんご /単語/丹後/" のように内容が1文字でも異なっていれば上書き登録される。
 
 [EOF]

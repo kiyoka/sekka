@@ -31,8 +31,7 @@
       (cond
        ((rxmatch #/^\;/ line)
         ;; コメント行
-        #f
-        )
+        #f)
        ((or (is-hiragana (first fields))
             (rxmatch #/^([>あ-ん]+)$/ (first fields)))
         ;; 送り仮名なしデータ
@@ -43,9 +42,12 @@
              (expand-okuri-ari-entry (rxmatch-substring m 1)
                                      (rxmatch-substring m 2)
                                      (second fields))))
+       ((rxmatch #/[亜-瑤]+/ (first fields))
+        ;; 漢字が1文字でも含まれている
+        #f)
        (else
         (list (cons (first fields) (second fields)))))))
-
+  
   (let* ((lines
           (map
            (lambda (line)

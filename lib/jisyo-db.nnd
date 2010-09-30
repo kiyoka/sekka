@@ -5,6 +5,7 @@
 (load "./lib/util.nnd")
 
 (define masterid "MASTER")
+(define workid   "WORK")
 
 (define alphabet-string "abcdefghijklmnopqrstuvwxyz>")
 (define alphabet-lower-list (to-list (alphabet-string.split "")))

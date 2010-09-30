@@ -113,82 +113,32 @@
 (define db (kvs._db))
 
 
-
 ;;-------------------------------------------------------------------
-(test-section "User dict's Queue utility")
-
-(test* "pop 1"  #f    (kvs-pop! userid "(queue)"  kvs))
-(test* "pop 2"  #f    (kvs-pop! userid "(stored)" kvs))
-
-(test* "push 1"
-       "100"
-       (kvs-push! userid "(queue)"  kvs "100"))
-(test* "push 2"
-       "200"
-       (kvs-push! userid "(queue)" kvs "200"))
-(test* "pop 3"
-       "100"
-       (kvs-pop! userid "(queue)"  kvs)
-       eq?)
-(test* "pop 4"
-       "200"
-       (kvs-pop! userid "(queue)"  kvs))
-(test* "pop 5"
-       #f
-       (kvs-pop! userid "(queue)"  kvs))
-
-(test* "push 3"
-       "aaaa"
-       (kvs-push! userid "(stored)"  kvs "aaaa"))
-(test* "pop 6"
-       #f
-       (kvs-pop! userid2 "(stored)"  kvs))    ;; userid2
-(test* "pop 7"
-       "aaaa"
-       (kvs-pop! userid "(stored)"  kvs))
-(test* "pop 8"
-       #f
-       (kvs-pop! userid "(stored)"  kvs))
-
-
 (test-section "Register User dict")
-(test* "register queue dict 1"
-       4
-       (registerUserJisyo userid kvs (string-join
-                                      '(
-                                        "まじぱねぇ /マジパネェ/"
-                                        "ぶろぐr /ブログ/"
-                                        "ぶろぐt /ブログ/"
-                                        "へんかんえんじん /変換エンジン/"
-                                        )
-                                      "\n")))
-(test* "register queue user dict 2"
-       1
-       (registerUserJisyo userid kvs "はてぶ /はてブ/はてなブックマーク/\n"))
-
-(test* "register queue user dict 3"
-       1
-       (registerUserJisyo userid kvs "はてぶ /はてブ/はてなブックマーク/\n"))
-
-(test* "register queue user dict 4"
-       1
-       (registerUserJisyo userid kvs "まじぱねぇ /マジパネェ/まじパネェ/マジ半端ネェ/まじ半端ネェ/\n"))
-
 (for-each
- (lambda (str n)
-   (test* (sprintf "store user dict %d" n)
-          str
-          (processUserJisyo userid kvs)))
- '("まじぱねぇ /マジパネェ/"
-   "ぶろぐr /ブログ/"
-   "ぶろぐt /ブログ/"
-   "へんかんえんじん /変換エンジン/"
-   "はてぶ /はてブ/はてなブックマーク/"
-   nil
-   "まじぱねぇ /マジパネェ/まじパネェ/マジ半端ネェ/まじ半端ネェ/"
-   nil
-   nil)
- (range 10 1))
+ (lambda (x)
+   (let ((_answer    (first x))
+         (_user      (second x))
+         (_dict-line (third x)))
+     (test* (sprintf "register dict [%s] from queue" _dict-line)
+            _answer
+            (registerUserJisyo _user kvs _dict-line))))
+ `(
+   (#t  ,userid "まじぱねぇ /マジパネェ/")
+   (#t  ,userid "ぶろぐr /ブログ/")
+   (#t  ,userid "ぶろぐt /ブログ/")
+   (#t  ,userid "へんかんえんじん /変換エンジン/")
+   (#t  ,userid "はてぶ /はてブ/はてなブックマーク/")
+   (#f  ,userid "はてぶ /はてブ/はてなブックマーク/")
+   (#t  ,userid "まじぱねぇ /マジパネェ/まじパネェ/マジ半端ネェ/まじ半端ネェ/")
+   (#f  ,userid "まじぱねぇ /マジパネェ/まじパネェ/マジ半端ネェ/まじ半端ネェ/")
+   (#f  ,userid "まじぱねぇ /マジパネェ/まじパネェ/マジ半端ネェ/まじ半端ネェ/")
+   (#f  ,userid ";; コメント")
+   (#f  ,userid ";;-------- 罫線 -------")
+   (#f  ,userid "") ;; 空行
+   (#f  ,userid "aaaa") ;; 明らかなフォーマットエラー
+   (#f  ,userid "単語 /たんご/") ;; フォーマットエラー
+   ))
 
 
 ;;-------------------------------------------------------------------

@@ -256,38 +256,8 @@
 (export-to-ruby sekkaKakutei)
 
 
-;; "ユーザー語彙の "(queue)" か "(stored)" にpush!する"
-(define (kvs-push! userid where kvs entry-str)
-  (let* ((orig (kvs.get (+ userid "::" where) "()"))
-         (orig (read-from-string orig)))
-    (kvs.put! (+ userid "::" where) (write-to-string (append orig (list entry-str))))
-    entry-str))
-
-;; "ユーザー語彙の "(queue)" か "(stored)" からpop!する
-(define (kvs-pop!  userid where kvs)
-  (let* ((orig (kvs.get (+ userid "::" where) "()"))
-         (orig (read-from-string orig)))
-    (if (null? orig)
-        #f
-        (let1 top (first orig)
-          (kvs.put! (+ userid "::" where) (write-to-string (cdr orig)))
-          top))))
-
-
-;; ユーザー定義語彙の登録依頼(キューへの追記のみ)
-(define (registerUserJisyo userid kvs str)
-  (let1 queue-data (to-list (str.split "\n"))
-    (for-each
-     (lambda (x)
-       (kvs-push! userid "(queue)" kvs x))
-     queue-data)
-    (length queue-data)))
-;; Export to Ruby world
-(export-to-ruby registerUserJisyo)
-
-
-;; ユーザー定義語彙の登録処理(キューの内容を実際にユーザー辞書に反映する)
-(define (processUserJisyo userid kvs)
+;; ユーザー定義語彙の登録処理
+(define (registerUserJisyo userid kvs dict-line)
   (define user-keylist '())
   (define (insert-to-db sekka-jisyo-data)
     (for-each
@@ -324,18 +294,34 @@
                                   " "))))
        (hash-table-keys okuri-nashi-hash))))
          
-  (let loop ((top (kvs-pop! userid "(queue)" kvs)))
-    (if top
-        (cond
-         ((memv top (read-from-string (kvs.get (+ userid "::(stored)") "()")))
-          #?=(+ "already stored userid=[" userid "] tango=[" top "]")
-          nil)
-         (else
-          (insert-to-db (convert-skk-jisyo-f (StringIO.new (+ top "\n"))))
-          (_create-ready-made-keylist user-keylist)
-          (kvs-push! userid "(stored)" kvs top)
-          #?=(+ "user dict stored userid=[" userid "] tango=[" top "]")
-          top))
-        nil)))
+  ;; "ユーザー語彙を"(stored)"にpush!する"
+  (define (kvs-push! userid kvs entry-str)
+    (let* ((orig (kvs.get (+ userid "::(stored)") "()"))
+           (orig (read-from-string orig)))
+      (kvs.put! (+ userid "::(stored)") (write-to-string (append orig (list entry-str))))
+      entry-str))
+
+  (cond
+   ((memv dict-line (read-from-string (kvs.get (+ userid "::(stored)") "()")))
+    #?=(+ "already stored userid=[" userid "] tango=[" dict-line "]")
+    #f)
+   (else
+    (cond
+     ((rxmatch #/[ ]+[\/]/ dict-line)
+      (let1 lst (convert-skk-jisyo-f (StringIO.new (+ dict-line "\n")))
+        (if (null? lst)
+            (begin
+              #?=(+ "Error user dict format error userid=[" userid "] tango=[" dict-line "]")
+              #f)
+            (begin
+              (insert-to-db lst)
+              (_create-ready-made-keylist user-keylist)
+              (kvs-push! userid kvs dict-line)
+              #?=(+ "user dict stored userid=[" userid "] tango=[" dict-line "]")
+              #t))))
+     (else
+      #?=(+ "Error user dict format error userid=[" userid "] tango=[" dict-line "]")
+      #f)))))
 ;; Export to Ruby world
-(export-to-ruby processUserJisyo)
+(export-to-ruby registerUserJisyo)
+

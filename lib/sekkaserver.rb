@@ -3,6 +3,8 @@
 
 require 'rack'
 require 'nendo'
+require 'eventmachine'
+require 'syslog'
 
 class SekkaServer
   def initialize( dictSource, cacheSource = false)
@@ -13,6 +15,27 @@ class SekkaServer
     @core.evalStr( '(define (writeToString sexp) (write-to-string sexp))' )
     @core.evalStr( '(export-to-ruby writeToString)' )
     (@kvs,@cachesv) = @core.openSekkaJisyo( dictSource, cacheSource )
+    @queue = EM::Queue.new
+
+    begin
+      @thread = Thread.new do
+        Thread.pass
+        EventMachine::run {
+          EventMachine::PeriodicTimer.new( 5 ) do
+            puts "queue size = " + @queue.size.to_s
+            while not @queue.empty?
+              @queue.pop { |word| 
+                arr = word.split( /[ ]+/ )
+                break if @core.registerUserJisyo(arr[0], @kvs, arr[1] + " " + arr[2] )
+              }
+            end
+          end
+        }
+      end
+      @thread.run
+    rescue
+      p $!  # => "unhandled exception"
+    end
   end
 
   def call(env)
@@ -27,12 +50,9 @@ class SekkaServer
                arr = arg.split( /[ ]+/ )
                @core.sekkaKakutei( req.params['userid'], @kvs, @cachesv, arr[0], arr[1] )
              when "/register"
-               result = @core.registerUserJisyo( req.params['userid'], @kvs, req.params['arg'].force_encoding( "UTF-8" ))
-               if 0 < result
-                 sprintf( "register request successful (%s) words", result )
-               else
-                 "register failed..."
-               end
+               dict = req.params['arg'].force_encoding( "UTF-8" ).split( "\n" )
+               dict.each { |x| @queue.push( req.params['userid'] + " " + x ) }
+               sprintf( "register request successful (%s) words", dict.size )
              else
                sprintf( "unknown path name. [%s]", req.path )
              end
@@ -47,3 +67,4 @@ class SekkaServer
     res.finish
   end
 end
+
