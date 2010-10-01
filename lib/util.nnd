@@ -16,4 +16,9 @@
     (+ (. (car _pair) downcase)
        (cdr _pair))))
 
-  
+(define (split-dict-line line)
+  (if-let1 index (line.index #/[ ]+/)
+    (list (car (to-list (line.split #/[ ]+/)))
+          (. (line.slice index (line.size)) strip))
+    #f))
+

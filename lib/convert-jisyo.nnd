@@ -1,6 +1,7 @@
 :; #-*- mode: nendo; syntax: scheme -*-;;
 
 (use srfi-1)
+(load "./lib/util.nnd")
 (load "./lib/roman-lib.nnd")
 
 
@@ -23,14 +24,16 @@
       roman-list)
      (list (cons (+ key okuri) value)))))
 
-
 (define (convert-skk-jisyo-f f)
   (define (gen-sekka-entries line)
     (let* ((line   (line.sub #/\/$/ ""))
-           (fields (to-list (line.split " "))))
+           (fields (split-dict-line line)))
       (cond
        ((rxmatch #/^\;/ line)
         ;; コメント行
+        #f)
+       ((not fields)
+        ;; フォーマットエラー
         #f)
        ((or (is-hiragana (first fields))
             (rxmatch #/^([>あ-ん]+)$/ (first fields)))

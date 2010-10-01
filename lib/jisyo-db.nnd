@@ -114,7 +114,7 @@
   (define (create-keylist kvs lines)
     (for-each
      (lambda (line)
-       (let1 fields (to-list (line.split " "))
+       (let1 fields (split-dict-line line)
          (set! keylist (cons (first fields) keylist))
          (append-entry masterid kvs (first fields) (second fields))))
      lines))
