@@ -168,14 +168,18 @@
         ((rxmatch #/[a-z][A-Z]/ keyword)
          ;; 送りあり
          ;;(let1 result (approximate-search db keyword #t)  (disp-search-result result))
-         (henkan-okuri-ari userid kvs keyword))
+         (append
+          (henkan-okuri-ari userid kvs keyword)
+          (if (gen-roman->hiragana (keyword.downcase))
+              (henkan-hiragana kvs (keyword.downcase))
+              '())))
         (else
          ;; 送りなし
          ;;(let1 result (approximate-search db keyword #f)  (disp-search-result result))
          (append
           (henkan-okuri-nashi userid kvs keyword)
-          (if (gen-roman->hiragana keyword)
-              (henkan-hiragana kvs keyword)
+          (if (gen-roman->hiragana (keyword.downcase))
+              (henkan-hiragana kvs (keyword.downcase))
               '()))))))
     ((gen-roman->hiragana keyword)
      (append
