@@ -12,7 +12,7 @@
 
 ;; 曖昧検索
 ;;  リストで返す。 (ソート済み検索結果)
-(define (approximate-search userid kvs keyword okuri-ari-flag)
+(define (approximate-search userid kvs keyword okuri-ari-flag limit)
   (define jarow-shikii 0.94)
   (let* ((a-search (ApproximateSearch.new jarow-shikii))
          (lst      (append-map
@@ -29,7 +29,9 @@
                          (to-list (v-rest.split "/")))))
                     (to-list (a-search.search userid kvs keyword okuri-ari-flag))))
          (sorted-lst  (sort-by lst (lambda (item) (- 1.0 (car item))))))
-    sorted-lst))
+    (if (= limit 0)
+        sorted-lst
+        (take* sorted-lst limit))))
 
 
 ;; 厳密検索
@@ -70,27 +72,32 @@
 
 
 ;; 送り仮名なしの変換
-(define (henkan-okuri-nashi userid kvs keyword)
-  (let* ((result (approximate-search userid kvs keyword #f))
+(define (henkan-okuri-nashi userid kvs keyword limit)
+  (let* ((result (approximate-search userid kvs keyword #f limit))
          (kouho  (uniq (map
                         (lambda (x)
                           (third x))
                         result))))
-    (append-map
-     (lambda (value)
-       (if-let1 m (rxmatch #/^C(.+)$/ value)
-         (split-henkan-kouho
-          (dict-get userid kvs (string-drop value 1))
-          (rxmatch-substring m 1)
-          ) ;; continue to fetch
-         (split-henkan-kouho
-          value
-          keyword)))
-     kouho)))
+    (let1 lst
+        (append-map
+         (lambda (value)
+           (if-let1 m (rxmatch #/^C(.+)$/ value)
+             (split-henkan-kouho
+              (dict-get userid kvs (string-drop value 1))
+              (rxmatch-substring m 1)
+              ) ;; continue to fetch
+             (split-henkan-kouho
+              value
+              keyword)))
+         kouho)
+      (if (= limit 0)
+          lst
+          (take* lst limit)))))
+          
 
 
 ;; 送り仮名ありの変換
-(define (henkan-okuri-ari userid kvs keyword)
+(define (henkan-okuri-ari userid kvs keyword limit)
   (let* ((keyword  (let1 _pair (string-split-first-and-rest keyword)
                      (+ (. (car _pair) downcase)
                         (cdr _pair))))
@@ -101,7 +108,8 @@
                                            (+ (rxmatch-substring m 1)
                                               (rxmatch-substring m 2)
                                               (rxmatch-substring m 3))
-                                           #t))
+                                           #t
+                                           limit))
                (okurigana  (or
                             (gen-roman->hiragana (. (+
                                                      (rxmatch-substring m 3)
@@ -111,15 +119,19 @@
                                   (lambda (x)
                                     (third x))
                                   result))))
-          (append-map
-           (lambda (value)
-             (if-let1 m (rxmatch #/^C(.+)$/ value)
-               (split-henkan-kouho
-                (dict-get userid kvs (string-drop value 1))
-                (rxmatch-substring m 1)
-                okurigana) ;; continue to fetch
-               (split-henkan-kouho value keyword okurigana)))
-           kouho)))))
+          (let1 lst
+              (append-map
+               (lambda (value)
+                 (if-let1 m (rxmatch #/^C(.+)$/ value)
+                   (split-henkan-kouho
+                    (dict-get userid kvs (string-drop value 1))
+                    (rxmatch-substring m 1)
+                    okurigana) ;; continue to fetch
+                   (split-henkan-kouho value keyword okurigana)))
+               kouho)
+            (if (= limit 0)
+                lst
+                (take* lst limit)))))))
 
 
 ;; 平仮名の変換
@@ -148,7 +160,7 @@
 
 
 ;; keyword には ローマ字のみを受け付ける
-(define (sekka-henkan userid kvs keyword)
+(define (sekka-henkan userid kvs keyword limit)
   ;; 変換候補にindex番号を付加する
   (define (append-index-number kouho-list)
     (let1 count 0
@@ -169,7 +181,7 @@
          ;; 送りあり
          ;;(let1 result (approximate-search db keyword #t)  (disp-search-result result))
          (append
-          (henkan-okuri-ari userid kvs keyword)
+          (henkan-okuri-ari userid kvs keyword limit)
           (if (gen-roman->hiragana (keyword.downcase))
               (henkan-hiragana kvs (keyword.downcase))
               '())))
@@ -177,23 +189,23 @@
          ;; 送りなし
          ;;(let1 result (approximate-search db keyword #f)  (disp-search-result result))
          (append
-          (henkan-okuri-nashi userid kvs keyword)
+          (henkan-okuri-nashi userid kvs keyword limit)
           (if (gen-roman->hiragana (keyword.downcase))
               (henkan-hiragana kvs (keyword.downcase))
               '()))))))
     ((gen-roman->hiragana keyword)
      (append
       (henkan-hiragana kvs keyword)
-      (henkan-okuri-nashi userid kvs keyword)))
+      (henkan-okuri-nashi userid kvs keyword limit)))
     (else
      (henkan-non-kanji userid kvs keyword)))))
 
 
 ;; conversion #f => nil for EmacsLisp
-(define (sekkaHenkan userid kvs cachesv keyword)
+(define (sekkaHenkan userid kvs cachesv keyword limit)
   (define cache-exp-second (* 60 60))
   (let* ((keyword (keyword.strip))
-         (sekka-keyword (+ "sekka::" keyword)))
+         (sekka-keyword (+ "sekka::" (limit.to_s) "::" keyword)))
     (if-let1 fetched (and cachesv
                           (cachesv.get sekka-keyword #f))
       (begin
@@ -202,7 +214,7 @@
       (let1 henkan-result (map
                            (lambda (x)
                              (map (lambda (val) (if val val nil)) x))
-                           (sekka-henkan userid kvs keyword))
+                           (sekka-henkan userid kvs keyword limit))
         (and cachesv
              (not (null? henkan-result))
              (let1 fetched2 (cachesv.get  "sekka::(keys)" #f)

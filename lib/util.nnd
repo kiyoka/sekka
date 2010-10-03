@@ -22,3 +22,10 @@
           (. (line.slice index (line.size)) strip))
     #f))
 
+(define (take* lst limit)
+  (let1 len (length lst)
+    (if (< len limit)
+        lst
+        (take lst limit))))
+
+

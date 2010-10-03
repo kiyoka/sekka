@@ -264,13 +264,13 @@
 ;;
 ;; ローマ字で書かれた文章をSekkaサーバーを使って変換する
 ;;
-(defun sekka-henkan-request (yomi)
+(defun sekka-henkan-request (yomi limit)
   (sekka-debug-print (format "henkan-input :[%s]\n"  yomi))
 
   ;;(message "Requesting to sekka server...")
   
   (let (
-	(result (sekka-rest-request "henkan" yomi)))
+	(result (sekka-rest-request "henkan" (concat yomi " " (number-to-string limit)))))
     (sekka-debug-print (format "henkan-result:%S\n" result))
     (if (eq (string-to-char result) ?\( )
 	(progn
@@ -361,7 +361,7 @@
   (when (/= b e)
     (let* (
 	   (yomi (buffer-substring-no-properties b e))
-	   (henkan-list (sekka-henkan-request yomi)))
+	   (henkan-list (sekka-henkan-request yomi 0)))
       
       (if henkan-list
 	  (condition-case err
@@ -890,7 +890,7 @@ sekka-modeがONの間中呼び出される可能性がある。"
 			  sekka-guide-lastresult
 			(progn
 			  (setq sekka-guide-lastquery str)
-			  (setq sekka-guide-lastresult (sekka-henkan-request str))
+			  (setq sekka-guide-lastresult (sekka-henkan-request str 1))
 			  sekka-guide-lastresult))))
 	       (mess
 		(if (< 0 (length lst))

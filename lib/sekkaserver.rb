@@ -50,7 +50,9 @@ class SekkaServer
            when 'POST'
              case req.path
              when "/henkan"
-               @core.writeToString( @core.sekkaHenkan( req.params['userid'], @kvs, @cachesv, req.params['arg'] ))
+               arg = req.params['arg'].force_encoding("UTF-8")
+               arr = arg.split( /[ ]+/ )
+               @core.writeToString( @core.sekkaHenkan( req.params['userid'], @kvs, @cachesv, arr[0], arr[1].to_i ))
              when "/kakutei"
                arg = req.params['arg'].force_encoding("UTF-8")
                arr = arg.split( /[ ]+/ )
