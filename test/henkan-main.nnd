@@ -62,10 +62,12 @@
                   "wake /ウェイク/"
                   "わけ /訳/和気;地名/理由;当て字/分け/分/譯;「訳」の旧字/戯奴/"
                   "あu /合;(一致) 話が合う/会;人と会う/遭;(偶然、特によくないことにあう) 事故に遭う/逢;(人と|運命的にあう) 巡り逢う/遇;≒遭う/會;「会」の旧字/"
+                  "さく /策/柵/作/佐久;地名/朔;朔日 ⇔晦/槊;ほこ/搾;搾取/昨;昨夜/咋;(くう)/窄;狭窄/酢;酢酸/柞;いすのき/炸;炸裂/筰;山田耕筰/削;削除/索;検索/錯;錯誤/筴/縒;より/鑿/做;「作」の異体字/簀;す/嘖;さいな・む/捉;(漢音) とら・える/齪;齷齪/冊;(慣用音)竹冊/册;「冊」の旧字/辟;?/乍;?/"
+                  "さき /先/崎/左記/前/早紀/沙樹/早岐/沙貴/咲/埼/尖/嵜/碕/早記/"
                   )
                 "\n")))
       (sekka-jisyo-data
-       '("watashiH Cわたしh" "watasiH Cわたしh" "わたしh /私" "okonaU Cおこなu" "oconaU Cおこなu" "おこなu /行/行な;※送り位置補正" "hennkann Cへんかん" "hennkan Cへんかん" "henncann Cへんかん" "henncan Cへんかん" "henkann Cへんかん" "henkan Cへんかん" "hencann Cへんかん" "hencan Cへんかん" "へんかん /変換/返還" "hennka Cへんか" "hennca Cへんか" "henka Cへんか" "henca Cへんか" "へんか /変化/返歌" "hennkaS Cへんかs" "henncaS Cへんかs" "henkaS Cへんかs" "hencaS Cへんかs" "へんかs /変化" "shizenngenngo Cしぜんげんご" "shizenngengo Cしぜんげんご" "shizengenngo Cしぜんげんご" "shizengengo Cしぜんげんご" "sizenngenngo Cしぜんげんご" "sizenngengo Cしぜんげんご" "sizengenngo Cしぜんげんご" "sizengengo Cしぜんげんご" "しぜんげんご /自然言語" "shizenngenngoshori Cしぜんげんごしょり" "shizenngenngosyori Cしぜんげんごしょり" "shizenngengoshori Cしぜんげんごしょり" "shizenngengosyori Cしぜんげんごしょり" "shizengenngoshori Cしぜんげんごしょり" "shizengenngosyori Cしぜんげんごしょり" "shizengengoshori Cしぜんげんごしょり" "shizengengosyori Cしぜんげんごしょり" "sizenngenngoshori Cしぜんげんごしょり" "sizenngenngosyori Cしぜんげんごしょり" "sizenngengoshori Cしぜんげんごしょり" "sizenngengosyori Cしぜんげんごしょり" "sizengenngoshori Cしぜんげんごしょり" "sizengenngosyori Cしぜんげんごしょり" "sizengengoshori Cしぜんげんごしょり" "sizengengosyori Cしぜんげんごしょり" "しぜんげんごしょり /自然言語処理" "shizenngenngorikai Cしぜんげんごりかい" "shizenngenngoricai Cしぜんげんごりかい" "shizenngengorikai Cしぜんげんごりかい" "shizenngengoricai Cしぜんげんごりかい" "shizengenngorikai Cしぜんげんごりかい" "shizengenngoricai Cしぜんげんごりかい" "shizengengorikai Cしぜんげんごりかい" "shizengengoricai Cしぜんげんごりかい" "sizenngenngorikai Cしぜんげんごりかい" "sizenngenngoricai Cしぜんげんごりかい" "sizenngengorikai Cしぜんげんごりかい" "sizenngengoricai Cしぜんげんごりかい" "sizengenngorikai Cしぜんげんごりかい" "sizengenngoricai Cしぜんげんごりかい" "sizengengorikai Cしぜんげんごりかい" "sizengengoricai Cしぜんげんごりかい" "しぜんげんごりかい /自然言語理解" "developer /デベロッパー/ディベロッパー/デベロッパ" ">ann C>あん" ">an C>あん" ">あん /案" "{ /｛" "kakko Cかっこ" "cakko Cかっこ" "かっこ /確固/括弧/各個/各戸/確乎/羯鼓;雅楽の打楽器/格好/『/』;二重鉤括弧/【/】;隅付き括弧/［/］;大括弧(bracket)/〔/〕;亀甲括弧/〈/〉;山括弧/《/》;二重山括弧/｛/｝;中括弧(brace)/「/」;鉤括弧/（/）;小括弧,丸括弧(parenthesis)/‘/’;singlequote/“/”;doublequote/『』/【】/［］/〔〕/〈〉/《》/｛｝/「」/（）/‘’/“”" "kokka Cこっか" "cokka Cこっか" "こっか /国家;state/国歌;anthem.「-斉唱」/国花/骨化/國家;「国」旧字/黒化/刻下/】/）/］/』" "! /！/感嘆符" ". /．/・/。/…;..." "* /＊/※/×" "? /？" "/ /／/÷" "!= /≠" "ko-hi- Cこーひー" "ko-hi^ Cこーひー" "ko^hi- Cこーひー" "ko^hi^ Cこーひー" "co-hi- Cこーひー" "co-hi^ Cこーひー" "co^hi- Cこーひー" "co^hi^ Cこーひー" "こーひー /コーヒー" "kani Cかに" "cani Cかに" "かに /蟹/可児/蠏" "kanni Cかんい" "kani Cかんい" "canni Cかんい" "cani Cかんい" "かんい /簡易/官位/冠位;-十二階/漢医;漢方医/敢為/官医/寛衣/換位/簡意" "icchi Cいっち" "ittyi Cいっち" "いっち /一致" "icchi Cいっち" "ittyi Cいっち" "いっち /イッチ" "eR Cえr" "えr /得/獲;NB:「とr」と同形/選;NB:「よr」「すぐr」と同形" "wo Cを" "を /小/緒/雄/男/牡/尾/悪/汚/惡;「悪」の旧字(人名用漢字)" "miR Cみr" "みr /見/観;(字義:みわたす)/視;(字義:じっとみる)/診;(diagnose) 患者を診る/看;(nurse) 病母を看る/觀;「観」の旧字" "wake /ウェイク" "wake Cわけ" "wace Cわけ" "わけ /訳/和気;地名/理由;当て字/分け/分/譯;「訳」の旧字/戯奴" "aU Cあu" "あu /合;(一致) 話が合う/会;人と会う/遭;(偶然、特によくないことにあう) 事故に遭う/逢;(人と|運命的にあう) 巡り逢う/遇;≒遭う/會;「会」の旧字")
+       '("watashiH Cわたしh" "watasiH Cわたしh" "わたしh /私" "okonaU Cおこなu" "oconaU Cおこなu" "おこなu /行/行な;※送り位置補正" "hennkann Cへんかん" "hennkan Cへんかん" "henncann Cへんかん" "henncan Cへんかん" "henkann Cへんかん" "henkan Cへんかん" "hencann Cへんかん" "hencan Cへんかん" "へんかん /変換/返還" "hennka Cへんか" "hennca Cへんか" "henka Cへんか" "henca Cへんか" "へんか /変化/返歌" "hennkaS Cへんかs" "henncaS Cへんかs" "henkaS Cへんかs" "hencaS Cへんかs" "へんかs /変化" "shizenngenngo Cしぜんげんご" "shizenngengo Cしぜんげんご" "shizengenngo Cしぜんげんご" "shizengengo Cしぜんげんご" "sizenngenngo Cしぜんげんご" "sizenngengo Cしぜんげんご" "sizengenngo Cしぜんげんご" "sizengengo Cしぜんげんご" "しぜんげんご /自然言語" "shizenngenngoshori Cしぜんげんごしょり" "shizenngenngosyori Cしぜんげんごしょり" "shizenngengoshori Cしぜんげんごしょり" "shizenngengosyori Cしぜんげんごしょり" "shizengenngoshori Cしぜんげんごしょり" "shizengenngosyori Cしぜんげんごしょり" "shizengengoshori Cしぜんげんごしょり" "shizengengosyori Cしぜんげんごしょり" "sizenngenngoshori Cしぜんげんごしょり" "sizenngenngosyori Cしぜんげんごしょり" "sizenngengoshori Cしぜんげんごしょり" "sizenngengosyori Cしぜんげんごしょり" "sizengenngoshori Cしぜんげんごしょり" "sizengenngosyori Cしぜんげんごしょり" "sizengengoshori Cしぜんげんごしょり" "sizengengosyori Cしぜんげんごしょり" "しぜんげんごしょり /自然言語処理" "shizenngenngorikai Cしぜんげんごりかい" "shizenngenngoricai Cしぜんげんごりかい" "shizenngengorikai Cしぜんげんごりかい" "shizenngengoricai Cしぜんげんごりかい" "shizengenngorikai Cしぜんげんごりかい" "shizengenngoricai Cしぜんげんごりかい" "shizengengorikai Cしぜんげんごりかい" "shizengengoricai Cしぜんげんごりかい" "sizenngenngorikai Cしぜんげんごりかい" "sizenngenngoricai Cしぜんげんごりかい" "sizenngengorikai Cしぜんげんごりかい" "sizenngengoricai Cしぜんげんごりかい" "sizengenngorikai Cしぜんげんごりかい" "sizengenngoricai Cしぜんげんごりかい" "sizengengorikai Cしぜんげんごりかい" "sizengengoricai Cしぜんげんごりかい" "しぜんげんごりかい /自然言語理解" "developer /デベロッパー/ディベロッパー/デベロッパ" ">ann C>あん" ">an C>あん" ">あん /案" "{ /｛" "kakko Cかっこ" "cakko Cかっこ" "かっこ /確固/括弧/各個/各戸/確乎/羯鼓;雅楽の打楽器/格好/『/』;二重鉤括弧/【/】;隅付き括弧/［/］;大括弧(bracket)/〔/〕;亀甲括弧/〈/〉;山括弧/《/》;二重山括弧/｛/｝;中括弧(brace)/「/」;鉤括弧/（/）;小括弧,丸括弧(parenthesis)/‘/’;singlequote/“/”;doublequote/『』/【】/［］/〔〕/〈〉/《》/｛｝/「」/（）/‘’/“”" "kokka Cこっか" "cokka Cこっか" "こっか /国家;state/国歌;anthem.「-斉唱」/国花/骨化/國家;「国」旧字/黒化/刻下/】/）/］/』" "! /！/感嘆符" ". /．/・/。/…;..." "* /＊/※/×" "? /？" "/ /／/÷" "!= /≠" "ko-hi- Cこーひー" "ko-hi^ Cこーひー" "ko^hi- Cこーひー" "ko^hi^ Cこーひー" "co-hi- Cこーひー" "co-hi^ Cこーひー" "co^hi- Cこーひー" "co^hi^ Cこーひー" "こーひー /コーヒー" "kani Cかに" "cani Cかに" "かに /蟹/可児/蠏" "kanni Cかんい" "kani Cかんい" "canni Cかんい" "cani Cかんい" "かんい /簡易/官位/冠位;-十二階/漢医;漢方医/敢為/官医/寛衣/換位/簡意" "icchi Cいっち" "ittyi Cいっち" "いっち /一致" "icchi Cいっち" "ittyi Cいっち" "いっち /イッチ" "eR Cえr" "えr /得/獲;NB:「とr」と同形/選;NB:「よr」「すぐr」と同形" "wo Cを" "を /小/緒/雄/男/牡/尾/悪/汚/惡;「悪」の旧字(人名用漢字)" "miR Cみr" "みr /見/観;(字義:みわたす)/視;(字義:じっとみる)/診;(diagnose) 患者を診る/看;(nurse) 病母を看る/觀;「観」の旧字" "wake /ウェイク" "wake Cわけ" "wace Cわけ" "わけ /訳/和気;地名/理由;当て字/分け/分/譯;「訳」の旧字/戯奴" "aU Cあu" "あu /合;(一致) 話が合う/会;人と会う/遭;(偶然、特によくないことにあう) 事故に遭う/逢;(人と|運命的にあう) 巡り逢う/遇;≒遭う/會;「会」の旧字" "saku Cさく" "sacu Cさく" "さく /策/柵/作/佐久;地名/朔;朔日 ⇔晦/槊;ほこ/搾;搾取/昨;昨夜/咋;(くう)/窄;狭窄/酢;酢酸/柞;いすのき/炸;炸裂/筰;山田耕筰/削;削除/索;検索/錯;錯誤/筴/縒;より/鑿/做;「作」の異体字/簀;す/嘖;さいな・む/捉;(漢音) とら・える/齪;齷齪/冊;(慣用音)竹冊/册;「冊」の旧字/辟;?/乍;?" "saki Cさき" "saci Cさき" "さき /先/崎/左記/前/早紀/沙樹/早岐/沙貴/咲/埼/尖/嵜/碕/早記")
        ))
        
   (test* "Create test jisyo"
@@ -89,7 +91,7 @@
   (let1 _output (StringIO.new)
     (_output.set_encoding "utf-8")
     (test* "dump DB to SEKKA jisyo file. (1)"
-           "3f883fd36f6c3555ba753130c27ea11ccd42d8e4"
+           "f02c8aea414b76a454faa351cb6623878a3f49b5"
            (begin
              (dump-sekka-jisyo-f _output target)
              (Digest::SHA1.hexdigest (_output.string))
@@ -239,6 +241,11 @@
        (my-round-map
         (approximate-search userid kvs "hennka" #f 2)))
 
+(test* "approximate search 8"
+       '((1.0 "saki" "Cさき"))
+       (my-round-map
+        (approximate-search userid kvs "Saki" #f 0)))
+
 
 ;;-------------------------------------------------------------------
 (test-section "henkan (okuri nashi)")
@@ -294,6 +301,10 @@
 (test* "okuri nashi 13"
        '(("蟹" #f "かに" j))
        (henkan-okuri-nashi userid kvs "kani" 1))
+
+(test* "okuri nashi 14"
+       '(("先" #f "さき" j) ("崎" #f "さき" j) ("左記" #f "さき" j) ("前" #f "さき" j) ("早紀" #f "さき" j) ("沙樹" #f "さき" j) ("早岐" #f "さき" j) ("沙貴" #f "さき" j) ("咲" #f "さき" j) ("埼" #f "さき" j) ("尖" #f "さき" j) ("嵜" #f "さき" j) ("碕" #f "さき" j) ("早記" #f "さき" j))
+       (henkan-okuri-nashi userid kvs "Saki" 0))
 
 
 ;;-------------------------------------------------------------------
