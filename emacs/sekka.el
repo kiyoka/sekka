@@ -705,6 +705,40 @@
      )))
 
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; キャピタライズ/アンキャピタライズ変換
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun sekka-capitalize-trans ()
+  "キャピタライズ変換を行う
+・カーソルから行頭方向にローマ字列を見つけ、先頭文字の大文字小文字を反転する"
+  (interactive)
+
+  (cond
+   (sekka-select-mode
+    ;; 候補選択モードでは反応しない。
+    ;; do nothing
+    )
+   ((eq (sekka-char-charset (preceding-char)) 'ascii)
+    ;; カーソル直前が alphabet だったら
+    (sekka-debug-print "capitalize(2)!\n")
+
+    (let ((end (point))
+	  (gap (sekka-skip-chars-backward)))
+      (when (/= gap 0)
+	;; 意味のある入力が見つかったので変換する
+	(let* (
+	       (b (+ end gap))
+	       (e end)
+	       (roman-str (buffer-substring-no-properties b e)))
+	  (sekka-debug-print (format "capitalize %d %d [%s]" b e roman-str))
+	  (setq case-fold-search nil)
+	  (cond
+	   ((string-match-p "^[A-Z]" roman-str)
+	    (downcase-region b (+ b 1)))
+	   ((string-match-p "^[a-z]" roman-str)
+	    (upcase-region   b (+ b 1))))))))
+   ))
+
 
 ;; 全角で漢字以外の判定関数
 (defun sekka-nkanji (ch)
@@ -909,7 +943,7 @@ sekka-modeがONの間中呼び出される可能性がある。"
 ;;; human interface
 ;;;
 (define-key sekka-mode-map sekka-rK-trans-key 'sekka-rK-trans)
-(define-key sekka-mode-map "\M-j" 'sekka-rHkA-trans)
+(define-key sekka-mode-map "\M-j" 'sekka-capitalize-trans)
 (or (assq 'sekka-mode minor-mode-map-alist)
     (setq minor-mode-map-alist
 	  (append (list 
