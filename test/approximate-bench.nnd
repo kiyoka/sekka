@@ -44,7 +44,9 @@
 (.puts Benchmark::CAPTION)
 (.puts (Benchmark.measure
         (&block ()
-          (a-search.search "uuuu" kvs "henkan" #f))))
+          (. (Range.new 0 1000) each
+             (&block (n)
+               (a-search.search "uuuu" kvs "henkan" #f))))))
 
 ;;===================================================================
 (test-end)

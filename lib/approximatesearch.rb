@@ -5,7 +5,7 @@ require './lib/kvs'
 class ApproximateSearch
   def initialize( jarow_shikii )
     @jarow_shikii = jarow_shikii
-    @jarow        = FuzzyStringMatch::JaroWinkler.new.create( :pure )
+    @jarow        = FuzzyStringMatch::JaroWinkler.new.create( :native )
   end
 
   def filtering( keyword, arr )
