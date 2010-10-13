@@ -171,58 +171,58 @@
 (test-section "approximate-search core")
 
 (test* "search keyword list 1"
-       '((1.0 "henkan") (0.9714 "henkann") (0.9667 "henka") (0.9611 "hennka"))
+       '((1.0 "henkan") (0.981 "henkann") (0.9722 "henka") (0.9611 "hennka"))
        (my-round-map
         (arr->list
          (a-search.search userid kvs "henkan" #f))))
 
 (test* "search keyword list 2"
-       '((1.0 "hennkan") (0.975 "hennkann") (0.9714 "hennka") (0.9667 "henkann") (0.9429 "henncan"))
+       '((1.0 "hennkan") (0.9875 "hennkann") (0.981 "hennka") (0.9667 "henkann") (0.9429 "henncan") (0.9421 "hennkanenzin") (0.9421 "hennkanenjin"))
        (my-round-map
         (arr->list
          (a-search.search userid kvs "hennkan" #f))))
 
 (test* "search keyword list 3"
-       '((1.0 "henkann") (0.9714 "henkan") (0.9667 "hennkan") (0.9429 "henka"))
+       '((1.0 "henkann") (0.981 "henkan") (0.9667 "hennkan") (0.9524 "henka") (0.9449 "henkanenjin") (0.9449 "henkanenzin") (0.9421 "henkannenzin") (0.9421 "henkannenjin"))
        (my-round-map
         (arr->list
          (a-search.search userid kvs "henkann" #f))))
 
 (test* "search keyword list 4"
-       '((1.0 "hennkann") (0.975 "hennkan") (0.95 "hennka") (0.95 "henncann"))
+       '((1.0 "hennkann") (0.9875 "hennkan") (0.9667 "hennka") (0.9537 "hennkanenzin") (0.9537 "hennkanenjin") (0.9507 "hennkannenjin") (0.9507 "hennkannenzin") (0.95 "henncann") (0.9408 "hennkanenzinn") (0.9408 "hennkanennjin") (0.9408 "hennkanenjinn") (0.9408 "hennkanennzin"))
        (my-round-map
         (arr->list
          (a-search.search userid kvs "hennkann" #f))))
 
 (test* "search keyword list 5"
-       '((0.9714 "henkaS") (0.9667 "hennkaS"))
+       '((0.9762 "henkaS") (0.9667 "hennkaS"))       
        (my-round-map
         (arr->list
          (a-search.search userid kvs "henkanS" #t))))
 
 (test* "search keyword list 6"
-       '((0.975 "hennkaS") (0.9417 "henkaS"))
+       '((0.9833 "hennkaS") (0.9417 "henkaS"))
        (my-round-map
         (arr->list
          (a-search.search userid kvs "hennkanS" #t))))
 
 (test* "approximate search 1"
-       '((1.0 "henka" "Cへんか") (0.9667 "henkan" "Cへんかん") (0.9611 "hennka" "Cへんか") (0.9429 "henkann" "Cへんかん"))
+       '((1.0 "henka" "Cへんか") (0.9722 "henkan" "Cへんかん") (0.9611 "hennka" "Cへんか") (0.9524 "henkann" "Cへんかん"))
        (my-round-map
         (approximate-search userid kvs "henka" #f 0)))
 
 (test* "approximate search 2"
-       '((1.0 "hennka" "Cへんか") (0.9714 "hennkan" "Cへんかん") (0.9611 "henkan" "Cへんかん") (0.9611 "henka" "Cへんか") (0.95 "hennkann" "Cへんかん"))
+       '((1.0 "hennka" "Cへんか") (0.981 "hennkan" "Cへんかん") (0.9667 "hennkann" "Cへんかん") (0.9611 "henkan" "Cへんかん") (0.9611 "henka" "Cへんか"))
        (my-round-map
         (approximate-search userid kvs "hennka" #f 0)))
 
 (test* "approximate search 3"
-       '((0.9667 "henka" "Cへんか"))
+       '((0.9722 "henka" "Cへんか") (0.9444 "henkan" "Cへんかん"))
        (my-round-map
         (approximate-search userid kvs "henkaS" #f 0)))
 
 (test* "approximate search 4"
-       '((0.9714 "hennka" "Cへんか") (0.9429 "hennkan" "Cへんかん"))
+       '((0.981 "hennka" "Cへんか") (0.9619 "hennkan" "Cへんかん") (0.9476 "hennkann" "Cへんかん"))
        (my-round-map
         (approximate-search userid kvs "hennkaS" #f 0)))
 
@@ -237,7 +237,7 @@
         (approximate-search userid kvs "hennka" #f 1)))
 
 (test* "approximate search 7"
-       '((1.0 "hennka" "Cへんか") (0.9714 "hennkan" "Cへんかん"))
+       '((1.0 "hennka" "Cへんか") (0.981 "hennkan" "Cへんかん"))
        (my-round-map
         (approximate-search userid kvs "hennka" #f 2)))
 
@@ -259,23 +259,23 @@
        (henkan-okuri-nashi userid kvs "henka" 0))
 
 (test* "okuri nashi 3"
-       '(("変換" #f "へんかん" j) ("返還" #f "へんかん" j) ("変化" #f "へんか" j) ("返歌" #f "へんか" j))
+       '(("変換" #f "へんかん" j) ("返還" #f "へんかん" j) ("変化" #f "へんか" j) ("返歌" #f "へんか" j) ("変換エンジン" #f "へんかんえんじん" j))
        (henkan-okuri-nashi userid kvs "henkann" 0))
 
 (test* "okuri nashi 4"
-       '(("変換" #f "へんかん" j) ("返還" #f "へんかん" j) ("変化" #f "へんか" j) ("返歌" #f "へんか" j))
+       '(("変換" #f "へんかん" j) ("返還" #f "へんかん" j) ("変化" #f "へんか" j) ("返歌" #f "へんか" j) ("変換エンジン" #f "へんかんえんじん" j))
        (henkan-okuri-nashi userid kvs "hennkan" 0))
 
 (test* "okuri nashi 5"
-       '(("変換" #f "へんかん" j) ("返還" #f "へんかん" j) ("変化" #f "へんか" j) ("返歌" #f "へんか" j))
+       '(("変換" #f "へんかん" j) ("返還" #f "へんかん" j) ("変化" #f "へんか" j) ("返歌" #f "へんか" j) ("変換エンジン" #f "へんかんえんじん" j))
        (henkan-okuri-nashi userid kvs "hennkann" 0))
 
 (test* "okuri nashi 6"
-       '(("自然言語" #f "しぜんげんご" j))
+       '(("自然言語" #f "しぜんげんご" j) ("自然言語理解" #f "しぜんげんごりかい" j) ("自然言語処理" #f "しぜんげんごしょり" j))
        (henkan-okuri-nashi userid kvs "shizengengo" 0))
 
 (test* "okuri nashi 7"
-       '(("自然言語処理" #f "しぜんげんごしょり" j) ("自然言語" #f "しぜんげんご" j))
+       '(("自然言語処理" #f "しぜんげんごしょり" j) ("自然言語" #f "しぜんげんご" j) ("自然言語理解" #f "しぜんげんごりかい" j))
        (henkan-okuri-nashi userid kvs "shizengengosyo" 0))
 
 (test* "okuri nashi 8"
@@ -316,7 +316,7 @@
         (approximate-search userid kvs "henkaS" #t 0)))
 
 (test* "approximate search 2"
-       '((0.9714 "henkaS" "Cへんかs") (0.9667 "hennkaS" "Cへんかs"))
+       '((0.9762 "henkaS" "Cへんかs") (0.9667 "hennkaS" "Cへんかs"))
        (my-round-map
         (approximate-search userid kvs "henkanS" #t 0)))
 
@@ -445,11 +445,11 @@
        (sekka-henkan userid kvs "*" 0))
 
 (test* "henkan toplevel 2"
-       '(("しぜんげんごりか" #f "shizengengorika" h 0) ("シゼンゲンゴリカ" #f "shizengengorika" k 1) ("自然言語理解" #f "しぜんげんごりかい" j 2) ("自然言語" #f "しぜんげんご" j 3))
+       '(("しぜんげんごりか" #f "shizengengorika" h 0) ("シゼンゲンゴリカ" #f "shizengengorika" k 1) ("自然言語理解" #f "しぜんげんごりかい" j 2) ("自然言語" #f "しぜんげんご" j 3) ("自然言語処理" #f "しぜんげんごしょり" j 4))
        (sekka-henkan userid kvs "shizengengorika" 0))
 
 (test* "henkan toplevel 3"
-       '(("自然言語理解" #f "しぜんげんごりかい" j 0) ("自然言語" #f "しぜんげんご" j 1) ("しぜんげんごりか" #f "shizengengorika" h 2) ("シゼンゲンゴリカ" #f "shizengengorika" k 3))
+       '(("自然言語理解" #f "しぜんげんごりかい" j 0) ("自然言語" #f "しぜんげんご" j 1) ("自然言語処理" #f "しぜんげんごしょり" j 2) ("しぜんげんごりか" #f "shizengengorika" h 3) ("シゼンゲンゴリカ" #f "shizengengorika" k 4))
        (sekka-henkan userid kvs "Shizengengorika" 0))
 
 (test* "henkan toplevel 4"
@@ -530,11 +530,11 @@
        (sekkaHenkan userid kvs #f "*" 0))
 
 (test* "henkan toplevel(for Elisp) 2"
-       '(("しぜんげんごりか" nil "shizengengorika" h 0) ("シゼンゲンゴリカ" nil "shizengengorika" k 1) ("自然言語理解" nil "しぜんげんごりかい" j 2) ("自然言語" nil "しぜんげんご" j 3))
+       '(("しぜんげんごりか" nil "shizengengorika" h 0) ("シゼンゲンゴリカ" nil "shizengengorika" k 1) ("自然言語理解" nil "しぜんげんごりかい" j 2) ("自然言語" nil "しぜんげんご" j 3) ("自然言語処理" nil "しぜんげんごしょり" j 4))
        (sekkaHenkan userid kvs #f "shizengengorika" 0))
 
 (test* "henkan toplevel(for Elisp) 3"
-       '(("自然言語理解" nil "しぜんげんごりかい" j 0) ("自然言語" nil "しぜんげんご" j 1) ("しぜんげんごりか" nil "shizengengorika" h 2) ("シゼンゲンゴリカ" nil "shizengengorika" k 3))
+       '(("自然言語理解" nil "しぜんげんごりかい" j 0) ("自然言語" nil "しぜんげんご" j 1) ("自然言語処理" nil "しぜんげんごしょり" j 2) ("しぜんげんごりか" nil "shizengengorika" h 3) ("シゼンゲンゴリカ" nil "shizengengorika" k 4))
        (sekkaHenkan userid kvs #f "Shizengengorika" 0))
 
 (test* "henkan toplevel(for Elisp) 4"

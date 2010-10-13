@@ -1,20 +1,20 @@
 
-require 'amatch'
+require 'fuzzystringmatch'
 require './lib/kvs'
 
 class ApproximateSearch
   def initialize( jarow_shikii )
     @jarow_shikii = jarow_shikii
+    @jarow        = FuzzyStringMatch::JaroWinkler.new.create( :pure )
   end
 
   def filtering( keyword, arr )
-    jarow = Amatch::JaroWinkler.new keyword
-    newarr = arr.map { |str|
-      val = jarow.match( str )
+    keyword = keyword.downcase
+    arr.map { |str|
+      val = @jarow.getDistance( keyword, str.downcase )
+      #printf( "   [%s] vs [%s] => %f\n", keyword, str.downcase, val )
       (val > @jarow_shikii) ? [ val, str ] : false
     }.select { |v| v }.sort_by {|item| 1.0 - item[0]}
-    jarow = nil
-    newarr
   end
 
   def search( userid, kvs, keyword, okuri_ari )
