@@ -276,6 +276,15 @@
 (define (is-hiragana str)
   (if (rxmatch #/^[あ-んぁぃぅぇぉゃゅょっー]+$/ str) #t #f))
 
+;; 送り仮名付き平仮名文字列(例:"おこなu") かどうかを評価する
+(define (is-hiragana-and-okuri str)
+  (if (rxmatch #/^[あ-んぁぃぅぇぉゃゅょっー]+[a-z]$/ str) #t #f))
+
+;; 送り仮名付き漢字文字列(例:"行う") の送り仮名部分を削除する
+(define (drop-okuri str)
+  (if-let1 m (rxmatch #/^([^あ-んぁぃぅぇぉゃゅょっー]+)(.+)$/ str)
+    (rxmatch-substring m 1)
+    str))
 
 (define (gen-hiragana->roman-pattens hiragana)
   (let ((lst '())

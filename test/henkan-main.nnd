@@ -637,8 +637,26 @@
 
 (test* "henkan kakutei(for Elisp) 12"
        nil
-       (sekkaKakutei userid2 kvs #f "wo" "を"))              ;; userid2
+       (sekkaKakutei userid2 kvs #f "wo" "を"))                ;; userid2
 
+
+(test* "henkan kakutei(for Elisp) 13"
+       '(("観" "(字義:みわたす)" "みr" j 0) ("見" nil "みr" j 1) ("視" "(字義:じっとみる)" "みr" j 2) ("診" "(diagnose) 患者を診る" "みr" j 3) ("看" "(nurse) 病母を看る" "みr" j 4) ("觀" "「観」の旧字" "みr" j 5))
+       (begin
+         (sekkaKakutei userid kvs #f "みr" "観")
+         (sekkaHenkan userid kvs #f "miR" 0)))
+
+(test* "henkan kakutei(for Elisp) 14"
+       '(("視" "(字義:じっとみる)" "みr" j 0) ("観" "(字義:みわたす)" "みr" j 1) ("見" nil "みr" j 2) ("診" "(diagnose) 患者を診る" "みr" j 3) ("看" "(nurse) 病母を看る" "みr" j 4) ("觀" "「観」の旧字" "みr" j 5))
+       (begin
+         (sekkaKakutei userid kvs #f "みr" "視")
+         (sekkaHenkan userid kvs #f "miR" 0)))
+
+(test* "henkan kakutei(for Elisp) 15"
+       '(("観る" "(字義:みわたす)" "みr" j 0) ("見る" nil "みr" j 1) ("視る" "(字義:じっとみる)" "みr" j 2) ("診る" "(diagnose) 患者を診る" "みr" j 3) ("看る" "(nurse) 病母を看る" "みr" j 4) ("觀る" "「観」の旧字" "みr" j 5) ("みる" nil "miru" h 6) ("ミル" nil "miru" k 7))
+       (begin
+         (sekkaKakutei userid2 kvs #f "みr" "観る")            ;; userid2
+         (sekkaHenkan userid2 kvs #f "miRu" 0)))               ;; userid2
 
 ;;===================================================================
 

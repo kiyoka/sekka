@@ -111,7 +111,48 @@
 (test* "is hiragana 7"
        #t
        (is-hiragana "こーひー"))
+(test* "is hiragana-and-okuri 1"
+       #t
+       (is-hiragana-and-okuri "あr"))
+(test* "is hiragana-and-okuri 2"
+       #f
+       (is-hiragana-and-okuri "あ"))
+(test* "is hiragana-and-okuri 3"
+       #t
+       (is-hiragana-and-okuri "おこなu"))
+(test* "is hiragana-and-okuri 4"
+       #f
+       (is-hiragana-and-okuri "おこなU"))
+(test* "is hiragana-and-okuri 5"
+       #f
+       (is-hiragana-and-okuri "a"))
+(test* "is hiragana-and-okuri 6"
+       #f
+       (is-hiragana-and-okuri "au"))
+(test* "is hiragana-and-okuri 7"
+       #f
+       (is-hiragana-and-okuri "1"))
+(test* "is hiragana-and-okuri 8"
+       #f
+       (is-hiragana-and-okuri "123"))
 
+;;-------------------------------------------------------------------
+(test-section "drop okurigana functions")
+(test* "drop okri 1"
+       "行"
+       (drop-okuri "行う"))
+(test* "drop okri 2"
+       "行"
+       (drop-okuri "行なう"))
+(test* "drop okri 3"
+       "見"
+       (drop-okuri "見る"))
+(test* "drop okri 4"
+       "変化"
+       (drop-okuri "変化する"))
+(test* "drop okri 5"
+       "見付"
+       (drop-okuri "見付ける"))
 
 ;;-------------------------------------------------------------------
 (test-section "kana->roman conversion functions")

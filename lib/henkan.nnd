@@ -268,28 +268,31 @@
          lst)
         "/")))
 
-  (if-let1 kouho-str (fetch userid kvs key)
-    (if (rxmatch #/^\// kouho-str)
-        (let* ((kouho-lst (split-henkan-kouho kouho-str key))
-               (no1
-                (filter (lambda (x)
-                          (eq? (car x) tango))
-                        kouho-lst))
-               (other
-                (filter (lambda (x)
-                          (not (eq? (car x) tango)))
-                        kouho-lst))
-               (new-kouho-str
-                (join-henkan-kouho (append no1 other))))
-          (if (not (= kouho-str new-kouho-str))
-              (begin
-                (write-user-entry userid kvs key new-kouho-str)
-                (and cachesv
-                     (flush-cachesv cachesv))
-                tango)
-              nil))
-        nil)
-    nil))
+  (let1 tango (if (is-hiragana-and-okuri key)
+                  (drop-okuri tango)
+                  tango)
+    (if-let1 kouho-str (fetch userid kvs key)
+      (if (rxmatch #/^\// kouho-str)
+          (let* ((kouho-lst (split-henkan-kouho kouho-str key))
+                 (no1
+                  (filter (lambda (x)
+                               (eq? (car x) tango))
+                             kouho-lst))
+                 (other
+                  (filter (lambda (x)
+                               (not (eq? (car x) tango)))
+                             kouho-lst))
+                 (new-kouho-str
+                  (join-henkan-kouho (append no1 other))))
+            (if (not (= kouho-str new-kouho-str))
+                (begin
+                  (write-user-entry userid kvs key new-kouho-str)
+                  (and cachesv
+                       (flush-cachesv cachesv))
+                  tango)
+                nil))
+          nil)
+      nil)))
 ;; Export to Ruby world
 (export-to-ruby sekkaKakutei)
 
