@@ -52,3 +52,20 @@ task :katakanago do
   sh "/usr/share/skktools/filters/abbrev-convert.rb -k tmpfile.euc | skkdic-expr2 | iconv -f=EUC-JP -t=UTF-8 > ./data/SKK-JISYO.L.hira-kata"
   sh "/bin/rm -f tmpfile.euc"
 end
+
+
+task :geminstall do
+  arr = [ "eventmachine",
+          "fuzzy-string-match",
+          "jeweler",
+          "memcache-client",
+          "mongrel --pre",
+          "nendo",
+          "rack",
+          "rspec",
+          "rubyforge",
+          "tokyocabinet" ]
+  arr.each { |str|
+    sh sprintf( "gem install %s", str)
+  }
+end
