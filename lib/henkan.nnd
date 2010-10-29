@@ -10,6 +10,30 @@
 (require "./lib/approximatesearch")
 
 
+;; 曖昧検索の評価値にヒューリスティックを加える
+;;  "nn" のように n が重なるほど、"ん" の可能性が強くなる。
+;;  "にゃ" "にゅ" "にょ" が出現した場合は、n がそちらの解釈に取られたものと解釈してその件数分引いておく。
+(define (nn-heuristics keyword lst)
+  (map
+   (lambda (x)
+     (let ((point  (first   x))
+           (roman  (second  x))
+           (target (third   x)))
+       (let* ((nn-number (min
+                          (vector-length (keyword.scan #/nn/))
+                          (vector-length (roman.scan   #/nn/))
+                          (- (vector-length (target.scan  #/ん/))
+                             (vector-length (target.scan  #/[ゃゅょ]/)))))
+              (nn-number (max 0 nn-number)))
+         (list
+          (if (= 0 nn-number)
+              point
+              (* point (* 1.1 nn-number)))
+          roman
+          target))))
+   lst))
+
+
 ;; 曖昧検索
 ;;  リストで返す。 (ソート済み検索結果)
 (define (approximate-search userid kvs keyword okuri-ari-flag limit)
@@ -28,10 +52,12 @@
                            (list val k (+ v-first element)))
                          (to-list (v-rest.split "/")))))
                     (to-list (a-search.search userid kvs keyword okuri-ari-flag))))
-         (sorted-lst  (sort-by lst (lambda (item) (- 1.0 (car item))))))
+         (nn-heuristics-result (nn-heuristics keyword lst))
+         (sorted-lst  (sort-by nn-heuristics-result (lambda (item) (- 1.0 (car item))))))
     (if (= limit 0)
         sorted-lst
         (take* sorted-lst limit))))
+
 
 
 ;; 厳密検索
