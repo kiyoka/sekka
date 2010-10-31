@@ -51,18 +51,8 @@
   :type  'string
   :group 'sekka)
 
-(defcustom sekka-server-use-cert nil
-  "Sekkaサーバーと通信する時のSSL証明書を使うかどうか。"
-  :type  'symbol
-  :group 'sekka)
-
 (defcustom sekka-server-timeout 10
   "Sekkaサーバーと通信する時のタイムアウトを指定する。(秒数)"
-  :type  'integer
-  :group 'sekka)
-
-(defcustom sekka-server-register-timeout 60
-  "Sekkaサーバーにユーザー語彙を登録する際のタイムアウトを指定する。(秒数)"
   :type  'integer
   :group 'sekka)
  
@@ -194,7 +184,6 @@
 (defvar sekka-use-color nil)
 
 (defvar sekka-init nil)
-(defvar sekka-server-cert-file nil)
 
 ;;
 ;; 初期化
@@ -223,7 +212,7 @@
 ;;
 ;; ローマ字で書かれた文章をSekkaサーバーを使って変換する
 ;;
-(defun sekka-rest-request (func-name arg &optional max-time)
+(defun sekka-rest-request (func-name arg)
   (if sekka-psudo-server
       ;; クライアント単体で仮想的にサーバーに接続しているようにしてテストするモード
       "((\"変換\" nil \"へんかん\" j 0) (\"変化\" nil \"へんか\" j 1) (\"ヘンカン\" nil \"へんかん\" k 2) (\"へんかん\" nil \"へんかん\" h 3))"
@@ -232,8 +221,7 @@
     (let ((command
 	   (concat
 	    sekka-curl " --silent --show-error "
-	    (format " --max-time %d " (or max-time
-					  sekka-server-timeout))
+	    (format " --max-time %d " sekka-server-timeout)
 	    " --insecure "
 	    " --header 'Content-Type: application/x-www-form-urlencoded' "
 	    (format "%s%s " sekka-server-url func-name)
@@ -315,7 +303,7 @@
     (when str
       (message "Requesting to sekka server...")
       (sekka-debug-print (format "register [%s]\n" str))
-      (let ((result (sekka-rest-request "register" str sekka-server-register-timeout)))
+      (let ((result (sekka-rest-request "register" str)))
 	(sekka-debug-print (format "register-result:%S\n" result))
 	(message result)
 	t))))
@@ -813,40 +801,6 @@
 	     limit-point
 	     (point))
 	  result)))))
-
-;;;
-;;; ローカルのEmacsLispだけで変換する処理
-;;;
-;; a-list を使って str の先頭に該当する文字列があるか調べる
-(defun romkan-scan-token (a-list str)
-  (let 
-      ((result     (substring str 0 1))
-       (rest       (substring str 1 (length str)))
-       (done       nil))
-
-    (mapcar
-     (lambda (x)
-       (if (and 
-	    (string-match (concat "^" (car x)) str)
-	    (not done))
-	   (progn
-	     (setq done t)
-	     (setq result (cdr x))
-	     (setq rest   (substring str (length (car x)))))))
-     a-list)
-    (cons result rest)))
-
-
-;; かな<->ローマ字変換する
-(defun romkan-convert (a-list str)
-  (cond ((= 0 (length str))
-	 "")
-	(t
-	 (let ((ret (romkan-scan-token a-list str)))
-	   (concat
-	    (car ret)
-	    (romkan-convert a-list (cdr ret)))))))
-
 
   
 ;;;
