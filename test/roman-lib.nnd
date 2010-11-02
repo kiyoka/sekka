@@ -8,43 +8,86 @@
 ;;===================================================================
 
 ;;-------------------------------------------------------------------
-(test-section "kana->roman conversion hash")
+(test-section "kana->roman conversion hash (short)")
 
 (test* "kana->roman 1"
        '("fu" "hu")
-       (hash-table-get sekka-kana->roman-hash "ふ" #f))
+       (hash-table-get sekka-kana->roman-hash-short "ふ" #f))
 (test* "kana->roman 2"
        '("xa" "la")
-       (hash-table-get sekka-kana->roman-hash "ぁ" #f))
+       (hash-table-get sekka-kana->roman-hash-short "ぁ" #f))
 (test* "kana->roman 3"
-       '("chi" "ti" "tyi")
-       (hash-table-get sekka-kana->roman-hash "ち" #f))
+       '("chi" "tyi" "ti")
+       (hash-table-get sekka-kana->roman-hash-short "ち" #f))
 (test* "kana->roman 4"
-       '("chi" "ti" "tyi")
-       (hash-table-get sekka-kana->roman-hash "ち" #f))
+       '("tt" "xtu" "xtsu" "@")
+       (hash-table-get sekka-kana->roman-hash-short "っ" #f))
 (test* "kana->roman 5"
-       '("-" "^")
-       (hash-table-get sekka-kana->roman-hash "ー" #f))
+       '("-" "^" ":")
+       (hash-table-get sekka-kana->roman-hash-short "ー" #f))
 
 ;;-------------------------------------------------------------------
-(test-section "roman->kana conversion hash")
+(test-section "kana->roman conversion hash (long)")
+
+(test* "kana->roman 1"
+       '("kz" "kn")
+       (hash-table-get sekka-kana->roman-hash-long "かん" #f))
+(test* "kana->roman 2"
+       '("kt")
+       (hash-table-get sekka-kana->roman-hash-long "こと" #f))
+(test* "kana->roman 3"
+       '("ffu" "hhu")
+       (hash-table-get sekka-kana->roman-hash-long "っふ" #f))
+
+;;-------------------------------------------------------------------
+(test-section "roman->kana conversion hash (short)")
 
 (test* "roman->kana 1"
        '("あ")
-       (hash-table-get sekka-roman->kana-hash "a" #f))
+       (hash-table-get sekka-roman->kana-hash-short "a" #f))
 (test* "roman->kana 2"
        '("っぎゃ")
-       (hash-table-get sekka-roman->kana-hash "ggya" #f))
+       (hash-table-get sekka-roman->kana-hash-short "ggya" #f))
 (test* "roman->kana 3"
        '("し")
-       (hash-table-get sekka-roman->kana-hash "si" #f))
+       (hash-table-get sekka-roman->kana-hash-short "si" #f))
 (test* "roman->kana 4"
        '("っ")
-       (hash-table-get sekka-roman->kana-hash "xtsu" #f))
+       (hash-table-get sekka-roman->kana-hash-short "xtsu" #f))
 (test* "roman->kana 5"
        '("ー")
-       (hash-table-get sekka-roman->kana-hash "-" #f))
+       (hash-table-get sekka-roman->kana-hash-short "-" #f))
+(test* "roman->kana 6"
+       '("ー")
+       (hash-table-get sekka-roman->kana-hash-short ":" #f))
+(test* "roman->kana 7"
+       '("っ")
+       (hash-table-get sekka-roman->kana-hash-short "@" #f))
 
+;;-------------------------------------------------------------------
+(test-section "roman->kana conversion hash (long)")
+
+(test* "roman->kana 1"
+       '("かん")
+       (hash-table-get sekka-roman->kana-hash-long "kn" #f))
+(test* "roman->kana 2"
+       '("かん")
+       (hash-table-get sekka-roman->kana-hash-long "kz" #f))
+(test* "roman->kana 3"
+       '("こと")
+       (hash-table-get sekka-roman->kana-hash-long "kt" #f))
+(test* "roman->kana 4"
+       '("です")
+       (hash-table-get sekka-roman->kana-hash-long "ds" #f))
+(test* "roman->kana 5"
+       '("ます")
+       (hash-table-get sekka-roman->kana-hash-long "ms" #f))
+(test* "roman->kana 6"
+       '("なん")
+       (hash-table-get sekka-roman->kana-hash-long "nz" #f))
+(test* "roman->kana 7"
+       '("ふぉん")
+       (hash-table-get sekka-roman->kana-hash-long "fl" #f))
 
 ;;-------------------------------------------------------------------
 (test-section "hiragana<->katanaka conversion functions")
@@ -158,30 +201,49 @@
 (test-section "kana->roman conversion functions")
 
 (let1 hira-list
-    (hash-table-keys sekka-kana->roman-hash)
-  (test* "kana->roman table length"        233 (length hira-list))
-  (test* "kana->roman key duplicate check" 233 (length (uniq (sort hira-list)))))
+    (hash-table-keys sekka-kana->roman-hash-long)
+  (test* "kana->roman table length"        341 (length hira-list))
+  (test* "kana->roman key duplicate check" 341 (length (uniq (sort hira-list)))))
 
+(test* "hiragana -> roman-pattern0"
+       '(
+         (("ka" "ca") ("nn" "n" "q"))
+         (("kz" "kn")))
+       (gen-hiragana->roman-pattens "かん"))
 (test* "hiragana -> roman-pattern1"
-       '(("he") ("nn" "n") ("ka" "ca") ("nn" "n"))
-       (gen-hiragana->roman-pattens "へんかん"))
+       '(
+         (("ka" "ca") ("nn" "n" "q") ("ji" "zi"))
+         (("kz" "kn") ("ji" "zi")))
+       (gen-hiragana->roman-pattens "かんじ"))
 (test* "hiragana -> roman-pattern2"
-       '(("ka" "ca") ("nn" "n") ("ji" "zi") ("he") ("nn" "n") ("ka" "ca") ("nn" "n"))
-       (gen-hiragana->roman-pattens "かんじへんかん"))
+       '(
+         (("he") ("nn" "n" "q") ("ka" "ca") ("nn" "n" "q"))
+         (("hd") ("kz" "kn")))
+       (gen-hiragana->roman-pattens "へんかん"))
 (test* "hiragana -> roman-pattern3"
-       '(("shi" "si") ("ze") ("nn" "n") ("ge") ("nn" "n") ("go") ("sho" "syo") ("ri"))
+       '(
+         (("ka" "ca") ("nn" "n" "q") ("ji" "zi") ("he") ("nn" "n" "q") ("ka" "ca") ("nn" "n" "q"))
+         (("kz" "kn") ("ji" "zi") ("hd") ("kz" "kn")))
+       (gen-hiragana->roman-pattens "かんじへんかん"))
+(test* "hiragana -> roman-pattern4"
+       '((("shi" "si") ("ze") ("nn" "n" "q") ("ge") ("nn" "n" "q") ("go") ("sho" "syo") ("ri"))
+         (("shi" "si") ("ze") ("nn" "n" "q") ("ge") ("nn" "n" "q") ("go") ("sho" "syo") ("ri")))
        (gen-hiragana->roman-pattens "しぜんげんごしょり"))
 
 (test* "patterns -> roman-list1"
-       '("kannji" "kannzi" "kanji" "kanzi" "cannji" "cannzi" "canji" "canzi")
-       (patterns->roman-list  '(("ka" "ca") ("nn" "n") ("ji" "zi"))))
+       '("kannji" "kannzi" "kanji" "kanzi" "kaqji" "kaqzi" "cannji" "cannzi" "canji" "canzi" "caqji" "caqzi" "kzji" "kzzi" "knji" "knzi")
+       (patterns->roman-list  '(
+                                (("ka" "ca") ("nn" "n" "q") ("ji" "zi"))
+                                (("kz" "kn") ("ji" "zi")))))
 
 (test* "patterns -> roman-list2"
-       '("shizenngenngoshori" "shizenngenngosyori" "shizenngengoshori" "shizenngengosyori" "shizengenngoshori" "shizengenngosyori" "shizengengoshori" "shizengengosyori" "sizenngenngoshori" "sizenngenngosyori" "sizenngengoshori" "sizenngengosyori" "sizengenngoshori" "sizengenngosyori" "sizengengoshori" "sizengengosyori")
-       (patterns->roman-list  '(("shi" "si") ("ze") ("nn" "n") ("ge") ("nn" "n") ("go") ("sho" "syo") ("ri"))))
+       '("shizenngenngoshori" "shizenngenngosyori" "shizenngengoshori" "shizenngengosyori" "shizenngeqgoshori" "shizenngeqgosyori" "shizengenngoshori" "shizengenngosyori" "shizengengoshori" "shizengengosyori" "shizengeqgoshori" "shizengeqgosyori" "shizeqgenngoshori" "shizeqgenngosyori" "shizeqgengoshori" "shizeqgengosyori" "shizeqgeqgoshori" "shizeqgeqgosyori" "sizenngenngoshori" "sizenngenngosyori" "sizenngengoshori" "sizenngengosyori" "sizenngeqgoshori" "sizenngeqgosyori" "sizengenngoshori" "sizengenngosyori" "sizengengoshori" "sizengengosyori" "sizengeqgoshori" "sizengeqgosyori" "sizeqgenngoshori" "sizeqgenngosyori" "sizeqgengoshori" "sizeqgengosyori" "sizeqgeqgoshori" "sizeqgeqgosyori")
+       (patterns->roman-list  '(
+                                (("shi" "si") ("ze") ("nn" "n" "q") ("ge") ("nn" "n" "q") ("go") ("sho" "syo") ("ri"))
+                                (("shi" "si") ("ze") ("nn" "n" "q") ("ge") ("nn" "n" "q") ("go") ("sho" "syo") ("ri")))))
                               
 (test* "hiragana -> roman-list1"
-       '("kannji" "kannzi" "kanji" "kanzi" "cannji" "cannzi" "canji" "canzi")
+       '("kannji" "kannzi" "kanji" "kanzi" "kaqji" "kaqzi" "cannji" "cannzi" "canji" "canzi" "caqji" "caqzi" "kzji" "kzzi" "knji" "knzi")
        (gen-hiragana->roman-list "かんじ"))
 
 (test* "hiragana -> roman-list2"
@@ -189,11 +251,11 @@
        (gen-hiragana->roman-list "にしやま"))
 
 (test* "hiragana -> roman-list3"
-       '("toukyou")
+       '("toukyou" "tpkyou")
        (gen-hiragana->roman-list "とうきょう"))
 
 (test* "hiragana -> roman-list4"
-       '("ko-hi-" "ko-hi^" "ko^hi-" "ko^hi^" "co-hi-" "co-hi^" "co^hi-" "co^hi^")       
+       '("ko-hi-" "ko-hi^" "ko-hi:" "ko^hi-" "ko^hi^" "ko^hi:" "ko:hi-" "ko:hi^" "ko:hi:" "co-hi-" "co-hi^" "co-hi:" "co^hi-" "co^hi^" "co^hi:" "co:hi-" "co:hi^" "co:hi:")
        (gen-hiragana->roman-list "こーひー"))
 
 (test* "hiragana -> roman-list4"
@@ -204,29 +266,44 @@
 ;;-------------------------------------------------------------------
 (test-section "roman->kana conversion functions")
 (test* "roman -> hiragana 1"
-       "つみき"       
+       '("つみき" "つみき")
        (gen-roman->hiragana "tsumiki"))
 (test* "roman -> hiragana 2"
-       "こーひー"
+       '("こーひー" "こーひー")
        (gen-roman->hiragana "ko-hi-"))
 (test* "roman -> hiragana 3"
-       "かんじ"
+       '("かんじ" "かぬんい")
        (gen-roman->hiragana "kanji"))
 (test* "roman -> hiragana 4"
-       "かんじ"
+       '("かんじ" "かなんい")
        (gen-roman->hiragana "canzi"))
 (test* "roman -> hiragana 5"
-       "とうきょうとっきょきょかきょく"
+       '("とうきょうとっきょきょかきょく" "とうきょうとっきょきょかきょく")
        (gen-roman->hiragana "toukyoutokkyokyokakyoku"))
 (test* "roman -> hiragana 6"
-       "はっぴょうってきょうかぁ"
+       '("はっぴょうってきょうかぁ" "はっぴょうってきょうかぁ")
        (gen-roman->hiragana "happyouttekyoukaxa"))
 (test* "roman -> hiragana 7"
-       #f
-       (gen-roman->hiragana "b"))
+       '("はっぴょうってきょうかぁ" "はっぴょうってきょうかぁ")
+       (gen-roman->hiragana "ha@pyou@tekyoukala"))
 (test* "roman -> hiragana 8"
-       #f
-       (gen-roman->hiragana "xx"))
+       '("かんじ")
+       (gen-roman->hiragana "knji"))
+(test* "roman -> hiragana 9"
+       '("かっこ" "かっこ")
+       (gen-roman->hiragana "ka@ko"))
+(test* "roman -> hiragana 10"
+       '("こーひー" "こーひー")
+       (gen-roman->hiragana "ko:hi:"))
+(test* "roman -> hiragana 11"
+       '()
+       (gen-roman->hiragana "b"))
+(test* "roman -> hiragana 12"
+       '("んんんん" "んんんん")
+       (gen-roman->hiragana "nnqnnq"))
+(test* "roman -> hiragana 13"
+       '("もうしょ")
+       (gen-roman->hiragana "mpxo"))
 
 
 ;;===================================================================
