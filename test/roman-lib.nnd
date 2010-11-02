@@ -14,13 +14,13 @@
        '("fu" "hu")
        (hash-table-get sekka-kana->roman-hash-short "ふ" #f))
 (test* "kana->roman 2"
-       '("xa" "la")
+       '("la")
        (hash-table-get sekka-kana->roman-hash-short "ぁ" #f))
 (test* "kana->roman 3"
        '("chi" "tyi" "ti")
        (hash-table-get sekka-kana->roman-hash-short "ち" #f))
 (test* "kana->roman 4"
-       '("tt" "xtu" "xtsu" "@")
+       '("tt" "@" "ltu")
        (hash-table-get sekka-kana->roman-hash-short "っ" #f))
 (test* "kana->roman 5"
        '("-" "^" ":")
@@ -52,14 +52,14 @@
        '("し")
        (hash-table-get sekka-roman->kana-hash-short "si" #f))
 (test* "roman->kana 4"
-       '("っ")
-       (hash-table-get sekka-roman->kana-hash-short "xtsu" #f))
-(test* "roman->kana 5"
        '("ー")
        (hash-table-get sekka-roman->kana-hash-short "-" #f))
-(test* "roman->kana 6"
+(test* "roman->kana 5"
        '("ー")
        (hash-table-get sekka-roman->kana-hash-short ":" #f))
+(test* "roman->kana 6"
+       '("っ")
+       (hash-table-get sekka-roman->kana-hash-short "ltu" #f))
 (test* "roman->kana 7"
        '("っ")
        (hash-table-get sekka-roman->kana-hash-short "@" #f))
@@ -202,8 +202,8 @@
 
 (let1 hira-list
     (hash-table-keys sekka-kana->roman-hash-long)
-  (test* "kana->roman table length"        341 (length hira-list))
-  (test* "kana->roman key duplicate check" 341 (length (uniq (sort hira-list)))))
+  (test* "kana->roman table length"        396 (length hira-list))
+  (test* "kana->roman key duplicate check" 396 (length (uniq (sort hira-list)))))
 
 (test* "hiragana -> roman-pattern0"
        '(
@@ -226,8 +226,8 @@
          (("kz" "kn") ("ji" "zi") ("hd") ("kz" "kn")))
        (gen-hiragana->roman-pattens "かんじへんかん"))
 (test* "hiragana -> roman-pattern4"
-       '((("shi" "si") ("ze") ("nn" "n" "q") ("ge") ("nn" "n" "q") ("go") ("sho" "syo") ("ri"))
-         (("shi" "si") ("ze") ("nn" "n" "q") ("ge") ("nn" "n" "q") ("go") ("sho" "syo") ("ri")))
+       '((("shi" "si") ("ze") ("nn" "n" "q") ("ge") ("nn" "n" "q") ("go") ("sho" "syo" "xo") ("ri"))
+         (("shi" "si") ("zd") ("gd") ("go") ("sho" "syo" "xo") ("ri")))
        (gen-hiragana->roman-pattens "しぜんげんごしょり"))
 
 (test* "patterns -> roman-list1"
@@ -251,14 +251,14 @@
        (gen-hiragana->roman-list "にしやま"))
 
 (test* "hiragana -> roman-list3"
-       '("toukyou" "tpkyou")
+       '("toukyou" "toukgou" "tpkyou" "tpkgou")
        (gen-hiragana->roman-list "とうきょう"))
 
 (test* "hiragana -> roman-list4"
-       '("ko-hi-" "ko-hi^" "ko-hi:" "ko^hi-" "ko^hi^" "ko^hi:" "ko:hi-" "ko:hi^" "ko:hi:" "co-hi-" "co-hi^" "co-hi:" "co^hi-" "co^hi^" "co^hi:" "co:hi-" "co:hi^" "co:hi:")
+       '("ko-hi-" "ko-hi^" "ko-hi:" "ko^hi-" "ko^hi^" "ko^hi:" "ko:hi-" "ko:hi^" "ko:hi:")
        (gen-hiragana->roman-list "こーひー"))
 
-(test* "hiragana -> roman-list4"
+(test* "hiragana -> roman-list5"
        '("tsumiki" "tsumici" "tumiki" "tumici")
        (gen-hiragana->roman-list "つみき"))
 
@@ -275,35 +275,53 @@
        '("かんじ" "かぬんい")
        (gen-roman->hiragana "kanji"))
 (test* "roman -> hiragana 4"
-       '("かんじ" "かなんい")
-       (gen-roman->hiragana "canzi"))
+       '("かんじ" "かんじ")
+       (gen-roman->hiragana "kannji"))
 (test* "roman -> hiragana 5"
+       '("ちゃんじ" "ちゃなんい")
+       (gen-roman->hiragana "canzi"))
+(test* "roman -> hiragana 6"
        '("とうきょうとっきょきょかきょく" "とうきょうとっきょきょかきょく")
        (gen-roman->hiragana "toukyoutokkyokyokakyoku"))
-(test* "roman -> hiragana 6"
-       '("はっぴょうってきょうかぁ" "はっぴょうってきょうかぁ")
-       (gen-roman->hiragana "happyouttekyoukaxa"))
 (test* "roman -> hiragana 7"
        '("はっぴょうってきょうかぁ" "はっぴょうってきょうかぁ")
-       (gen-roman->hiragana "ha@pyou@tekyoukala"))
+       (gen-roman->hiragana "happyouttekyoukala"))
 (test* "roman -> hiragana 8"
+       '("はっぴょうってきょうかぁ" "はっぴょうってきょうかぁ")
+       (gen-roman->hiragana "ha@pyou@tekyoukala"))
+(test* "roman -> hiragana 9"
        '("かんじ")
        (gen-roman->hiragana "knji"))
-(test* "roman -> hiragana 9"
+(test* "roman -> hiragana 10"
        '("かっこ" "かっこ")
        (gen-roman->hiragana "ka@ko"))
-(test* "roman -> hiragana 10"
+(test* "roman -> hiragana 11"
        '("こーひー" "こーひー")
        (gen-roman->hiragana "ko:hi:"))
-(test* "roman -> hiragana 11"
+(test* "roman -> hiragana 12"
        '()
        (gen-roman->hiragana "b"))
-(test* "roman -> hiragana 12"
+(test* "roman -> hiragana 13"
        '("んんんん" "んんんん")
        (gen-roman->hiragana "nnqnnq"))
-(test* "roman -> hiragana 13"
+(test* "roman -> hiragana 14"
+       '("んんんん" "ないない")
+       (gen-roman->hiragana "nqnq"))
+(test* "roman -> hiragana 15"
+       '("そうです")
+       (gen-roman->hiragana "spds"))
+(test* "roman -> hiragana 16"
        '("もうしょ")
        (gen-roman->hiragana "mpxo"))
+(test* "roman -> hiragana 17"
+       '("ものこと")
+       (gen-roman->hiragana "mnkt"))
+(test* "roman -> hiragana 18"
+       '("しぜんげんごしょり" "しぜにぇにょしょり")
+       (gen-roman->hiragana "shizengengosyori"))
+(test* "roman -> hiragana 19"
+       '("しぜんげんごしょり" "しぜんげんごしょり")
+       (gen-roman->hiragana "shizenngenngosyori"))
 
 
 ;;===================================================================
