@@ -10,7 +10,7 @@ task :check do
   files = []
   files << "./test/util.nnd"
   files << "./test/roman-lib.nnd"
-#  files << "./test/jisyo.nnd" 
+  files << "./test/jisyo.nnd" 
 #  files << "./test/henkan-main.nnd  tokyocabinet"
 #  files << "./test/approximate-bench.nnd  memcache"
   files.each {|filename|
