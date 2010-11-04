@@ -7,9 +7,9 @@
 (define masterid "MASTER")
 (define workid   "WORK")
 
-(define alphabet-string "abcdefghijklmnopqrstuvwxyz>")
+(define alphabet-string "abcdefghijklmnopqrstuvwxyz>@")
 (define alphabet-lower-list (to-list (alphabet-string.split "")))
-(define alphabet-upper-list (to-list (alphabet-string.upcase.split "")))
+(define alphabet-upper-list (to-list (. (sekka-upcase alphabet-string) split "")))
 (define alphabet-pairs (append-map
                         (lambda (a)
                           (map
@@ -44,10 +44,10 @@
   (define (create-hash keylist)
     (for-each
      (lambda (k)
-       (when (rxmatch #/^[a-zA-Z^>-]+$/ k)
-         (let1 sliced (. (k.slice 0 2) downcase)
+       (when (rxmatch #/^[a-zA-Z^>-@`]+$/ k)
+         (let1 sliced (sekka-downcase (k.slice 0 2))
            (when (= 2 sliced.size)
-             (if (rxmatch #/[A-Z]$/ k)
+             (if (rxmatch #/[A-Z`]$/ k)
                  (hash-table-push! okuri-ari-hash   sliced k)
                  (hash-table-push! okuri-nashi-hash sliced k))))))
      keylist))
@@ -70,14 +70,14 @@
     ;; OKURI-ARI
     (for-each
      (lambda (key)
-       (kvs.put! (+ masterid "::" "(" key.upcase ")")
+       (kvs.put! (+ masterid "::" "(" (sekka-upcase key) ")")
                  (string-join (uniq (sort (hash-table-get okuri-ari-hash key))) " ")))
      (hash-table-keys okuri-ari-hash))
 
     ;; OKURI-NASHI
     (for-each
      (lambda (key)
-       (kvs.put! (+ masterid "::" "(" key.downcase ")")
+       (kvs.put! (+ masterid "::" "(" (sekka-downcase key) ")")
                  (string-join (uniq (sort (hash-table-get okuri-nashi-hash key))) " ")))
      (hash-table-keys okuri-nashi-hash))))
 

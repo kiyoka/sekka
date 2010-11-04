@@ -15,14 +15,23 @@
      (list (cons key value)))))
 
 
-(define (expand-okuri-ari-entry key okuri value)
+(define (expand-okuri-ari-entry-internal key okuri value)
   (let1 roman-list (gen-hiragana->roman-list key)
     (append
      (map
       (lambda (x)
-        (cons (+ x okuri.upcase) (+ "C" key okuri)))
+        (cons (+ x (sekka-upcase okuri)) (+ "C" key okuri)))
       roman-list)
      (list (cons (+ key okuri) value)))))
+
+(define (expand-okuri-ari-entry key okuri value)
+  (cond
+   ((eq? "t" okuri)
+    (append (expand-okuri-ari-entry-internal key okuri                value)
+            (expand-okuri-ari-entry-internal key (sekka-upcase "@")   value)))
+   (else
+    (expand-okuri-ari-entry-internal key okuri value))))
+
 
 (define (convert-skk-jisyo-f f)
   (define (gen-sekka-entries line)

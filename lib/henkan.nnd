@@ -134,9 +134,9 @@
 ;; 送り仮名ありの変換
 (define (henkan-okuri-ari userid kvs keyword limit roman-method)
   (let* ((keyword  (let1 _pair (string-split-first-and-rest keyword)
-                     (+ (. (car _pair) downcase)
+                     (+ (sekka-downcase (car _pair))
                         (cdr _pair))))
-         (m        (rxmatch #/^([a-z])([a-z\-^]*)([A-Z])([a-zA-Z]*)$/ keyword)))
+         (m        (rxmatch #/^([a-z])([a-z\-^]*)([A-Z`])([a-zA-Z]*)$/ keyword)))
     (if (not m)
         '() ;; 変換候補無し
         (let* ((result (approximate-search userid kvs
@@ -145,9 +145,10 @@
                                               (rxmatch-substring m 3))
                                            #t
                                            limit))
-               (okurigana-lst  (gen-roman->hiragana (. (+
-                                                        (rxmatch-substring m 3)
-                                                        (rxmatch-substring m 4)) downcase)
+               (okurigana-lst  (gen-roman->hiragana (sekka-downcase
+                                                     (+
+                                                      (rxmatch-substring m 3)
+                                                      (rxmatch-substring m 4)))
                                                     roman-method))
                (okurigana-lst  (if (null? okurigana-lst)
                                    '("")
@@ -176,7 +177,7 @@
 
 ;; 平仮名の変換
 (define (henkan-hiragana kvs keyword roman-method)
-  (let* ((str  (keyword.downcase))
+  (let* ((str  (sekka-downcase keyword))
          (hira (gen-roman->hiragana str roman-method))
          (kata (gen-roman->katakana str roman-method)))
     (if (null? hira)
@@ -217,25 +218,25 @@
   ;; キーワードの種別で処理を分割する
   (append-index-number
    (cond
-    ((rxmatch #/[A-Z]/ keyword)
+    ((rxmatch #/[A-Z`]/ keyword)
      (let1 keyword (string-downcase-first keyword)
        (cond
-        ((rxmatch #/[a-z][A-Z]/ keyword)
+        ((rxmatch #/[a-z][A-Z`]/ keyword)
          ;; 送りあり
          ;;(let1 result (approximate-search db keyword #t)  (disp-search-result result))
          (append
           (henkan-okuri-ari userid kvs keyword limit roman-method)
-          (if (null? (gen-roman->hiragana (keyword.downcase) roman-method))
+          (if (null? (gen-roman->hiragana (sekka-downcase keyword) roman-method))
               '()
-              (henkan-hiragana kvs (keyword.downcase) roman-method))))
+              (henkan-hiragana kvs (sekka-downcase keyword) roman-method))))
         (else
          ;; 送りなし
          ;;(let1 result (approximate-search db keyword #f)  (disp-search-result result))
          (append
           (henkan-okuri-nashi userid kvs keyword limit)
-          (if (null? (gen-roman->hiragana (keyword.downcase) roman-method))
+          (if (null? (gen-roman->hiragana (sekka-downcase keyword) roman-method))
               '()
-              (henkan-hiragana kvs (keyword.downcase) roman-method)))))))
+              (henkan-hiragana kvs (sekka-downcase keyword) roman-method)))))))
     ((not (null? (gen-roman->hiragana keyword roman-method)))
      (append
       (henkan-hiragana kvs keyword roman-method)
@@ -361,8 +362,8 @@
       ;; OKURI-ARI
       (for-each
        (lambda (key)
-         (let1 master (kvs.get  (+ masterid "::" "(" key.upcase ")") "")
-           (kvs.put! (+ userid "::" "(" key.upcase ")")
+         (let1 master (kvs.get  (+ masterid "::" "(" (sekka-upcase key) ")") "")
+           (kvs.put! (+ userid "::" "(" (sekka-upcase key) ")")
                      (string-join (uniq (sort (append (to-list (master.split #/[ ]+/))
                                                       (hash-table-get okuri-ari-hash key))))
                                   " "))))
@@ -371,8 +372,8 @@
       ;; OKURI-NASHI
       (for-each
        (lambda (key)
-         (let1 master (kvs.get  (+ masterid "::" "(" key.downcase ")") "")
-           (kvs.put! (+ userid "::" "(" key.downcase ")")
+         (let1 master (kvs.get  (+ masterid "::" "(" (sekka-downcase key) ")") "")
+           (kvs.put! (+ userid "::" "(" (sekka-downcase key) ")")
                      (string-join (uniq (sort (append (to-list (master.split #/[ ]+/))
                                                       (hash-table-get okuri-nashi-hash key))))
                                   " "))))

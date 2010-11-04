@@ -8,6 +8,22 @@
 ;;===================================================================
 
 ;;-------------------------------------------------------------------
+(test-section "upcase and downcase conversion")
+(test* "downcase 1"
+       "aabbccddeeffgg"
+       (sekka-downcase "aAbBcCdDeEfFgG"))
+(test* "downcase 2"
+       "aaa@@@@@@bbb"
+       (sekka-downcase "AAA@@@```BBB"))
+(test* "upcase 1"
+       "AABBCCDDEEFFGG"
+       (sekka-upcase "aAbBcCdDeEfFgG"))
+(test* "upcase 2"
+       "AAA``````BBB"
+       (sekka-upcase "AAA@@@```BBB"))
+
+
+;;-------------------------------------------------------------------
 (test-section "kana->roman conversion hash (short)")
 
 (test* "kana->roman 1"
@@ -36,7 +52,7 @@
        '("kt")
        (hash-table-get sekka-kana->roman-hash-long "こと" #f))
 (test* "kana->roman 3"
-       '("ffu" "hhu")
+       '("ffu" "hhu" "@fu" "@hu")
        (hash-table-get sekka-kana->roman-hash-long "っふ" #f))
 
 ;;-------------------------------------------------------------------
@@ -202,8 +218,8 @@
 
 (let1 hira-list
     (hash-table-keys sekka-kana->roman-hash-long)
-  (test* "kana->roman table length"        396 (length hira-list))
-  (test* "kana->roman key duplicate check" 396 (length (uniq (sort hira-list)))))
+  (test* "kana->roman table length"        402 (length hira-list))
+  (test* "kana->roman key duplicate check" 402 (length (uniq (sort hira-list)))))
 
 (test* "hiragana -> roman-pattern0"
        '(
@@ -229,6 +245,9 @@
        '((("shi" "si") ("ze") ("nn" "n" "q") ("ge") ("nn" "n" "q") ("go") ("sho" "syo" "xo") ("ri"))
          (("shi" "si") ("zd") ("gd") ("go") ("sho" "syo" "xo") ("ri")))
        (gen-hiragana->roman-pattens "しぜんげんごしょり"))
+(test* "hiragana -> roman-pattern5"
+       '((("ka") ("kko" "@ko")))
+       (gen-hiragana->roman-pattens "かっこ"))
 
 (test* "patterns -> roman-list1"
        '("kannji" "kannzi" "kanji" "kanzi" "kaqji" "kaqzi" "kzji" "kzzi" "knji" "knzi")
@@ -343,6 +362,13 @@
 (test* "roman -> hiragana 26"
        '("しぜんげんごしょり")
        (gen-roman->hiragana "shizenngenngosyori" :normal))
+(test* "roman -> hiragana 27"
+       '("かっこ")
+       (gen-roman->hiragana "ka@ko" :normal))
+(test* "roman -> hiragana 28"
+       '("かった")
+       (gen-roman->hiragana "ka@ta" :normal))
+
 
 
 ;;===================================================================
