@@ -519,9 +519,10 @@
 
 
 (define (gen-hiragana->roman-pattens hiragana)
-  (list
-   (gen-hiragana->roman-pattens-with-hash  sekka-kana->roman-hash-short  hiragana)
-   (gen-hiragana->roman-pattens-with-hash  sekka-kana->roman-hash-long   hiragana)))
+  (delete-duplicates
+   (list
+    (gen-hiragana->roman-pattens-with-hash  sekka-kana->roman-hash-short  hiragana)
+    (gen-hiragana->roman-pattens-with-hash  sekka-kana->roman-hash-long   hiragana))))
 
 
 ;; if failed, return #f
@@ -559,19 +560,29 @@
 
 
 ;; if failed, return '()
-(define (gen-roman->hiragana roman-str)
-  (filter
-   (lambda (x) x)
-   (list
-    (gen-roman->hiragana-with-hash  sekka-roman->kana-hash-short  roman-str)
-    (gen-roman->hiragana-with-hash  sekka-roman->kana-hash-long   roman-str))))
+;;   roman-methodには :normal か :azik  を指定します。
+;;   それにより、通常のローマ字かAZIK(拡張ローマ字)のどちらを優先するかを指定できます。
+(define (gen-roman->hiragana roman-str roman-method)
+  (let ((s (gen-roman->hiragana-with-hash  sekka-roman->kana-hash-short  roman-str))
+        (l (gen-roman->hiragana-with-hash  sekka-roman->kana-hash-long   roman-str)))
+  (delete-duplicates
+   (filter
+    (lambda (x) x)
+    (case roman-method
+      ((:azik)
+       (list l s))
+      ((:normal)
+       (list s l))
+      (else
+       (error "Error: gen-roman->hiragana got illegal roman-method.")))))))
+
 
 ;; if failed, return '()
-(define (gen-roman->katakana roman-str)
+(define (gen-roman->katakana roman-str roman-method)
   (filter-map
    (lambda (x)
      (gen-hiragana->katakana x))
-   (gen-roman->hiragana roman-str)))
+   (gen-roman->hiragana roman-str roman-method)))
 
 ;; This function port from Gauche-0.9's util.combinations.
 (define (cartesian-product lol)

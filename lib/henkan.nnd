@@ -132,7 +132,7 @@
 
 
 ;; 送り仮名ありの変換
-(define (henkan-okuri-ari userid kvs keyword limit)
+(define (henkan-okuri-ari userid kvs keyword limit roman-method)
   (let* ((keyword  (let1 _pair (string-split-first-and-rest keyword)
                      (+ (. (car _pair) downcase)
                         (cdr _pair))))
@@ -145,11 +145,13 @@
                                               (rxmatch-substring m 3))
                                            #t
                                            limit))
-               (okurigana  (or
-                            (gen-roman->hiragana (. (+
-                                                     (rxmatch-substring m 3)
-                                                     (rxmatch-substring m 4)) downcase))
-                            ""))
+               (okurigana-lst  (gen-roman->hiragana (. (+
+                                                        (rxmatch-substring m 3)
+                                                        (rxmatch-substring m 4)) downcase)
+                                                    roman-method))
+               (okurigana-lst  (if (null? okurigana-lst)
+                                   '("")
+                                   okurigana-lst))
                (kouho      (uniq (map
                                   (lambda (x)
                                     (third x))
@@ -157,12 +159,15 @@
           (let1 lst
               (append-map
                (lambda (value)
-                 (if-let1 m (rxmatch #/^C(.+)$/ value)
-                   (split-henkan-kouho
-                    (dict-get userid kvs (string-drop value 1))
-                    (rxmatch-substring m 1)
-                    okurigana) ;; continue to fetch
-                   (split-henkan-kouho value keyword okurigana)))
+                 (append-map
+                  (lambda (x)
+                    (if-let1 m (rxmatch #/^C(.+)$/ value)
+                      (split-henkan-kouho
+                       (dict-get userid kvs (string-drop value 1))
+                       (rxmatch-substring m 1)
+                       x) ;; continue to fetch
+                      (split-henkan-kouho value keyword x)))
+                  okurigana-lst))
                kouho)
             (if (= limit 0)
                 lst
@@ -170,15 +175,18 @@
 
 
 ;; 平仮名の変換
-(define (henkan-hiragana kvs keyword)
+(define (henkan-hiragana kvs keyword roman-method)
   (let* ((str  (keyword.downcase))
-         (hira (gen-roman->hiragana str))
-         (kata (gen-roman->katakana str)))
-    (if hira
-        `(
-          ( ,hira #f ,keyword h)
-          ( ,kata #f ,keyword k))
-        `((,keyword #f ,keyword j)))))
+         (hira (gen-roman->hiragana str roman-method))
+         (kata (gen-roman->katakana str roman-method)))
+    (if (null? hira)
+        `((,keyword #f ,keyword j))
+        (append-map (lambda (h k)
+                      `(
+                        (,h #f ,keyword h)
+                        (,k #f ,keyword k)))
+                    hira
+                    kata))))
 
 
 ;; 記号を含むキーワードの変換
@@ -195,7 +203,7 @@
 
 
 ;; keyword には ローマ字のみを受け付ける
-(define (sekka-henkan userid kvs keyword limit)
+(define (sekka-henkan userid kvs keyword limit roman-method)
   ;; 変換候補にindex番号を付加する
   (define (append-index-number kouho-list)
     (let1 count 0
@@ -216,28 +224,28 @@
          ;; 送りあり
          ;;(let1 result (approximate-search db keyword #t)  (disp-search-result result))
          (append
-          (henkan-okuri-ari userid kvs keyword limit)
-          (if (gen-roman->hiragana (keyword.downcase))
-              (henkan-hiragana kvs (keyword.downcase))
-              '())))
+          (henkan-okuri-ari userid kvs keyword limit roman-method)
+          (if (null? (gen-roman->hiragana (keyword.downcase) roman-method))
+              '()
+              (henkan-hiragana kvs (keyword.downcase) roman-method))))
         (else
          ;; 送りなし
          ;;(let1 result (approximate-search db keyword #f)  (disp-search-result result))
          (append
           (henkan-okuri-nashi userid kvs keyword limit)
-          (if (gen-roman->hiragana (keyword.downcase))
-              (henkan-hiragana kvs (keyword.downcase))
-              '()))))))
-    ((gen-roman->hiragana keyword)
+          (if (null? (gen-roman->hiragana (keyword.downcase) roman-method))
+              '()
+              (henkan-hiragana kvs (keyword.downcase) roman-method)))))))
+    ((not (null? (gen-roman->hiragana keyword roman-method)))
      (append
-      (henkan-hiragana kvs keyword)
+      (henkan-hiragana kvs keyword roman-method)
       (henkan-okuri-nashi userid kvs keyword limit)))
     (else
      (henkan-non-kanji userid kvs keyword)))))
 
 
 ;; conversion #f => nil for EmacsLisp
-(define (sekkaHenkan userid kvs cachesv keyword limit)
+(define (sekkaHenkan userid kvs cachesv keyword limit roman-method)
   (define cache-exp-second (* 60 60))
   (let* ((keyword (keyword.strip))
          (sekka-keyword (+ "sekka::" (limit.to_s) "::" keyword)))
@@ -249,7 +257,7 @@
       (let1 henkan-result (map
                            (lambda (x)
                              (map (lambda (val) (if val val nil)) x))
-                           (sekka-henkan userid kvs keyword limit))
+                           (sekka-henkan userid kvs keyword limit roman-method))
         (and cachesv
              (not (null? henkan-result))
              (let1 fetched2 (cachesv.get  "sekka::(keys)" #f)

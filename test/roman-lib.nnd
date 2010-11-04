@@ -266,62 +266,83 @@
 ;;-------------------------------------------------------------------
 (test-section "roman->kana conversion functions")
 (test* "roman -> hiragana 1"
-       '("つみき" "つみき")
-       (gen-roman->hiragana "tsumiki"))
+       '("つみき")
+       (gen-roman->hiragana "tsumiki" :normal))
 (test* "roman -> hiragana 2"
-       '("こーひー" "こーひー")
-       (gen-roman->hiragana "ko-hi-"))
+       '("こーひー")
+       (gen-roman->hiragana "ko-hi-" :normal))
 (test* "roman -> hiragana 3"
        '("かんじ" "かぬんい")
-       (gen-roman->hiragana "kanji"))
+       (gen-roman->hiragana "kanji" :normal))
 (test* "roman -> hiragana 4"
-       '("かんじ" "かんじ")
-       (gen-roman->hiragana "kannji"))
+       '("かぬんい" "かんじ")
+       (gen-roman->hiragana "kanji" :azik))
 (test* "roman -> hiragana 5"
-       '("ちゃんじ" "ちゃなんい")
-       (gen-roman->hiragana "canzi"))
-(test* "roman -> hiragana 6"
-       '("とうきょうとっきょきょかきょく" "とうきょうとっきょきょかきょく")
-       (gen-roman->hiragana "toukyoutokkyokyokakyoku"))
-(test* "roman -> hiragana 7"
-       '("はっぴょうってきょうかぁ" "はっぴょうってきょうかぁ")
-       (gen-roman->hiragana "happyouttekyoukala"))
-(test* "roman -> hiragana 8"
-       '("はっぴょうってきょうかぁ" "はっぴょうってきょうかぁ")
-       (gen-roman->hiragana "ha@pyou@tekyoukala"))
-(test* "roman -> hiragana 9"
        '("かんじ")
-       (gen-roman->hiragana "knji"))
+       (gen-roman->hiragana "kannji" :normal))
+(test* "roman -> hiragana 6"
+       '("ちゃんじ" "ちゃなんい")
+       (gen-roman->hiragana "canzi" :normal))
+(test* "roman -> hiragana 7"
+       '("ちゃなんい" "ちゃんじ")
+       (gen-roman->hiragana "canzi" :azik))
+(test* "roman -> hiragana 8"
+       '("とうきょうとっきょきょかきょく")
+       (gen-roman->hiragana "toukyoutokkyokyokakyoku" :normal))
+(test* "roman -> hiragana 9"
+       '("はっぴょうってきょうかぁ")
+       (gen-roman->hiragana "happyouttekyoukala" :normal))
 (test* "roman -> hiragana 10"
-       '("かっこ" "かっこ")
-       (gen-roman->hiragana "ka@ko"))
+       '("はっぴょうってきょうかぁ")
+       (gen-roman->hiragana "ha@pyou@tekyoukala" :normal))
 (test* "roman -> hiragana 11"
-       '("こーひー" "こーひー")
-       (gen-roman->hiragana "ko:hi:"))
+       '("かんじ")
+       (gen-roman->hiragana "knji" :normal))
 (test* "roman -> hiragana 12"
-       '()
-       (gen-roman->hiragana "b"))
+       '("かっこ")
+       (gen-roman->hiragana "ka@ko" :normal))
 (test* "roman -> hiragana 13"
-       '("んんんん" "んんんん")
-       (gen-roman->hiragana "nnqnnq"))
+       '("こーひー")
+       (gen-roman->hiragana "ko:hi:" :normal))
 (test* "roman -> hiragana 14"
-       '("んんんん" "ないない")
-       (gen-roman->hiragana "nqnq"))
+       '()
+       (gen-roman->hiragana "b" :normal))
 (test* "roman -> hiragana 15"
-       '("そうです")
-       (gen-roman->hiragana "spds"))
+       '("んんんん")
+       (gen-roman->hiragana "nnqnnq" :normal))
 (test* "roman -> hiragana 16"
-       '("もうしょ")
-       (gen-roman->hiragana "mpxo"))
+       '("んんんん" "ないない")
+       (gen-roman->hiragana "nqnq" :normal))
 (test* "roman -> hiragana 17"
-       '("ものこと")
-       (gen-roman->hiragana "mnkt"))
+       '("ないない" "んんんん")
+       (gen-roman->hiragana "nqnq" :azik))
 (test* "roman -> hiragana 18"
-       '("しぜんげんごしょり" "しぜにぇにょしょり")
-       (gen-roman->hiragana "shizengengosyori"))
+       '("そうです")
+       (gen-roman->hiragana "spds" :normal))
 (test* "roman -> hiragana 19"
-       '("しぜんげんごしょり" "しぜんげんごしょり")
-       (gen-roman->hiragana "shizenngenngosyori"))
+       '("そうです")
+       (gen-roman->hiragana "spds" :azik))
+(test* "roman -> hiragana 20"
+       '("もうしょ")
+       (gen-roman->hiragana "mpxo" :normal))
+(test* "roman -> hiragana 21"
+       '("もうしょ")
+       (gen-roman->hiragana "mpxo" :azik))
+(test* "roman -> hiragana 22"
+       '("ものこと")
+       (gen-roman->hiragana "mnkt" :normal))
+(test* "roman -> hiragana 23"
+       '("ものこと")
+       (gen-roman->hiragana "mnkt" :azik))
+(test* "roman -> hiragana 24"
+       '("しぜんげんごしょり" "しぜにぇにょしょり")
+       (gen-roman->hiragana "shizengengosyori" :normal))
+(test* "roman -> hiragana 25"
+       '("しぜにぇにょしょり" "しぜんげんごしょり")
+       (gen-roman->hiragana "shizengengosyori" :azik))
+(test* "roman -> hiragana 26"
+       '("しぜんげんごしょり")
+       (gen-roman->hiragana "shizenngenngosyori" :normal))
 
 
 ;;===================================================================
