@@ -27,8 +27,11 @@
        '(("shiroI" . "Cしろi") ("siroI" . "Cしろi") ("しろi" . "/白"))
        (expand-okuri-ari-entry   "しろ" "i" "/白"))
 (test* "expanding SKK(1) entry to SEKKA(n) entry. (送りあり2)"
-       '(("kaK" . "Cかk") ("caK" . "Cかk") ("かk" . "/書/掛/欠/架/駆/懸"))
+       '(("kaK" . "Cかk") ("かk" . "/書/掛/欠/架/駆/懸"))
        (expand-okuri-ari-entry   "か" "k" "/書/掛/欠/架/駆/懸"))
+(test* "expanding SKK(1) entry to SEKKA(n) entry. (送りあり3)"
+       '(("kaT" . "Cかt") ("かt" . "/勝/買/飼/刈;(crop)草を刈る"))
+       (expand-okuri-ari-entry   "か" "t" "/勝/買/飼/刈;(crop)草を刈る"))
 
 (let1 _input (StringIO.new
               (string-join

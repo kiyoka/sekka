@@ -207,22 +207,22 @@
 
 (test* "hiragana -> roman-pattern0"
        '(
-         (("ka" "ca") ("nn" "n" "q"))
+         (("ka") ("nn" "n" "q"))
          (("kz" "kn")))
        (gen-hiragana->roman-pattens "かん"))
 (test* "hiragana -> roman-pattern1"
        '(
-         (("ka" "ca") ("nn" "n" "q") ("ji" "zi"))
+         (("ka") ("nn" "n" "q") ("ji" "zi"))
          (("kz" "kn") ("ji" "zi")))
        (gen-hiragana->roman-pattens "かんじ"))
 (test* "hiragana -> roman-pattern2"
        '(
-         (("he") ("nn" "n" "q") ("ka" "ca") ("nn" "n" "q"))
+         (("he") ("nn" "n" "q") ("ka") ("nn" "n" "q"))
          (("hd") ("kz" "kn")))
        (gen-hiragana->roman-pattens "へんかん"))
 (test* "hiragana -> roman-pattern3"
        '(
-         (("ka" "ca") ("nn" "n" "q") ("ji" "zi") ("he") ("nn" "n" "q") ("ka" "ca") ("nn" "n" "q"))
+         (("ka") ("nn" "n" "q") ("ji" "zi") ("he") ("nn" "n" "q") ("ka") ("nn" "n" "q"))
          (("kz" "kn") ("ji" "zi") ("hd") ("kz" "kn")))
        (gen-hiragana->roman-pattens "かんじへんかん"))
 (test* "hiragana -> roman-pattern4"
@@ -231,19 +231,19 @@
        (gen-hiragana->roman-pattens "しぜんげんごしょり"))
 
 (test* "patterns -> roman-list1"
-       '("kannji" "kannzi" "kanji" "kanzi" "kaqji" "kaqzi" "cannji" "cannzi" "canji" "canzi" "caqji" "caqzi" "kzji" "kzzi" "knji" "knzi")
+       '("kannji" "kannzi" "kanji" "kanzi" "kaqji" "kaqzi" "kzji" "kzzi" "knji" "knzi")
        (patterns->roman-list  '(
-                                (("ka" "ca") ("nn" "n" "q") ("ji" "zi"))
+                                (("ka") ("nn" "n" "q") ("ji" "zi"))
                                 (("kz" "kn") ("ji" "zi")))))
-
+        
 (test* "patterns -> roman-list2"
-       '("shizenngenngoshori" "shizenngenngosyori" "shizenngengoshori" "shizenngengosyori" "shizenngeqgoshori" "shizenngeqgosyori" "shizengenngoshori" "shizengenngosyori" "shizengengoshori" "shizengengosyori" "shizengeqgoshori" "shizengeqgosyori" "shizeqgenngoshori" "shizeqgenngosyori" "shizeqgengoshori" "shizeqgengosyori" "shizeqgeqgoshori" "shizeqgeqgosyori" "sizenngenngoshori" "sizenngenngosyori" "sizenngengoshori" "sizenngengosyori" "sizenngeqgoshori" "sizenngeqgosyori" "sizengenngoshori" "sizengenngosyori" "sizengengoshori" "sizengengosyori" "sizengeqgoshori" "sizengeqgosyori" "sizeqgenngoshori" "sizeqgenngosyori" "sizeqgengoshori" "sizeqgengosyori" "sizeqgeqgoshori" "sizeqgeqgosyori")
+       '("shizenngenngoshori" "shizenngenngosyori" "shizenngenngoxori" "shizenngengoshori" "shizenngengosyori" "shizenngengoxori" "shizenngeqgoshori" "shizenngeqgosyori" "shizenngeqgoxori" "shizengenngoshori" "shizengenngosyori" "shizengenngoxori" "shizengengoshori" "shizengengosyori" "shizengengoxori" "shizengeqgoshori" "shizengeqgosyori" "shizengeqgoxori" "shizeqgenngoshori" "shizeqgenngosyori" "shizeqgenngoxori" "shizeqgengoshori" "shizeqgengosyori" "shizeqgengoxori" "shizeqgeqgoshori" "shizeqgeqgosyori" "shizeqgeqgoxori" "sizenngenngoshori" "sizenngenngosyori" "sizenngenngoxori" "sizenngengoshori" "sizenngengosyori" "sizenngengoxori" "sizenngeqgoshori" "sizenngeqgosyori" "sizenngeqgoxori" "sizengenngoshori" "sizengenngosyori" "sizengenngoxori" "sizengengoshori" "sizengengosyori" "sizengengoxori" "sizengeqgoshori" "sizengeqgosyori" "sizengeqgoxori" "sizeqgenngoshori" "sizeqgenngosyori" "sizeqgenngoxori" "sizeqgengoshori" "sizeqgengosyori" "sizeqgengoxori" "sizeqgeqgoshori" "sizeqgeqgosyori" "sizeqgeqgoxori" "shizdgdgoshori" "shizdgdgosyori" "shizdgdgoxori" "sizdgdgoshori" "sizdgdgosyori" "sizdgdgoxori")
        (patterns->roman-list  '(
-                                (("shi" "si") ("ze") ("nn" "n" "q") ("ge") ("nn" "n" "q") ("go") ("sho" "syo") ("ri"))
-                                (("shi" "si") ("ze") ("nn" "n" "q") ("ge") ("nn" "n" "q") ("go") ("sho" "syo") ("ri")))))
+                                (("shi" "si") ("ze") ("nn" "n" "q") ("ge") ("nn" "n" "q") ("go") ("sho" "syo" "xo") ("ri"))
+                                (("shi" "si") ("zd") ("gd") ("go") ("sho" "syo" "xo") ("ri")))))
                               
 (test* "hiragana -> roman-list1"
-       '("kannji" "kannzi" "kanji" "kanzi" "kaqji" "kaqzi" "cannji" "cannzi" "canji" "canzi" "caqji" "caqzi" "kzji" "kzzi" "knji" "knzi")
+       '("kannji" "kannzi" "kanji" "kanzi" "kaqji" "kaqzi" "kzji" "kzzi" "knji" "knzi")
        (gen-hiragana->roman-list "かんじ"))
 
 (test* "hiragana -> roman-list2"
@@ -259,7 +259,7 @@
        (gen-hiragana->roman-list "こーひー"))
 
 (test* "hiragana -> roman-list5"
-       '("tsumiki" "tsumici" "tumiki" "tumici")
+       '("tsumiki" "tumiki")
        (gen-hiragana->roman-list "つみき"))
 
 
