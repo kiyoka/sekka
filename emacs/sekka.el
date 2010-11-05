@@ -76,6 +76,11 @@
   :type  'integer
   :group 'sekka)
 
+(defcustom sekka-realtime-guide-limit-lines 5
+  "最後に変換した行から N 行離れたらリアルタイムガイド表示が止まる。"
+  :type  'integer
+  :group 'sekka)
+
 (defcustom sekka-realtime-guide-interval  0.5
   "リアルタイムガイド表示を更新する時間間隔"
   :type  'integer
@@ -154,6 +159,7 @@
 (defvar sekka-markers '())              ; 文節開始、終了位置のpair: 次のような形式 ( 1 . 2 )
 (defvar sekka-timer    nil)             ; インターバルタイマー型変数
 (defvar sekka-timer-rest  0)            ; あと何回呼出されたら、インターバルタイマの呼出を止めるか
+(defvar sekka-last-lineno 0)            ; 最後に変換を実行した行番号
 (defvar sekka-guide-overlay   nil)      ; リアルタイムガイドに使用するオーバーレイ
 (defvar sekka-last-request-time 0)      ; Sekkaサーバーにリクエストした最後の時刻(単位は秒)
 (defvar sekka-guide-lastquery  "")      ; Sekkaサーバーにリクエストした最後のクエリ文字列
@@ -641,6 +647,9 @@
 	  (/ sekka-realtime-guide-running-seconds
 	     sekka-realtime-guide-interval)))
 
+  ;; 最後に変換した行番号の更新
+  (setq sekka-last-lineno (line-number-at-pos (point)))
+
   (cond
    (sekka-select-mode
     ;; 変換中に呼出されたら、候補選択モードに移行する。
@@ -856,6 +865,13 @@ sekka-modeがONの間中呼び出される可能性がある。"
    (sekka-guide-overlay
     ;; 残り回数のデクリメント
     (setq sekka-timer-rest (- sekka-timer-rest 1))
+
+    ;; カーソルがsekka-realtime-guide-limit-lines をはみ出していないかチェック
+    (sekka-debug-print (format "sekka-last-lineno [%d] : current-line" sekka-last-lineno (line-number-at-pos (point))))
+    (when (< 0 sekka-realtime-guide-limit-lines)
+      (let ((diff-lines (abs (- (line-number-at-pos (point)) sekka-last-lineno))))
+	(when (<= sekka-realtime-guide-limit-lines diff-lines)
+	  (setq sekka-timer-rest 0))))
 
     (let* (
 	   (end (point))
