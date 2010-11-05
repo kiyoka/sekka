@@ -44,7 +44,7 @@
   (define (display-progress line)
     (set! current (+ current 1))
     (when (= 0 (% current 10000))
-      (STDERR.printf "  %7d/%7d (%3.3f％)\n" current total (/ current (total.to_f)))))
+      (STDERR.printf "  %7d/%7d (%3.3f％)\n" current total (* (/ current (total.to_f)) 100.0))))
 
   (define (gen-sekka-entries line)
     (display-progress line)
