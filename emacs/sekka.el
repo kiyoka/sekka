@@ -1,4 +1,4 @@
-;;;-*- mode: lisp-interaction; syntax: elisp ; coding: iso-2022-jp -*-"
+e;;;-*- mode: lisp-interaction; syntax: elisp ; coding: iso-2022-jp -*-"
 ;;
 ;; "sekka.el" is a client for Sekka server
 ;;
@@ -178,7 +178,8 @@
     ("1" . "!")("2" . "\"")("3" . "#")("4" . "$")("5" . "%")("6" . "&")("7" . "'")
     ("8" . "(")("9" . ")")
     ("`" . "@")("[" . "{")("]" . "}")("-" . "=")("^" . "~")("\\" . "|")("." . ">")
-    ("/" . "?")(";" . ";")(":" . "*")
+    ("/" . "?")(";" . ";")(":" . "*")("@" . "`")
+    ("\C-h" . "")
     ))
 (defvar sticky-map (make-sparse-keymap))
 
@@ -848,8 +849,10 @@
   (mapcar (lambda (pair)
 	    (define-key sticky-map (car pair)
 	      `(lambda()(interactive)
-		 (setq unread-command-events
-		       (cons ,(string-to-char (cdr pair)) unread-command-events)))))
+		 (if ,(< 0 (length (cdr pair)))
+		     (setq unread-command-events
+			   (cons ,(string-to-char (cdr pair)) unread-command-events))
+		   nil))))
 	  sticky-list)
   (define-key sticky-map sticky-key '(lambda ()(interactive)(insert sticky-key))))
 
