@@ -611,14 +611,15 @@
 
 
 (define (patterns->roman-list patterns)
-  (delete-duplicates
-   (append-map
-    (lambda (_pattern)
-      (map
-       (lambda (x)
-         (string-join x))
-       (cartesian-product _pattern)))
-    patterns)))
+  (uniq
+   (sort
+    (append-map
+     (lambda (_pattern)
+       (map
+        (lambda (x)
+          (string-join x))
+        (cartesian-product _pattern)))
+     patterns))))
 
 
 (define (gen-hiragana->roman-list hiragana)

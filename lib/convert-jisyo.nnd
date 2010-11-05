@@ -7,12 +7,16 @@
 
 (define (expand-okuri-nashi-entry key value)
   (let1 roman-list (gen-hiragana->roman-list key)
-    (append
-     (map
-      (lambda (x)
-        (cons x (+ "C" key)))
-      roman-list)
-     (list (cons key value)))))
+    (if (< 500 (length roman-list))
+        (begin
+          (STDERR.printf " Warning: ignored entry [%s %s] , because too many pattens.\n" key value)
+          #f) ;; パターン数が爆発した単語は無視する
+        (append
+         (map
+          (lambda (x)
+            (cons x (+ "C" key)))
+          roman-list)
+         (list (cons key value))))))
 
 
 (define (expand-okuri-ari-entry-internal key okuri value)
