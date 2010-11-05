@@ -258,7 +258,7 @@
       (let1 henkan-result (map
                            (lambda (x)
                              (map (lambda (val) (if val val nil)) x))
-                           (sekka-henkan userid kvs keyword limit roman-method))
+                           (sekka-henkan userid kvs keyword limit (make-keyword roman-method)))
         (and cachesv
              (not (null? henkan-result))
              (let1 fetched2 (cachesv.get  "sekka::(keys)" #f)
