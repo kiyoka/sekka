@@ -34,7 +34,17 @@
 
 
 (define (convert-skk-jisyo-f f)
+  (define total   0)
+  (define current 0)
+
+  (define (display-progress line)
+    (set! current (+ current 1))
+    (when (= 0 (% current 1000))
+      (STDERR.printf "  %10d / %10d (%f％)\n" current total (/ current (total.to_f)))))
+
   (define (gen-sekka-entries line)
+    (display-progress line)
+
     (let* ((line   (line.sub #/\/$/ ""))
            (fields (split-dict-line line)))
       (cond
@@ -59,14 +69,17 @@
         #f)
        (else
         (list (cons (first fields) (second fields)))))))
-  
+
   (let* ((lines
           (map
            (lambda (line)
              (line.chomp))
            (f.readlines.to_list)))
+         (_ (set! total (length lines)))
          (entry-list
-          (filter-map gen-sekka-entries lines)))
+          (filter
+           (lambda (x) x)
+           (map gen-sekka-entries lines))))
     (map
      (lambda (entry)
        (sprintf "%s %s" (car entry) (cdr entry)))
