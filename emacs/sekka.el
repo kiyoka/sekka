@@ -77,7 +77,7 @@
   :group 'sekka)
 
 (defcustom sekka-realtime-guide-limit-lines 5
-  "最後に変換した行から N 行離れたらリアルタイムガイド表示が止まる。"
+  "最後に変換した行から N 行離れたらリアルタイムガイド表示が止まる"
   :type  'integer
   :group 'sekka)
 
@@ -87,9 +87,9 @@
   :group 'sekka)
 
 (defcustom sekka-roman-method "normal"
-  "ローマ字入力方式として，通常ローマ字か、AZIK(拡張ローマ字)のどちらを優先するか"
+  "ローマ字入力方式として，normal(通常ローマ字)か、AZIK(拡張ローマ字)のどちらの解釈を優先するか"
   :type '(choice (const :tag "normal" "normal")
-		 (const :tag "azik"   "azik"  ))
+		 (const :tag "AZIK"   "azik"  ))
   :group 'sekka)
 
 
