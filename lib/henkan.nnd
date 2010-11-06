@@ -249,7 +249,7 @@
 (define (sekkaHenkan userid kvs cachesv keyword limit roman-method)
   (define cache-exp-second (* 60 60))
   (let* ((keyword (keyword.strip))
-         (sekka-keyword (+ "sekka::" (limit.to_s) "::" keyword)))
+         (sekka-keyword (+ "sekka::" roman-method "::" (limit.to_s) "::" keyword)))
     (if-let1 fetched (and cachesv
                           (cachesv.get sekka-keyword #f))
       (begin
