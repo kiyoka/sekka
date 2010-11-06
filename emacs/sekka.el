@@ -1,4 +1,4 @@
-e;;;-*- mode: lisp-interaction; syntax: elisp ; coding: iso-2022-jp -*-"
+;;;-*- mode: lisp-interaction; syntax: elisp ; coding: iso-2022-jp -*-"
 ;;
 ;; "sekka.el" is a client for Sekka server
 ;;
@@ -84,6 +84,12 @@ e;;;-*- mode: lisp-interaction; syntax: elisp ; coding: iso-2022-jp -*-"
 (defcustom sekka-realtime-guide-interval  0.5
   "リアルタイムガイド表示を更新する時間間隔"
   :type  'integer
+  :group 'sekka)
+
+(defcustom sekka-roman-method "normal"
+  "ローマ字入力方式として，通常ローマ字か、AZIK(拡張ローマ字)のどちらを優先するか"
+  :type '(choice (const :tag "normal" "normal")
+		 (const :tag "azik"   "azik"  ))
   :group 'sekka)
 
 
@@ -216,10 +222,34 @@ e;;;-*- mode: lisp-interaction; syntax: elisp ; coding: iso-2022-jp -*-"
     ;; 初期化完了
     (setq sekka-init t)))
 
+
+(defun sekka-construct-curl-argstr (arg-alist)
+  (apply 'concat
+	 (mapcar
+	  (lambda (x)
+	    (format "--data '%s=%s' " (car x) (cdr x)))
+	  arg-alist)))
+
+;; test-code
+(when nil
+  (sekka-construct-curl-argstr
+   '(
+     ("yomi"   .  "kanji")
+     ("limit"  .  2)
+     ("method" .  "normal")
+     )))
+
 ;;
 ;; ローマ字で書かれた文章をSekkaサーバーを使って変換する
 ;;
-(defun sekka-rest-request (func-name arg)
+;; arg-alistの引数の形式
+;;  例:
+;;   '(
+;;     ("yomi"   .  "kanji")
+;;     ("limit"  .  2)
+;;     ("method" .  "normal")
+;;    )
+(defun sekka-rest-request (func-name arg-alist)
   (if sekka-psudo-server
       ;; クライアント単体で仮想的にサーバーに接続しているようにしてテストするモード
       "((\"変換\" nil \"へんかん\" j 0) (\"変化\" nil \"へんか\" j 1) (\"ヘンカン\" nil \"へんかん\" k 2) (\"へんかん\" nil \"へんかん\" h 3))"
@@ -232,7 +262,8 @@ e;;;-*- mode: lisp-interaction; syntax: elisp ; coding: iso-2022-jp -*-"
 	    " --insecure "
 	    " --header 'Content-Type: application/x-www-form-urlencoded' "
 	    (format "%s%s " sekka-server-url func-name)
-	    (format "--data 'arg=%s' --data 'userid=%s' " arg sekka-login-name))))
+	    (sekka-construct-curl-argstr arg-alist)
+	    (format "--data 'userid=%s' " sekka-login-name))))
       
       (sekka-debug-print (format "curl-command :%s\n" command))
       
@@ -265,7 +296,9 @@ e;;;-*- mode: lisp-interaction; syntax: elisp ; coding: iso-2022-jp -*-"
   ;;(message "Requesting to sekka server...")
   
   (let (
-	(result (sekka-rest-request "henkan" (concat yomi " " (number-to-string limit)))))
+	(result (sekka-rest-request "henkan" `((yomi   . ,yomi)
+					       (limit  . ,limit)
+					       (method . ,sekka-roman-method)))))
     (sekka-debug-print (format "henkan-result:%S\n" result))
     (if (eq (string-to-char result) ?\( )
 	(progn
@@ -288,7 +321,9 @@ e;;;-*- mode: lisp-interaction; syntax: elisp ; coding: iso-2022-jp -*-"
   
   (message "Requesting to sekka server...")
   
-  (let ((result (sekka-rest-request "kakutei" (concat key " " tango))))
+  (let ((result (sekka-rest-request "kakutei" `(
+						(key   . ,key)
+						(tango . ,tango)))))
     (sekka-debug-print (format "kakutei-result:%S\n" result))
     (message result)
     t))
@@ -310,7 +345,7 @@ e;;;-*- mode: lisp-interaction; syntax: elisp ; coding: iso-2022-jp -*-"
     (when str
       (message "Requesting to sekka server...")
       (sekka-debug-print (format "register [%s]\n" str))
-      (let ((result (sekka-rest-request "register" str)))
+      (let ((result (sekka-rest-request "register" `((dict . ,str)))))
 	(sekka-debug-print (format "register-result:%S\n" result))
 	(message result)
 	t))))

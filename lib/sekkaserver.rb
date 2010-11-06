@@ -50,15 +50,16 @@ class SekkaServer
            when 'POST'
              case req.path
              when "/henkan"
-               arg = req.params['arg'].force_encoding("UTF-8")
-               arr = arg.split( /[ ]+/ )
-               @core.writeToString( @core.sekkaHenkan( req.params['userid'], @kvs, @cachesv, arr[0], arr[1].to_i, "normal"))
+               _yomi   = req.params[  'yomi'].force_encoding("UTF-8")
+               _limit  = req.params[ 'limit'].force_encoding("UTF-8")
+               _method = req.params['method'].force_encoding("UTF-8")
+               @core.writeToString( @core.sekkaHenkan( req.params['userid'], @kvs, @cachesv, _yomi, _limit.to_i, _method ))
              when "/kakutei"
-               arg = req.params['arg'].force_encoding("UTF-8")
-               arr = arg.split( /[ ]+/ )
-               @core.sekkaKakutei( req.params['userid'], @kvs, @cachesv, arr[0], arr[1] )
+               _key    = req.params[   'key'].force_encoding("UTF-8")
+               _tango  = req.params[ 'tango'].force_encoding("UTF-8")
+               @core.sekkaKakutei( req.params['userid'], @kvs, @cachesv, _key, _tango )
              when "/register"
-               dict = req.params['arg'].force_encoding( "UTF-8" ).split( "\n" )
+               dict = req.params['dict'].force_encoding( "UTF-8" ).split( "\n" )
                dict.each { |x| @queue.push( req.params['userid'] + " " + x ) }
                sprintf( "register request successful (%s) words", dict.size )
              else
