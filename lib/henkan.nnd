@@ -362,9 +362,10 @@
       ;; OKURI-ARI
       (for-each
        (lambda (key)
-         (let1 master (kvs.get  (+ masterid "::" "(" (sekka-upcase key) ")") "")
+         (let1 fetched (kvs.get  (+ userid "::" "(" (sekka-upcase key) ")")
+                                 (kvs.get  (+ masterid "::" "(" (sekka-upcase key) ")") ""))
            (kvs.put! (+ userid "::" "(" (sekka-upcase key) ")")
-                     (string-join (uniq (sort (append (to-list (master.split #/[ ]+/))
+                     (string-join (uniq (sort (append (to-list (fetched.split #/[ ]+/))
                                                       (hash-table-get okuri-ari-hash key))))
                                   " "))))
        (hash-table-keys okuri-ari-hash))
@@ -372,9 +373,10 @@
       ;; OKURI-NASHI
       (for-each
        (lambda (key)
-         (let1 master (kvs.get  (+ masterid "::" "(" (sekka-downcase key) ")") "")
+         (let1 fetched (kvs.get  (+ userid "::" "(" (sekka-downcase key) ")")
+                                 (kvs.get  (+ masterid "::" "(" (sekka-downcase key) ")") ""))
            (kvs.put! (+ userid "::" "(" (sekka-downcase key) ")")
-                     (string-join (uniq (sort (append (to-list (master.split #/[ ]+/))
+                     (string-join (uniq (sort (append (to-list (fetched.split #/[ ]+/))
                                                       (hash-table-get okuri-nashi-hash key))))
                                   " "))))
        (hash-table-keys okuri-nashi-hash))))

@@ -177,7 +177,7 @@
        (. (hash-table-get db "MASTER::(KA)" #f) force_encoding "UTF-8"))
 
 (test* "db fetch 8"
-       "buroguT burogu`"
+       "buroguR buroguT burogu`"
        (. (hash-table-get db "dummy::(BU)" #f) force_encoding "UTF-8"))
 
 
@@ -480,6 +480,15 @@
        '(("勝った" #f "か`" j) ("買った" #f "か`" j) ("飼った" #f "か`" j) ("刈った" "(crop)草を刈る" "か`" j))
        (henkan-okuri-ari userid kvs "ka`ta" 0 :azik))
 
+;; 送り仮名が "R" で始っているのに、"t" や "`" もマッチしている理由は、送り仮名の開始子音1文字まで含めたJaro-WInkler distanceで候補で並べており、送り仮名が違うからといって排除しない方針をとっているため。
+;; それにより送り仮名のミスタイプの許容をしている。
+(test* "okuri ari 23"
+       '(("ブログりました" #f "ぶろぐr" j) ("ブログりました" #f "ぶろぐt" j) ("ブログりました" #f "ぶろぐ`" j))
+       (henkan-okuri-ari userid kvs "buroguRimashita" 0 :normal))
+
+(test* "okuri ari 24"
+       '(("ブログった" #f "ぶろぐt" j) ("ブログった" #f "ぶろぐr" j) ("ブログった" #f "ぶろぐ`" j))
+       (henkan-okuri-ari userid kvs "buroguTta" 0 :normal))
 
 ;;-------------------------------------------------------------------
 (test-section "henkan hiragana")
@@ -687,13 +696,12 @@
        (sekkaHenkan userid kvs #f "Henkanenji" 0 "normal"))
 
 (test* "henkan toplevel(for Elisp) 8"
-       '(("ブログった" nil "ぶろぐt" j 0) ("ブログった" nil "ぶろぐ`" j 1) ("ぶろぐった" nil "burogutta" h 2) ("ブログッタ" nil "burogutta" k 3))
+       '(("ブログった" nil "ぶろぐt" j 0) ("ブログった" nil "ぶろぐr" j 1) ("ブログった" nil "ぶろぐ`" j 2) ("ぶろぐった" nil "burogutta" h 3) ("ブログッタ" nil "burogutta" k 4))
        (sekkaHenkan userid kvs #f "buroguTta" 0 "normal"))
 
-;; バグ:このテストがパスしない.
-;;(test* "henkan toplevel(for Elisp) 9"
-;;       '(("ブログりました" nil "ぶろぐr" j 0) ("ぶろぐりました" nil "burogurimashita" h 1) ("ブログリマシタ" nil "burogurimashita" k 2))
-;;       (sekkaHenkan userid kvs #f "buroguRimashita" 0 "normal"))
+(test* "henkan toplevel(for Elisp) 9"
+       '(("ブログりました" nil "ぶろぐr" j 0) ("ブログりました" nil "ぶろぐt" j 1) ("ブログりました" nil "ぶろぐ`" j 2) ("ぶろぐりました" nil "burogurimashita" h 3) ("ブログリマシタ" nil "burogurimashita" k 4))
+       (sekkaHenkan userid kvs #f "buroguRimashita" 0 "normal"))
 
 (test* "henkan toplevel(for Elisp) 10"
        '(("はてブ" nil "はてぶ" j 0) ("はてなブックマーク" nil "はてぶ" j 1) ("はてぶ" nil "hatebu" h 2) ("ハテブ" nil "hatebu" k 3))
