@@ -7,7 +7,7 @@
 
 (define (expand-okuri-nashi-entry key value)
   (let1 roman-list (gen-hiragana->roman-list key)
-    (if (< 500 (length roman-list))
+    (if (< 1000 (length roman-list))
         (begin
           (STDERR.printf " Warning: ignored entry [%s %s] , because too many pattens.\n" key value)
           #f) ;; パターン数が爆発した単語は無視する

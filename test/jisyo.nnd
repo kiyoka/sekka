@@ -27,7 +27,7 @@
        (expand-okuri-nashi-entry "かっこ" "/確固/括弧/各個/各戸/確乎/羯鼓;雅楽の打楽器/格好/『/』;二重鉤括弧"))
 (test* "expanding SKK(1) entry to SEKKA(n) entry. (送りなし5)"
        #f
-       (expand-okuri-nashi-entry "げんぱつせいめんえきふぜんしょうこうぐん" "/原発性免疫不全症候群/"))
+       (expand-okuri-nashi-entry "すたんでぃんぐおべーしょん" "/スタンディングオベーション"))
 
 (test* "expanding SKK(1) entry to SEKKA(n) entry. (送りあり1)"
        '(("shiroI" . "Cしろi") ("siroI" . "Cしろi") ("しろi" . "/白"))
