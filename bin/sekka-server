@@ -1,60 +1,73 @@
-#!/bin/sh
-:; #-*- mode: nendo; syntax: scheme -*-;;
-:; exec /usr/local/bin/nendo $0 $*
+#!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
 
-(require "kyotocabinet")
-(load "./lib/henkan.nnd")
+require 'digest/md5'
+require 'fileutils'
+require 'rack'
+require File.expand_path(File.dirname(__FILE__) + "/../lib/sekkaconfig")
 
+DICTDIR = File.expand_path( "~/.sekka-server" )
+DICTURL = "http://sumibi.org/sekka/dict"
 
-;; result ( search-range '(search result...) )
-(define (disp-search-result result)
-  (printf "----------\n"
-  (for-each
-   (lambda (x)
-     (let1 vec (x.to_arr)
-       (printf " JaroW(%1.5f) [%s]:[%s]\n"
-               (vector-ref vec 0)
-               (vector-ref vec 1)
-               (vector-ref vec 2))))
-   result)))
+TC_FILE = DICTDIR + "/SEKKA-JISYO.ALL.tch"
+SUMFILE = DICTDIR + "/SEKKA-JISYO.ALL.md5"
+TC_URL  = DICTURL + "/SEKKA-JISYO.ALL.tch"
+SUMURL  = DICTURL + "/SEKKA-JISYO.ALL.md5"
+
+MEMCACHED = "localhost:11211"                # memcahced
 
 
-(define (sekka-read-henkan-loop db-filename)
-  (define (readline)
-    (printf "> ")
-    (STDIN.readline.chomp))
-  (define (opendb db-filename)
-    (let* ((db (KyotoCabinet::DB.new)))
-      (cond
-       ((db.open db-filename)
-        (db.tune_encoding   "utf-8")
-        db)
-       (elsen
-        (printf "db error [%s]\n" db.error)
-        (exit 1)))))
-    
-  (let1 db (opendb db-filename)
-    (printf " 'q': quit.\n")
-    (let loop ((line (readline)))
-      (if (rxmatch #/^[qQ]$/ line)
-          (printf "quit.\n")
-          (begin
-            (write (sekkaHenkan db line))
-            (newline)
-            (loop (readline)))))
-    (db.close)))
+def main
+  if not File.directory?( DICTDIR )
+    Dir.mkdir( DICTDIR )
+    STDERR.printf( "Info: created directory [%s]\n", DICTDIR )
+  end
 
+  if not File.exist?( TC_FILE )
+    STDERR.printf( "Info: Downloading SEKKA-JISYO\n" )
+    # 辞書をダウンロードする
+    cmd = sprintf( "curl -o %s %s",    TC_FILE, TC_URL )
+    STDERR.printf( "Command : %s\n", cmd )
+    system( cmd )
+    cmd = sprintf( "curl -o %s %s",    SUMFILE, SUMURL )
+    STDERR.printf( "Command : %s\n", cmd )
+    system( cmd )
 
+    # チェックサムを確認する
+    downloadSum = ""
+    open( TC_FILE ) { |f|
+      dataBody = f.read
+      downloadSum = Digest::MD5.hexdigest( dataBody )
+    }
+    open( SUMFILE ) { |f|
+      answerSum = f.readline.chomp.split[0]
+      STDERR.printf( "   Downloaded-md5 : %s\n", downloadSum )
+      STDERR.printf( "       Answer-md5 : %s\n", answerSum   )
+      if downloadSum == answerSum
+        STDERR.printf( "Info:  downloaded file [%s] verify OK.\n", TC_FILE )
+      else
+        STDERR.printf( "Error: downloaded file [%s] verify NG.\n", TC_FILE )
+        File.unlink( TC_FILE )
+        exit( 1 )
+      end
+    }
+  end
 
-(define (display-help)
-  (print "Usage : ")
-  (print "  sekka-engine [SEKKA-JISYO.L]  ... > input and henkan loop."))
+  # 設定項目をConfigオブジェクトに代入
+  SekkaServer::Config.setup( TC_FILE, MEMCACHED )
 
+  # サーバースクリプトのrootディレクトリへ移動
+  FileUtils.cd(File.dirname(__FILE__) + "/../")
 
-(define (main argv)
-  (define cabinet-ext ".tch")
-  (cond
-   ((eq? 0 (length argv))
-    (display-help))
-   (else
-    (sekka-read-henkan-loop (+ (first argv) cabinet-ext)))))
+  # サーバー起動
+  Rack::Server.start(
+                     :environment => "development",
+                     :pid         => nil,
+                     :Port        => 12929,
+                     :Host        => "0.0.0.0",
+                     :AccessLog   => [],
+                     :config      => "./lib/sekka.ru"
+                     )
+end
+
+main()

@@ -1,5 +1,7 @@
-# -*- mode: ruby; coding: utf-8 -*-
-# sekka.ru  -  "config file for rack"
+#!/usr/local/bin/ruby
+# -*- coding: utf-8 -*-
+#
+# sekkaconfig.rb  -  "a config info class"
 #  
 #   Copyright (c) 2010  Kiyoka Nishiyama  <kiyoka@sumibi.org>
 #   
@@ -32,5 +34,24 @@
 #  
 #  $Id: 
 #
-require './lib/sekkaserver'
-run SekkaServer::Server.new
+require 'singleton'
+
+module SekkaServer
+  class Config
+    include Singleton
+    
+    def self.setup( dictSource, cacheSource = false )
+      @@dictSource  = dictSource
+      @@cacheSource = cacheSource
+    end
+    
+    def self.dictSource
+      @@dictSource
+    end
+    
+    def self.cacheSource
+      @@cacheSource
+    end
+  end
+end
+
