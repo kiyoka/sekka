@@ -1,4 +1,4 @@
-;;;-*- mode: lisp-interaction; syntax: elisp ; coding: iso-2022-jp -*-"
+;; -*- coding: iso-2022-jp -*-
 ;;
 ;; "sekka.el" is a client for Sekka server
 ;;
@@ -21,20 +21,8 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with Sumibi; see the file COPYING.
 ;;
-;;
-
-;;;     配布条件: GPL
-;;; 最新版配布元: 
-;;; 
-;;; 不明な点や改善したい点があればSumibiのメーリングリストに参加してフィードバックをおねがいします。
-;;;
-;;; また、Sekkaに興味を持っていただいた方はどなたでも
-;;; 気軽にプロジェクトにご参加ください。
-;;;
-;;;
 
 ;;; Code:
-
 (require 'cl)
 
 ;;; 
