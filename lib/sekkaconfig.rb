@@ -40,9 +40,10 @@ module SekkaServer
   class Config
     include Singleton
     
-    def self.setup( dictSource, cacheSource = false )
+    def self.setup( dictSource, cacheSource = false, listenPort )
       @@dictSource  = dictSource
       @@cacheSource = cacheSource
+      @@listenPort  = listenPort
     end
     
     def self.dictSource
@@ -51,6 +52,10 @@ module SekkaServer
     
     def self.cacheSource
       @@cacheSource
+    end
+
+    def self.listenPort
+      @@listenPort
     end
   end
 end

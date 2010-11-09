@@ -54,7 +54,7 @@ def main
   end
 
   # 設定項目をConfigオブジェクトに代入
-  SekkaServer::Config.setup( TC_FILE, MEMCACHED )
+  SekkaServer::Config.setup( TC_FILE, MEMCACHED, 12929 )
 
   # サーバースクリプトのrootディレクトリへ移動
   FileUtils.cd(File.dirname(__FILE__) + "/../")
@@ -63,7 +63,7 @@ def main
   Rack::Server.start(
                      :environment => "development",
                      :pid         => nil,
-                     :Port        => 12929,
+                     :Port        => SekkaServer::Config.listenPort,
                      :Host        => "0.0.0.0",
                      :AccessLog   => [],
                      :config      => "./lib/sekka.ru"

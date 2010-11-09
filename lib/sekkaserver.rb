@@ -56,6 +56,7 @@ module SekkaServer
       STDERR.puts(   "----- Sekka Server Started -----" )
       STDERR.printf( "  dict-db  :  %s\n", SekkaServer::Config.dictSource  )
       STDERR.printf( "  memcached:  %s\n", SekkaServer::Config.cacheSource )
+      STDERR.printf( "  listenPort: %s\n", SekkaServer::Config.listenPort  )
       STDERR.puts(   "--------------------------------" )
 
       begin
