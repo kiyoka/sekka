@@ -1,5 +1,4 @@
 #-*- mode: ruby; -*-
-#
 #                                                  Rakefile for Sekka
 # Release Engineering
 #   1. edit the VERSION.yml file
@@ -16,7 +15,7 @@ begin
   Jeweler::Tasks.new do |gemspec|
     gemspec.name = "sekka"
     gemspec.summary = "Sekka is a SKK like input method."
-    gemspec.description = "Sekka is a SKK like input method."
+    gemspec.description = "Sekka is a SKK like input method. Sekka server provides REST Based API. If you are SKK user, let's try it."
     gemspec.email = "kiyoka@sumibi.org"
     gemspec.homepage = "http://github.com/kiyoka/sekka"
     gemspec.authors = ["Kiyoka Nishiyama"]
@@ -24,9 +23,21 @@ begin
                              'lib/*.ru',
                              'lib/*.nnd',
                              'bin/*',
-                             'test/*',
+                             'test/*.nnd',
+                             'test/*.rb',
                              'emacs/*.el'].to_a
     gemspec.add_development_dependency "rspec"
+    gemspec.add_development_dependency "rubyforge"
+    gemspec.required_ruby_version = '>= 1.9.1'
+    [ "eventmachine",
+      "fuzzy-string-match",
+      "jeweler",
+      "memcache-client",
+      "nendo",
+      "rack",
+      "tokyocabinet" ].each { |name|
+      gemspec.add_dependency(name)
+    }
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install jeweler"
