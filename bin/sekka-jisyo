@@ -1,6 +1,7 @@
-#!/bin/sh
-:; #-*- mode: nendo; syntax: scheme -*-;;
-:; exec /usr/local/bin/nendo $0 $*
+#!/usr/bin/env ruby
+#t ;;-*- mode: nendo; syntax: scheme ; coding: utf-8 -*-
+;; system( "/usr/local/bin/nendo " + $0 + " " + $*.join( ' ' ))
+;; source = <<";;EOS"
 ;;;
 ;;; sekka-jisyo - Sekkaの辞書メンテナンスツール
 ;;;  
@@ -64,7 +65,6 @@
   (print "Usage : ")
   (print "  sekka-jisyo convert SKK-JISYO.L                        ... output SEKKA-JISYO to STDOUT")
   (print "  sekka-jisyo load    SEKKA-JISYO.L  SEKKA-JISYO.L.tch   ... load   SEKKA-JISYO to DB(*.tch)")
-  (print "  sekka-jisyo load    SEKKA-JISYO.L  localhost:21201     ... load   SEKKA-JISYO to memcachedb server")
   (print "  sekka-jisyo dump    SEKKA-JISYO.L                      ... dump   DB(*.tch) to SEKKA-JISYO(STDOUT)"))
 
 
@@ -90,16 +90,4 @@
        (else
         (errorf "Error: no such command [%s] \n" command )))))))
 
-
-
-       
-
-    
-    
-      
-  
-
-
-
-
-	
+;;EOS
