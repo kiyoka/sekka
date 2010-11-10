@@ -136,7 +136,7 @@
   (let* ((keyword  (let1 _pair (string-split-first-and-rest keyword)
                      (+ (sekka-downcase (car _pair))
                         (cdr _pair))))
-         (m        (rxmatch #/^([a-z])([a-z\-^]*)([A-Z`])([a-zA-Z]*)$/ keyword)))
+         (m        (rxmatch #/^([a-z])([a-z\-^]*)([A-Z`+])([a-zA-Z]*)$/ keyword)))
     (if (not m)
         '() ;; 変換候補無し
         (let* ((result (approximate-search userid kvs
@@ -218,10 +218,10 @@
   ;; キーワードの種別で処理を分割する
   (append-index-number
    (cond
-    ((rxmatch #/[A-Z`]/ keyword)
+    ((rxmatch #/[A-Z`+]/ keyword)
      (let1 keyword (string-downcase-first keyword)
        (cond
-        ((rxmatch #/[a-z][A-Z`]/ keyword)
+        ((rxmatch #/[a-z][A-Z`+]/ keyword)
          ;; 送りあり
          ;;(let1 result (approximate-search db keyword #t)  (disp-search-result result))
          (append

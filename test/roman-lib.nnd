@@ -15,12 +15,18 @@
 (test* "downcase 2"
        "aaa@@@@@@bbb"
        (sekka-downcase "AAA@@@```BBB"))
+(test* "downcase 3"
+       "aaa;;;;;;bbb"
+       (sekka-downcase "AAA+++;;;BBB"))
 (test* "upcase 1"
        "AABBCCDDEEFFGG"
        (sekka-upcase "aAbBcCdDeEfFgG"))
 (test* "upcase 2"
        "AAA``````BBB"
        (sekka-upcase "AAA@@@```BBB"))
+(test* "upcase 2"
+       "AAA++++++BBB"
+       (sekka-upcase "AAA+++;;;BBB"))
 
 
 ;;-------------------------------------------------------------------
@@ -36,7 +42,7 @@
        '("chi" "tyi" "ti")
        (hash-table-get sekka-kana->roman-hash-short "ち" #f))
 (test* "kana->roman 4"
-       '("tt" "@" "ltu")
+       '("tt" "@" ";" "ltu")
        (hash-table-get sekka-kana->roman-hash-short "っ" #f))
 (test* "kana->roman 5"
        '("-" "^" ":")
@@ -52,7 +58,7 @@
        '("kt")
        (hash-table-get sekka-kana->roman-hash-long "こと" #f))
 (test* "kana->roman 3"
-       '("ffu" "hhu" "@fu" "@hu")
+       '("ffu" "hhu" "@fu" "@hu" ";fu" ";hu")
        (hash-table-get sekka-kana->roman-hash-long "っふ" #f))
 
 ;;-------------------------------------------------------------------
@@ -79,6 +85,9 @@
 (test* "roman->kana 7"
        '("っ")
        (hash-table-get sekka-roman->kana-hash-short "@" #f))
+(test* "roman->kana 8"
+       '("っ")
+       (hash-table-get sekka-roman->kana-hash-short ";" #f))
 
 ;;-------------------------------------------------------------------
 (test-section "roman->kana conversion hash (long)")
@@ -246,7 +255,7 @@
          (("shi" "si") ("zd") ("gd") ("go") ("sho" "syo" "xo") ("ri")))
        (gen-hiragana->roman-pattens "しぜんげんごしょり"))
 (test* "hiragana -> roman-pattern5"
-       '((("ka") ("kko" "@ko")))
+       '((("ka") ("kko" "@ko" ";ko")))
        (gen-hiragana->roman-pattens "かっこ"))
 
 (test* "patterns -> roman-list1"

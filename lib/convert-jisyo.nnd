@@ -31,8 +31,11 @@
 (define (expand-okuri-ari-entry key okuri value)
   (cond
    ((eq? "t" okuri)
-    (append (expand-okuri-ari-entry-internal key okuri                value)
-            (expand-okuri-ari-entry-internal key (sekka-upcase "@")   value)))
+    (append-map (lambda (x) x)
+                (list
+                 (expand-okuri-ari-entry-internal key okuri                value)
+                 (expand-okuri-ari-entry-internal key (sekka-upcase "@")   value)
+                 (expand-okuri-ari-entry-internal key (sekka-upcase ";")   value))))
    (else
     (expand-okuri-ari-entry-internal key okuri value))))
 

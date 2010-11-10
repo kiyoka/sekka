@@ -7,7 +7,7 @@
 (define masterid "MASTER")
 (define workid   "WORK")
 
-(define alphabet-string "abcdefghijklmnopqrstuvwxyz>@")
+(define alphabet-string "abcdefghijklmnopqrstuvwxyz>@;")
 (define alphabet-lower-list (to-list (alphabet-string.split "")))
 (define alphabet-upper-list (to-list (. (sekka-upcase alphabet-string) split "")))
 (define alphabet-pairs (append-map
@@ -44,10 +44,10 @@
   (define (create-hash keylist)
     (for-each
      (lambda (k)
-       (when (rxmatch #/^[a-zA-Z^>-@`]+$/ k)
+       (when (rxmatch #/^[a-zA-Z^>-@`;+]+$/ k)
          (let1 sliced (sekka-downcase (k.slice 0 2))
            (when (= 2 sliced.size)
-             (if (rxmatch #/[A-Z`]$/ k)
+             (if (rxmatch #/[A-Z`+]$/ k)
                  (hash-table-push! okuri-ari-hash   sliced k)
                  (hash-table-push! okuri-nashi-hash sliced k))))))
      keylist))

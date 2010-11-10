@@ -69,7 +69,7 @@
                   "かt /勝/買/飼/刈;(crop)草を刈る")
                 "\n")))
       (sekka-jisyo-data
-       '("watashiH Cわたしh" "watasiH Cわたしh" "wtshiH Cわたしh" "wtsiH Cわたしh" "わたしh /私" "okonaU Cおこなu" "おこなu /行/行な;※送り位置補正" "hdkn Cへんかん" "hdkz Cへんかん" "henkan Cへんかん" "henkann Cへんかん" "henkaq Cへんかん" "hennkan Cへんかん" "hennkann Cへんかん" "hennkaq Cへんかん" "heqkan Cへんかん" "heqkann Cへんかん" "heqkaq Cへんかん" "へんかん /変換/返還" "hdka Cへんか" "henka Cへんか" "hennka Cへんか" "heqka Cへんか" "へんか /変化/返歌" "hdkaS Cへんかs" "henkaS Cへんかs" "hennkaS Cへんかs" "heqkaS Cへんかs" "へんかs /変化" "shizdgdgo Cしぜんげんご" "shizengengo Cしぜんげんご" "shizengenngo Cしぜんげんご" "shizengeqgo Cしぜんげんご" "shizenngengo Cしぜんげんご" "shizenngenngo Cしぜんげんご" "shizenngeqgo Cしぜんげんご" "shizeqgengo Cしぜんげんご" "shizeqgenngo Cしぜんげんご" "shizeqgeqgo Cしぜんげんご" "sizdgdgo Cしぜんげんご" "sizengengo Cしぜんげんご" "sizengenngo Cしぜんげんご" "sizengeqgo Cしぜんげんご" "sizenngengo Cしぜんげんご" "sizenngenngo Cしぜんげんご" "sizenngeqgo Cしぜんげんご" "sizeqgengo Cしぜんげんご" "sizeqgenngo Cしぜんげんご" "sizeqgeqgo Cしぜんげんご" "しぜんげんご /自然言語" "shizdgdgoshori Cしぜんげんごしょり" "shizdgdgosyori Cしぜんげんごしょり" "shizdgdgoxori Cしぜんげんごしょり" "shizengengoshori Cしぜんげんごしょり" "shizengengosyori Cしぜんげんごしょり" "shizengengoxori Cしぜんげんごしょり" "shizengenngoshori Cしぜんげんごしょり" "shizengenngosyori Cしぜんげんごしょり" "shizengenngoxori Cしぜんげんごしょり" "shizengeqgoshori Cしぜんげんごしょり" "shizengeqgosyori Cしぜんげんごしょり" "shizengeqgoxori Cしぜんげんごしょり" "shizenngengoshori Cしぜんげんごしょり" "shizenngengosyori Cしぜんげんごしょり" "shizenngengoxori Cしぜんげんごしょり" "shizenngenngoshori Cしぜんげんごしょり" "shizenngenngosyori Cしぜんげんごしょり" "shizenngenngoxori Cしぜんげんごしょり" "shizenngeqgoshori Cしぜんげんごしょり" "shizenngeqgosyori Cしぜんげんごしょり" "shizenngeqgoxori Cしぜんげんごしょり" "shizeqgengoshori Cしぜんげんごしょり" "shizeqgengosyori Cしぜんげんごしょり" "shizeqgengoxori Cしぜんげんごしょり" "shizeqgenngoshori Cしぜんげんごしょり" "shizeqgenngosyori Cしぜんげんごしょり" "shizeqgenngoxori Cしぜんげんごしょり" "shizeqgeqgoshori Cしぜんげんごしょり" "shizeqgeqgosyori Cしぜんげんごしょり" "shizeqgeqgoxori Cしぜんげんごしょり" "sizdgdgoshori Cしぜんげんごしょり" "sizdgdgosyori Cしぜんげんごしょり" "sizdgdgoxori Cしぜんげんごしょり" "sizengengoshori Cしぜんげんごしょり" "sizengengosyori Cしぜんげんごしょり" "sizengengoxori Cしぜんげんごしょり" "sizengenngoshori Cしぜんげんごしょり" "sizengenngosyori Cしぜんげんごしょり" "sizengenngoxori Cしぜんげんごしょり" "sizengeqgoshori Cしぜんげんごしょり" "sizengeqgosyori Cしぜんげんごしょり" "sizengeqgoxori Cしぜんげんごしょり" "sizenngengoshori Cしぜんげんごしょり" "sizenngengosyori Cしぜんげんごしょり" "sizenngengoxori Cしぜんげんごしょり" "sizenngenngoshori Cしぜんげんごしょり" "sizenngenngosyori Cしぜんげんごしょり" "sizenngenngoxori Cしぜんげんごしょり" "sizenngeqgoshori Cしぜんげんごしょり" "sizenngeqgosyori Cしぜんげんごしょり" "sizenngeqgoxori Cしぜんげんごしょり" "sizeqgengoshori Cしぜんげんごしょり" "sizeqgengosyori Cしぜんげんごしょり" "sizeqgengoxori Cしぜんげんごしょり" "sizeqgenngoshori Cしぜんげんごしょり" "sizeqgenngosyori Cしぜんげんごしょり" "sizeqgenngoxori Cしぜんげんごしょり" "sizeqgeqgoshori Cしぜんげんごしょり" "sizeqgeqgosyori Cしぜんげんごしょり" "sizeqgeqgoxori Cしぜんげんごしょり" "しぜんげんごしょり /自然言語処理" "shizdgdgorikq Cしぜんげんごりかい" "shizengengorikai Cしぜんげんごりかい" "shizengenngorikai Cしぜんげんごりかい" "shizengeqgorikai Cしぜんげんごりかい" "shizenngengorikai Cしぜんげんごりかい" "shizenngenngorikai Cしぜんげんごりかい" "shizenngeqgorikai Cしぜんげんごりかい" "shizeqgengorikai Cしぜんげんごりかい" "shizeqgenngorikai Cしぜんげんごりかい" "shizeqgeqgorikai Cしぜんげんごりかい" "sizdgdgorikq Cしぜんげんごりかい" "sizengengorikai Cしぜんげんごりかい" "sizengenngorikai Cしぜんげんごりかい" "sizengeqgorikai Cしぜんげんごりかい" "sizenngengorikai Cしぜんげんごりかい" "sizenngenngorikai Cしぜんげんごりかい" "sizenngeqgorikai Cしぜんげんごりかい" "sizeqgengorikai Cしぜんげんごりかい" "sizeqgenngorikai Cしぜんげんごりかい" "sizeqgeqgorikai Cしぜんげんごりかい" "しぜんげんごりかい /自然言語理解" "developer /デベロッパー/ディベロッパー/デベロッパ" ">an C>あん" ">ann C>あん" ">aq C>あん" ">あん /案" "{ /｛" "ka@ko Cかっこ" "kakko Cかっこ" "かっこ /確固/括弧/各個/各戸/確乎/羯鼓;雅楽の打楽器/格好/『』/【】/［］/〔〕/〈〉/《》/｛｝/「」/（）/‘’/“”" "ko@ka Cこっか" "kokka Cこっか" "こっか /国家;state/国歌;anthem.「-斉唱」/国花/骨化/國家;「国」旧字/黒化/刻下/】/）/］/』" "! /！/感嘆符" ". /．/・/。/…;..." "* /＊/※/×" "? /？" "/ /／/÷" "!= /≠" "ko-hi- Cこーひー" "ko-hi: Cこーひー" "ko-hi^ Cこーひー" "ko:hi- Cこーひー" "ko:hi: Cこーひー" "ko:hi^ Cこーひー" "ko^hi- Cこーひー" "ko^hi: Cこーひー" "ko^hi^ Cこーひー" "こーひー /コーヒー" "kani Cかに" "かに /蟹/可児/蠏" "kani Cかんい" "kanni Cかんい" "kaqi Cかんい" "kni Cかんい" "kzi Cかんい" "かんい /簡易/官位/冠位;-十二階/漢医;漢方医/敢為/官医/寛衣/換位/簡意" "i@chi Cいっち" "i@ci Cいっち" "i@tyi Cいっち" "icchi Cいっち" "icci Cいっち" "ittyi Cいっち" "いっち /一致" "i@chi Cいっち" "i@ci Cいっち" "i@tyi Cいっち" "icchi Cいっち" "icci Cいっち" "ittyi Cいっち" "いっち /イッチ" "eR Cえr" "えr /得/獲;NB:「とr」と同形/選;NB:「よr」「すぐr」と同形" "wo Cを" "を /小/緒/雄/男/牡/尾/悪/汚/惡;「悪」の旧字(人名用漢字)" "miR Cみr" "みr /見/観;(字義:みわたす)/視;(字義:じっとみる)/診;(diagnose) 患者を診る/看;(nurse) 病母を看る/觀;「観」の旧字" "wake /ウェイク" "wake Cわけ" "わけ /訳/和気;地名/理由;当て字/分け/分/譯;「訳」の旧字/戯奴" "aU Cあu" "あu /合;(一致) 話が合う/会;人と会う/遭;(偶然、特によくないことにあう) 事故に遭う/逢;(人と|運命的にあう) 巡り逢う/遇;≒遭う/會;「会」の旧字" "saku Cさく" "さく /策/柵/作/佐久;地名/朔;朔日 ⇔晦/槊;ほこ/搾;搾取/昨;昨夜/咋;(くう)/窄;狭窄/酢;酢酸/柞;いすのき/炸;炸裂/筰;山田耕筰/削;削除/索;検索/錯;錯誤/筴/縒;より/鑿/做;「作」の異体字/簀;す/嘖;さいな・む/捉;(漢音) とら・える/齪;齷齪/冊;(慣用音)竹冊/册;「冊」の旧字/辟;?/乍;?" "saki Cさき" "さき /先/崎/左記/前/早紀/沙樹/早岐/沙貴/咲/埼/尖/嵜/碕/早記" "inngou Cいんにょう" "innngou Cいんにょう" "innnyou Cいんにょう" "innyou Cいんにょう" "iqngou Cいんにょう" "iqnyou Cいんにょう" "いんにょう /飲尿/廴繞;[部首]" "innyou Cいんよう" "innyp Cいんよう" "inyou Cいんよう" "inyp Cいんよう" "iqyou Cいんよう" "iqyp Cいんよう" "いんよう /引用/飲用/陰陽" "kaT Cかt" "かt /勝/買/飼/刈;(crop)草を刈る" "ka` Cか`" "か` /勝/買/飼/刈;(crop)草を刈る")
+       '("watashiH Cわたしh" "watasiH Cわたしh" "wtshiH Cわたしh" "wtsiH Cわたしh" "わたしh /私" "okonaU Cおこなu" "おこなu /行/行な;※送り位置補正" "hdkn Cへんかん" "hdkz Cへんかん" "henkan Cへんかん" "henkann Cへんかん" "henkaq Cへんかん" "hennkan Cへんかん" "hennkann Cへんかん" "hennkaq Cへんかん" "heqkan Cへんかん" "heqkann Cへんかん" "heqkaq Cへんかん" "へんかん /変換/返還" "hdka Cへんか" "henka Cへんか" "hennka Cへんか" "heqka Cへんか" "へんか /変化/返歌" "hdkaS Cへんかs" "henkaS Cへんかs" "hennkaS Cへんかs" "heqkaS Cへんかs" "へんかs /変化" "shizdgdgo Cしぜんげんご" "shizengengo Cしぜんげんご" "shizengenngo Cしぜんげんご" "shizengeqgo Cしぜんげんご" "shizenngengo Cしぜんげんご" "shizenngenngo Cしぜんげんご" "shizenngeqgo Cしぜんげんご" "shizeqgengo Cしぜんげんご" "shizeqgenngo Cしぜんげんご" "shizeqgeqgo Cしぜんげんご" "sizdgdgo Cしぜんげんご" "sizengengo Cしぜんげんご" "sizengenngo Cしぜんげんご" "sizengeqgo Cしぜんげんご" "sizenngengo Cしぜんげんご" "sizenngenngo Cしぜんげんご" "sizenngeqgo Cしぜんげんご" "sizeqgengo Cしぜんげんご" "sizeqgenngo Cしぜんげんご" "sizeqgeqgo Cしぜんげんご" "しぜんげんご /自然言語" "shizdgdgoshori Cしぜんげんごしょり" "shizdgdgosyori Cしぜんげんごしょり" "shizdgdgoxori Cしぜんげんごしょり" "shizengengoshori Cしぜんげんごしょり" "shizengengosyori Cしぜんげんごしょり" "shizengengoxori Cしぜんげんごしょり" "shizengenngoshori Cしぜんげんごしょり" "shizengenngosyori Cしぜんげんごしょり" "shizengenngoxori Cしぜんげんごしょり" "shizengeqgoshori Cしぜんげんごしょり" "shizengeqgosyori Cしぜんげんごしょり" "shizengeqgoxori Cしぜんげんごしょり" "shizenngengoshori Cしぜんげんごしょり" "shizenngengosyori Cしぜんげんごしょり" "shizenngengoxori Cしぜんげんごしょり" "shizenngenngoshori Cしぜんげんごしょり" "shizenngenngosyori Cしぜんげんごしょり" "shizenngenngoxori Cしぜんげんごしょり" "shizenngeqgoshori Cしぜんげんごしょり" "shizenngeqgosyori Cしぜんげんごしょり" "shizenngeqgoxori Cしぜんげんごしょり" "shizeqgengoshori Cしぜんげんごしょり" "shizeqgengosyori Cしぜんげんごしょり" "shizeqgengoxori Cしぜんげんごしょり" "shizeqgenngoshori Cしぜんげんごしょり" "shizeqgenngosyori Cしぜんげんごしょり" "shizeqgenngoxori Cしぜんげんごしょり" "shizeqgeqgoshori Cしぜんげんごしょり" "shizeqgeqgosyori Cしぜんげんごしょり" "shizeqgeqgoxori Cしぜんげんごしょり" "sizdgdgoshori Cしぜんげんごしょり" "sizdgdgosyori Cしぜんげんごしょり" "sizdgdgoxori Cしぜんげんごしょり" "sizengengoshori Cしぜんげんごしょり" "sizengengosyori Cしぜんげんごしょり" "sizengengoxori Cしぜんげんごしょり" "sizengenngoshori Cしぜんげんごしょり" "sizengenngosyori Cしぜんげんごしょり" "sizengenngoxori Cしぜんげんごしょり" "sizengeqgoshori Cしぜんげんごしょり" "sizengeqgosyori Cしぜんげんごしょり" "sizengeqgoxori Cしぜんげんごしょり" "sizenngengoshori Cしぜんげんごしょり" "sizenngengosyori Cしぜんげんごしょり" "sizenngengoxori Cしぜんげんごしょり" "sizenngenngoshori Cしぜんげんごしょり" "sizenngenngosyori Cしぜんげんごしょり" "sizenngenngoxori Cしぜんげんごしょり" "sizenngeqgoshori Cしぜんげんごしょり" "sizenngeqgosyori Cしぜんげんごしょり" "sizenngeqgoxori Cしぜんげんごしょり" "sizeqgengoshori Cしぜんげんごしょり" "sizeqgengosyori Cしぜんげんごしょり" "sizeqgengoxori Cしぜんげんごしょり" "sizeqgenngoshori Cしぜんげんごしょり" "sizeqgenngosyori Cしぜんげんごしょり" "sizeqgenngoxori Cしぜんげんごしょり" "sizeqgeqgoshori Cしぜんげんごしょり" "sizeqgeqgosyori Cしぜんげんごしょり" "sizeqgeqgoxori Cしぜんげんごしょり" "しぜんげんごしょり /自然言語処理" "shizdgdgorikq Cしぜんげんごりかい" "shizengengorikai Cしぜんげんごりかい" "shizengenngorikai Cしぜんげんごりかい" "shizengeqgorikai Cしぜんげんごりかい" "shizenngengorikai Cしぜんげんごりかい" "shizenngenngorikai Cしぜんげんごりかい" "shizenngeqgorikai Cしぜんげんごりかい" "shizeqgengorikai Cしぜんげんごりかい" "shizeqgenngorikai Cしぜんげんごりかい" "shizeqgeqgorikai Cしぜんげんごりかい" "sizdgdgorikq Cしぜんげんごりかい" "sizengengorikai Cしぜんげんごりかい" "sizengenngorikai Cしぜんげんごりかい" "sizengeqgorikai Cしぜんげんごりかい" "sizenngengorikai Cしぜんげんごりかい" "sizenngenngorikai Cしぜんげんごりかい" "sizenngeqgorikai Cしぜんげんごりかい" "sizeqgengorikai Cしぜんげんごりかい" "sizeqgenngorikai Cしぜんげんごりかい" "sizeqgeqgorikai Cしぜんげんごりかい" "しぜんげんごりかい /自然言語理解" "developer /デベロッパー/ディベロッパー/デベロッパ" ">an C>あん" ">ann C>あん" ">aq C>あん" ">あん /案" "{ /｛" "ka;ko Cかっこ" "ka@ko Cかっこ" "kakko Cかっこ" "かっこ /確固/括弧/各個/各戸/確乎/羯鼓;雅楽の打楽器/格好/『』/【】/［］/〔〕/〈〉/《》/｛｝/「」/（）/‘’/“”" "ko;ka Cこっか" "ko@ka Cこっか" "kokka Cこっか" "こっか /国家;state/国歌;anthem.「-斉唱」/国花/骨化/國家;「国」旧字/黒化/刻下/】/）/］/』" "! /！/感嘆符" ". /．/・/。/…;..." "* /＊/※/×" "? /？" "/ /／/÷" "!= /≠" "ko-hi- Cこーひー" "ko-hi: Cこーひー" "ko-hi^ Cこーひー" "ko:hi- Cこーひー" "ko:hi: Cこーひー" "ko:hi^ Cこーひー" "ko^hi- Cこーひー" "ko^hi: Cこーひー" "ko^hi^ Cこーひー" "こーひー /コーヒー" "kani Cかに" "かに /蟹/可児/蠏" "kani Cかんい" "kanni Cかんい" "kaqi Cかんい" "kni Cかんい" "kzi Cかんい" "かんい /簡易/官位/冠位;-十二階/漢医;漢方医/敢為/官医/寛衣/換位/簡意" "i;chi Cいっち" "i;ci Cいっち" "i;tyi Cいっち" "i@chi Cいっち" "i@ci Cいっち" "i@tyi Cいっち" "icchi Cいっち" "icci Cいっち" "ittyi Cいっち" "いっち /一致" "i;chi Cいっち" "i;ci Cいっち" "i;tyi Cいっち" "i@chi Cいっち" "i@ci Cいっち" "i@tyi Cいっち" "icchi Cいっち" "icci Cいっち" "ittyi Cいっち" "いっち /イッチ" "eR Cえr" "えr /得/獲;NB:「とr」と同形/選;NB:「よr」「すぐr」と同形" "wo Cを" "を /小/緒/雄/男/牡/尾/悪/汚/惡;「悪」の旧字(人名用漢字)" "miR Cみr" "みr /見/観;(字義:みわたす)/視;(字義:じっとみる)/診;(diagnose) 患者を診る/看;(nurse) 病母を看る/觀;「観」の旧字" "wake /ウェイク" "wake Cわけ" "わけ /訳/和気;地名/理由;当て字/分け/分/譯;「訳」の旧字/戯奴" "aU Cあu" "あu /合;(一致) 話が合う/会;人と会う/遭;(偶然、特によくないことにあう) 事故に遭う/逢;(人と|運命的にあう) 巡り逢う/遇;≒遭う/會;「会」の旧字" "saku Cさく" "さく /策/柵/作/佐久;地名/朔;朔日 ⇔晦/槊;ほこ/搾;搾取/昨;昨夜/咋;(くう)/窄;狭窄/酢;酢酸/柞;いすのき/炸;炸裂/筰;山田耕筰/削;削除/索;検索/錯;錯誤/筴/縒;より/鑿/做;「作」の異体字/簀;す/嘖;さいな・む/捉;(漢音) とら・える/齪;齷齪/冊;(慣用音)竹冊/册;「冊」の旧字/辟;?/乍;?" "saki Cさき" "さき /先/崎/左記/前/早紀/沙樹/早岐/沙貴/咲/埼/尖/嵜/碕/早記" "inngou Cいんにょう" "innngou Cいんにょう" "innnyou Cいんにょう" "innyou Cいんにょう" "iqngou Cいんにょう" "iqnyou Cいんにょう" "いんにょう /飲尿/廴繞;[部首]" "innyou Cいんよう" "innyp Cいんよう" "inyou Cいんよう" "inyp Cいんよう" "iqyou Cいんよう" "iqyp Cいんよう" "いんよう /引用/飲用/陰陽" "kaT Cかt" "かt /勝/買/飼/刈;(crop)草を刈る" "ka` Cか`" "か` /勝/買/飼/刈;(crop)草を刈る" "ka+ Cか+" "か+ /勝/買/飼/刈;(crop)草を刈る")
        ))
        
   (test* "Create test jisyo"
@@ -93,7 +93,7 @@
   (let1 _output (StringIO.new)
     (_output.set_encoding "utf-8")
     (test* "dump DB to SEKKA jisyo file. (1)"
-           "e94329e886f5f2c6df6d18d3e8ee03c41be6475f"
+           "0e9dee43c79144807cac67a848f6887296482d58"
            (begin
              (dump-sekka-jisyo-f _output target)
              (Digest::SHA1.hexdigest (_output.string))
@@ -170,15 +170,15 @@
        (. (hash-table-get db "dummy::henkanenjin" #f) force_encoding "UTF-8"))
 
 (test* "db fetch 6"
-       "ka@ko kakko kani kanni kaqi"
+       "ka;ko ka@ko kakko kani kanni kaqi"
        (. (hash-table-get db "MASTER::(ka)" #f) force_encoding "UTF-8"))
 
 (test* "db fetch 7"
-       "kaT ka`"
+       "ka+ kaT ka`"
        (. (hash-table-get db "MASTER::(KA)" #f) force_encoding "UTF-8"))
 
 (test* "db fetch 8"
-       "buroguR buroguT burogu`"
+       "burogu+ buroguR buroguT burogu`"
        (. (hash-table-get db "dummy::(BU)" #f) force_encoding "UTF-8"))
 
 (test* "db fetch 9"
@@ -374,12 +374,20 @@
        (henkan-okuri-nashi userid kvs "Ka@ko" 0))
 
 (test* "okuri nashi 17"
-       '(("一致" #f "いっち" j) ("イッチ" #f "いっち" j))
-       (henkan-okuri-nashi userid kvs "icchi" 0))
+       '(("確固" #f "かっこ" j) ("括弧" #f "かっこ" j) ("各個" #f "かっこ" j) ("各戸" #f "かっこ" j) ("確乎" #f "かっこ" j) ("羯鼓" "雅楽の打楽器" "かっこ" j) ("格好" #f "かっこ" j) ("『』" #f "かっこ" j) ("【】" #f "かっこ" j) ("［］" #f "かっこ" j) ("〔〕" #f "かっこ" j) ("〈〉" #f "かっこ" j) ("《》" #f "かっこ" j) ("｛｝" #f "かっこ" j) ("「」" #f "かっこ" j) ("（）" #f "かっこ" j) ("‘’" #f "かっこ" j) ("“”" #f "かっこ" j))
+       (henkan-okuri-nashi userid kvs "Ka;ko" 0))
 
 (test* "okuri nashi 18"
        '(("一致" #f "いっち" j) ("イッチ" #f "いっち" j))
+       (henkan-okuri-nashi userid kvs "icchi" 0))
+
+(test* "okuri nashi 19"
+       '(("一致" #f "いっち" j) ("イッチ" #f "いっち" j))
        (henkan-okuri-nashi userid kvs "i@chi" 0))
+
+(test* "okuri nashi 20"
+       '(("一致" #f "いっち" j) ("イッチ" #f "いっち" j))
+       (henkan-okuri-nashi userid kvs "i;chi" 0))
 
 
 ;;-------------------------------------------------------------------
@@ -512,11 +520,11 @@
 ;; 送り仮名が "R" で始っているのに、"t" や "`" もマッチしている理由は、送り仮名の開始子音1文字まで含めたJaro-WInkler distanceで候補で並べており、送り仮名が違うからといって排除しない方針をとっているため。
 ;; それにより送り仮名のミスタイプの許容をしている。
 (test* "okuri ari 23"
-       '(("ブログりました" #f "ぶろぐr" j) ("ブログりました" #f "ぶろぐt" j) ("ブログりました" #f "ぶろぐ`" j))
+       '(("ブログりました" #f "ぶろぐr" j) ("ブログりました" #f "ぶろぐ+" j) ("ブログりました" #f "ぶろぐt" j) ("ブログりました" #f "ぶろぐ`" j))
        (henkan-okuri-ari userid kvs "buroguRimashita" 0 :normal))
 
 (test* "okuri ari 24"
-       '(("ブログった" #f "ぶろぐt" j) ("ブログった" #f "ぶろぐr" j) ("ブログった" #f "ぶろぐ`" j))
+       '(("ブログった" #f "ぶろぐt" j) ("ブログった" #f "ぶろぐr" j) ("ブログった" #f "ぶろぐ+" j) ("ブログった" #f "ぶろぐ`" j))
        (henkan-okuri-ari userid kvs "buroguTta" 0 :normal))
 
 ;;-------------------------------------------------------------------
@@ -725,11 +733,11 @@
        (sekkaHenkan userid kvs #f "Henkanenji" 0 "normal"))
 
 (test* "henkan toplevel(for Elisp) 8"
-       '(("ブログった" nil "ぶろぐt" j 0) ("ブログった" nil "ぶろぐr" j 1) ("ブログった" nil "ぶろぐ`" j 2) ("ぶろぐった" nil "burogutta" h 3) ("ブログッタ" nil "burogutta" k 4))
+       '(("ブログった" nil "ぶろぐt" j 0) ("ブログった" nil "ぶろぐr" j 1) ("ブログった" nil "ぶろぐ+" j 2) ("ブログった" nil "ぶろぐ`" j 3) ("ぶろぐった" nil "burogutta" h 4) ("ブログッタ" nil "burogutta" k 5))
        (sekkaHenkan userid kvs #f "buroguTta" 0 "normal"))
 
 (test* "henkan toplevel(for Elisp) 9"
-       '(("ブログりました" nil "ぶろぐr" j 0) ("ブログりました" nil "ぶろぐt" j 1) ("ブログりました" nil "ぶろぐ`" j 2) ("ぶろぐりました" nil "burogurimashita" h 3) ("ブログリマシタ" nil "burogurimashita" k 4))
+       '(("ブログりました" nil "ぶろぐr" j 0) ("ブログりました" nil "ぶろぐ+" j 1) ("ブログりました" nil "ぶろぐt" j 2) ("ブログりました" nil "ぶろぐ`" j 3) ("ぶろぐりました" nil "burogurimashita" h 4) ("ブログリマシタ" nil "burogurimashita" k 5))
        (sekkaHenkan userid kvs #f "buroguRimashita" 0 "normal"))
 
 (test* "henkan toplevel(for Elisp) 10"
@@ -851,8 +859,8 @@
 ;;===================================================================
 
 ;; ---後処理---
-;; 最終的な辞書の状態を見たい時、dumpしてみること。
 (db.close)
+;; 最終的な辞書の状態を目視するためのダンプ
 (dump-sekka-jisyo-f STDOUT target)
 
 (test-end)
