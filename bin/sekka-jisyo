@@ -4,7 +4,7 @@ require 'nendo'
 core = Nendo::Core.new()
 core.setArgv( ARGV )
 core.loadInitFile
-core.evalStr( <<";;EOS" )
+core.evalStr( <<";;END-OF-SCRIPT" )
 ;;;
 ;;; sekka-jisyo - Sekkaの辞書メンテナンスツール
 ;;;  
@@ -94,4 +94,4 @@ core.evalStr( <<";;EOS" )
         (errorf "Error: no such command [%s] \n" command )))))))
 
 (main *argv*)
-;;EOS
+;;END-OF-SCRIPT
