@@ -1,7 +1,10 @@
 #!/usr/bin/env ruby
-#t ;;-*- mode: nendo; syntax: scheme ; coding: utf-8 -*-
-;; system( "/usr/local/bin/nendo " + $0 + " " + $*.join( ' ' ))
-;; source = <<";;EOS"
+# -*- mode: nendo; syntax: scheme ; coding: utf-8 -*-
+require 'nendo'
+core = Nendo::Core.new()
+core.setArgv( ARGV )
+core.loadInitFile
+core.evalStr( <<";;EOS" )
 ;;;
 ;;; sekka-jisyo - Sekkaの辞書メンテナンスツール
 ;;;  
@@ -90,4 +93,5 @@
        (else
         (errorf "Error: no such command [%s] \n" command )))))))
 
+(main *argv*)
 ;;EOS
