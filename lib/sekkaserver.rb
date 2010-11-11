@@ -38,6 +38,7 @@ require 'rack'
 require 'nendo'
 require 'eventmachine'
 require 'syslog'
+require 'uri'
 require './lib/sekkaconfig'
 
 module SekkaServer
@@ -93,16 +94,16 @@ module SekkaServer
              when 'POST'
                case req.path
                when "/henkan"
-                 _yomi   = req.params[  'yomi'].force_encoding("UTF-8")
-                 _limit  = req.params[ 'limit'].force_encoding("UTF-8")
-                 _method = req.params['method'].force_encoding("UTF-8")
+                 _yomi   = URI.decode( req.params[  'yomi'].force_encoding("UTF-8") )
+                 _limit  = URI.decode( req.params[ 'limit'].force_encoding("UTF-8") )
+                 _method = URI.decode( req.params['method'].force_encoding("UTF-8") )
                  @core.writeToString( @core.sekkaHenkan( req.params['userid'], @kvs, @cachesv, _yomi, _limit.to_i, _method ))
                when "/kakutei"
-                 _key    = req.params[   'key'].force_encoding("UTF-8")
-                 _tango  = req.params[ 'tango'].force_encoding("UTF-8")
+                 _key    = URI.decode( req.params[   'key'].force_encoding("UTF-8") )
+                 _tango  = URI.decode( req.params[ 'tango'].force_encoding("UTF-8") )
                  @core.sekkaKakutei( req.params['userid'], @kvs, @cachesv, _key, _tango )
                when "/register"
-                 dict = req.params['dict'].force_encoding( "UTF-8" ).split( "\n" )
+                 dict    = URI.decode( req.params['dict'].force_encoding( "UTF-8" ) ).split( "\n" )
                  dict.each { |x| @queue.push( req.params['userid'] + " " + x ) }
                  sprintf( "register request successful (%s) words", dict.size )
                else

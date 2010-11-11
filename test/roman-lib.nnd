@@ -409,6 +409,12 @@
 (test* "roman -> hiragana 28"
        '("かった")
        (gen-roman->hiragana "ka@ta" :normal))
+(test* "roman -> hiragana 29"
+       '("かっこ")
+       (gen-roman->hiragana "ka;ko" :normal))
+(test* "roman -> hiragana 30"
+       '("かった")
+       (gen-roman->hiragana "ka;ta" :normal))
 
 
 

@@ -13,17 +13,18 @@
 ;; the Free Software Foundation; either version 2, or (at your option)
 ;; any later version.
 ;; 
-;; Sumibi is distributed in the hope that it will be useful,
+;; Sekka is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
 ;; 
 ;; You should have received a copy of the GNU General Public License
-;; along with Sumibi; see the file COPYING.
+;; along with Sekka; see the file COPYING.
 ;;
 
 ;;; Code:
 (require 'cl)
+(require 'http-get)
 
 ;;; 
 ;;;
@@ -215,7 +216,10 @@
   (apply 'concat
 	 (mapcar
 	  (lambda (x)
-	    (format "--data '%s=%s' " (car x) (cdr x)))
+	    (format "--data '%s=%s' " (car x)
+		    (if (stringp (cdr x))
+			(http-url-encode (cdr x) 'utf-8)
+		      (cdr x))))
 	  arg-alist)))
 
 ;; test-code

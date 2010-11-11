@@ -733,6 +733,14 @@
        '(("確固" #f "かっこ" j 0) ("かっこ" #f "ka@ko" h 1) ("カッコ" #f "ka@ko" k 2))
        (sekka-henkan userid kvs "Ka@ko" 1 :normal))
 
+(test* "henkan toplevel 28"
+       '(("かっこ" #f "ka;ko" h 0) ("カッコ" #f "ka;ko" k 1) ("確固" #f "かっこ" j 2))
+       (sekka-henkan userid kvs "ka;ko" 1 :normal))
+
+(test* "henkan toplevel 29"
+       '(("確固" #f "かっこ" j 0) ("かっこ" #f "ka;ko" h 1) ("カッコ" #f "ka;ko" k 2))
+       (sekka-henkan userid kvs "Ka;ko" 1 :normal))
+
 
 
 (test* "henkan toplevel(for Elisp) 1"
@@ -782,6 +790,22 @@
 (test* "henkan toplevel(for Elisp) 12"
        '(("かんい" nil "kanni" h 0) ("カンイ" nil "kanni" k 1) ("簡易" nil "かんい" j 2) ("官位" nil "かんい" j 3) ("冠位" "-十二階" "かんい" j 4) ("漢医" "漢方医" "かんい" j 5) ("敢為" nil "かんい" j 6) ("官医" nil "かんい" j 7) ("寛衣" nil "かんい" j 8) ("換位" nil "かんい" j 9) ("簡意" nil "かんい" j 10) ("蟹" nil "かに" j 11) ("可児" nil "かに" j 12) ("蠏" nil "かに" j 13))
        (sekkaHenkan userid kvs #f "kanni" 0 "normal"))
+
+(test* "henkan toplevel(for Elisp) 13"
+       '(("確固" nil "かっこ" j 0) ("括弧" nil "かっこ" j 1) ("かっこ" nil "ka@ko" h 2) ("カッコ" nil "ka@ko" k 3))
+       (sekkaHenkan userid kvs #f "Ka@ko" 2 "normal"))
+
+(test* "henkan toplevel(for Elisp) 14"
+       '(("かっこ" nil "ka@ko" h 0) ("カッコ" nil "ka@ko" k 1) ("確固" nil "かっこ" j 2) ("括弧" nil "かっこ" j 3))
+       (sekkaHenkan userid kvs #f "ka@ko" 2 "normal"))
+
+(test* "henkan toplevel(for Elisp) 15"
+       '(("確固" nil "かっこ" j 0) ("括弧" nil "かっこ" j 1) ("かっこ" nil "ka;ko" h 2) ("カッコ" nil "ka;ko" k 3))
+       (sekkaHenkan userid kvs #f "Ka;ko" 2 "normal"))
+
+(test* "henkan toplevel(for Elisp) 16"
+       '(("かっこ" nil "ka;ko" h 0) ("カッコ" nil "ka;ko" k 1) ("確固" nil "かっこ" j 2) ("括弧" nil "かっこ" j 3))
+       (sekkaHenkan userid kvs #f "ka;ko" 2 "normal"))
 
 
 ;;-------------------------------------------------------------------
