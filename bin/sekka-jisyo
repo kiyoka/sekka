@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # -*- mode: nendo; syntax: scheme ; coding: utf-8 -*-
 require 'nendo'
+$LOAD_PATH.push( File.dirname(__FILE__) + "/../lib" )
 core = Nendo::Core.new()
 core.setArgv( ARGV )
 core.loadInitFile
@@ -39,8 +40,8 @@ core.evalStr( <<";;END-OF-SCRIPT" )
 ;;;  
 ;;;  $Id: 
 ;;;
-(load "./lib/convert-jisyo.nnd")
-(load "./lib/jisyo-db.nnd")
+(use sekka.convert-jisyo)
+(use sekka.jisyo-db)
 
 (define (convert-skk-jisyo filename)
   (let1 lines (with-open

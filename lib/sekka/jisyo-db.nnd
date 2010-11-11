@@ -34,8 +34,8 @@
 ;;;  $Id: 
 ;;;
 (use srfi-1)
-(require "./lib/kvs")
-(load "./lib/util.nnd")
+(require "sekka/kvs")
+(use sekka.util)
 
 (define masterid "MASTER")
 (define workid   "WORK")

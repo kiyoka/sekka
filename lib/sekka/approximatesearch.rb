@@ -32,7 +32,7 @@
 #  $Id: 
 #
 require 'fuzzystringmatch'
-require './lib/kvs'
+require 'sekka/kvs'
 
 class ApproximateSearch
   def initialize( jarow_shikii )

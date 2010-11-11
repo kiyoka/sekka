@@ -43,10 +43,11 @@ require './lib/sekkaconfig'
 module SekkaServer
   class Server
     def initialize
+      $LOAD_PATH.push( File.dirname(__FILE__) + "/../lib" )
       @core = Nendo::Core.new()
       @core.loadInitFile
       @core.evalStr( "(use debug.syslog)" )
-      @core.load( "./lib/henkan.nnd" )
+      @core.evalStr( "(use sekka.henkan)" )
       @core.evalStr( '(define (writeToString sexp) (write-to-string sexp))' )
       @core.evalStr( '(export-to-ruby writeToString)' )
       (@kvs,@cachesv) = @core.openSekkaJisyo( SekkaServer::Config.dictSource,

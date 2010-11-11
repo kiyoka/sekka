@@ -34,7 +34,7 @@
 ;;;  $Id: 
 ;;;
 (use nendo.test)
-(load "./lib/util.nnd")
+(use sekka.util)
 
 (test-start "util")
 

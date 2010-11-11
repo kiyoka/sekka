@@ -34,8 +34,8 @@
 ;;;  $Id: 
 ;;;
 (use srfi-1)
-(load "./lib/util.nnd")
-(load "./lib/roman-lib.nnd")
+(use sekka.util)
+(use sekka.roman-lib)
 
 
 (define (expand-okuri-nashi-entry key value)

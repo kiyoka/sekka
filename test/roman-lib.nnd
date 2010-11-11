@@ -34,7 +34,7 @@
 ;;;  $Id: 
 ;;;
 (use nendo.test)
-(load "./lib/roman-lib.nnd")
+(use sekka.roman-lib)
 (test-start "roman-lib")
 
 ;;===================================================================

@@ -34,7 +34,7 @@
 ;;;  $Id: 
 ;;;
 (use nendo.test)
-(load "./lib/convert-jisyo.nnd")
+(use sekka.convert-jisyo)
 
 (define debug-print-length 10000)
 

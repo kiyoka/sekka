@@ -33,10 +33,10 @@
 ;;;  
 ;;;  $Id: 
 ;;;
+(require "sekka/kvs")
 (use nendo.test)
-(require "./lib/kvs")
-(load "./lib/convert-jisyo.nnd")
-(load "./lib/henkan.nnd")
+(use sekka.convert-jisyo)
+(use sekka.henkan)
 (load "./test/common.nnd")
 
 (define dbtype   (string->symbol (first *argv*)))
