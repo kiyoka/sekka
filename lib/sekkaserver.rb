@@ -92,19 +92,21 @@ module SekkaServer
       req = Rack::Request.new(env)
       body = case req.request_method
              when 'POST'
+               userid = URI.decode( req.params['userid'].force_encoding("UTF-8") )
+               format = URI.decode( req.params['format'].force_encoding("UTF-8") )
                case req.path
                when "/henkan"
                  _yomi   = URI.decode( req.params[  'yomi'].force_encoding("UTF-8") )
                  _limit  = URI.decode( req.params[ 'limit'].force_encoding("UTF-8") )
                  _method = URI.decode( req.params['method'].force_encoding("UTF-8") )
-                 @core.writeToString( @core.sekkaHenkan( req.params['userid'], @kvs, @cachesv, _yomi, _limit.to_i, _method ))
+                 @core.writeToString( @core.sekkaHenkan( userid, @kvs, @cachesv, _yomi, _limit.to_i, _method ))
                when "/kakutei"
                  _key    = URI.decode( req.params[   'key'].force_encoding("UTF-8") )
                  _tango  = URI.decode( req.params[ 'tango'].force_encoding("UTF-8") )
-                 @core.sekkaKakutei( req.params['userid'], @kvs, @cachesv, _key, _tango )
+                 @core.sekkaKakutei( userid, @kvs, @cachesv, _key, _tango )
                when "/register"
                  dict    = URI.decode( req.params['dict'].force_encoding( "UTF-8" ) ).split( "\n" )
-                 dict.each { |x| @queue.push( req.params['userid'] + " " + x ) }
+                 dict.each { |x| @queue.push( userid + " " + x ) }
                  sprintf( "register request successful (%s) words", dict.size )
                else
                  sprintf( "unknown path name. [%s]", req.path )

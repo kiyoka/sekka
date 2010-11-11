@@ -254,9 +254,11 @@
 	    " --insecure "
 	    " --header 'Content-Type: application/x-www-form-urlencoded' "
 	    (format "%s%s " sekka-server-url func-name)
-	    (sekka-construct-curl-argstr arg-alist)
+	    (sekka-construct-curl-argstr (cons
+					  '("format" . "sexp")
+					  arg-alist))
 	    (format "--data 'userid=%s' " sekka-login-name))))
-      
+
       (sekka-debug-print (format "curl-command :%s\n" command))
       
       (let (
