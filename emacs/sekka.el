@@ -69,7 +69,7 @@
   :type  'integer
   :group 'sekka)
 
-(defcustom sekka-realtime-guide-interval  0.5
+(defcustom sekka-realtime-guide-interval  0.2
   "リアルタイムガイド表示を更新する時間間隔"
   :type  'integer
   :group 'sekka)
