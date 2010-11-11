@@ -9,10 +9,14 @@ require File.expand_path(File.dirname(__FILE__) + "/../lib/sekkaconfig")
 DICTDIR = File.expand_path( "~/.sekka-server" )
 DICTURL = "http://sumibi.org/sekka/dict"
 
-TC_FILE = DICTDIR + "/SEKKA-JISYO.ALL.tch"
-SUMFILE = DICTDIR + "/SEKKA-JISYO.ALL.md5"
-TC_URL  = DICTURL + "/SEKKA-JISYO.ALL.tch"
-SUMURL  = DICTURL + "/SEKKA-JISYO.ALL.md5"
+TC_FILE = DICTDIR + "/SEKKA-JISYO.SMALL.tch"
+SUMFILE = DICTDIR + "/SEKKA-JISYO.SMALL.md5"
+TC_URL  = DICTURL + "/SEKKA-JISYO.SMALL.tch"
+SUMURL  = DICTURL + "/SEKKA-JISYO.SMALL.md5"
+
+TC_FILE_LIST = [ DICTDIR + "/SEKKA-JISYO.CUSTOM.tch",
+                 DICTDIR + "/SEKKA-JISYO.LARGE.tch",
+                 DICTDIR + "/SEKKA-JISYO.SMALL.tch" ]
 
 MEMCACHED = "localhost:11211"                # memcahced
 
@@ -40,10 +44,10 @@ def main
       downloadSum = Digest::MD5.hexdigest( dataBody )
     }
     open( SUMFILE ) { |f|
-      answerSum = f.readline.chomp.split[0]
-      STDERR.printf( "   Downloaded-md5 : %s\n", downloadSum )
-      STDERR.printf( "       Answer-md5 : %s\n", answerSum   )
-      if downloadSum == answerSum
+      correctSum = f.readline.chomp.split[0]
+      STDERR.printf( "   downloaded file's MD5 : %s\n", downloadSum )
+      STDERR.printf( "             correct MD5 : %s\n", correctSum   )
+      if downloadSum == correctSum
         STDERR.printf( "Info:  downloaded file [%s] verify OK.\n", TC_FILE )
       else
         STDERR.printf( "Error: downloaded file [%s] verify NG.\n", TC_FILE )
@@ -53,8 +57,11 @@ def main
     }
   end
 
+  # 辞書ディレクトリに存在している辞書ファイルリストを作る
+  list = TC_FILE_LIST.select { |name| File.exist?( name ) }
+
   # 設定項目をConfigオブジェクトに代入
-  SekkaServer::Config.setup( TC_FILE, MEMCACHED, 12929 )
+  SekkaServer::Config.setup( list[0], MEMCACHED, 12929 )
 
   # サーバースクリプトのrootディレクトリへ移動
   FileUtils.cd(File.dirname(__FILE__) + "/../")
