@@ -1,0 +1,80 @@
+#!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
+
+require 'digest/md5'
+require 'fileutils'
+require 'rack'
+require File.expand_path(File.dirname(__FILE__) + "/../lib/sekkaconfig")
+
+DICTDIR = File.expand_path( "~/.sekka-server" )
+DICTURL = "http://sumibi.org/sekka/dict"
+
+TC_FILE = DICTDIR + "/SEKKA-JISYO.SMALL.tch"
+SUMFILE = DICTDIR + "/SEKKA-JISYO.SMALL.md5"
+TC_URL  = DICTURL + "/SEKKA-JISYO.SMALL.tch"
+SUMURL  = DICTURL + "/SEKKA-JISYO.SMALL.md5"
+
+TC_FILE_LIST = [ DICTDIR + "/SEKKA-JISYO.CUSTOM.tch",
+                 DICTDIR + "/SEKKA-JISYO.LARGE.tch",
+                 DICTDIR + "/SEKKA-JISYO.SMALL.tch" ]
+
+MEMCACHED = "localhost:11211"                # memcahced
+
+
+def main
+  if not File.directory?( DICTDIR )
+    Dir.mkdir( DICTDIR )
+    STDERR.printf( "Info: created directory [%s]\n", DICTDIR )
+  end
+
+  if not File.exist?( TC_FILE )
+    STDERR.printf( "Info: Downloading SEKKA-JISYO\n" )
+    # 辞書をダウンロードする
+    cmd = sprintf( "curl -o %s %s",    TC_FILE, TC_URL )
+    STDERR.printf( "Command : %s\n", cmd )
+    system( cmd )
+    cmd = sprintf( "curl -o %s %s",    SUMFILE, SUMURL )
+    STDERR.printf( "Command : %s\n", cmd )
+    system( cmd )
+
+    # チェックサムを確認する
+    downloadSum = ""
+    open( TC_FILE ) { |f|
+      dataBody = f.read
+      downloadSum = Digest::MD5.hexdigest( dataBody )
+    }
+    open( SUMFILE ) { |f|
+      correctSum = f.readline.chomp.split[0]
+      STDERR.printf( "   downloaded file's MD5 : %s\n", downloadSum )
+      STDERR.printf( "             correct MD5 : %s\n", correctSum   )
+      if downloadSum == correctSum
+        STDERR.printf( "Info:  downloaded file [%s] verify OK.\n", TC_FILE )
+      else
+        STDERR.printf( "Error: downloaded file [%s] verify NG.\n", TC_FILE )
+        File.unlink( TC_FILE )
+        exit( 1 )
+      end
+    }
+  end
+
+  # 辞書ディレクトリに存在している辞書ファイルリストを作る
+  list = TC_FILE_LIST.select { |name| File.exist?( name ) }
+
+  # 設定項目をConfigオブジェクトに代入
+  SekkaServer::Config.setup( list[0], MEMCACHED, 12929 )
+
+  # サーバースクリプトのrootディレクトリへ移動
+  FileUtils.cd(File.dirname(__FILE__) + "/../")
+
+  # サーバー起動
+  Rack::Server.start(
+                     :environment => "development",
+                     :pid         => nil,
+                     :Port        => SekkaServer::Config.listenPort,
+                     :Host        => "0.0.0.0",
+                     :AccessLog   => [],
+                     :config      => "./lib/sekka.ru"
+                     )
+end
+
+main()

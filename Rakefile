@@ -1,8 +1,46 @@
 #-*- mode: ruby; -*-
-#  Rakefile for Sekka
-#
-#
+#                                                  Rakefile for Sekka
+# Release Engineering
+#   1. edit the VERSION.yml file
+#   2. rake check
+#   3. rake gemspec  &&   rake build
+#      to generate sekka-x.x.x.gem
+#   4. install sekka-x.x.x.gem to clean environment and test
+#   5. rake release
+#   6. gem push pkg/sekka-x.x.x.gem   ( need gem version 1.3.6 or higer. Please "gem update --system" to update )
+
 require 'rake'
+begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |gemspec|
+    gemspec.name = "sekka"
+    gemspec.summary = "Sekka is a SKK like input method."
+    gemspec.description = "Sekka is a SKK like input method. Sekka server provides REST Based API. If you are SKK user, let's try it."
+    gemspec.email = "kiyoka@sumibi.org"
+    gemspec.homepage = "http://github.com/kiyoka/sekka"
+    gemspec.authors = ["Kiyoka Nishiyama"]
+    gemspec.files = FileList['lib/*.rb',
+                             'lib/*.ru',
+                             'lib/sekka/*.rb',
+                             'lib/sekka/*.nnd',
+                             'bin/*',
+                             'test/*.nnd',
+                             'test/*.rb',
+                             'emacs/*.el'].to_a
+    gemspec.add_development_dependency "rspec"
+    gemspec.add_development_dependency "rubyforge"
+    gemspec.required_ruby_version = '>= 1.9.1'
+    gemspec.add_dependency( "eventmachine" )
+    gemspec.add_dependency( "fuzzy-string-match" )
+    gemspec.add_dependency( "jeweler" )
+    gemspec.add_dependency( "memcache-client" )
+    gemspec.add_dependency( "nendo", ">= 0.3.6" )
+    gemspec.add_dependency( "rack" )
+    gemspec.add_dependency( "tokyocabinet" )
+  end
+rescue LoadError
+  puts "Jeweler not available. Install it with: sudo gem install jeweler"
+end
 
 task :check do
   sh "/bin/rm -f test.record"

@@ -1,6 +1,6 @@
-;;-*- mode: nendo; syntax: scheme -*-
+:; #-*- mode: nendo; syntax: scheme -*-;;
 ;;;
-;;; common.nnd - Nendoのテストフレームワーク用の補足ライブラリ
+;;; util.nnd - Sekkaの汎用文字列処理ライブラリ
 ;;;  
 ;;;   Copyright (c) 2010  Kiyoka Nishiyama  <kiyoka@sumibi.org>
 ;;;   
@@ -33,19 +33,32 @@
 ;;;  
 ;;;  $Id: 
 ;;;
-(define (arr->list arr)
-  (map
-   (lambda (element)
-     (element.to_list))
-   (arr.to_list)))
+(define (string-drop str n)
+  (or (str.slice n (str.size))
+      ""))
 
-(define (my-round value)
-  (define significant-digits 10000.0)
-  (let1 intval (. (* value significant-digits) round)
-    (/ intval significant-digits)))
+;; "string" => (cons "s" "tring")
+(define (string-split-first-and-rest str)
+  (if (= 0 str.size)
+      (cons "" "")
+      (cons (str.slice 0 1)
+            (str.slice 1 str.size))))
 
-(define (my-round-map lst)
-  (map
-   (lambda (x)
-     (cons (my-round (car x)) (cdr x)))
-   lst))
+(define (string-downcase-first str)
+  (let1 _pair (string-split-first-and-rest str)
+    (+ (. (car _pair) downcase)
+       (cdr _pair))))
+
+(define (split-dict-line line)
+  (if-let1 index (line.index #/[ ]+/)
+    (list (car (to-list (line.split #/[ ]+/)))
+          (. (line.slice index (line.size)) strip))
+    #f))
+
+(define (take* lst limit)
+  (let1 len (length lst)
+    (if (< len limit)
+        lst
+        (take lst limit))))
+
+
