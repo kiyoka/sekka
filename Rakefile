@@ -82,7 +82,7 @@ end
 
 task :rackup do
   # how to install mongrel is "gem install mongrel --pre"
-  sh "rackup --server mongrel --port 12929 ./lib/sekka.ru"
+  sh "./bin/sekka-server"
 end
 
 task :katakanago do
