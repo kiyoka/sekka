@@ -47,6 +47,7 @@ task :check do
   sh "echo > test.log"
   files = []
   files << "./test/util.nnd"
+  files << "./test/alphabet-lib.nnd"
   files << "./test/roman-lib.nnd"
   files << "./test/jisyo.nnd" 
   files << "./test/henkan-main.nnd  tokyocabinet"

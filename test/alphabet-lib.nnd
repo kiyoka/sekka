@@ -1,0 +1,188 @@
+;;-*- mode: nendo; syntax: scheme -*-
+;;;
+;;; roman-lib.nnd - アルファベットライブラリ部のテストスイート
+;;;  
+;;;   Copyright (c) 2010  Kiyoka Nishiyama  <kiyoka@sumibi.org>
+;;;   
+;;;   Redistribution and use in source and binary forms, with or without
+;;;   modification, are permitted provided that the following conditions
+;;;   are met:
+;;;   
+;;;   1. Redistributions of source code must retain the above copyright
+;;;      notice, this list of conditions and the following disclaimer.
+;;;  
+;;;   2. Redistributions in binary form must reproduce the above copyright
+;;;      notice, this list of conditions and the following disclaimer in the
+;;;      documentation and/or other materials provided with the distribution.
+;;;  
+;;;   3. Neither the name of the authors nor the names of its contributors
+;;;      may be used to endorse or promote products derived from this
+;;;      software without specific prior written permission.
+;;;  
+;;;   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+;;;   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+;;;   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+;;;   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+;;;   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+;;;   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+;;;   TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+;;;   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+;;;   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+;;;   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+;;;   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+;;;  
+;;;  $Id: 
+;;;
+(use nendo.test)
+(use sekka.alphabet-lib)
+(test-start "alphabet-lib")
+
+;;===================================================================
+
+;;-------------------------------------------------------------------
+(test-section "半角 checker")
+(test* "半角？ 1"       #t
+       (is-alphabet-hankaku "abczabcz"))
+(test* "半角？ 2"       #t
+       (is-alphabet-hankaku "!}"))
+(test* "半角？ 3"       #f
+       (is-alphabet-hankaku "!abcdefg}Ａ"))
+(test* "半角？ 4"       #f
+       (is-alphabet-hankaku "ａｂｃｚＡＢＣＺ"))
+(test* "半角？ 5"       #f
+       (is-alphabet-hankaku "漢字"))
+(test* "半角？ 6"       #f
+       (is-alphabet-hankaku "ひらがな"))
+(test* "半角？ 7"       #f
+       (is-alphabet-hankaku "カタカナ"))
+
+
+;;-------------------------------------------------------------------
+(test-section "全角 checker")
+(test* "全角？ 1"       #t
+       (is-alphabet-zenkaku "ａｂｃｚＡＢＣＺ"))
+(test* "全角？ 2"       #t
+       (is-alphabet-zenkaku "！｝"))
+(test* "全角？ 3"       #f
+       (is-alphabet-zenkaku "！A｝"))
+(test* "全角？ 4"       #f
+       (is-alphabet-zenkaku "AＡ"))
+(test* "全角？ 4"       #f
+       (is-alphabet-zenkaku "!abcdefg}"))
+(test* "全角？ 5"       #f
+       (is-alphabet-zenkaku "漢字"))
+(test* "全角？ 6"       #f
+       (is-alphabet-zenkaku "ひらがな"))
+(test* "全角？ 7"       #f
+       (is-alphabet-zenkaku "カタカナ"))
+(test* "全角？ 8"       #f
+       (is-alphabet-zenkaku "漢Ａ字"))
+(test* "全角？ 9"       #f
+       (is-alphabet-zenkaku "ひＡらがな"))
+(test* "全角？ 10"      #f
+       (is-alphabet-zenkaku "カＡタカナ"))
+
+
+;;-------------------------------------------------------------------
+(test-section "半角 inculde checker")
+(test* "半角含む？ 1"       #t
+       (include-alphabet-hankaku "abczabcz"))
+(test* "半角含む？ 2"       #t
+       (include-alphabet-hankaku "!}"))
+(test* "半角含む？ 3"       #t
+       (include-alphabet-hankaku "!abcdefg}Ａ"))
+(test* "半角含む？ 4"       #f
+       (include-alphabet-hankaku "ａｂｃｚＡＢＣＺ"))
+(test* "半角含む？ 5"       #t
+       (include-alphabet-hankaku "ａｂｃｚAＡＢＣＺ"))
+(test* "半角含む？ 6"       #f
+       (include-alphabet-hankaku "漢字"))
+(test* "半角含む？ 7"       #f
+       (include-alphabet-hankaku "ひらがな"))
+(test* "半角含む？ 8"       #f
+       (include-alphabet-hankaku "カタカナ"))
+(test* "半角含む？ 9"       #t
+       (include-alphabet-hankaku "漢A字"))
+(test* "半角含む？ 10"       #t
+       (include-alphabet-hankaku "ひAらがな"))
+(test* "半角含む？ 11"       #t
+       (include-alphabet-hankaku "カAタカナ"))
+(test* "半角含む？ 12"       #t
+       (include-alphabet-hankaku "漢字ひらがなカAタカＡナ"))
+
+
+;;-------------------------------------------------------------------
+(test-section "全角 include checker")
+(test* "全角含む？ 1"       #t
+       (include-alphabet-zenkaku "ａｂｃｚＡＢＣＺ"))
+(test* "全角含む？ 2"       #t
+       (include-alphabet-zenkaku "！｝"))
+(test* "全角含む？ 3"       #t
+       (include-alphabet-zenkaku "！A｝"))
+(test* "全角含む？ 3"       #t
+       (include-alphabet-zenkaku "|Ａ}"))
+(test* "全角含む？ 4"       #t
+       (include-alphabet-zenkaku "AＡ"))
+(test* "全角含む？ 5"       #f
+       (include-alphabet-zenkaku "!abcdefg}"))
+(test* "全角含む？ 6"       #f
+       (include-alphabet-zenkaku "漢字"))
+(test* "全角含む？ 7"       #f
+       (include-alphabet-zenkaku "ひらがな"))
+(test* "全角含む？ 8"       #f
+       (include-alphabet-zenkaku "カタカナ"))
+(test* "全角含む？ 9"       #t
+       (include-alphabet-zenkaku "漢Ａ字"))
+(test* "全角含む？ 10"       #t
+       (include-alphabet-zenkaku "ひＡらがな"))
+(test* "全角含む？ 11"       #t
+       (include-alphabet-zenkaku "カＡタカナ"))
+(test* "全角含む？ 12"       #t
+       (include-alphabet-zenkaku "漢字ひらがなカAタカＡナ"))
+
+
+;;-------------------------------------------------------------------
+(test-section "半角->全角")
+(test* "半角->全角 1"
+       "ａｂｃｚＡＢＣＺ"
+       (gen-alphabet-han->zen "abczABCZ"))
+(test* "半角->全角 2"
+       "！｝"
+       (gen-alphabet-han->zen "!}"))
+(test* "半角->全角 3"
+       "！ａｂｃｚＡＢＣＺ｝"
+       (gen-alphabet-han->zen "！ａｂｃｚＡＢＣＺ｝"))
+(test* "半角->全角 4"
+       "ひＡらがな"
+       (gen-alphabet-han->zen "ひAらがな"))
+(test* "半角->全角 5"
+       "カＡタカナ"
+       (gen-alphabet-han->zen "カAタカナ"))
+(test* "半角->全角 6"
+       "漢字ひらがなカＡタカＡナ"
+       (gen-alphabet-han->zen "漢字ひらがなカAタカＡナ"))
+
+;;-------------------------------------------------------------------
+(test-section "全角->半角")
+(test* "全角->半角 1"
+       "abczABCZ"
+       (gen-alphabet-zen->han "ａｂｃｚＡＢＣＺ"))
+(test* "全角->半角 2"
+       "!}"
+       (gen-alphabet-zen->han "！｝"))
+(test* "全角->半角 3"
+       "!abcdefg}"
+       (gen-alphabet-zen->han "!abcdefg}"))
+(test* "全角->半角 4"
+       "ひAらがな"
+       (gen-alphabet-zen->han "ひＡらがな"))
+(test* "全角->半角 5"
+       "カAタカナ"
+       (gen-alphabet-zen->han "カＡタカナ"))
+(test* "全角->半角 6"
+       "漢字ひらがなカAタカAナ"
+       (gen-alphabet-zen->han "漢字ひらがなカAタカＡナ"))
+
+
+;;===================================================================
+(test-end)
