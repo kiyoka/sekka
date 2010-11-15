@@ -44,7 +44,6 @@ end
 
 task :check do
   sh "/bin/rm -f test.record"
-  sh "echo > test.log"
   files = []
   files << "./test/util.nnd"
   files << "./test/alphabet-lib.nnd"

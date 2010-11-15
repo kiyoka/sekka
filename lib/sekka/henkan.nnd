@@ -37,6 +37,7 @@
 (use sekka.util)
 (use sekka.convert-jisyo)
 (use sekka.jisyo-db)
+(use sekka.alphabet-lib)
 (require "sekka/approximatesearch")
 
 
@@ -221,6 +222,15 @@
                     kata))))
 
 
+;; アルファベットの単純変換
+(define (henkan-alphabet kvs keyword)
+  (let* ((zen  (gen-alphabet-han->zen keyword))
+         (han  (gen-alphabet-zen->han keyword)))
+    `(
+      (,zen #f ,keyword z)
+      (,han #f ,keyword l))))
+
+
 ;; 記号を含むキーワードの変換
 (define (henkan-non-kanji userid kvs keyword)
   (let* ((result (exact-search userid kvs keyword))
@@ -250,30 +260,39 @@
   (append-index-number
    (cond
     ((rxmatch #/[A-Z`+]/ keyword)
-     (let1 keyword (string-downcase-first keyword)
+     (let1 k (string-downcase-first keyword)
        (cond
-        ((rxmatch #/[a-z][A-Z`+]/ keyword)
+        ((rxmatch #/[a-z][A-Z`+]/ k)
          ;; 送りあり
-         ;;(let1 result (approximate-search db keyword #t)  (disp-search-result result))
+         ;;(let1 result (approximate-search db k #t)  (disp-search-result result))
          (append
-          (henkan-okuri-ari userid kvs keyword limit roman-method)
-          (if (null? (gen-roman->hiragana (sekka-downcase keyword) roman-method))
-              '()
-              (henkan-hiragana kvs (sekka-downcase keyword) roman-method))))
+          (append
+           (henkan-okuri-ari userid kvs k limit roman-method)
+           (if (null? (gen-roman->hiragana (sekka-downcase k) roman-method))
+               '()
+              (henkan-hiragana kvs (sekka-downcase k) roman-method)))
+          (henkan-alphabet kvs keyword)))
         (else
          ;; 送りなし
-         ;;(let1 result (approximate-search db keyword #f)  (disp-search-result result))
+         ;;(let1 result (approximate-search db k #f)  (disp-search-result result))
          (append
-          (henkan-okuri-nashi userid kvs keyword limit)
-          (if (null? (gen-roman->hiragana (sekka-downcase keyword) roman-method))
-              '()
-              (henkan-hiragana kvs (sekka-downcase keyword) roman-method)))))))
+          (append
+           (henkan-okuri-nashi userid kvs k limit)
+           (if (null? (gen-roman->hiragana (sekka-downcase k) roman-method))
+               '()
+               (henkan-hiragana kvs (sekka-downcase k) roman-method)))
+          (henkan-alphabet kvs keyword))))))
     ((not (null? (gen-roman->hiragana keyword roman-method)))
      (append
-      (henkan-hiragana kvs keyword roman-method)
+      (append
+       (henkan-hiragana kvs keyword roman-method)
+       (henkan-alphabet kvs keyword))
       (henkan-okuri-nashi userid kvs keyword limit)))
     (else
-     (henkan-non-kanji userid kvs keyword)))))
+     (append
+      (henkan-non-kanji userid kvs keyword)
+      (henkan-alphabet kvs keyword))))))
+
 
 
 ;; conversion #f => nil for EmacsLisp
