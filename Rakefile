@@ -82,7 +82,7 @@ end
 
 task :rackup do
   # how to install mongrel is "gem install mongrel --pre"
-  sh "./bin/sekka-server"
+  sh "ruby -I ./lib ./bin/sekka-server"
 end
 
 task :katakanago do

@@ -524,12 +524,17 @@
 (define-key sekka-select-mode-map "\C-m"                   'sekka-select-kakutei)
 (define-key sekka-select-mode-map "\C-g"                   'sekka-select-cancel)
 (define-key sekka-select-mode-map "q"                      'sekka-select-cancel)
+(define-key sekka-select-mode-map "\C-a"                   'sekka-select-kanji)
 (define-key sekka-select-mode-map "\C-p"                   'sekka-select-prev)
 (define-key sekka-select-mode-map "\C-n"                   'sekka-select-next)
 (define-key sekka-select-mode-map sekka-rK-trans-key       'sekka-select-next)
 (define-key sekka-select-mode-map " "                      'sekka-select-next)
 (define-key sekka-select-mode-map "\C-u"                   'sekka-select-hiragana)
 (define-key sekka-select-mode-map "\C-i"                   'sekka-select-katakana)
+(define-key sekka-select-mode-map "\C-k"                   'sekka-select-katakana)
+(define-key sekka-select-mode-map "\C-l"                   'sekka-select-hankaku)
+(define-key sekka-select-mode-map "\C-e"                   'sekka-select-zenkaku)
+
 
 
 ;; 変換を確定し入力されたキーを再入力する関数
@@ -607,18 +612,24 @@
 	 (when (eq sym _type)
 	   (push x lst))))
      sekka-henkan-kouho-list)
-    (sekka-debug-print (format "filterd-lst = %S" lst))
-    (car lst)))
+    (sekka-debug-print (format "filterd-lst = %S" (reverse lst)))
+    (car (reverse lst))))
     
 ;; 指定された type の候補に強制的に切りかえる
 (defun sekka-select-by-type ( _type )
   (let ((kouho (sekka-select-by-type-filter _type)))
     (if (null kouho)
-	(cond 
+	(cond
+	 ((eq _type 'j)
+	  (message "Sekka: 漢字の候補はありません。"))
 	 ((eq _type 'h)
 	  (message "Sekka: ひらがなの候補はありません。"))
 	 ((eq _type 'k)
-	  (message "Sekka: カタカナの候補はありません。")))
+	  (message "Sekka: カタカナの候補はありません。"))
+	 ((eq _type 'l)
+	  (message "Sekka: 半角の候補はありません。"))
+	 ((eq _type 'z)
+	  (message "Sekka: 全角の候補はありません。")))
       (let ((num   (nth sekka-id-index kouho)))
 	(setq sekka-cand-cur num)
 	(sekka-select-update-display)))))
@@ -637,6 +648,16 @@
   "カタカナ候補に強制的に切りかえる"
   (interactive)
   (sekka-select-by-type 'k))
+
+(defun sekka-select-hankaku ()
+  "半角候補に強制的に切りかえる"
+  (interactive)
+  (sekka-select-by-type 'l))
+
+(defun sekka-select-zenkaku ()
+  "半角候補に強制的に切りかえる"
+  (interactive)
+  (sekka-select-by-type 'z))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ローマ字漢字変換関数
