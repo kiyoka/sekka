@@ -1059,7 +1059,7 @@ point から行頭方向に同種の文字列が続く間を漢字変換します。
 (setq default-input-method "japanese-sekka")
 
 (defconst sekka-version
-  " $Date: 2007/07/23 15:40:49 $ on CVS " ;;VERSION;;
+  " 0.8.0 " ;;VERSION;;
   )
 (defun sekka-version (&optional arg)
   "入力モード変更"

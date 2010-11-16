@@ -23,7 +23,7 @@ begin
                              'lib/*.ru',
                              'lib/sekka/*.rb',
                              'lib/sekka/*.nnd',
-                             'bin/*',
+                             'bin/sekka-*',
                              'test/*.nnd',
                              'test/*.rb',
                              'emacs/*.el'].to_a

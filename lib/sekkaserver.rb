@@ -40,6 +40,7 @@ require 'eventmachine'
 require 'syslog'
 require 'uri'
 require './lib/sekkaconfig'
+require './lib/sekka/sekkaversion'
 
 module SekkaServer
   class Server
@@ -56,6 +57,7 @@ module SekkaServer
       @queue = EM::Queue.new
 
       STDERR.puts(   "----- Sekka Server Started -----" )
+      STDERR.printf( "  version  :  %s\n", SekkaVersion.version            )
       STDERR.printf( "  dict-db  :  %s\n", SekkaServer::Config.dictSource  )
       STDERR.printf( "  memcached:  %s\n", SekkaServer::Config.cacheSource )
       STDERR.printf( "  listenPort: %s\n", SekkaServer::Config.listenPort  )
