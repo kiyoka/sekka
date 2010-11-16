@@ -2,7 +2,7 @@
 #                                                  Rakefile for Sekka
 # Release Engineering
 #   1. edit the VERSION.yml file
-#   2. rake check
+#   2. rake compile  &&   rake check
 #   3. rake gemspec  &&   rake build
 #      to generate sekka-x.x.x.gem
 #   4. install sekka-x.x.x.gem to clean environment and test
@@ -40,6 +40,19 @@ begin
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install jeweler"
+end
+
+task :compile do
+  # generate version.rb
+  vh = Jeweler::VersionHelper.new "."
+  open( "./lib/sekka/sekkaversion.rb", "w" ) {|f|
+    f.puts(   "class SekkaVersion" )
+    f.puts(   "  include Singleton" )
+    f.puts(   "  def self.version" )
+    f.printf( "    \"%s\"\n", vh )
+    f.puts(   "  end" )
+    f.puts(   "end" )
+  }
 end
 
 task :check do

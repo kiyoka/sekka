@@ -5,9 +5,12 @@ require 'digest/md5'
 require 'fileutils'
 require 'rack'
 require File.expand_path(File.dirname(__FILE__) + "/../lib/sekkaconfig")
+require File.expand_path(File.dirname(__FILE__) + "/../lib/sekka/sekkaversion")
+
+
 
 DICTDIR = File.expand_path( "~/.sekka-server" )
-DICTURL = "http://sumibi.org/sekka/dict"
+DICTURL = "http://sumibi.org/sekka/dict/" + SekkaVersion.version
 
 TC_FILE = DICTDIR + "/SEKKA-JISYO.SMALL.tch"
 SUMFILE = DICTDIR + "/SEKKA-JISYO.SMALL.md5"
