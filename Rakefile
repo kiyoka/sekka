@@ -57,27 +57,30 @@ task :check do
   sh "cat test.record" 
 end
 
-task :jisyo do
-  sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.S.201001    >  ./data/SEKKA-JISYO.S.201001"
-  sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.L.hira-kata >> ./data/SEKKA-JISYO.S.201001"
-  sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.L.201008    >  ./data/SEKKA-JISYO.L.201008"
-  sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.L.hira-kata >> ./data/SEKKA-JISYO.L.201008"
+task :jisyoS do
+  sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.L.201008           >  ./data/SEKKA-JISYO.SMALL"
+  sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.SMALL"
 end
 
-task :load do
-  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.S.201001 ./data/SEKKA-JISYO.S.201001.tch"
-  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.L.201008 ./data/SEKKA-JISYO.L.201008.tch"
+task :jisyoL do
+  sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.L.201008           >  ./data/SEKKA-JISYO.LARGE"
+  sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.LARGE"
+  sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.fullname           >> ./data/SEKKA-JISYO.LARGE"
+  sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.jinmei             >> ./data/SEKKA-JISYO.LARGE"
+  sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.station            >> ./data/SEKKA-JISYO.LARGE"
 end
 
-task :load_memcachedb do
-#  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.S.201001 localhost:11211"
-#  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.S.201001 localhost:21201"
-  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.L.201008 localhost:21201"
+task :loadS do
+  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.SMALL ./data/SEKKA-JISYO.SMALL.tch"
+end
+
+task :loadL do
+  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.LARGE ./data/SEKKA-JISYO.LARGE.tch"
 end
 
 task :dump do
-  sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.S.201001 > ./data/SEKKA-JISYO.S.201001.dump"
-  sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.L.201008 > ./data/SEKKA-JISYO.L.201008.dump"
+  sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.SMALL > ./data/SEKKA-JISYO.SMALL.dump"
+  sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.LARGE > ./data/SEKKA-JISYO.LARGE.dump"
 end
 
 task :rackup do
