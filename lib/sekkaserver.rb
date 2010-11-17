@@ -107,11 +107,15 @@ module SekkaServer
                  _tango  = URI.decode( req.params[ 'tango'].force_encoding("UTF-8") )
                  @core.sekkaKakutei( userid, @kvs, @cachesv, _key, _tango )
                when "/register"
-                 @core.flushUserJisyo( userid, @kvs )
                  @core.flushCacheServer( @cachesv )
                  dict    = URI.decode( req.params['dict'].force_encoding( "UTF-8" ) ).split( "\n" )
                  dict.each { |x| @queue.push( userid + " " + x ) }
                  sprintf( "register request successful (%s) words", dict.size )
+               when "/flush"
+                 @core.flushCacheServer( @cachesv )
+                 n = @core.flushUserJisyo( userid, @kvs )
+                 printf( "info : flush [%s] user's dict %d entries.", userid, n )
+                 sprintf( "flush request successful. flush (%d) entries.", n )
                else
                  sprintf( "unknown path name. [%s]", req.path )
                end

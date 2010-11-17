@@ -345,6 +345,19 @@
 	t))))
 
 
+;;
+;; ユーザー語彙をサーバーから全て削除する
+;;
+(defun sekka-flush-userdict (&optional arg)
+  "ユーザー辞書をサーバーに再度アップロードする"
+  (interactive "P")
+  (message "Requesting to sekka server...")
+  (let ((result (sekka-rest-request "flush" `())))
+    (sekka-debug-print (format "register-result:%S\n" result))
+    (message result)
+    t))
+
+
 (defun sekka-get-jisyo-str (file &optional nomsg)
   "FILE を開いて SKK 辞書バッファを作り、バッファを返す。
 オプション引数の NOMSG を指定するとファイル読み込みの際のメッセージを表示しな
