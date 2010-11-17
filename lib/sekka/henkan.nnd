@@ -328,8 +328,8 @@
 
 
 ;; Flush henkan-result cache data on cachesv(memcached)
-(define (flush-cachesv cachesv)
-  #?="--- do (flush-cachesv) ---"
+(define (flushCacheServer cachesv)
+  #?="--- do (flushCacheServer) ---"
   (if-let1 fetched (cachesv.get  "sekka::(keys)" #f)
     (begin
       (for-each
@@ -338,6 +338,8 @@
        (to-list (fetched.split #/[ ]+/)))
       (cachesv.delete "sekka::(keys)"))
     #f))
+;; Export to Ruby world
+(export-to-ruby flushCacheServer)
 
 
 ;; 確定処理: 最終確定語を変換候補の先頭に持ってくる。
@@ -382,13 +384,26 @@
                 (begin
                   (write-user-entry userid kvs key new-kouho-str)
                   (and cachesv
-                       (flush-cachesv cachesv))
+                       (flushCacheServer cachesv))
                   tango)
                 nil))
           nil)
       nil)))
 ;; Export to Ruby world
 (export-to-ruby sekkaKakutei)
+
+
+;; ユーザー辞書の全削除 (useridで指定したユーザーの辞書)
+;; 削除した件数を返す。
+(define (flushUserJisyo userid kvs)
+  (let1 lst (to-list (kvs.forward_match_keys (+ userid "::")))
+    (for-each
+     (lambda (k)
+       (kvs.delete k))
+     lst)
+    (length lst)))
+;; Export to Ruby world
+(export-to-ruby flushUserJisyo)
 
 
 ;; ユーザー定義語彙の登録処理

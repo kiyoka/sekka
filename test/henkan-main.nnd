@@ -169,7 +169,6 @@
    (#t  ,userid "まじぱねぇ /マジパネェ/まじパネェ/マジ半端ネェ/まじ半端ネェ/")
    (#f  ,userid "まじぱねぇ /マジパネェ/まじパネェ/マジ半端ネェ/まじ半端ネェ/")
    (#f  ,userid "まじぱねぇ /マジパネェ/まじパネェ/マジ半端ネェ/まじ半端ネェ/")
-   (#t  ,userid "てすとようえんとり /エントリA/エントリB/エントリC/")
    (#t  ,userid "ゆーざーじしょ /ユーザー辞書/")
    (#f  ,userid ";; コメント")
    (#f  ,userid ";;-------- 罫線 -------")
@@ -214,39 +213,55 @@
        (. (hash-table-get db "dummy::(BU)" #f) force_encoding "UTF-8"))
 
 (test* "db fetch 9"
-       "tesutoyouenntori tesutoyouentori tesutoyoueqtori tesutoypenntori tesutoypentori tesutoypeqtori"
-       (. (hash-table-get db "dummy::(te)" #f) force_encoding "UTF-8"))
-
-(test* "db fetch 10"
-       "/エントリA/エントリB/エントリC"
-       (. (hash-table-get db "dummy::てすとようえんとり" #f) force_encoding "UTF-8"))
-
-(test* "db fetch 11"
        "/ユーザー辞書"
        (. (hash-table-get db "dummy::ゆーざーじしょ" #f) force_encoding "UTF-8"))
 
-(test* "db fetch 12"
+(test* "db fetch 10"
        "yu-za-jisho yu-za-jisyo yu-za-jixo yu-za-zisho yu-za-zisyo yu-za-zixo yu-za:jisho yu-za:jisyo yu-za:jixo yu-za:zisho yu-za:zisyo yu-za:zixo yu-za^jisho yu-za^jisyo yu-za^jixo yu-za^zisho yu-za^zisyo yu-za^zixo yu-zc-jisho yu-zc-jisyo yu-zc-jixo yu-zc-zisho yu-zc-zisyo yu-zc-zixo yu-zc:jisho yu-zc:jisyo yu-zc:jixo yu-zc:zisho yu-zc:zisyo yu-zc:zixo yu-zc^jisho yu-zc^jisyo yu-zc^jixo yu-zc^zisho yu-zc^zisyo yu-zc^zixo yu:za-jisho yu:za-jisyo yu:za-jixo yu:za-zisho yu:za-zisyo yu:za-zixo yu:za:jisho yu:za:jisyo yu:za:jixo yu:za:zisho yu:za:zisyo yu:za:zixo yu:za^jisho yu:za^jisyo yu:za^jixo yu:za^zisho yu:za^zisyo yu:za^zixo yu:zc-jisho yu:zc-jisyo yu:zc-jixo yu:zc-zisho yu:zc-zisyo yu:zc-zixo yu:zc:jisho yu:zc:jisyo yu:zc:jixo yu:zc:zisho yu:zc:zisyo yu:zc:zixo yu:zc^jisho yu:zc^jisyo yu:zc^jixo yu:zc^zisho yu:zc^zisyo yu:zc^zixo yu^za-jisho yu^za-jisyo yu^za-jixo yu^za-zisho yu^za-zisyo yu^za-zixo yu^za:jisho yu^za:jisyo yu^za:jixo yu^za:zisho yu^za:zisyo yu^za:zixo yu^za^jisho yu^za^jisyo yu^za^jixo yu^za^zisho yu^za^zisyo yu^za^zixo yu^zc-jisho yu^zc-jisyo yu^zc-jixo yu^zc-zisho yu^zc-zisyo yu^zc-zixo yu^zc:jisho yu^zc:jisyo yu^zc:jixo yu^zc:zisho yu^zc:zisyo yu^zc:zixo yu^zc^jisho yu^zc^jisyo yu^zc^jixo yu^zc^zisho yu^zc^zisyo yu^zc^zixo"
        (. (hash-table-get db "dummy::(yu)" #f) force_encoding "UTF-8"))
 
 
 ;;-------------------------------------------------------------------
 (test-section "Replace user dict entry")
-(test*  "replace information of user dict entry"
+(test*  "register user dict 1"
         #t
-        (registerUserJisyo userid kvs
+        (registerUserJisyo userid2 kvs
+                           "てすとようえんとり /エントリA/エントリB/エントリC/\n"))
+
+(test* "check user dict 1"
+       "/エントリA/エントリB/エントリC"
+       (. (hash-table-get db "dummy2::てすとようえんとり" #f) force_encoding "UTF-8"))
+
+(test* "check user dict 2"
+       "tesutoyouenntori tesutoyouentori tesutoyoueqtori tesutoypenntori tesutoypentori tesutoypeqtori"
+       (. (hash-table-get db "dummy2::(te)" #f) force_encoding "UTF-8"))
+
+(test* "flush user dict"
+       9
+       (flushUserJisyo userid2 kvs))
+
+;; getに失敗しないといけない。
+(test* "check user dict 3"
+       :no-entry
+       (hash-table-get db "dummy2::てすとようえんとり" :no-entry))
+
+(test* "check user dict 4"
+       :no-entry
+       (hash-table-get db "dummy2::(te)" :no-entry))
+
+(test*  "register user dict 2"
+        #t
+        (registerUserJisyo userid2 kvs
                            "てすとようえんとり /エントリA/エントリC/\n"))
 
-;; FIX-ME: このテストがまだパスしない。エントリB という単語が消えないといけない。
-;;(test* "db fetch 11"
-;;       "/エントリA/エントリC"
-;;       (. (hash-table-get db "dummy::てすとようえんとり" #f) force_encoding "UTF-8"))
+;; "エントリB" という単語が消えないといけない。
+(test* "check user dict 5"
+       "/エントリA/エントリC"
+       (. (hash-table-get db "dummy2::てすとようえんとり" #f) force_encoding "UTF-8"))
 
-
-;;-------------------------------------------------------------------
-(test* "db fetch 10"
+(test* "check user dict 6"
        "tesutoyouenntori tesutoyouentori tesutoyoueqtori tesutoypenntori tesutoypentori tesutoypeqtori"
-       (. (hash-table-get db "dummy::(te)" #f) force_encoding "UTF-8"))
+       (. (hash-table-get db "dummy2::(te)" #f) force_encoding "UTF-8"))
 
 
 ;;-------------------------------------------------------------------

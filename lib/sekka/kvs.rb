@@ -117,6 +117,19 @@ class Kvs
     end
   end
 
+  def forward_match_keys( prefix )
+    case @dbtype
+    when :tokyocabinet
+      @db.fwmkeys( prefix ).each { |k|
+        k.force_encoding("UTF-8")
+      }
+    when :memcache 
+      raise RuntimeError, "Kvs#forward_match_keys method was not implemented for memcache."
+    else
+      raise RuntimeError
+    end
+  end
+
   def close()
     case @dbtype
     when :tokyocabinet

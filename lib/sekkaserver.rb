@@ -75,9 +75,9 @@ module SekkaServer
                   dictline = arr[1] + " " + arr[2]
                   registered = @core.registerUserJisyo(userid, @kvs, dictline)
                   if registered
-                    puts "Info: added to dict           userid[" + userid + "] dictline[" + dictline + "]"
+                    puts "Info: added to dict                      userid[" + userid + "] dictline[" + dictline + "]"
                   else
-                    puts "Info: ignored (already added) userid[" + userid + "] dictline[" + dictline + "]"
+                    puts "Info: ignored (already added or comment) userid[" + userid + "] dictline[" + dictline + "]"
                   end
                 }
               end
@@ -107,6 +107,8 @@ module SekkaServer
                  _tango  = URI.decode( req.params[ 'tango'].force_encoding("UTF-8") )
                  @core.sekkaKakutei( userid, @kvs, @cachesv, _key, _tango )
                when "/register"
+                 @core.flushUserJisyo( userid, @kvs )
+                 @core.flushCacheServer( @cachesv )
                  dict    = URI.decode( req.params['dict'].force_encoding( "UTF-8" ) ).split( "\n" )
                  dict.each { |x| @queue.push( userid + " " + x ) }
                  sprintf( "register request successful (%s) words", dict.size )
