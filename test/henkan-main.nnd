@@ -124,7 +124,7 @@
   (let1 _output (StringIO.new)
     (_output.set_encoding "utf-8")
     (test* "dump DB to SEKKA jisyo file. (1)"
-           "0e9dee43c79144807cac67a848f6887296482d58"
+           "7b8235271aa9e62c41af417823c2bc166b26d52a"
            (begin
              (dump-sekka-jisyo-f _output target)
              (Digest::SHA1.hexdigest (_output.string))
@@ -170,6 +170,7 @@
    (#f  ,userid "まじぱねぇ /マジパネェ/まじパネェ/マジ半端ネェ/まじ半端ネェ/")
    (#f  ,userid "まじぱねぇ /マジパネェ/まじパネェ/マジ半端ネェ/まじ半端ネェ/")
    (#t  ,userid "てすとようえんとり /エントリA/エントリB/エントリC/")
+   (#t  ,userid "ゆーざーじしょ /ユーザー辞書/")
    (#f  ,userid ";; コメント")
    (#f  ,userid ";;-------- 罫線 -------")
    (#f  ,userid "") ;; 空行
@@ -220,6 +221,13 @@
        "/エントリA/エントリB/エントリC"
        (. (hash-table-get db "dummy::てすとようえんとり" #f) force_encoding "UTF-8"))
 
+(test* "db fetch 11"
+       "/ユーザー辞書"
+       (. (hash-table-get db "dummy::ゆーざーじしょ" #f) force_encoding "UTF-8"))
+
+(test* "db fetch 12"
+       "yu-za-jisho yu-za-jisyo yu-za-jixo yu-za-zisho yu-za-zisyo yu-za-zixo yu-za:jisho yu-za:jisyo yu-za:jixo yu-za:zisho yu-za:zisyo yu-za:zixo yu-za^jisho yu-za^jisyo yu-za^jixo yu-za^zisho yu-za^zisyo yu-za^zixo yu-zc-jisho yu-zc-jisyo yu-zc-jixo yu-zc-zisho yu-zc-zisyo yu-zc-zixo yu-zc:jisho yu-zc:jisyo yu-zc:jixo yu-zc:zisho yu-zc:zisyo yu-zc:zixo yu-zc^jisho yu-zc^jisyo yu-zc^jixo yu-zc^zisho yu-zc^zisyo yu-zc^zixo yu:za-jisho yu:za-jisyo yu:za-jixo yu:za-zisho yu:za-zisyo yu:za-zixo yu:za:jisho yu:za:jisyo yu:za:jixo yu:za:zisho yu:za:zisyo yu:za:zixo yu:za^jisho yu:za^jisyo yu:za^jixo yu:za^zisho yu:za^zisyo yu:za^zixo yu:zc-jisho yu:zc-jisyo yu:zc-jixo yu:zc-zisho yu:zc-zisyo yu:zc-zixo yu:zc:jisho yu:zc:jisyo yu:zc:jixo yu:zc:zisho yu:zc:zisyo yu:zc:zixo yu:zc^jisho yu:zc^jisyo yu:zc^jixo yu:zc^zisho yu:zc^zisyo yu:zc^zixo yu^za-jisho yu^za-jisyo yu^za-jixo yu^za-zisho yu^za-zisyo yu^za-zixo yu^za:jisho yu^za:jisyo yu^za:jixo yu^za:zisho yu^za:zisyo yu^za:zixo yu^za^jisho yu^za^jisyo yu^za^jixo yu^za^zisho yu^za^zisyo yu^za^zixo yu^zc-jisho yu^zc-jisyo yu^zc-jixo yu^zc-zisho yu^zc-zisyo yu^zc-zixo yu^zc:jisho yu^zc:jisyo yu^zc:jixo yu^zc:zisho yu^zc:zisyo yu^zc:zixo yu^zc^jisho yu^zc^jisyo yu^zc^jixo yu^zc^zisho yu^zc^zisyo yu^zc^zixo"
+       (. (hash-table-get db "dummy::(yu)" #f) force_encoding "UTF-8"))
 
 
 ;;-------------------------------------------------------------------
@@ -419,6 +427,14 @@
 (test* "okuri nashi 20"
        '(("一致" #f "いっち" j) ("イッチ" #f "いっち" j))
        (henkan-okuri-nashi userid kvs "i;chi" 0))
+
+(test* "okuri nashi 21"
+       '(("ユーザー辞書" #f "ゆーざーじしょ" j))
+       (henkan-okuri-nashi userid kvs "Yu-za-jisyo" 0))
+
+(test* "okuri nashi 22"
+       '(("ユーザー辞書" #f "ゆーざーじしょ" j))
+       (henkan-okuri-nashi userid kvs "Yu:za:jisyo" 0))
 
 
 ;;-------------------------------------------------------------------
@@ -675,7 +691,7 @@
        (sekka-henkan userid kvs "HENkan" 0 :normal))
 
 (test* "henkan toplevel 8"
-       '(("こーひー" #f "ko-hi-" h 0) ("コーヒー" #f "ko-hi-" k 1) ("Ｋｏ－ｈｉ－" #f "Ko-hi-" z 2) ("Ko-hi-" #f "Ko-hi-" l 3))
+       '(("コーヒー" #f "こーひー" j 0) ("こーひー" #f "ko-hi-" h 1) ("コーヒー" #f "ko-hi-" k 2) ("Ｋｏ－ｈｉ－" #f "Ko-hi-" z 3) ("Ko-hi-" #f "Ko-hi-" l 4))
        (sekka-henkan userid kvs "Ko-hi-" 0 :normal))
 
 (test* "henkan toplevel 9"
@@ -827,6 +843,10 @@
 (test* "henkan toplevel(for Elisp) 16"
        '(("かっこ" nil "ka;ko" h 0) ("カッコ" nil "ka;ko" k 1) ("ｋａ；ｋｏ" nil "ka;ko" z 2) ("ka;ko" nil "ka;ko" l 3) ("確固" nil "かっこ" j 4) ("括弧" nil "かっこ" j 5))
        (sekkaHenkan userid kvs #f "ka;ko" 2 "normal"))
+
+(test* "henkan toplevel(for Elisp) 17"
+       '(("ユーザー辞書" nil "ゆーざーじしょ" j 0) ("ゆーざーじしょ" nil "yu-za-jisyo" h 1) ("ユーザージショ" nil "yu-za-jisyo" k 2) ("Ｙｕ－ｚａ－ｊｉｓｙｏ" nil "Yu-za-jisyo" z 3) ("Yu-za-jisyo" nil "Yu-za-jisyo" l 4))
+       (sekkaHenkan userid kvs #f "Yu-za-jisyo" 2 "normal"))
 
 
 ;;-------------------------------------------------------------------
