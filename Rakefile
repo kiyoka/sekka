@@ -53,6 +53,27 @@ task :compile do
     f.puts(   "  end" )
     f.puts(   "end" )
   }
+
+  # Replace Version Number
+  targetFile = "./emacs/sekka.el"
+  vh = Jeweler::VersionHelper.new "."
+  (original, modified) = open( targetFile ) {|f|
+    lines = f.readlines
+    [ lines,
+      lines.map {|line|
+        if line.match( /;;SEKKA-VERSION/ )
+          sprintf( '  "%s" ;;SEKKA-VERSION', vh.to_s ) + "\n"
+        else
+          line
+        end
+      } ]
+  }
+  if original.join != modified.join
+    puts "Info: " + targetFile + " was updated."
+    open( targetFile, "w" ) {|f|
+      f.write( modified.join )
+    }
+  end
 end
 
 task :check do
