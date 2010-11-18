@@ -1,4 +1,4 @@
-;; -*- coding: iso-2022-jp -*-
+;; -*- coding: utf-8 -*-
 ;;
 ;; "sekka.el" is a client for Sekka server
 ;;
@@ -36,47 +36,47 @@
   :group 'Japanese)
 
 (defcustom sekka-server-url "http://localhost:12929/"
-  "Sekka$B%5!<%P!<$N(BURL$B$r;XDj$9$k!#(B"
+  "SekkaサーバーのURLを指定する。"
   :type  'string
   :group 'sekka)
 
 (defcustom sekka-server-timeout 10
-  "Sekka$B%5!<%P!<$HDL?.$9$k;~$N%?%$%`%"%&%H$r;XDj$9$k!#(B($BIC?t(B)"
+  "Sekkaサーバーと通信する時のタイムアウトを指定する。(秒数)"
   :type  'integer
   :group 'sekka)
  
 (defcustom sekka-stop-chars "(){}<> "
-  "*$B4A;zJQ49J8;zNs$r<h$j9~$`;~$KJQ49HO0O$K4^$a$J$$J8;z$r@_Dj$9$k(B"
+  "*漢字変換文字列を取り込む時に変換範囲に含めない文字を設定する"
   :type  'string
   :group 'sekka)
 
 (defcustom sekka-curl "curl"
-  "curl$B%3%^%s%I$N@dBP%Q%9$r@_Dj$9$k(B"
+  "curlコマンドの絶対パスを設定する"
   :type  'string
   :group 'sekka)
 
 (defcustom sekka-use-viper nil
-  "*Non-nil $B$G$"$l$P!"(BVIPER $B$KBP1~$9$k(B"
+  "*Non-nil であれば、VIPER に対応する"
   :type 'boolean
   :group 'sekka)
 
 (defcustom sekka-realtime-guide-running-seconds 30
-  "$B%j%"%k%?%$%`%,%$%II=<($N7QB3;~4V(B($BIC?t(B)$B!&%<%m$G%,%$%II=<(5!G=$,L58z$K$J$k(B"
+  "リアルタイムガイド表示の継続時間(秒数)・ゼロでガイド表示機能が無効になる"
   :type  'integer
   :group 'sekka)
 
 (defcustom sekka-realtime-guide-limit-lines 5
-  "$B:G8e$KJQ49$7$?9T$+$i(B N $B9TN%$l$?$i%j%"%k%?%$%`%,%$%II=<($,;_$^$k(B"
+  "最後に変換した行から N 行離れたらリアルタイムガイド表示が止まる"
   :type  'integer
   :group 'sekka)
 
 (defcustom sekka-realtime-guide-interval  0.2
-  "$B%j%"%k%?%$%`%,%$%II=<($r99?7$9$k;~4V4V3V(B"
+  "リアルタイムガイド表示を更新する時間間隔"
   :type  'integer
   :group 'sekka)
 
 (defcustom sekka-roman-method "normal"
-  "$B%m!<%^;zF~NOJ}<0$H$7$F!$(Bnormal($BDL>o%m!<%^;z(B)$B$+!"(BAZIK($B3HD%%m!<%^;z(B)$B$N$I$A$i$N2r<a$rM%@h$9$k$+(B"
+  "ローマ字入力方式として，normal(通常ローマ字)か、AZIK(拡張ローマ字)のどちらの解釈を優先するか"
   :type '(choice (const :tag "normal" "normal")
 		 (const :tag "AZIK"   "azik"  ))
   :group 'sekka)
@@ -84,26 +84,26 @@
 
 (defface sekka-guide-face
   '((((class color) (background light)) (:background "#E0E0E0" :foreground "#F03030")))
-  "$B%j%"%k%?%$%`%,%$%I$N%U%'%$%9(B($BAu>~!"?'$J$I$N;XDj(B)"
+  "リアルタイムガイドのフェイス(装飾、色などの指定)"
   :group 'sekka)
 
 
-(defvar sekka-sticky-shift nil     "*Non-nil $B$G$"$l$P!"(BSticky-Shift$B$rM-8z$K$9$k(B")
-(defvar sekka-mode nil             "$B4A;zJQ49%H%0%kJQ?t(B")
+(defvar sekka-sticky-shift nil     "*Non-nil であれば、Sticky-Shiftを有効にする")
+(defvar sekka-mode nil             "漢字変換トグル変数")
 (defvar sekka-mode-line-string     " Sekka")
-(defvar sekka-select-mode nil      "$B8uJdA*Br%b!<%IJQ?t(B")
+(defvar sekka-select-mode nil      "候補選択モード変数")
 (or (assq 'sekka-mode minor-mode-alist)
     (setq minor-mode-alist (cons
 			    '(sekka-mode        sekka-mode-line-string)
 			    minor-mode-alist)))
 
 
-;; $B%m!<%^;z4A;zJQ49;~!"BP>]$H$9$k%m!<%^;z$r@_Dj$9$k$?$a$NJQ?t(B
+;; ローマ字漢字変換時、対象とするローマ字を設定するための変数
 (defvar sekka-skip-chars "a-zA-Z0-9.,@:`\\-+!\\[\\]?;")
-(defvar sekka-mode-map        (make-sparse-keymap)         "$B4A;zJQ49%H%0%k%^%C%W(B")
-(defvar sekka-select-mode-map (make-sparse-keymap)         "$B8uJdA*Br%b!<%I%^%C%W(B")
+(defvar sekka-mode-map        (make-sparse-keymap)         "漢字変換トグルマップ")
+(defvar sekka-select-mode-map (make-sparse-keymap)         "候補選択モードマップ")
 (defvar sekka-rK-trans-key "\C-j"
-  "*$B4A;zJQ49%-!<$r@_Dj$9$k(B")
+  "*漢字変換キーを設定する")
 (or (assq 'sekka-mode minor-mode-map-alist)
     (setq minor-mode-map-alist
 	  (append (list (cons 'sekka-mode         sekka-mode-map)
@@ -122,11 +122,11 @@
 (defconst sekka-kind-index   3)
 (defconst sekka-id-index     4)
 
-;;--- $B%G%P%C%0%a%C%;!<%8=PNO(B
-(defvar sekka-psudo-server nil)         ; $B%/%i%$%"%s%HC1BN$G2>A[E*$K%5!<%P!<$K@\B3$7$F$$$k$h$&$K$7$F%F%9%H$9$k%b!<%I(B
+;;--- デバッグメッセージ出力
+(defvar sekka-psudo-server nil)         ; クライアント単体で仮想的にサーバーに接続しているようにしてテストするモード
 
-;;--- $B%G%P%C%0%a%C%;!<%8=PNO(B
-(defvar sekka-debug nil)		; $B%G%P%C%0%U%i%0(B
+;;--- デバッグメッセージ出力
+(defvar sekka-debug nil)		; デバッグフラグ
 (defun sekka-debug-print (string)
   (if sekka-debug
       (let
@@ -137,28 +137,28 @@
 
 
 ;;; sekka basic output
-(defvar sekka-fence-start nil)          ; fence $B;OC<0LCV(B
-(defvar sekka-fence-end nil)            ; fence $B=*C<0LCV(B
+(defvar sekka-fence-start nil)          ; fence 始端位置
+(defvar sekka-fence-end nil)            ; fence 終端位置
 (defvar sekka-henkan-separeter " ")     ; fence mode separeter
-(defvar sekka-henkan-buffer nil)        ; $BI=<(MQ%P%C%U%!(B
-(defvar sekka-henkan-length nil)        ; $BI=<(MQ%P%C%U%!D9(B
-(defvar sekka-henkan-revpos nil)        ; $BJ8@a;OC<0LCV(B
-(defvar sekka-henkan-revlen nil)        ; $BJ8@aD9(B
+(defvar sekka-henkan-buffer nil)        ; 表示用バッファ
+(defvar sekka-henkan-length nil)        ; 表示用バッファ長
+(defvar sekka-henkan-revpos nil)        ; 文節始端位置
+(defvar sekka-henkan-revlen nil)        ; 文節長
 
 ;;; sekka basic local
-(defvar sekka-cand-cur 0)               ; $B%+%l%s%H8uJdHV9f(B
-(defvar sekka-cand-cur-backup 0)        ; $B%+%l%s%H8uJdHV9f(B(UNDO$BMQ$KB`Hr$9$kJQ?t(B)
-(defvar sekka-cand-len nil)             ; $B8uJd?t(B
-(defvar sekka-last-fix "")              ; $B:G8e$K3NDj$7$?J8;zNs(B
-(defvar sekka-henkan-kouho-list nil)    ; $BJQ497k2L%j%9%H(B($B%5!<%P$+$i5"$C$F$-$?%G!<%?$=$N$b$N(B)
-(defvar sekka-markers '())              ; $BJ8@a3+;O!"=*N;0LCV$N(Bpair: $B<!$N$h$&$J7A<0(B ( 1 . 2 )
-(defvar sekka-timer    nil)             ; $B%$%s%?!<%P%k%?%$%^!<7?JQ?t(B
-(defvar sekka-timer-rest  0)            ; $B$"$H2?2s8F=P$5$l$?$i!"%$%s%?!<%P%k%?%$%^$N8F=P$r;_$a$k$+(B
-(defvar sekka-last-lineno 0)            ; $B:G8e$KJQ49$r<B9T$7$?9THV9f(B
-(defvar sekka-guide-overlay   nil)      ; $B%j%"%k%?%$%`%,%$%I$K;HMQ$9$k%*!<%P!<%l%$(B
-(defvar sekka-last-request-time 0)      ; Sekka$B%5!<%P!<$K%j%/%(%9%H$7$?:G8e$N;~9o(B($BC10L$OIC(B)
-(defvar sekka-guide-lastquery  "")      ; Sekka$B%5!<%P!<$K%j%/%(%9%H$7$?:G8e$N%/%(%jJ8;zNs(B
-(defvar sekka-guide-lastresult '())     ; Sekka$B%5!<%P!<$K%j%/%(%9%H$7$?:G8e$N%/%(%jJ8;zNs(B
+(defvar sekka-cand-cur 0)               ; カレント候補番号
+(defvar sekka-cand-cur-backup 0)        ; カレント候補番号(UNDO用に退避する変数)
+(defvar sekka-cand-len nil)             ; 候補数
+(defvar sekka-last-fix "")              ; 最後に確定した文字列
+(defvar sekka-henkan-kouho-list nil)    ; 変換結果リスト(サーバから帰ってきたデータそのもの)
+(defvar sekka-markers '())              ; 文節開始、終了位置のpair: 次のような形式 ( 1 . 2 )
+(defvar sekka-timer    nil)             ; インターバルタイマー型変数
+(defvar sekka-timer-rest  0)            ; あと何回呼出されたら、インターバルタイマの呼出を止めるか
+(defvar sekka-last-lineno 0)            ; 最後に変換を実行した行番号
+(defvar sekka-guide-overlay   nil)      ; リアルタイムガイドに使用するオーバーレイ
+(defvar sekka-last-request-time 0)      ; Sekkaサーバーにリクエストした最後の時刻(単位は秒)
+(defvar sekka-guide-lastquery  "")      ; Sekkaサーバーにリクエストした最後のクエリ文字列
+(defvar sekka-guide-lastresult '())     ; Sekkaサーバーにリクエストした最後のクエリ文字列
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -180,7 +180,7 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; $BI=<(7O4X?t72(B
+;; 表示系関数群
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar sekka-use-fence t)
 (defvar sekka-use-color nil)
@@ -188,10 +188,10 @@
 (defvar sekka-init nil)
 
 ;;
-;; $B=i4|2=(B
+;; 初期化
 ;;
 (defun sekka-init ()
-  ;; $B:G=i$N(B n $B7o$N%j%9%H$r<hF@$9$k(B
+  ;; 最初の n 件のリストを取得する
   (defun sekka-take (arg-list n)
     (let ((lst '()))
       (dotimes (i n (reverse lst))
@@ -200,15 +200,15 @@
 	    (push item lst))))))
   
   (when (not sekka-init)
-    ;; $B%f!<%6!<8lWC$N%m!<%I(B + $B%5!<%P!<$X$NEPO?(B
+    ;; ユーザー語彙のロード + サーバーへの登録
     (sekka-register-userdict-internal)
 
-    ;; Emacs$B=*N;;~$N=hM}(B
+    ;; Emacs終了時の処理
     (add-hook 'kill-emacs-hook
 	      (lambda ()
-		;; $B2?$b$9$k$3$H$OL5$$(B
+		;; 何もすることは無い
 		t))
-    ;; $B=i4|2=40N;(B
+    ;; 初期化完了
     (setq sekka-init t)))
 
 
@@ -232,10 +232,10 @@
      )))
 
 ;;
-;; $B%m!<%^;z$G=q$+$l$?J8>O$r(BSekka$B%5!<%P!<$r;H$C$FJQ49$9$k(B
+;; ローマ字で書かれた文章をSekkaサーバーを使って変換する
 ;;
-;; arg-alist$B$N0z?t$N7A<0(B
-;;  $BNc(B:
+;; arg-alistの引数の形式
+;;  例:
 ;;   '(
 ;;     ("yomi"   .  "kanji")
 ;;     ("limit"  .  2)
@@ -243,10 +243,10 @@
 ;;    )
 (defun sekka-rest-request (func-name arg-alist)
   (if sekka-psudo-server
-      ;; $B%/%i%$%"%s%HC1BN$G2>A[E*$K%5!<%P!<$K@\B3$7$F$$$k$h$&$K$7$F%F%9%H$9$k%b!<%I(B
-      "((\"$BJQ49(B\" nil \"$B$X$s$+$s(B\" j 0) (\"$BJQ2=(B\" nil \"$B$X$s$+(B\" j 1) (\"$B%X%s%+%s(B\" nil \"$B$X$s$+$s(B\" k 2) (\"$B$X$s$+$s(B\" nil \"$B$X$s$+$s(B\" h 3))"
-      ;;"((\"$BJQ49(B\" nil \"$B$X$s$+$s(B\" j 0) (\"$BJQ2=(B\" nil \"$B$X$s$+(B\" j 1))"
-    ;; $B<B:]$N%5!<%P$K@\B3$9$k(B
+      ;; クライアント単体で仮想的にサーバーに接続しているようにしてテストするモード
+      "((\"変換\" nil \"へんかん\" j 0) (\"変化\" nil \"へんか\" j 1) (\"ヘンカン\" nil \"へんかん\" k 2) (\"へんかん\" nil \"へんかん\" h 3))"
+      ;;"((\"変換\" nil \"へんかん\" j 0) (\"変化\" nil \"へんか\" j 1))"
+    ;; 実際のサーバに接続する
     (let ((command
 	   (concat
 	    sekka-curl " --silent --show-error "
@@ -270,7 +270,7 @@
 	result))))
       
 ;;
-;; $B8=:_;~9o$r(BUNIX$B%?%$%`$rJV$9(B($BC10L$OIC(B)
+;; 現在時刻をUNIXタイムを返す(単位は秒)
 ;;
 (defun sekka-current-unixtime ()
   (let (
@@ -282,7 +282,7 @@
 
 
 ;;
-;; $B%m!<%^;z$G=q$+$l$?J8>O$r(BSekka$B%5!<%P!<$r;H$C$FJQ49$9$k(B
+;; ローマ字で書かれた文章をSekkaサーバーを使って変換する
 ;;
 (defun sekka-henkan-request (yomi limit)
   (sekka-debug-print (format "henkan-input :[%s]\n"  yomi))
@@ -308,7 +308,7 @@
 	nil))))
 
 ;;
-;; $B3NDj$7$?C18l$r%5!<%P!<$KEAC#$9$k(B
+;; 確定した単語をサーバーに伝達する
 ;;
 (defun sekka-kakutei-request (key tango)
   (sekka-debug-print (format "henkan-kakutei key=[%s] tango=[%s]\n" key tango))
@@ -323,16 +323,16 @@
     t))
 
 ;;
-;; $B%f!<%6!<8lWC$r%5!<%P!<$K:FEYEPO?$9$k!#(B
+;; ユーザー語彙をサーバーに再度登録する。
 ;;
 (defun sekka-register-userdict (&optional arg)
-  "$B%f!<%6!<<-=q$r%5!<%P!<$K:FEY%"%C%W%m!<%I$9$k(B"
+  "ユーザー辞書をサーバーに再度アップロードする"
   (interactive "P")
   (sekka-register-userdict-internal))
 
   
 ;;
-;; $B%f!<%6!<8lWC$r%5!<%P!<$KEPO?$9$k!#(B
+;; ユーザー語彙をサーバーに登録する。
 ;;
 (defun sekka-register-userdict-internal ()
   (let ((str (sekka-get-jisyo-str "~/.sekka-jisyo")))
@@ -346,10 +346,10 @@
 
 
 ;;
-;; $B%f!<%6!<8lWC$r%5!<%P!<$+$iA4$F:o=|$9$k(B
+;; ユーザー語彙をサーバーから全て削除する
 ;;
 (defun sekka-flush-userdict (&optional arg)
-  "$B%f!<%6!<<-=q$r%5!<%P!<$K:FEY%"%C%W%m!<%I$9$k(B"
+  "ユーザー辞書をサーバーに再度アップロードする"
   (interactive "P")
   (message "Requesting to sekka server...")
   (let ((result (sekka-rest-request "flush" `())))
@@ -359,16 +359,16 @@
 
 
 (defun sekka-get-jisyo-str (file &optional nomsg)
-  "FILE $B$r3+$$$F(B SKK $B<-=q%P%C%U%!$r:n$j!"%P%C%U%!$rJV$9!#(B
-$B%*%W%7%g%s0z?t$N(B NOMSG $B$r;XDj$9$k$H%U%!%$%kFI$_9~$_$N:]$N%a%C%;!<%8$rI=<($7$J(B
-$B$$!#(B"
+  "FILE を開いて SKK 辞書バッファを作り、バッファを返す。
+オプション引数の NOMSG を指定するとファイル読み込みの際のメッセージを表示しな
+い。"
   (when file
     (let* ((file (or (car-safe file)
 		     file))
 	   (file (expand-file-name file)))
       (if (not (file-exists-p file))
 	  (progn
-	    (message (format "SKK $B<-=q(B %s $B$,B8:_$7$^$;$s(B..." file))
+	    (message (format "SKK 辞書 %s が存在しません..." file))
 	    nil)
 	(let ((str "")
 	      (buf-name (file-name-nondirectory file)))
@@ -376,14 +376,14 @@
 	    (find-file-read-only file)
 	    (setq str (with-current-buffer (get-buffer buf-name)
 			(buffer-substring-no-properties (point-min) (point-max))))
-	    (message (format "SKK $B<-=q(B %s $B$r3+$$$F$$$^$9(B...$B40N;!*(B" (file-name-nondirectory file)))
+	    (message (format "SKK 辞書 %s を開いています...完了！" (file-name-nondirectory file)))
 	    (kill-buffer-if-not-modified (get-buffer buf-name)))
 	  str)))))
 
 ;;(sekka-get-jisyo-str "~/.sekka-jisyo")
 
 
-;; $B%]!<%?%V%kJ8;zNsCV49(B( Emacs$B$H(BXEmacs$B$NN>J}$GF0$/(B )
+;; ポータブル文字列置換( EmacsとXEmacsの両方で動く )
 (defun sekka-replace-regexp-in-string (regexp replace str)
   (cond ((featurep 'xemacs)
 	 (replace-in-string str regexp replace))
@@ -391,9 +391,9 @@
 	 (replace-regexp-in-string regexp replace str))))
 	
 
-;; $B%j!<%8%g%s$r%m!<%^;z4A;zJQ49$9$k4X?t(B
+;; リージョンをローマ字漢字変換する関数
 (defun sekka-henkan-region (b e)
-  "$B;XDj$5$l$?(B region $B$r4A;zJQ49$9$k(B"
+  "指定された region を漢字変換する"
   (sekka-init)
   (when (/= b e)
     (let* (
@@ -404,9 +404,9 @@
 	  (condition-case err
 	      (progn
 		(setq
-		 ;; $BJQ497k2L$NJ];}(B
+		 ;; 変換結果の保持
 		 sekka-henkan-kouho-list henkan-list
-		 ;; $BJ8@aA*Br=i4|2=(B
+		 ;; 文節選択初期化
 		 sekka-cand-cur 0
 		 ;; 
 		 sekka-cand-len (length henkan-list))
@@ -424,7 +424,7 @@
 	nil))))
 
 
-;; $B%+!<%=%kA0$NJ8;z<o$rJV5Q$9$k4X?t(B
+;; カーソル前の文字種を返却する関数
 (eval-and-compile
   (if (>= emacs-major-version 20)
       (progn
@@ -440,9 +440,9 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; undo $B>pJs$N@)8f(B
+;; undo 情報の制御
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; undo buffer $BB`HrMQJQ?t(B
+;; undo buffer 退避用変数
 (defvar sekka-buffer-undo-list nil)
 (make-variable-buffer-local 'sekka-buffer-undo-list)
 (defvar sekka-buffer-modified-p nil)
@@ -450,14 +450,14 @@
 
 (defvar sekka-blink-cursor nil)
 (defvar sekka-cursor-type nil)
-;; undo buffer $B$rB`Hr$7!"(Bundo $B>pJs$NC_@Q$rDd;_$9$k4X?t(B
+;; undo buffer を退避し、undo 情報の蓄積を停止する関数
 (defun sekka-disable-undo ()
   (when (not (eq buffer-undo-list t))
     (setq sekka-buffer-undo-list buffer-undo-list)
     (setq sekka-buffer-modified-p (buffer-modified-p))
     (setq buffer-undo-list t)))
 
-;; $BB`Hr$7$?(B undo buffer $B$rI|5"$7!"(Bundo $B>pJs$NC_@Q$r:F3+$9$k4X?t(B
+;; 退避した undo buffer を復帰し、undo 情報の蓄積を再開する関数
 (defun sekka-enable-undo ()
   (when (not sekka-buffer-modified-p) (set-buffer-modified-p nil))
   (when sekka-buffer-undo-list
@@ -465,10 +465,10 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; $B8=:_$NJQ49%(%j%"$NI=<($r9T$&(B
+;; 現在の変換エリアの表示を行う
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun sekka-get-display-string ()
-  ;; $BJQ497k2LJ8;zNs$rJV$9!#(B
+  ;; 変換結果文字列を返す。
   (let* ((kouho      (nth sekka-cand-cur sekka-henkan-kouho-list))
 	 (_          (sekka-debug-print (format "sekka-cand-cur=%s\n" sekka-cand-cur)))
 	 (_          (sekka-debug-print (format "kouho=%s\n" kouho)))
@@ -480,17 +480,17 @@
 (defun sekka-display-function (b e select-mode)
   (setq sekka-henkan-separeter (if sekka-use-fence " " ""))
   (when sekka-henkan-kouho-list
-    ;; UNDO$BM^@)3+;O(B
+    ;; UNDO抑制開始
     (sekka-disable-undo)
     
     (delete-region b e)
 
-    ;; $B%j%9%H=i4|2=(B
+    ;; リスト初期化
     (setq sekka-markers '())
 
     (setq sekka-last-fix "")
 
-    ;; $BJQ49$7$?(Bpoint$B$NJ];}(B
+    ;; 変換したpointの保持
     (setq sekka-fence-start (point-marker))
     (when select-mode (insert "|"))
     
@@ -505,29 +505,29 @@
 	(let* ((end         (point-marker))
 	       (ov          (make-overlay start end)))
 	    
-	  ;; $B3NDjJ8;zNs$N:n@.(B
+	  ;; 確定文字列の作成
 	  (setq sekka-last-fix insert-word)
 	   
-	  ;; $BA*BrCf$N>l=j$rAu>~$9$k!#(B
+	  ;; 選択中の場所を装飾する。
 	  (overlay-put ov 'face 'default)
 	  (when select-mode
 	    (overlay-put ov 'face 'highlight))
 	  (setq sekka-markers (cons start end))
 	  (sekka-debug-print (format "insert:[%s] point:%d-%d\n" insert-word (marker-position start) (marker-position end))))))
 
-    ;; fence$B$NHO0O$r@_Dj$9$k(B
+    ;; fenceの範囲を設定する
     (when select-mode (insert "|"))
     (setq sekka-fence-end   (point-marker))
     
     (sekka-debug-print (format "total-point:%d-%d\n"
 			       (marker-position sekka-fence-start)
 			       (marker-position sekka-fence-end)))
-    ;; UNDO$B:F3+(B
+    ;; UNDO再開
     (sekka-enable-undo)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; $BJQ498uJdA*Br%b!<%I(B
+;; 変換候補選択モード
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (let ((i 0))
   (while (<= i ?\177)
@@ -550,14 +550,14 @@
 
 
 
-;; $BJQ49$r3NDj$7F~NO$5$l$?%-!<$r:FF~NO$9$k4X?t(B
+;; 変換を確定し入力されたキーを再入力する関数
 (defun sekka-kakutei-and-self-insert (arg)
-  "$B8uJdA*Br$r3NDj$7!"F~NO$5$l$?J8;z$rF~NO$9$k(B"
+  "候補選択を確定し、入力された文字を入力する"
   (interactive "P")
   (sekka-select-kakutei)
   (setq unread-command-events (list last-command-event)))
 
-;; $B8uJdA*Br>uBV$G$NI=<(99?7(B
+;; 候補選択状態での表示更新
 (defun sekka-select-update-display ()
   (sekka-display-function
    (marker-position sekka-fence-start)
@@ -565,13 +565,13 @@
    sekka-select-mode))
 
 
-;; $B8uJdA*Br$r3NDj$9$k(B
+;; 候補選択を確定する
 (defun sekka-select-kakutei ()
-  "$B8uJdA*Br$r3NDj$9$k(B"
+  "候補選択を確定する"
   (interactive)
-  ;; $B8uJdHV9f%j%9%H$r%P%C%/%"%C%W$9$k!#(B
+  ;; 候補番号リストをバックアップする。
   (setq sekka-cand-cur-backup sekka-cand-cur)
-  ;; $B%5!<%P!<$K3NDj$7$?C18l$rEA$($k(B($B<-=q3X=,(B)
+  ;; サーバーに確定した単語を伝える(辞書学習)
   (let* ((kouho      (nth sekka-cand-cur sekka-henkan-kouho-list))
 	 (_          (sekka-debug-print (format "2:sekka-cand-cur=%s\n" sekka-cand-cur)))
 	 (_          (sekka-debug-print (format "2:kouho=%s\n" kouho)))
@@ -585,38 +585,38 @@
   (sekka-select-update-display))
 
 
-;; $B8uJdA*Br$r%-%c%s%;%k$9$k(B
+;; 候補選択をキャンセルする
 (defun sekka-select-cancel ()
-  "$B8uJdA*Br$r%-%c%s%;%k$9$k(B"
+  "候補選択をキャンセルする"
   (interactive)
-  ;; $B%+%l%s%H8uJdHV9f$r%P%C%/%"%C%W$7$F$$$?8uJdHV9f$GI|85$9$k!#(B
+  ;; カレント候補番号をバックアップしていた候補番号で復元する。
   (setq sekka-cand-cur sekka-cand-cur-backup)
   (setq sekka-select-mode nil)
   (run-hooks 'sekka-select-mode-end-hook)
   (sekka-select-update-display))
 
-;; $BA0$N8uJd$K?J$a$k(B
+;; 前の候補に進める
 (defun sekka-select-prev ()
-  "$BA0$N8uJd$K?J$a$k(B"
+  "前の候補に進める"
   (interactive)
-  ;; $BA0$N8uJd$K@Z$j$+$($k(B
+  ;; 前の候補に切りかえる
   (decf sekka-cand-cur)
   (when (> 0 sekka-cand-cur)
     (setq sekka-cand-cur (- sekka-cand-len 1)))
   (sekka-select-update-display))
 
-;; $B<!$N8uJd$K?J$a$k(B
+;; 次の候補に進める
 (defun sekka-select-next ()
-  "$B<!$N8uJd$K?J$a$k(B"
+  "次の候補に進める"
   (interactive)
-  ;; $B<!$N8uJd$K@Z$j$+$($k(B
+  ;; 次の候補に切りかえる
   (setq sekka-cand-cur
 	(if (< sekka-cand-cur (- sekka-cand-len 1))
 	    (+ sekka-cand-cur 1)
 	  0))
   (sekka-select-update-display))
 
-;; $B;XDj$5$l$?(B type $B$N8uJd$rH4$-=P$9(B
+;; 指定された type の候補を抜き出す
 (defun sekka-select-by-type-filter ( _type )
   (let ((lst '()))
     (mapcar
@@ -628,67 +628,67 @@
     (sekka-debug-print (format "filterd-lst = %S" (reverse lst)))
     (car (reverse lst))))
     
-;; $B;XDj$5$l$?(B type $B$N8uJd$K6/@)E*$K@Z$j$+$($k(B
+;; 指定された type の候補に強制的に切りかえる
 (defun sekka-select-by-type ( _type )
   (let ((kouho (sekka-select-by-type-filter _type)))
     (if (null kouho)
 	(cond
 	 ((eq _type 'j)
-	  (message "Sekka: $B4A;z$N8uJd$O$"$j$^$;$s!#(B"))
+	  (message "Sekka: 漢字の候補はありません。"))
 	 ((eq _type 'h)
-	  (message "Sekka: $B$R$i$,$J$N8uJd$O$"$j$^$;$s!#(B"))
+	  (message "Sekka: ひらがなの候補はありません。"))
 	 ((eq _type 'k)
-	  (message "Sekka: $B%+%?%+%J$N8uJd$O$"$j$^$;$s!#(B"))
+	  (message "Sekka: カタカナの候補はありません。"))
 	 ((eq _type 'l)
-	  (message "Sekka: $BH>3Q$N8uJd$O$"$j$^$;$s!#(B"))
+	  (message "Sekka: 半角の候補はありません。"))
 	 ((eq _type 'z)
-	  (message "Sekka: $BA43Q$N8uJd$O$"$j$^$;$s!#(B")))
+	  (message "Sekka: 全角の候補はありません。")))
       (let ((num   (nth sekka-id-index kouho)))
 	(setq sekka-cand-cur num)
 	(sekka-select-update-display)))))
 
 (defun sekka-select-kanji ()
-  "$B4A;z8uJd$K6/@)E*$K@Z$j$+$($k(B"
+  "漢字候補に強制的に切りかえる"
   (interactive)
   (sekka-select-by-type 'j))
 
 (defun sekka-select-hiragana ()
-  "$B$R$i$,$J8uJd$K6/@)E*$K@Z$j$+$($k(B"
+  "ひらがな候補に強制的に切りかえる"
   (interactive)
   (sekka-select-by-type 'h))
 
 (defun sekka-select-katakana ()
-  "$B%+%?%+%J8uJd$K6/@)E*$K@Z$j$+$($k(B"
+  "カタカナ候補に強制的に切りかえる"
   (interactive)
   (sekka-select-by-type 'k))
 
 (defun sekka-select-hankaku ()
-  "$BH>3Q8uJd$K6/@)E*$K@Z$j$+$($k(B"
+  "半角候補に強制的に切りかえる"
   (interactive)
   (sekka-select-by-type 'l))
 
 (defun sekka-select-zenkaku ()
-  "$BH>3Q8uJd$K6/@)E*$K@Z$j$+$($k(B"
+  "半角候補に強制的に切りかえる"
   (interactive)
   (sekka-select-by-type 'z))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; $B%m!<%^;z4A;zJQ494X?t(B
+;; ローマ字漢字変換関数
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun sekka-rK-trans ()
-  "$B%m!<%^;z4A;zJQ49$r$9$k!#(B
-$B!&%+!<%=%k$+$i9TF,J}8~$K%m!<%^;zNs$,B3$/HO0O$G%m!<%^;z4A;zJQ49$r9T$&!#(B"
+  "ローマ字漢字変換をする。
+・カーソルから行頭方向にローマ字列が続く範囲でローマ字漢字変換を行う。"
   (interactive)
 ;  (print last-command)			; DEBUG
 
   (cond 
-   ;; $B%?%$%^!<%$%Y%s%H$r@_Dj$7$J$$>r7o(B
+   ;; タイマーイベントを設定しない条件
    ((or
      sekka-timer
      (> 1 sekka-realtime-guide-running-seconds)
      ))
    (t
-    ;; $B%?%$%^!<%$%Y%s%H4X?t$NEPO?(B
+    ;; タイマーイベント関数の登録
     (progn
       (let 
 	  ((ov-point
@@ -701,18 +701,18 @@
 			(run-at-time 0.1 sekka-realtime-guide-interval
 						 'sekka-realtime-guide)))))
 
-  ;; $B%,%$%II=<(7QB32s?t$N99?7(B
+  ;; ガイド表示継続回数の更新
   (when (< 0 sekka-realtime-guide-running-seconds)
     (setq sekka-timer-rest  
 	  (/ sekka-realtime-guide-running-seconds
 	     sekka-realtime-guide-interval)))
 
-  ;; $B:G8e$KJQ49$7$?9THV9f$N99?7(B
+  ;; 最後に変換した行番号の更新
   (setq sekka-last-lineno (line-number-at-pos (point)))
 
   (cond
    (sekka-select-mode
-    ;; $BJQ49Cf$K8F=P$5$l$?$i!"8uJdA*Br%b!<%I$K0\9T$9$k!#(B
+    ;; 変換中に呼出されたら、候補選択モードに移行する。
     (funcall (lookup-key sekka-select-mode-map sekka-rK-trans-key)))
 
 
@@ -720,11 +720,11 @@
     (cond
 
      ((eq (sekka-char-charset (preceding-char)) 'ascii)
-      ;; $B%+!<%=%kD>A0$,(B alphabet $B$@$C$?$i(B
+      ;; カーソル直前が alphabet だったら
       (let ((end (point))
 	    (gap (sekka-skip-chars-backward)))
 	(when (/= gap 0)
-	  ;; $B0UL#$N$"$kF~NO$,8+$D$+$C$?$N$GJQ49$9$k(B
+	  ;; 意味のある入力が見つかったので変換する
 	  (let (
 		(b (+ end gap))
 		(e end))
@@ -742,19 +742,19 @@
      
      ((sekka-kanji (preceding-char))
     
-      ;; $B%+!<%=%kD>A0$,(B $BA43Q$G4A;z0J30(B $B$@$C$?$i8uJdA*Br%b!<%I$K0\9T$9$k!#(B
-      ;; $B$^$?!":G8e$K3NDj$7$?J8;zNs$HF1$8$+$I$&$+$b3NG'$9$k!#(B
+      ;; カーソル直前が 全角で漢字以外 だったら候補選択モードに移行する。
+      ;; また、最後に確定した文字列と同じかどうかも確認する。
       (when (and
 	     (<= (marker-position sekka-fence-start) (point))
 	     (<= (point) (marker-position sekka-fence-end))
 	     (string-equal sekka-last-fix (buffer-substring 
 					   (marker-position sekka-fence-start)
 					   (marker-position sekka-fence-end))))
-	;; $BD>A0$KJQ49$7$?(Bfence$B$NHO0O$KF~$C$F$$$?$i!"JQ49%b!<%I$K0\9T$9$k!#(B
+	;; 直前に変換したfenceの範囲に入っていたら、変換モードに移行する。
 	(setq sekka-select-mode t)
 	(sekka-debug-print "henkan mode ON\n")
 
-	;; $BI=<(>uBV$r8uJdA*Br%b!<%I$K@ZBX$($k!#(B
+	;; 表示状態を候補選択モードに切替える。
 	(sekka-display-function
 	 (marker-position sekka-fence-start)
 	 (marker-position sekka-fence-end)
@@ -763,26 +763,26 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; $B%-%c%T%?%i%$%:(B/$B%"%s%-%c%T%?%i%$%:JQ49(B
+;; キャピタライズ/アンキャピタライズ変換
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun sekka-capitalize-trans ()
-  "$B%-%c%T%?%i%$%:JQ49$r9T$&(B
-$B!&%+!<%=%k$+$i9TF,J}8~$K%m!<%^;zNs$r8+$D$1!"@hF,J8;z$NBgJ8;z>.J8;z$rH?E>$9$k(B"
+  "キャピタライズ変換を行う
+・カーソルから行頭方向にローマ字列を見つけ、先頭文字の大文字小文字を反転する"
   (interactive)
 
   (cond
    (sekka-select-mode
-    ;; $B8uJdA*Br%b!<%I$G$OH?1~$7$J$$!#(B
+    ;; 候補選択モードでは反応しない。
     ;; do nothing
     )
    ((eq (sekka-char-charset (preceding-char)) 'ascii)
-    ;; $B%+!<%=%kD>A0$,(B alphabet $B$@$C$?$i(B
+    ;; カーソル直前が alphabet だったら
     (sekka-debug-print "capitalize(2)!\n")
 
     (let ((end (point))
 	  (gap (sekka-skip-chars-backward)))
       (when (/= gap 0)
-	;; $B0UL#$N$"$kF~NO$,8+$D$+$C$?$N$GJQ49$9$k(B
+	;; 意味のある入力が見つかったので変換する
 	(let* (
 	       (b (+ end gap))
 	       (e end)
@@ -797,36 +797,36 @@
    ))
 
 
-;; $BA43Q$G4A;z0J30$NH=Dj4X?t(B
+;; 全角で漢字以外の判定関数
 (defun sekka-nkanji (ch)
   (and (eq (sekka-char-charset ch) 'japanese-jisx0208)
-       (not (string-match "[$B0!(B-$Bt$(B]" (char-to-string ch)))))
+       (not (string-match "[亜-瑤]" (char-to-string ch)))))
 
 (defun sekka-kanji (ch)
   (eq (sekka-char-charset ch) 'japanese-jisx0208))
 
 
-;; $B%m!<%^;z4A;zJQ49;~!"JQ49BP>]$H$9$k%m!<%^;z$rFI$_Ht$P$94X?t(B
+;; ローマ字漢字変換時、変換対象とするローマ字を読み飛ばす関数
 (defun sekka-skip-chars-backward ()
   (let* (
 	 (skip-chars
 	  (if auto-fill-function
-	      ;; auto-fill-mode $B$,M-8z$K$J$C$F$$$k>l9g2~9T$,$"$C$F$b(Bskip$B$rB3$1$k(B
+	      ;; auto-fill-mode が有効になっている場合改行があってもskipを続ける
 	      (concat sekka-skip-chars "\n")
-	    ;; auto-fill-mode$B$,L58z$N>l9g$O$=$N$^$^(B
+	    ;; auto-fill-modeが無効の場合はそのまま
 	    sekka-skip-chars))
 	    
-	 ;; $B%^!<%/$5$l$F$$$k0LCV$r5a$a$k!#(B
+	 ;; マークされている位置を求める。
 	 (pos (or (and (markerp (mark-marker)) (marker-position (mark-marker)))
 		  1))
 
-	 ;; $B>r7o$K%^%C%A$9$k4V!"A0J}J}8~$K%9%-%C%W$9$k!#(B
+	 ;; 条件にマッチする間、前方方向にスキップする。
 	 (result (save-excursion
 		   (skip-chars-backward skip-chars (and (< pos (point)) pos))))
 	 (limit-point 0))
 
     (if auto-fill-function
-	;; auto-fill-mode$B$,M-8z$N;~(B
+	;; auto-fill-modeが有効の時
 	(progn
 	  (save-excursion
 	    (backward-paragraph)
@@ -843,14 +843,14 @@
 	  ;; (sekka-debug-print (format "(point) = %d  result = %d  limit-point = %d\n" (point) result limit-point))
 	  ;; (sekka-debug-print (format "a = %d b = %d \n" (+ (point) result) limit-point))
 
-	  ;; $B%Q%i%0%i%U0LCV$G%9%H%C%W$9$k(B
+	  ;; パラグラフ位置でストップする
 	  (if (< (+ (point) result) limit-point)
 	      (- 
 	       limit-point
 	       (point))
 	    result))
 
-      ;; auto-fill-mode$B$,L58z$N;~(B
+      ;; auto-fill-modeが無効の時
       (progn
 	(save-excursion
 	  (goto-char (point-at-bol))
@@ -865,7 +865,7 @@
 	;; (sekka-debug-print (format "a = %d b = %d \n" (+ (point) result) limit-point))
 
 	(if (< (+ (point) result) limit-point)
-	    ;; $B%$%s%G%s%H0LCV$G%9%H%C%W$9$k!#(B
+	    ;; インデント位置でストップする。
 	    (- 
 	     limit-point
 	     (point))
@@ -916,8 +916,8 @@
   (define-key sticky-map sticky-key '(lambda ()(interactive)(insert sticky-key))))
 
 (defun sekka-realtime-guide ()
-  "$B%j%"%k%?%$%`$GJQ49Cf$N%,%$%I$r=P$9(B
-sekka-mode$B$,(BON$B$N4VCf8F$S=P$5$l$k2DG=@-$,$"$k!#(B"
+  "リアルタイムで変換中のガイドを出す
+sekka-modeがONの間中呼び出される可能性がある。"
   (cond
    ((or (null sekka-mode)
 	(> 1 sekka-timer-rest))
@@ -925,10 +925,10 @@ sekka-mode$B$,(BON$B$N4VCf8F$S=P$5$l$k2DG=@-$,$"$k!#(B"
     (setq sekka-timer nil)
     (delete-overlay sekka-guide-overlay))
    (sekka-guide-overlay
-    ;; $B;D$j2s?t$N%G%/%j%a%s%H(B
+    ;; 残り回数のデクリメント
     (setq sekka-timer-rest (- sekka-timer-rest 1))
 
-    ;; $B%+!<%=%k$,(Bsekka-realtime-guide-limit-lines $B$r$O$_=P$7$F$$$J$$$+%A%'%C%/(B
+    ;; カーソルがsekka-realtime-guide-limit-lines をはみ出していないかチェック
     (sekka-debug-print (format "sekka-last-lineno [%d] : current-line" sekka-last-lineno (line-number-at-pos (point))))
     (when (< 0 sekka-realtime-guide-limit-lines)
       (let ((diff-lines (abs (- (line-number-at-pos (point)) sekka-last-lineno))))
@@ -943,9 +943,9 @@ sekka-mode$B$,(BON$B$N4VCf8F$S=P$5$l$k2DG=@-$,$"$k!#(B"
 	   (when (fboundp 'minibufferp)
 	     (minibufferp))
 	   (= gap 0))
-	  ;; $B>e2<%9%Z!<%9$,L5$$(B $B$^$?$O(B $BJQ49BP>]$,L5$7$J$i%,%$%I$OI=<($7$J$$!#(B
+	  ;; 上下スペースが無い または 変換対象が無しならガイドは表示しない。
 	  (overlay-put sekka-guide-overlay 'before-string "")
-	;; $B0UL#$N$"$kF~NO$,8+$D$+$C$?$N$G%,%$%I$rI=<($9$k!#(B
+	;; 意味のある入力が見つかったのでガイドを表示する。
 	(let* (
 	       (b (+ end gap))
 	       (e end)
@@ -984,41 +984,41 @@ sekka-mode$B$,(BON$B$N4VCf8F$S=P$5$l$k2DG=@-$,$"$k!#(B"
 
 
 
-;; sekka-mode $B$N>uBVJQ994X?t(B
-;;  $B@5$N0z?t$N>l9g!">o$K(B sekka-mode $B$r3+;O$9$k(B
-;;  {$BIi(B,0}$B$N0z?t$N>l9g!">o$K(B sekka-mode $B$r=*N;$9$k(B
-;;  $B0z?tL5$7$N>l9g!"(Bsekka-mode $B$r%H%0%k$9$k(B
+;; sekka-mode の状態変更関数
+;;  正の引数の場合、常に sekka-mode を開始する
+;;  {負,0}の引数の場合、常に sekka-mode を終了する
+;;  引数無しの場合、sekka-mode をトグルする
 
-;; buffer $BKh$K(B sekka-mode $B$rJQ99$9$k(B
+;; buffer 毎に sekka-mode を変更する
 (defun sekka-mode (&optional arg)
-  "Sekka mode $B$O(B $B%m!<%^;z$+$iD>@\4A;zJQ49$9$k$?$a$N(B minor mode $B$G$9!#(B
-$B0z?t$K@5?t$r;XDj$7$?>l9g$O!"(BSekka mode $B$rM-8z$K$7$^$9!#(B
+  "Sekka mode は ローマ字から直接漢字変換するための minor mode です。
+引数に正数を指定した場合は、Sekka mode を有効にします。
 
-Sekka $B%b!<%I$,M-8z$K$J$C$F$$$k>l9g(B \\<sekka-mode-map>\\[sekka-rK-trans] $B$G(B
-point $B$+$i9TF,J}8~$KF1<o$NJ8;zNs$,B3$/4V$r4A;zJQ49$7$^$9!#(B
+Sekka モードが有効になっている場合 \\<sekka-mode-map>\\[sekka-rK-trans] で
+point から行頭方向に同種の文字列が続く間を漢字変換します。
 
-$BF1<o$NJ8;zNs$H$O0J2<$N$b$N$r;X$7$^$9!#(B
-$B!&H>3Q%+%?%+%J$H(Bsekka-stop-chars $B$K;XDj$7$?J8;z$r=|$/H>3QJ8;z(B
-$B!&4A;z$r=|$/A43QJ8;z(B"
+同種の文字列とは以下のものを指します。
+・半角カタカナとsekka-stop-chars に指定した文字を除く半角文字
+・漢字を除く全角文字"
   (interactive "P")
   (sekka-mode-internal arg nil))
 
-;; $BA4%P%C%U%!$G(B sekka-mode $B$rJQ99$9$k(B
+;; 全バッファで sekka-mode を変更する
 (defun global-sekka-mode (&optional arg)
-  "Sekka mode $B$O(B $B%m!<%^;z$+$iD>@\4A;zJQ49$9$k$?$a$N(B minor mode $B$G$9!#(B
-$B0z?t$K@5?t$r;XDj$7$?>l9g$O!"(BSekka mode $B$rM-8z$K$7$^$9!#(B
+  "Sekka mode は ローマ字から直接漢字変換するための minor mode です。
+引数に正数を指定した場合は、Sekka mode を有効にします。
 
-Sekka $B%b!<%I$,M-8z$K$J$C$F$$$k>l9g(B \\<sekka-mode-map>\\[sekka-rK-trans] $B$G(B
-point $B$+$i9TF,J}8~$KF1<o$NJ8;zNs$,B3$/4V$r4A;zJQ49$7$^$9!#(B
+Sekka モードが有効になっている場合 \\<sekka-mode-map>\\[sekka-rK-trans] で
+point から行頭方向に同種の文字列が続く間を漢字変換します。
 
-$BF1<o$NJ8;zNs$H$O0J2<$N$b$N$r;X$7$^$9!#(B
-$B!&H>3Q%+%?%+%J$H(Bsekka-stop-chars $B$K;XDj$7$?J8;z$r=|$/H>3QJ8;z(B
-$B!&4A;z$r=|$/A43QJ8;z(B"
+同種の文字列とは以下のものを指します。
+・半角カタカナとsekka-stop-chars に指定した文字を除く半角文字
+・漢字を除く全角文字"
   (interactive "P")
   (sekka-mode-internal arg t))
 
 
-;; sekka-mode $B$rJQ99$9$k6&DL4X?t(B
+;; sekka-mode を変更する共通関数
 (defun sekka-mode-internal (arg global)
   (or (local-variable-p 'sekka-mode (current-buffer))
       (make-local-variable 'sekka-mode))
@@ -1036,7 +1036,7 @@ point $B$+$i9TF,J}8~$KF1<o$NJ8;zNs$,B3$/4V$r4A;zJQ49$7$^$9!#(B
   (when sekka-mode (run-hooks 'sekka-mode-hook)))
 
 
-;; buffer local $B$J(B sekka-mode $B$r:o=|$9$k4X?t(B
+;; buffer local な sekka-mode を削除する関数
 (defun sekka-kill-sekka-mode ()
   (let ((buf (buffer-list)))
     (while buf
@@ -1045,9 +1045,9 @@ point $B$+$i9TF,J}8~$KF1<o$NJ8;zNs$,B3$/4V$r4A;zJQ49$7$^$9!#(B
       (setq buf (cdr buf)))))
 
 
-;; $BA4%P%C%U%!$G(B sekka-input-mode $B$rJQ99$9$k(B
+;; 全バッファで sekka-input-mode を変更する
 (defun sekka-input-mode (&optional arg)
-  "$BF~NO%b!<%IJQ99(B"
+  "入力モード変更"
   (interactive "P")
   (if (< 0 arg)
       (progn
@@ -1057,7 +1057,7 @@ point $B$+$i9TF,J}8~$KF1<o$NJ8;zNs$,B3$/4V$r4A;zJQ49$7$^$9!#(B
     (setq sekka-mode nil)))
 
 
-;; input method $BBP1~(B
+;; input method 対応
 (defun sekka-activate (&rest arg)
   (sekka-input-mode 1))
 (defun sekka-inactivate (&rest arg)
@@ -1067,7 +1067,7 @@ point $B$+$i9TF,J}8~$KF1<o$NJ8;zNs$,B3$/4V$r4A;zJQ49$7$^$9!#(B
  "" "Roman -> Kanji&Kana"
  nil)
 
-;; input-method $B$H$7$FEPO?$9$k!#(B
+;; input-method として登録する。
 (set-language-info "Japanese" 'input-method "japanese-sekka")
 (setq default-input-method "japanese-sekka")
 
@@ -1075,7 +1075,7 @@ point $B$+$i9TF,J}8~$KF1<o$NJ8;zNs$,B3$/4V$r4A;zJQ49$7$^$9!#(B
   " 0.8.0 " ;;VERSION;;
   )
 (defun sekka-version (&optional arg)
-  "$BF~NO%b!<%IJQ99(B"
+  "入力モード変更"
   (interactive "P")
   (message sekka-version))
 
