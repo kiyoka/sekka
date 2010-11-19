@@ -136,29 +136,41 @@
 	  (insert string)))))
 
 
-;;; sekka basic output
-(defvar sekka-fence-start nil)          ; fence 始端位置
-(defvar sekka-fence-end nil)            ; fence 終端位置
+;;; 候補選択モード用
+(defvar sekka-history-stack '())        ; 過去に変換した、場所と変換候補の状態を保存しておくスタック
+;; データ構造は以下の通り。
+;; alistのlistとなる。 alistのキーは、sekka-* というバッファローカル変数のバックアップとなる)
+;; 新しいものは先頭に追加され、検索も先頭から行われる。即ち、古い情報も残るがいつかstackのlimitを超えるとあふれて捨てられる。
+;;(
+;; (
+;;  (bufname           . "*scratch*")
+;;  (markers           . '(#<marker at 192 in *scratch*> . #<marker at 194 in *scratch*>))
+;;  (cand-cur          . 0)
+;;  (cand-cur-backup   . 0)
+;;  (cand-len          . 0)
+;;  (last-fix          . 0)
+;;  (henkan-kouho-list . '())
+;;  ))
+(defvar sekka-fence-start nil)          ; fence 始端marker
+(defvar sekka-fence-end nil)            ; fence 終端marker
 (defvar sekka-henkan-separeter " ")     ; fence mode separeter
-(defvar sekka-henkan-buffer nil)        ; 表示用バッファ
-(defvar sekka-henkan-length nil)        ; 表示用バッファ長
-(defvar sekka-henkan-revpos nil)        ; 文節始端位置
-(defvar sekka-henkan-revlen nil)        ; 文節長
-
-;;; sekka basic local
 (defvar sekka-cand-cur 0)               ; カレント候補番号
 (defvar sekka-cand-cur-backup 0)        ; カレント候補番号(UNDO用に退避する変数)
 (defvar sekka-cand-len nil)             ; 候補数
 (defvar sekka-last-fix "")              ; 最後に確定した文字列
 (defvar sekka-henkan-kouho-list nil)    ; 変換結果リスト(サーバから帰ってきたデータそのもの)
-(defvar sekka-markers '())              ; 文節開始、終了位置のpair: 次のような形式 ( 1 . 2 )
+
+
+;; その他
+(defvar sekka-markers '())              ; 単語の開始、終了位置のpair。 次のような形式で保存する ( 1 . 2 )
 (defvar sekka-timer    nil)             ; インターバルタイマー型変数
 (defvar sekka-timer-rest  0)            ; あと何回呼出されたら、インターバルタイマの呼出を止めるか
 (defvar sekka-last-lineno 0)            ; 最後に変換を実行した行番号
 (defvar sekka-guide-overlay   nil)      ; リアルタイムガイドに使用するオーバーレイ
 (defvar sekka-last-request-time 0)      ; Sekkaサーバーにリクエストした最後の時刻(単位は秒)
 (defvar sekka-guide-lastquery  "")      ; Sekkaサーバーにリクエストした最後のクエリ文字列
-(defvar sekka-guide-lastresult '())     ; Sekkaサーバーにリクエストした最後のクエリ文字列
+(defvar sekka-guide-lastresult '())     ; Sekkaサーバーにリクエストした最後のクエリ結果
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -177,6 +189,16 @@
     ("\C-h" . "")
     ))
 (defvar sticky-map (make-sparse-keymap))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ユーティリティ
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun sekka-assoc-ref (key alist fallback)
+  (let ((entry (assoc key alist)))
+    (if entry
+	(cdr entry)
+      fallback)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -582,7 +604,8 @@
       (sekka-kakutei-request key tango)))
   (setq sekka-select-mode nil)
   (run-hooks 'sekka-select-mode-end-hook)
-  (sekka-select-update-display))
+  (sekka-select-update-display)
+  (sekka-history-push))
 
 
 ;; 候補選択をキャンセルする
@@ -593,7 +616,9 @@
   (setq sekka-cand-cur sekka-cand-cur-backup)
   (setq sekka-select-mode nil)
   (run-hooks 'sekka-select-mode-end-hook)
-  (sekka-select-update-display))
+  (sekka-select-update-display)
+  (sekka-history-push))
+
 
 ;; 前の候補に進める
 (defun sekka-select-prev ()
@@ -672,6 +697,91 @@
   (interactive)
   (sekka-select-by-type 'z))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 変換履歴操作関数
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun sekka-history-gc ()
+  ;; sekka-history-stack中の無効なマークを持つエントリを削除する
+  (let ((temp-list '()))
+    (mapcar
+     (lambda (alist)
+       (let ((markers  (sekka-assoc-ref 'markers  alist nil)))
+	 (if (= (marker-position (car markers))
+		(marker-position (cdr markers)))
+	     ;; マークの開始と終了が同じ位置を指している場合はそのマークは既に無効(選択モードの再表示で一旦マーク周辺の文字列が削除された)
+	     (progn
+	       (set-marker (car markers) nil)
+	       (set-marker (cdr markers) nil))
+	   (push alist temp-list))))
+     sekka-history-stack)
+    (setq sekka-history-stack temp-list)))
+
+
+;;確定ヒストリから、指定_pointに変換済の単語が埋まっているかどうか調べる
+;; t か nil を返す。
+;; また、_load に 真を渡すと、見付かった情報で、現在の変換候補変数にロードしてくれる。
+(defun sekka-history-search (_point _load)
+  (sekka-history-gc)
+
+  ;; カーソル位置に有効な変換済エントリがあるか探す
+  (let ((found nil))
+    (mapcar
+     (lambda (alist)
+       (let* ((markers  (sekka-assoc-ref 'markers  alist nil))
+	      (last-fix (sekka-assoc-ref 'last-fix alist ""))
+	      (end      (marker-position (cdr markers)))
+	      (start    (- end (length last-fix)))
+	      (bufname  (sekka-assoc-ref 'bufname alist ""))
+	      (pickup   (if (string-equal bufname (buffer-name))
+			    (buffer-substring start end)
+			  "")))
+	 (sekka-debug-print (format "sekka-history-search  bufname:   [%s]\n"   bufname))
+	 (sekka-debug-print (format "sekka-history-search  (point):   %d\n"     (point)))
+	 (sekka-debug-print (format "sekka-history-search    range:   %d-%d\n"  start end))
+	 (sekka-debug-print (format "sekka-history-search last-fix:   [%s]\n"   last-fix))
+	 (sekka-debug-print (format "sekka-history-search   pickup:   [%s]\n"   pickup))
+	 (when (and
+		(string-equal bufname (buffer-name))
+		(<  start   (point))
+		(<= (point) end)
+		(string-equal last-fix pickup))
+	   (setq found t)
+	   (when _load
+	     (setq sekka-markers            (cons
+					     (move-marker (car markers) start)
+					     (cdr markers)))
+	     (setq sekka-cand-cur           (sekka-assoc-ref 'cand-cur alist           nil))
+	     (setq sekka-cand-cur-backup    (sekka-assoc-ref 'cand-cur-backup alist    nil))
+	     (setq sekka-cand-len           (sekka-assoc-ref 'cand-len alist           nil))
+	     (setq sekka-last-fix           pickup)
+	     (setq sekka-henkan-kouho-list  (sekka-assoc-ref 'henkan-kouho-list alist  nil))
+
+	     (sekka-debug-print (format "sekka-history-search : sekka-markers         : %S\n" sekka-markers))
+	     (sekka-debug-print (format "sekka-history-search : sekka-cand-cur        : %S\n" sekka-cand-cur))
+	     (sekka-debug-print (format "sekka-history-search : sekka-cand-cur-backup : %S\n" sekka-cand-cur-backup))
+	     (sekka-debug-print (format "sekka-history-search : sekka-cand-len %S\n" sekka-cand-len))
+	     (sekka-debug-print (format "sekka-history-search : sekka-last-fix %S\n" sekka-last-fix))
+	     (sekka-debug-print (format "sekka-history-search : sekka-henkan-kouho-list %S\n" sekka-henkan-kouho-list)))
+	   )))
+     sekka-history-stack)
+    found))
+
+(defun sekka-history-push ()
+  (push 
+   `(
+     (markers            . ,sekka-markers            )
+     (cand-cur           . ,sekka-cand-cur           )
+     (cand-cur-backup    . ,sekka-cand-cur-backup    )
+     (cand-len           . ,sekka-cand-len           )
+     (last-fix           . ,sekka-last-fix           )
+     (henkan-kouho-list  . ,sekka-henkan-kouho-list  )
+     (bufname            . ,(buffer-name)))
+   sekka-history-stack)
+  (sekka-debug-print (format "sekka-history-push result: %S\n" sekka-history-stack)))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ローマ字漢字変換関数
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -712,7 +822,7 @@
 
   (cond
    (sekka-select-mode
-    ;; 変換中に呼出されたら、候補選択モードに移行する。
+    ;; 候補選択モード中に呼出されたら、keymapから再度候補選択モードに入る
     (funcall (lookup-key sekka-select-mode-map sekka-rK-trans-key)))
 
 
@@ -744,22 +854,16 @@
     
       ;; カーソル直前が 全角で漢字以外 だったら候補選択モードに移行する。
       ;; また、最後に確定した文字列と同じかどうかも確認する。
-      (when (and
-	     (<= (marker-position sekka-fence-start) (point))
-	     (<= (point) (marker-position sekka-fence-end))
-	     (string-equal sekka-last-fix (buffer-substring 
-					   (marker-position sekka-fence-start)
-					   (marker-position sekka-fence-end))))
-	;; 直前に変換したfenceの範囲に入っていたら、変換モードに移行する。
+      (when (sekka-history-search (point) t)
+	;; 直前に変換したfenceの範囲に入っていたら、候補選択モードに移行する。
 	(setq sekka-select-mode t)
 	(sekka-debug-print "henkan mode ON\n")
-
+	
 	;; 表示状態を候補選択モードに切替える。
 	(sekka-display-function
-	 (marker-position sekka-fence-start)
-	 (marker-position sekka-fence-end)
-	 t))))
-     )))
+	 (marker-position (car sekka-markers))
+	 (marker-position (cdr sekka-markers))
+	 t)))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
