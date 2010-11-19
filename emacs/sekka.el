@@ -81,6 +81,11 @@
 		 (const :tag "AZIK"   "azik"  ))
   :group 'sekka)
 
+(defcustom sekka-history-stack-limit 20
+  "再度候補選択できる単語と場所を最大何件記憶するか"
+  :type  'integer
+  :group 'sekka)
+
 
 (defface sekka-guide-face
   '((((class color) (background light)) (:background "#E0E0E0" :foreground "#F03030")))
@@ -708,15 +713,26 @@
     (mapcar
      (lambda (alist)
        (let ((markers  (sekka-assoc-ref 'markers  alist nil)))
-	 (if (= (marker-position (car markers))
-		(marker-position (cdr markers)))
-	     ;; マークの開始と終了が同じ位置を指している場合はそのマークは既に無効(選択モードの再表示で一旦マーク周辺の文字列が削除された)
-	     (progn
-	       (set-marker (car markers) nil)
-	       (set-marker (cdr markers) nil))
-	   (push alist temp-list))))
+	 (when (and (marker-position (car markers))	 ;; 存在するバッファを指しているか
+		    (marker-position (cdr markers)))
+	   (if (= (marker-position (car markers))
+		  (marker-position (cdr markers)))
+	       ;; マークの開始と終了が同じ位置を指している場合は、
+	       ;; そのマークは既に無効(選択モードの再表示で一旦マーク周辺の文字列が削除された)
+	       (progn
+		 (set-marker (car markers) nil)
+		 (set-marker (cdr markers) nil))
+	     (push alist temp-list)))))
      sekka-history-stack)
-    (setq sekka-history-stack temp-list)))
+
+    ;; temp-list から limit 件数だけコピーする
+    (setq sekka-history-stack '())
+    (mapcar
+     (lambda (alist)
+       (when (< (length sekka-history-stack)
+		sekka-history-stack-limit)
+	 (push alist sekka-history-stack)))
+     (reverse temp-list))))
 
 
 ;;確定ヒストリから、指定_pointに変換済の単語が埋まっているかどうか調べる
