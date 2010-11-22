@@ -86,10 +86,10 @@
   :type  'integer
   :group 'sekka)
 
-(defcustom sekka-keyboard "jis"
-  "キーボードの指定: 使っているキーボードはJIS(日本語JISキーボード)、US(英語US106キーボード)のどちらか"
-  :type '(choice (const :tag "JIS-keyboard"   "jis")
-		 (const :tag "US106-keyboard" "us"))
+(defcustom sekka-keyboard-type "jp"
+  "キーボードの指定: 使っているキーボードはjp(日本語106キーボード)、en(英語usキーボード)のどちらか"
+  :type '(choice (const :tag "jp106-keyboard"       "jp")
+		 (const :tag "english(us)-keyboard" "en"))
   :group 'sekka)
 
 
@@ -319,7 +319,7 @@
 ;;
 (defun sekka-henkan-request (yomi limit)
   (sekka-debug-print (format "henkan-input :[%s]\n"  yomi))
-  (when (string-equal "us" sekka-keyboard)
+  (when (string-equal "en" sekka-keyboard-type)
     (setq yomi (replace-regexp-in-string ":" "+" yomi)))
   (sekka-debug-print (format "henkan-send  :[%s]\n"  yomi))
 
