@@ -185,11 +185,11 @@
     ("うぇ"      "we")
     ("を"        "wo")
     ("うぉ"      "wso")
-    ;; normal roman                                ---AZIK---
+    ;; normal roman                                ---AZIK---                                                   ---AZIK(US)---
     ("ん"        "nn" "n"                             "q")
     ("でぃ"      "dyi" "dhi"                          "dci")
     ("でぅ"      "dyu" "dhu"                          "dcu")
-    ("ー"        "-" "^"                              ":")
+    ("ー"        "-" "^"                              ":"                                                          "'")
 
     ;; Ruby romkanからの不足分追加
     ("てぃ"     "thi"                                 "tgi")

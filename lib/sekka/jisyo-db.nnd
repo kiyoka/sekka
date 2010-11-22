@@ -77,7 +77,7 @@
   (define (create-hash keylist)
     (for-each
      (lambda (k)
-       (when (rxmatch #/^[a-zA-Z^>-@`;+:\-]+$/ k)
+       (when (rxmatch #/^[a-zA-Z^>-@`;+:'\-]+$/ k)
          (let1 sliced (sekka-downcase (k.slice 0 2))
            (when (= 2 sliced.size)
              (if (rxmatch #/[A-Z`+]$/ k)

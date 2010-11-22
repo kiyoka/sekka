@@ -86,6 +86,12 @@
   :type  'integer
   :group 'sekka)
 
+(defcustom sekka-keyboard "jis"
+  "キーボードの指定: 使っているキーボードはJIS(日本語JISキーボード)、US(英語US106キーボード)のどちらか"
+  :type '(choice (const :tag "JIS-keyboard"   "jis")
+		 (const :tag "US106-keyboard" "us"))
+  :group 'sekka)
+
 
 (defface sekka-guide-face
   '((((class color) (background light)) (:background "#E0E0E0" :foreground "#F03030")))
@@ -104,7 +110,7 @@
 
 
 ;; ローマ字漢字変換時、対象とするローマ字を設定するための変数
-(defvar sekka-skip-chars "a-zA-Z0-9.,@:`\\-+!\\[\\]?;")
+(defvar sekka-skip-chars "a-zA-Z0-9.,@:`\\-+!\\[\\]?;'")
 (defvar sekka-mode-map        (make-sparse-keymap)         "漢字変換トグルマップ")
 (defvar sekka-select-mode-map (make-sparse-keymap)         "候補選択モードマップ")
 (defvar sekka-rK-trans-key "\C-j"
@@ -313,9 +319,10 @@
 ;;
 (defun sekka-henkan-request (yomi limit)
   (sekka-debug-print (format "henkan-input :[%s]\n"  yomi))
+  (when (string-equal "us" sekka-keyboard)
+    (setq yomi (replace-regexp-in-string ":" "+" yomi)))
+  (sekka-debug-print (format "henkan-send  :[%s]\n"  yomi))
 
-  ;;(message "Requesting to sekka server...")
-  
   (let (
 	(result (sekka-rest-request "henkan" `((yomi   . ,yomi)
 					       (limit  . ,limit)

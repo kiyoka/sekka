@@ -77,7 +77,7 @@
        '("tt" "@" ";" "ltu")
        (hash-table-get sekka-kana->roman-hash-short "っ" #f))
 (test* "kana->roman 5"
-       '("-" "^" ":")
+       '("-" "^" ":" "'")
        (hash-table-get sekka-kana->roman-hash-short "ー" #f))
 
 ;;-------------------------------------------------------------------
@@ -315,7 +315,7 @@
        (gen-hiragana->roman-list "とうきょう"))
 
 (test* "hiragana -> roman-list4"
-       '("ko-hi-" "ko-hi:" "ko-hi^" "ko:hi-" "ko:hi:" "ko:hi^" "ko^hi-" "ko^hi:" "ko^hi^")
+       '("ko'hi'" "ko'hi-" "ko'hi:" "ko'hi^" "ko-hi'" "ko-hi-" "ko-hi:" "ko-hi^" "ko:hi'" "ko:hi-" "ko:hi:" "ko:hi^" "ko^hi'" "ko^hi-" "ko^hi:" "ko^hi^")
        (gen-hiragana->roman-list "こーひー"))
 
 (test* "hiragana -> roman-list5"
