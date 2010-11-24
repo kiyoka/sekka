@@ -82,6 +82,7 @@ task :check do
   files << "./test/util.nnd"
   files << "./test/alphabet-lib.nnd"
   files << "./test/roman-lib.nnd"
+  files << "./test/azik-verification.nnd"
   files << "./test/jisyo.nnd" 
   files << "./test/henkan-main.nnd  tokyocabinet"
   files << "./test/approximate-bench.nnd  memcache"

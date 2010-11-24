@@ -65,13 +65,13 @@
 (test-section "kana->roman conversion hash (short)")
 
 (test* "kana->roman 1"
-       '("fu" "hu")
+       '("fu" "hu" "hf")
        (hash-table-get sekka-kana->roman-hash-short "ふ" #f))
 (test* "kana->roman 2"
-       '("la")
+       '("la" "xxa")
        (hash-table-get sekka-kana->roman-hash-short "ぁ" #f))
 (test* "kana->roman 3"
-       '("chi" "tyi" "ti")
+       '("chi" "tyi" "ti" "ci")
        (hash-table-get sekka-kana->roman-hash-short "ち" #f))
 (test* "kana->roman 4"
        '("tt" "@" ";" "ltu")
@@ -259,8 +259,8 @@
 
 (let1 hira-list
     (hash-table-keys sekka-kana->roman-hash-long)
-  (test* "kana->roman table length"        402 (length hira-list))
-  (test* "kana->roman key duplicate check" 402 (length (uniq (sort hira-list)))))
+  (test* "kana->roman table length"        523 (length hira-list))
+  (test* "kana->roman key duplicate check" 523 (length (uniq (sort hira-list)))))
 
 (test* "hiragana -> roman-pattern0"
        '(
@@ -283,8 +283,9 @@
          (("kz" "kn") ("ji" "zi") ("hd") ("kz" "kn")))
        (gen-hiragana->roman-pattens "かんじへんかん"))
 (test* "hiragana -> roman-pattern4"
-       '((("shi" "si") ("ze") ("nn" "n" "q") ("ge") ("nn" "n" "q") ("go") ("sho" "syo" "xo") ("ri"))
-         (("shi" "si") ("zd") ("gd") ("go") ("sho" "syo" "xo") ("ri")))
+       '(
+         (("shi" "si" "xi") ("ze" "zf") ("nn" "n" "q") ("ge") ("nn" "n" "q") ("go") ("sho" "syo" "xo") ("ri"))
+         (("shi" "si" "xi") ("zd") ("gd") ("go") ("sho" "syo" "xo") ("ri")))
        (gen-hiragana->roman-pattens "しぜんげんごしょり"))
 (test* "hiragana -> roman-pattern5"
        '((("ka") ("kko" "@ko" ";ko")))
@@ -307,11 +308,11 @@
        (gen-hiragana->roman-list "かんじ"))
 
 (test* "hiragana -> roman-list2"
-       '("nishiyama" "nisiyama")
+       '("nishiyama" "nisiyama" "nixiyama")
        (gen-hiragana->roman-list "にしやま"))
 
 (test* "hiragana -> roman-list3"
-       '("toukgou" "toukyou" "tpkgou" "tpkyou")
+       '("toukgou" "toukgowhu" "toukyou" "toukyowhu" "towhukgou" "towhukgowhu" "towhukyou" "towhukyowhu" "tpkgp" "tpkyp")
        (gen-hiragana->roman-list "とうきょう"))
 
 (test* "hiragana -> roman-list4"
@@ -319,7 +320,7 @@
        (gen-hiragana->roman-list "こーひー"))
 
 (test* "hiragana -> roman-list5"
-       '("tsumiki" "tumiki")
+       '("tsumikf" "tsumiki" "tumikf" "tumiki")
        (gen-hiragana->roman-list "つみき"))
 
 

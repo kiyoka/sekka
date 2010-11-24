@@ -49,7 +49,7 @@
        '(("ai" . "Cあい") ("あい" . "/愛/哀/相/挨"))
        (expand-okuri-nashi-entry "あい" "/愛/哀/相/挨"))
 (test* "expanding SKK(1) entry to SEKKA(n) entry. (送りなし2)"
-       '(("un" . "Cうん") ("unn" . "Cうん") ("uq" . "Cうん") ("うん" . "/云/運/雲"))
+       '(("un" . "Cうん") ("unn" . "Cうん") ("uq" . "Cうん") ("whun" . "Cうん") ("whunn" . "Cうん") ("whuq" . "Cうん") ("うん" . "/云/運/雲"))
        (expand-okuri-nashi-entry "うん" "/云/運/雲"))
 (test* "expanding SKK(1) entry to SEKKA(n) entry. (送りなし3)"
        '(("ko'hi'" . "Cこーひー") ("ko'hi-" . "Cこーひー") ("ko'hi:" . "Cこーひー") ("ko'hi^" . "Cこーひー") ("ko-hi'" . "Cこーひー") ("ko-hi-" . "Cこーひー") ("ko-hi:" . "Cこーひー") ("ko-hi^" . "Cこーひー") ("ko:hi'" . "Cこーひー") ("ko:hi-" . "Cこーひー") ("ko:hi:" . "Cこーひー") ("ko:hi^" . "Cこーひー") ("ko^hi'" . "Cこーひー") ("ko^hi-" . "Cこーひー") ("ko^hi:" . "Cこーひー") ("ko^hi^" . "Cこーひー") ("こーひー" . "/コーヒー"))
@@ -59,10 +59,9 @@
        (expand-okuri-nashi-entry "かっこ" "/確固/括弧/各個/各戸/確乎/羯鼓;雅楽の打楽器/格好/『/』;二重鉤括弧"))
 (test* "expanding SKK(1) entry to SEKKA(n) entry. (送りなし5)"
        #f
-       (expand-okuri-nashi-entry "すたんでぃんぐおべーしょん" "/スタンディングオベーション"))
-
+       (expand-okuri-nashi-entry "きゃっしゅふろーけいさんしょ" "/キャッシュフロー計算書;財務諸表の1つ"))
 (test* "expanding SKK(1) entry to SEKKA(n) entry. (送りあり1)"
-       '(("shiroI" . "Cしろi") ("siroI" . "Cしろi") ("しろi" . "/白"))
+       '(("shiroI" . "Cしろi") ("siroI" . "Cしろi") ("xiroI" . "Cしろi") ("しろi" . "/白"))
        (expand-okuri-ari-entry   "しろ" "i" "/白"))
 (test* "expanding SKK(1) entry to SEKKA(n) entry. (送りあり2)"
        '(("kaK" . "Cかk") ("かk" . "/書/掛/欠/架/駆/懸"))
@@ -87,7 +86,7 @@
                  )
                "\n"))
   (test* "convert SKK file to SEKKA jisyo file. (1)"
-         '("shiroI Cしろi" "siroI Cしろi" "しろi /白" "ai Cあい" "あい /愛/哀/相/挨" "Greek /Α/Β/Γ/Δ/Ε/Ζ/Η/Θ/Ι/Κ/Λ/Μ/Ν/Ξ/Ο/Π/Ρ/Σ/Τ/Υ/Φ/Χ/Ψ/Ω" ">an C>あん" ">ann C>あん" ">aq C>あん" ">あん /案" ">yasuI C>やすi" ">やすi /易" "! /！/感嘆符" "? /？" "ko'hi' Cこーひー" "ko'hi- Cこーひー" "ko'hi: Cこーひー" "ko'hi^ Cこーひー" "ko-hi' Cこーひー" "ko-hi- Cこーひー" "ko-hi: Cこーひー" "ko-hi^ Cこーひー" "ko:hi' Cこーひー" "ko:hi- Cこーひー" "ko:hi: Cこーひー" "ko:hi^ Cこーひー" "ko^hi' Cこーひー" "ko^hi- Cこーひー" "ko^hi: Cこーひー" "ko^hi^ Cこーひー" "こーひー /コーヒー")
+         '("shiroI Cしろi" "siroI Cしろi" "xiroI Cしろi" "しろi /白" "ai Cあい" "あい /愛/哀/相/挨" "Greek /Α/Β/Γ/Δ/Ε/Ζ/Η/Θ/Ι/Κ/Λ/Μ/Ν/Ξ/Ο/Π/Ρ/Σ/Τ/Υ/Φ/Χ/Ψ/Ω" ">an C>あん" ">ann C>あん" ">aq C>あん" ">あん /案" ">yasuI C>やすi" ">やすi /易" "! /！/感嘆符" "? /？" "ko'hi' Cこーひー" "ko'hi- Cこーひー" "ko'hi: Cこーひー" "ko'hi^ Cこーひー" "ko-hi' Cこーひー" "ko-hi- Cこーひー" "ko-hi: Cこーひー" "ko-hi^ Cこーひー" "ko:hi' Cこーひー" "ko:hi- Cこーひー" "ko:hi: Cこーひー" "ko:hi^ Cこーひー" "ko^hi' Cこーひー" "ko^hi- Cこーひー" "ko^hi: Cこーひー" "ko^hi^ Cこーひー" "こーひー /コーヒー")
          (convert-skk-jisyo-f _input)))
 
 ;;===================================================================
