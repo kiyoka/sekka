@@ -1,14 +1,14 @@
 ;;-*- mode: nendo; syntax: scheme -*-
 ;;; skk-azik-table.nnd - DDSKKのskk-azik.elからの抜粋
-;;;
+
 ;;; Copyright (C) 2002 ONODA Arata <onoto@ma.nma.ne.jp>
 
 ;;; Author: ONODA Arata <onoto@ma.nma.ne.jp>
 ;;; Maintainer: SKK Development Team <skk@ring.gr.jp>
-;;; Version: $Id: skk-azik.el,v 1.7 2007/10/19 13:29:41 skk-cvs Exp $
+;;; Version: $Id: skk-azik.el,v 1.8 2010/09/10 14:23:31 skk-cvs Exp $
 ;;; Keywords: japanese, mule, input method
 ;;; Created: Jan. 9, 2002
-;;; Last Modified: $Date: 2007/10/19 13:29:41 $
+;;; Last Modified: $Date: 2010/09/10 14:23:31 $
 
 ;;; This file is part of Daredevil SKK.
 
@@ -27,7 +27,7 @@
 ;;; the Free Software Foundation Inc., 51 Franklin Street, Fifth Floor,
 ;;; Boston, MA 02110-1301, USA.
 
-;; following data was imported from   Version: $Id: skk-azik.el,v 1.7 2007/10/19 13:29:41 skk-cvs Exp $
+;; following data was imported from  DDSKK 14.1.90
 
 ;;(defvar skk-azik-additional-rom-kana-rule-list
 (define skk-azik-additional-rom-kana-rule-list
