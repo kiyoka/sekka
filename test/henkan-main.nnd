@@ -37,7 +37,7 @@
 (use nendo.test)
 (use sekka.convert-jisyo)
 (use sekka.henkan)
-(load "./test/common.nnd")
+(load "test/common.nnd")
 
 (define dbtype   (string->symbol (first *argv*)))
 (define userid   "dummy")
