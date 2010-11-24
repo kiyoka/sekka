@@ -92,6 +92,8 @@ task :check do
   sh "cat test.record" 
 end
 
+task :alljisyo => [ :jisyoS, :jisyoL, :loadS, :loadL ]
+
 task :jisyoS do
   sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.L.201008           >  ./data/SEKKA-JISYO.SMALL"
   sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.SMALL"
