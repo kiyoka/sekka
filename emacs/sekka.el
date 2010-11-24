@@ -81,7 +81,7 @@
 		 (const :tag "AZIK"   "azik"  ))
   :group 'sekka)
 
-(defcustom sekka-history-stack-limit 20
+(defcustom sekka-history-stack-limit 100
   "再度候補選択できる単語と場所を最大何件記憶するか"
   :type  'integer
   :group 'sekka)
