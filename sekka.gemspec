@@ -5,18 +5,20 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sekka}
-  s.version = "0.8.0"
+  s.version = "0.8.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kiyoka Nishiyama"]
-  s.date = %q{2010-11-16}
+  s.date = %q{2010-11-25}
   s.description = %q{Sekka is a SKK like input method. Sekka server provides REST Based API. If you are SKK user, let's try it.}
   s.email = %q{kiyoka@sumibi.org}
-  s.executables = [".gitignore", "sekka-jisyo", "sekka-server"]
+  s.executables = ["sekka-jisyo", "sekka-server"]
   s.extra_rdoc_files = [
     "README"
   ]
   s.files = [
+    "COPYING",
+    "README",
     "bin/sekka-jisyo",
     "bin/sekka-server",
     "emacs/http-cookies.el",
@@ -36,10 +38,12 @@ Gem::Specification.new do |s|
     "lib/sekkaserver.rb",
     "test/alphabet-lib.nnd",
     "test/approximate-bench.nnd",
+    "test/azik-verification.nnd",
     "test/common.nnd",
     "test/henkan-main.nnd",
     "test/jisyo.nnd",
     "test/roman-lib.nnd",
+    "test/skk-azik-table.nnd",
     "test/util.nnd"
   ]
   s.homepage = %q{http://github.com/kiyoka/sekka}

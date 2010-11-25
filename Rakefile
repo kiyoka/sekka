@@ -19,11 +19,14 @@ begin
     gemspec.email = "kiyoka@sumibi.org"
     gemspec.homepage = "http://github.com/kiyoka/sekka"
     gemspec.authors = ["Kiyoka Nishiyama"]
-    gemspec.files = FileList['lib/*.rb',
+    gemspec.files = FileList['README',
+                             'COPYING',
+                             'lib/*.rb',
                              'lib/*.ru',
                              'lib/sekka/*.rb',
                              'lib/sekka/*.nnd',
-                             'bin/sekka-*',
+                             'bin/sekka-jisyo',
+                             'bin/sekka-server',
                              'test/*.nnd',
                              'test/*.rb',
                              'emacs/*.el'].to_a
