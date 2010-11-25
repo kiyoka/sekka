@@ -116,8 +116,8 @@ task :loadL do
 end
 
 task :dump do
-  sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.SMALL > ./data/SEKKA-JISYO.SMALL.dump"
-  sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.LARGE > ./data/SEKKA-JISYO.LARGE.dump"
+  sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.SMALL.tch > ./data/SEKKA-JISYO.SMALL.dump"
+  sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.LARGE.tch > ./data/SEKKA-JISYO.LARGE.dump"
 end
 
 task :rackup do
