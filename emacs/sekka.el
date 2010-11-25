@@ -347,7 +347,7 @@
 (defun sekka-kakutei-request (key tango)
   (sekka-debug-print (format "henkan-kakutei key=[%s] tango=[%s]\n" key tango))
   
-  (message "Requesting to sekka server...")
+  ;;(message "Requesting to sekka server...")
   
   (let ((result (sekka-rest-request "kakutei" `(
 						(key   . ,key)
@@ -383,7 +383,7 @@
 ;; ユーザー語彙をサーバーから全て削除する
 ;;
 (defun sekka-flush-userdict (&optional arg)
-  "ユーザー辞書をサーバーに再度アップロードする"
+  "サーバー上のユーザー辞書を全て削除する"
   (interactive "P")
   (message "Requesting to sekka server...")
   (let ((result (sekka-rest-request "flush" `())))
