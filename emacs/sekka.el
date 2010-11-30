@@ -369,14 +369,17 @@
 ;; ユーザー語彙をサーバーに登録する。
 ;;
 (defun sekka-register-userdict-internal ()
-  (let ((str (sekka-get-jisyo-str "~/.sekka-jisyo")))
-    (when str
-      (message "Requesting to sekka server...")
-      (sekka-debug-print (format "register [%s]\n" str))
-      (let ((result (sekka-rest-request "register" `((dict . ,str)))))
-	(sekka-debug-print (format "register-result:%S\n" result))
-	(message result)
-	t))))
+  (let* ((str      (sekka-get-jisyo-str "~/.sekka-jisyo"))
+	 (str-lst  (sekka-divide-into-few-line str)))
+    (mapcar
+     (lambda (x)
+       ;;(message "Requesting to sekka server...")
+       (sekka-debug-print (format "register [%s]\n" x))
+       (let ((result (sekka-rest-request "register" `((dict . ,x)))))
+	 (sekka-debug-print (format "register-result:%S\n" result))
+	 (message result)))
+     str-lst)
+    t))
 
 
 ;;
@@ -392,29 +395,62 @@
     t))
 
 
+;; str = "line1 \n line2 \n line3 \n line4 \n line5 \n "
+;; result:
+;;     '(
+;;        ("line1 \n line2 \n line3 \n ")
+;;        ("line4 \n line5 \n ")
+;;      )
+;;
+;; for-testing:
+;;   (sekka-divide-into-few-line 
+;;     "line1 \n line2 \n line3 \n line4 \n line5 \n line6 \n line7 \n line8 \n line9 \n line10 \n  line11 \n  line12 \n")
+;;
+(defun sekka-divide-into-few-line (str)
+  (if (stringp str)
+      (let ((str-lst (split-string str "\n"))
+	    (result '()))
+	(while (< 0 (length str-lst))
+	  (push 
+	   (concat
+	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" 
+	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" 
+
+	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" 
+	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" 
+
+	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" 
+	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" 
+
+	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" 
+	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" 
+
+	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" 
+	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" 
+	    )
+	   result))
+	(reverse result))
+    '()))
+
 (defun sekka-get-jisyo-str (file &optional nomsg)
-  "FILE を開いて SKK 辞書バッファを作り、バッファを返す。
-オプション引数の NOMSG を指定するとファイル読み込みの際のメッセージを表示しな
-い。"
+  "FILE を開いて Sekka辞書バッファを作り、バッファ1行1文字列のリストで返す"
   (when file
     (let* ((file (or (car-safe file)
 		     file))
 	   (file (expand-file-name file)))
       (if (not (file-exists-p file))
 	  (progn
-	    (message (format "SKK 辞書 %s が存在しません..." file))
+	    (message (format "Sekka辞書 %s が存在しません..." file))
 	    nil)
 	(let ((str "")
 	      (buf-name (file-name-nondirectory file)))
 	  (save-excursion
-	    (find-file-read-only file)
+	    (find-file-read-only-other-window file)
 	    (setq str (with-current-buffer (get-buffer buf-name)
 			(buffer-substring-no-properties (point-min) (point-max))))
-	    (message (format "SKK 辞書 %s を開いています...完了！" (file-name-nondirectory file)))
+	    (message (format "Sekka辞書 %s を開いています...完了！" (file-name-nondirectory file)))
 	    (kill-buffer-if-not-modified (get-buffer buf-name)))
 	  str)))))
-
-;;(sekka-get-jisyo-str "~/.sekka-jisyo")
 
 
 ;; ポータブル文字列置換( EmacsとXEmacsの両方で動く )

@@ -39,6 +39,7 @@ require 'nendo'
 require 'eventmachine'
 require 'syslog'
 require 'uri'
+require 'date'
 require './lib/sekkaconfig'
 require './lib/sekka/sekkaversion'
 
@@ -67,15 +68,22 @@ module SekkaServer
         @thread = Thread.new do
           Thread.pass
           EventMachine::run {
+            d = DateTime.now
             EventMachine::PeriodicTimer.new( 5 ) do
               while not @queue.empty?
-                @queue.pop { |word| 
+                @queue.pop { |word|
                   arr = word.split( /[ ]+/ )
                   userid   = arr[0]
-                  dictline = arr[1] + " " + arr[2]
+                  dictline = 
+                  if 3 == arr.size 
+                    arr[1] + " " + arr[2]
+                  else
+                    ";; comment"
+                  end
                   registered = @core.registerUserJisyo(userid, @kvs, dictline)
                   if registered
-                    puts "Info: added to dict                      userid[" + userid + "] dictline[" + dictline + "]"
+                    str = d.strftime( "%D %X" )
+                    puts "Info: [" + str + "]added to dict                      userid[" + userid + "] dictline[" + dictline + "]"
                     @core.flushCacheServer( @cachesv )
                   else
                     puts "Info: ignored (already added or comment) userid[" + userid + "] dictline[" + dictline + "]"
@@ -110,14 +118,14 @@ module SekkaServer
                when "/register"
                  dict    = URI.decode( req.params['dict'].force_encoding( "UTF-8" ) ).split( "\n" )
                  dict.each { |x| @queue.push( userid + " " + x ) }
-                 sprintf( "register request successful (%s) words", dict.size )
+                 sprintf( "sekka-server:register request (%s) words added, current-queue-size (%s)", dict.size, @queue.size )
                when "/flush"
                  @core.flushCacheServer( @cachesv )
                  n = @core.flushUserJisyo( userid, @kvs )
                  printf( "info : flush [%s] user's dict %d entries.", userid, n )
-                 sprintf( "flush request successful. flush (%d) entries.", n )
+                 sprintf( "sekka-server:flush request successful. flush (%d) entries.", n )
                else
-                 sprintf( "unknown path name. [%s]", req.path )
+                 sprintf( "sekka-server:unknown path name. [%s]", req.path )
                end
              else
                "no message."
