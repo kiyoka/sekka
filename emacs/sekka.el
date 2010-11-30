@@ -55,11 +55,6 @@
   :type  'string
   :group 'sekka)
 
-(defcustom sekka-use-viper nil
-  "*Non-nil であれば、VIPER に対応する"
-  :type 'boolean
-  :group 'sekka)
-
 (defcustom sekka-realtime-guide-running-seconds 30
   "リアルタイムガイド表示の継続時間(秒数)・ゼロでガイド表示機能が無効になる"
   :type  'integer
@@ -1034,36 +1029,6 @@
 	     (point))
 	  result)))))
 
-  
-;;;
-;;; with viper
-;;;
-;; code from skk-viper.el
-(defun sekka-viper-normalize-map ()
-  (let ((other-buffer
-	 (if (featurep 'xemacs)
-	     (local-variable-p 'minor-mode-map-alist nil t)
-	   (local-variable-if-set-p 'minor-mode-map-alist))))
-    ;; for current buffer and buffers to be created in the future.
-    ;; substantially the same job as viper-harness-minor-mode does.
-    (viper-normalize-minor-mode-map-alist)
-    (setq-default minor-mode-map-alist minor-mode-map-alist)
-    (when other-buffer
-      ;; for buffers which are already created and have
-      ;; the minor-mode-map-alist localized by Viper.
-      (dolist (buf (buffer-list))
-	(with-current-buffer buf
-	  (unless (assq 'sekka-mode minor-mode-map-alist)
-	    (setq minor-mode-map-alist
-		  (append (list (cons 'sekka-mode sekka-mode-map)
-				(cons 'sekka-select-mode
-				      sekka-select-mode-map))
-			  minor-mode-map-alist)))
-	  (viper-normalize-minor-mode-map-alist))))))
-
-(defun sekka-viper-init-function ()
-  (sekka-viper-normalize-map)
-  (remove-hook 'sekka-mode-hook 'sekka-viper-init-function))
 
 (defun sekka-sticky-shift-init-function ()
   ;; sticky-shift
@@ -1192,8 +1157,6 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
 	(sekka-kill-sekka-mode))
     (setq sekka-mode (if (null arg) (not sekka-mode)
 			(> (prefix-numeric-value arg) 0))))
-  (when sekka-use-viper
-    (add-hook 'sekka-mode-hook 'sekka-viper-init-function))
   (when sekka-sticky-shift
     (add-hook 'sekka-mode-hook 'sekka-sticky-shift-init-function))
   (when sekka-mode (run-hooks 'sekka-mode-hook)))
