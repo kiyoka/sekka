@@ -27,6 +27,7 @@ begin
                              'lib/sekka/*.nnd',
                              'bin/sekka-jisyo',
                              'bin/sekka-server',
+                             'bin/sekka-benchmark',
                              'test/*.nnd',
                              'test/*.rb',
                              'emacs/*.el'].to_a

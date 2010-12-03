@@ -40,27 +40,40 @@ core.evalStr( <<";;END-OF-SCRIPT" )
 ;;;  
 ;;;  $Id: 
 ;;;
+(require "benchmark")
+(define (bench-block title block)
+  (print  "----------------------------------------")
+  (printf "[%s]\n" title )
+  (.puts Benchmark::CAPTION)
+  (.puts (Benchmark.measure
+          (&block ()
+            (block)))))
 
 
 (define (gen-curl-command-string keyword limit)
-  (sprintf "curl --silent --show-error  --max-time 10  --insecure  --header 'Content-Type: application/x-www-form-urlencoded' http://localhost:12929/henkan --data 'format=sexp' --data 'yomi=%s' --data 'limit=%d' --data 'method=normal' --data 'userid=%s' > /dev/null" keyword limit "benchuser"))
+  (let ((host "localhost"))
+    (sprintf "curl --silent --show-error  --max-time 10  --insecure  --header 'Content-Type: application/x-www-form-urlencoded' http://%s:12929/henkan --data 'format=sexp' --data 'yomi=%s' --data 'limit=%d' --data 'method=normal' --data 'userid=%s' > /dev/null" host keyword limit "benchuser")))
 
 
-(define (henkan-with-same-keyword)
-  (let1 cmd (gen-curl-command-string "Kanji" 1)
-        (for-each
-         (lambda (x)
-           (display ".")
-           (.system cmd))
-         (range 100))
-        (newline)))
+(define (henkan-with-same-keyword limit)
+  (let1 cmd (gen-curl-command-string "Kanji" limit)
+    (bench-block
+     (sprintf "Samekey limit=%d  (all request hits memcached)" limit)
+     (lambda ()
+       (for-each
+        (lambda (x)
+          (display ".")
+          (.system cmd))
+        (range 100))
+       (newline)))))
 
 
 (define (display-help)
   (print "Usage : ")
-  (print "  sekka-benchmark samekey  .... henkan 1000 times with same keyword [kanji] "))
+  (print "  sekka-benchmark samekey0  .... henkan 100 times with same keyword [kanji] (kouho unlimited)")
+  (print "  sekka-benchmark samekey1  .... henkan 100 times with same keyword [kanji] (kouho limited by 1)"))
 
-
+            
 (define (main argv)
   (cond
    ((= 0 (length argv))
@@ -68,8 +81,10 @@ core.evalStr( <<";;END-OF-SCRIPT" )
    (else
     (let1 command (string->symbol (first argv))
       (cond
-       ((eq? 'samekey command)
-        (henkan-with-same-keyword))
+       ((eq? 'samekey0 command)
+        (henkan-with-same-keyword 0))
+       ((eq? 'samekey1 command)
+        (henkan-with-same-keyword 1))
        (else
         (errorf "Error: no such command [%s] \n" command )))))))
 
