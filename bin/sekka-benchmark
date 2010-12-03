@@ -110,9 +110,9 @@ core.evalStr( <<";;END-OF-SCRIPT" )
 
 (define (display-help)
   (print "Usage : ")
-  (print "  sekka-benchmark samekey0  .... henkan 100 times with same keyword  [kanji] (kouho unlimited)")
-  (print "  sekka-benchmark samekey1  .... henkan 100 times with same keyword  [kanji] (kouho limited by 1)")
-  (print "  sekka-benchmark uniqkey0  .... henkan 100 times with uniq keywords [kanji] (kouho unlimited)"))
+  (print "  sekka-benchmark samekey0  .... henkan 100 times with same keyword  [Kanji]        (get N candidate)")
+  (print "  sekka-benchmark samekey1  .... henkan 100 times with same keyword  [Kanji]        (get 1 candidate)")
+  (print "  sekka-benchmark uniqkey0  .... henkan 100 times with uniq keywords [Aimai Ao ...] (get N candidate)"))
 
             
 (define (main argv)
