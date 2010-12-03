@@ -41,6 +41,7 @@ class Kvs
     case dbtype
     when :tokyocabinet
       @db = TokyoCabinet::HDB.new( )
+      @db.setxmsiz(512 * 1024 * 1024)  # expand memory
     when :memcache
       # do nothing
     else
