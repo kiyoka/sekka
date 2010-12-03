@@ -67,11 +67,52 @@ core.evalStr( <<";;END-OF-SCRIPT" )
         (range 100))
        (newline)))))
 
+(define (henkan-with-uniq-keyword limit)
+  (let1 keylist
+      '(
+        "Aimai" "Ao" "Aoumigame" "Akakeitou"
+        "Bangou" "Bankai" "Banninkyoutuu" "Banouyaku"
+        "Chance"
+        "Dangai"   "Daiichihousoku" "Daigakuin" "Daidokoro"
+        "Enjin"    "Eigyoukatudou"  "Eiseikidou" "Ebisu"
+        "Fantaji-"
+        "Goukaku"  "Gakkou" "Gaikoku" "Gakki" "Gamenkeishiki" "Gamensaizu" "Garapagosu" "Gankyuu"
+        "Hinode" "Hi-ro-" "Hiroshima" "Hinjaku" "Hakari" "Ha-monika" "Haru"
+        "Iwanami" "Ikimono" "Inarizushi" "Iso" "Ishi" "Ima" "Imi" "Inu"
+        "Jinkoumondai" "Jinkoueisei" "Jiken" "Jiko" "Jirou" "Jakouneko"
+        "Kousei" "Kaisen" "Kiso" "Kisokenkyuu" "Kisoshikkan" "Kenkyuukikan" "Kenkyuunaiyou"
+        "London" "Lonly" "Load" "Love" "Listen" "List"
+        "Manyousyuu"
+        "Nouzei" "Namae" "Nakanaka" "Nihongohenkan" "Nihongo" "Nishi"
+        "Okinawa" "Oudanhodou"
+        "Painappuru" "Pa-sonaru"
+        "Quizu"
+        "Rokuon" "Rasenkaidan" "Risoku" "Risuku"
+        "Sougouhyouka" "Sougou" "Son" "Soro"
+        "Tuuka" "Tuika" "Taiyou" "Taiou" "Tamatama"
+        "Umi" "Ushiro" "Utagoe" "Uso" "Ukai"
+        "World" "Watagashi" "Watarigani"
+        "Yamagataken" "Yamai" "Yu-suke-su"
+        "Zonbi" "Zou" "Zanshin" "Zannen"
+        )
+
+    (bench-block
+     (sprintf "Uniqkey limit=%d" limit)
+     (lambda ()
+       (for-each
+        (lambda (x)
+          (let1 cmd (gen-curl-command-string x limit)
+            (display ".")
+            (.system cmd)))
+        keylist)
+       (newline)))))
+
 
 (define (display-help)
   (print "Usage : ")
-  (print "  sekka-benchmark samekey0  .... henkan 100 times with same keyword [kanji] (kouho unlimited)")
-  (print "  sekka-benchmark samekey1  .... henkan 100 times with same keyword [kanji] (kouho limited by 1)"))
+  (print "  sekka-benchmark samekey0  .... henkan 100 times with same keyword  [kanji] (kouho unlimited)")
+  (print "  sekka-benchmark samekey1  .... henkan 100 times with same keyword  [kanji] (kouho limited by 1)")
+  (print "  sekka-benchmark uniqkey0  .... henkan 100 times with uniq keywords [kanji] (kouho unlimited)"))
 
             
 (define (main argv)
@@ -85,6 +126,8 @@ core.evalStr( <<";;END-OF-SCRIPT" )
         (henkan-with-same-keyword 0))
        ((eq? 'samekey1 command)
         (henkan-with-same-keyword 1))
+       ((eq? 'uniqkey0 command)
+        (henkan-with-uniq-keyword 0))
        (else
         (errorf "Error: no such command [%s] \n" command )))))))
 
