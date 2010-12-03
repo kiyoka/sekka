@@ -52,7 +52,7 @@ core.evalStr( <<";;END-OF-SCRIPT" )
 
 (define (gen-curl-command-string keyword limit)
   (let ((host "localhost"))
-    (sprintf "curl --silent --show-error  --max-time 10  --insecure  --header 'Content-Type: application/x-www-form-urlencoded' http://%s:12929/henkan --data 'format=sexp' --data 'yomi=%s' --data 'limit=%d' --data 'method=normal' --data 'userid=%s' > /dev/null" host keyword limit "benchuser")))
+    (sprintf "curl --silent --show-error  --max-time 60  --insecure  --header 'Content-Type: application/x-www-form-urlencoded' http://%s:12929/henkan --data 'format=sexp' --data 'yomi=%s' --data 'limit=%d' --data 'method=normal' --data 'userid=%s' > /dev/null" host keyword limit "benchuser")))
 
 
 (define (henkan-with-same-keyword limit)
