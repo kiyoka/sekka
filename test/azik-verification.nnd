@@ -36,7 +36,7 @@
 (use nendo.test)
 (use sekka.roman-lib)
 (test-start "roman-lib")
-(load "test/skk-azik-table")
+(load "./test/skk-azik-table.nnd")
 
 ;;===================================================================
 (define skk-azik-roman->kana-alist
