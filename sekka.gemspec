@@ -5,20 +5,21 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sekka}
-  s.version = "0.8.1"
+  s.version = "0.8.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kiyoka Nishiyama"]
-  s.date = %q{2010-11-29}
+  s.date = %q{2010-12-06}
   s.description = %q{Sekka is a SKK like input method. Sekka server provides REST Based API. If you are SKK user, let's try it.}
   s.email = %q{kiyoka@sumibi.org}
-  s.executables = ["sekka-jisyo", "sekka-server"]
+  s.executables = ["sekka-benchmark", "sekka-jisyo", "sekka-server"]
   s.extra_rdoc_files = [
     "README"
   ]
   s.files = [
     "COPYING",
     "README",
+    "bin/sekka-benchmark",
     "bin/sekka-jisyo",
     "bin/sekka-server",
     "emacs/http-cookies.el",
