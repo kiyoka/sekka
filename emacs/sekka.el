@@ -25,6 +25,7 @@
 ;;; Code:
 (require 'cl)
 (require 'http-get)
+(require 'popup)
 
 ;;; 
 ;;;
@@ -271,9 +272,18 @@
 ;;    )
 (defun sekka-rest-request (func-name arg-alist)
   (if sekka-psudo-server
-      ;; クライアント単体で仮想的にサーバーに接続しているようにしてテストするモード
-      "((\"変換\" nil \"へんかん\" j 0) (\"変化\" nil \"へんか\" j 1) (\"ヘンカン\" nil \"へんかん\" k 2) (\"へんかん\" nil \"へんかん\" h 3))"
-      ;;"((\"変換\" nil \"へんかん\" j 0) (\"変化\" nil \"へんか\" j 1))"
+      (cond
+       ((string-equal func-name "henkan")
+	;; クライアント単体で仮想的にサーバーに接続しているようにしてテストするモード
+	;; result of /henkan
+	"((\"変換\" nil \"へんかん\" j 0) (\"変化\" nil \"へんか\" j 1) (\"ヘンカン\" nil \"へんかん\" k 2) (\"へんかん\" nil \"へんかん\" h 3))")
+       ((string-equal func-name "googleime")
+	;; result of /google_ime
+	;;  1) よんもじじゅくご
+	"(\"四文字熟語\" \"４文字熟語\" \"4文字熟語\" \"よんもじじゅくご\" \"ヨンモジジュクゴ\")"
+	;;  2) しょかいきどう
+	;;    "(\"初回起動\", \"諸快気堂\", \"諸開基堂\", \"しょかいきどう\", \"ショカイキドウ\")"
+	))
     ;; 実際のサーバに接続する
     (let ((command
 	   (concat
@@ -350,6 +360,28 @@
     (sekka-debug-print (format "kakutei-result:%S\n" result))
     (message result)
     t))
+
+
+;;
+;; GoogleImeAPIリクエストをサーバーに送る
+;;
+(defun sekka-googleime-request (yomi)
+  (sekka-debug-print (format "googleime yomi=[%s]\n" yomi))
+  
+  ;;(message "Requesting to sekka server...")
+  
+  (let ((result (sekka-rest-request "googleime" `(
+						  (yomi  . ,yomi)))))
+    (sekka-debug-print (format "googleime-result:%S\n" result))
+    (progn
+      (message nil)
+      (condition-case err
+	  (read result)
+	(end-of-file
+	 (progn
+	   (message "Parse error for parsing result of Sekka Server.")
+	   '()))))))
+
 
 ;;
 ;; ユーザー語彙をサーバーに再度登録する。
@@ -612,6 +644,7 @@
 (define-key sekka-select-mode-map "\C-k"                   'sekka-select-katakana)
 (define-key sekka-select-mode-map "\C-l"                   'sekka-select-hankaku)
 (define-key sekka-select-mode-map "\C-e"                   'sekka-select-zenkaku)
+(define-key sekka-select-mode-map "\C-r"                   'sekka-register-new-word)
 
 
 
@@ -739,6 +772,31 @@
   "半角候補に強制的に切りかえる"
   (interactive)
   (sekka-select-by-type 'z))
+
+
+;; 登録語リストからユーザーに該当単語を選択してもらう
+(defun sekka-register-new-word-sub (yomi lst)
+  (let* ((etc "(自分で入力する)")
+	 (result (popup-menu*
+		  (append lst `(,etc)))))
+    (let ((tango
+	   (if (string-equal result etc)
+	       (read-string (format "%sに対応する単語:" yomi))
+	     result)))
+      (message tango))))
+
+
+(defun sekka-register-new-word ()
+  "変換候補のよみ(平仮名)に対応する新しい単語を追加する"
+  (interactive)
+  (sekka-select-by-type 'h)
+  (let* ((kouho      (nth sekka-cand-cur sekka-henkan-kouho-list))
+	 (yomi       (car kouho)))
+    (sekka-debug-print (format "sekka-register-new-word: yomi=%s" yomi))
+    (sekka-select-cancel)
+    (sekka-register-new-word-sub
+     yomi
+     (sekka-googleime-request yomi))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
