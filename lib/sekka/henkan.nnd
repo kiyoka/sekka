@@ -34,10 +34,12 @@
 ;;;  $Id: 
 ;;;
 (use srfi-1)
+(use rfc.json)
 (use sekka.util)
 (use sekka.convert-jisyo)
 (use sekka.jisyo-db)
 (use sekka.alphabet-lib)
+(use sekka.google-ime)
 (require "sekka/approximatesearch")
 
 
@@ -477,3 +479,9 @@
 ;; Export to Ruby world
 (export-to-ruby registerUserJisyo)
 
+
+;; ユーザー定義語彙の登録処理
+(define (googleIme keyword)
+  (request-google-ime keyword #f))
+;; Export to Ruby world
+(export-to-ruby googleIme)

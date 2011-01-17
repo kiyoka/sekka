@@ -276,7 +276,8 @@
        ((string-equal func-name "henkan")
 	;; クライアント単体で仮想的にサーバーに接続しているようにしてテストするモード
 	;; result of /henkan
-	"((\"変換\" nil \"へんかん\" j 0) (\"変化\" nil \"へんか\" j 1) (\"ヘンカン\" nil \"へんかん\" k 2) (\"へんかん\" nil \"へんかん\" h 3))")
+	;;"((\"変換\" nil \"へんかん\" j 0) (\"変化\" nil \"へんか\" j 1) (\"ヘンカン\" nil \"へんかん\" k 2) (\"へんかん\" nil \"へんかん\" h 3))")
+	"((\"ヨンモジジュクゴ\" nil \"よんもじじゅくご\" k 0) (\"よんもじじゅくご\" nil \"よんもじじゅくご\" h 1))")
        ((string-equal func-name "googleime")
 	;; result of /google_ime
 	;;  1) よんもじじゅくご
@@ -793,7 +794,7 @@
   (let* ((kouho      (nth sekka-cand-cur sekka-henkan-kouho-list))
 	 (yomi       (car kouho)))
     (sekka-debug-print (format "sekka-register-new-word: yomi=%s" yomi))
-    (sekka-select-cancel)
+    (sekka-select-kakutei)
     (sekka-register-new-word-sub
      yomi
      (sekka-googleime-request yomi))))

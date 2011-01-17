@@ -124,6 +124,10 @@ module SekkaServer
                  n = @core.flushUserJisyo( userid, @kvs )
                  printf( "info : flush [%s] user's dict %d entries.", userid, n )
                  sprintf( "sekka-server:flush request successful. flush (%d) entries.", n )
+               when "/googleime"
+                 _yomi   = URI.decode( req.params[  'yomi'].force_encoding("UTF-8") )
+                 printf( "info : google-ime request [%s]\n", _yomi )
+                 @core.writeToString( @core.googleIme( _yomi ))
                else
                  sprintf( "sekka-server:unknown path name. [%s]", req.path )
                end
