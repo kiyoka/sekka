@@ -1,0 +1,91 @@
+;;-*- mode: nendo; syntax: scheme -*-
+;;;
+;;; google-ime.nnd - google-ime部のテスト
+;;;  
+;;;   Copyright (c) 2010  Kiyoka Nishiyama  <kiyoka@sumibi.org>
+;;;   
+;;;   Redistribution and use in source and binary forms, with or without
+;;;   modification, are permitted provided that the following conditions
+;;;   are met:
+;;;   
+;;;   1. Redistributions of source code must retain the above copyright
+;;;      notice, this list of conditions and the following disclaimer.
+;;;  
+;;;   2. Redistributions in binary form must reproduce the above copyright
+;;;      notice, this list of conditions and the following disclaimer in the
+;;;      documentation and/or other materials provided with the distribution.
+;;;  
+;;;   3. Neither the name of the authors nor the names of its contributors
+;;;      may be used to endorse or promote products derived from this
+;;;      software without specific prior written permission.
+;;;  
+;;;   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+;;;   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+;;;   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+;;;   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+;;;   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+;;;   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+;;;   TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+;;;   PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+;;;   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+;;;   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+;;;   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+;;;  
+;;;  $Id: 
+;;;
+(use nendo.test)
+(use sekka.google-ime)
+
+(test-start "google-ime")
+
+;;===================================================================
+
+;;-------------------------------------------------------------------
+(test-section "conversion json => sekka result")
+
+(test* "no split (1)"
+       '("四文字熟語" "４文字熟語" "4文字熟語" "よんもじじゅくご" "ヨンモジジュクゴ")
+       (json-string->sekka-result-string
+        "[[\"よんもじじゅくご\", [\"四文字熟語\", \"４文字熟語\", \"4文字熟語\", \"よんもじじゅくご\", \"ヨンモジジュクゴ\"]]]"))
+
+(test* "no split (2)"
+       '()
+       (json-string->sekka-result-string
+        "[]"))
+
+(test* "split (1)"
+       '("曖昧文字列" "あいまいもじれつ" "アイマイモジレツ")
+       (json-string->sekka-result-string
+        "[[\"あいまい\", [\"曖昧\", \"あいまい\", \"アイマイ\", \"愛舞\", \"愛麻衣\"]],  [\"もじれつ\", [\"文字列\", \"もじれつ\", \"モジレツ\"]]]"))
+
+(test* "split (2)"
+       '("竹内関数" "竹内関数" "竹内巻数" "武内函数" "タケウチ韓嵩")
+       (json-string->sekka-result-string
+        "[[\"たけうち\", [\"竹内\", \"竹内\", \"竹内\", \"武内\", \"タケウチ\"]], [\"かんすう\", [\"関数\", \"関数\", \"巻数\", \"函数\", \"韓嵩\"]]]"))
+
+;;-------------------------------------------------------------------
+(test-section "request to google-ime")
+
+(test* "request online (1)"
+       '("四文字熟語" "４文字熟語" "4文字熟語" "よんもじじゅくご" "ヨンモジジュクゴ")
+       (request-google-ime "よんもじじゅくご" #f))
+
+(test* "request online (2)"
+       '("初回起動" "諸快気堂" "諸開基堂" "しょかいきどう" "ショカイキドウ")
+       (request-google-ime "しょかいきどう" #f))
+
+(test* "request online (3)"
+       '("イクメン" "イクメン")
+       (request-google-ime "イクメン" #f)) ;; 2010年流行語より
+
+(test* "request online (4)"
+       '("マジパネェ" "マジぱねぇ" "まじパネェ" "まじぱねぇ" "マジパネェ")
+       (request-google-ime "まじぱねぇ" #f)) ;; 若者言葉
+
+(test* "request offline (1)"
+       '()
+       (request-google-ime "しょかいきどう" #t))
+
+
+;;===================================================================
+(test-end)

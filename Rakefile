@@ -88,6 +88,7 @@ task :check do
   files << "./test/roman-lib.nnd"
   files << "./test/azik-verification.nnd"
   files << "./test/jisyo.nnd" 
+  files << "./test/google-ime.nnd"
   files << "./test/henkan-main.nnd  tokyocabinet"
   files << "./test/approximate-bench.nnd  memcache"
   files.each {|filename|
