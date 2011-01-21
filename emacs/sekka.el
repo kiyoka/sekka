@@ -88,6 +88,11 @@
 		 (const :tag "english(us)-keyboard" "en"))
   :group 'sekka)
 
+(defcustom sekka-jisyo-filename "~/.sekka-jisyo"
+  "sekka-jisyoのファイル名を指定する"
+  :type  'string
+  :group 'sekka)
+
 
 (defface sekka-guide-face
   '((((class color) (background light)) (:background "#E0E0E0" :foreground "#F03030")))
@@ -395,9 +400,9 @@
   
 ;;
 ;; ユーザー語彙をサーバーに登録する。
-;;
-(defun sekka-register-userdict-internal ()
-  (let* ((str      (sekka-get-jisyo-str "~/.sekka-jisyo"))
+;;   only-first が t の時は、1ブロック目だけを登録する
+(defun sekka-register-userdict-internal (&optional only-first)
+  (let* ((str      (sekka-get-jisyo-str sekka-jisyo-filename))
 	 (str-lst  (sekka-divide-into-few-line str)))
     (mapcar
      (lambda (x)
@@ -406,7 +411,9 @@
        (let ((result (sekka-rest-request "register" `((dict . ,x)))))
 	 (sekka-debug-print (format "register-result:%S\n" result))
 	 (message result)))
-     str-lst)
+     (if only-first
+	 (list (car str-lst))
+       str-lst))
     t))
 
 
@@ -460,25 +467,54 @@
 	(reverse result))
     '()))
 
+
+(defun sekka-file-existp (file)
+  "FILE が存在するかどうかをチェックする。 t か nil で結果を返す"
+  (let* ((file (or (car-safe file)
+		   file))
+	 (file (expand-file-name file)))
+    (file-exists-p file)))
+
+
 (defun sekka-get-jisyo-str (file &optional nomsg)
   "FILE を開いて Sekka辞書バッファを作り、バッファ1行1文字列のリストで返す"
-  (when file
-    (let* ((file (or (car-safe file)
-		     file))
-	   (file (expand-file-name file)))
-      (if (not (file-exists-p file))
-	  (progn
-	    (message (format "Sekka辞書 %s が存在しません..." file))
-	    nil)
-	(let ((str "")
-	      (buf-name (file-name-nondirectory file)))
-	  (save-excursion
-	    (find-file-read-only file)
-	    (setq str (with-current-buffer (get-buffer buf-name)
-			(buffer-substring-no-properties (point-min) (point-max))))
-	    (message (format "Sekka辞書 %s を開いています...完了！" (file-name-nondirectory file)))
-	    (kill-buffer-if-not-modified (get-buffer buf-name)))
-	  str)))))
+  (if (sekka-file-existp file)
+      (let ((str "")
+	    (buf-name (file-name-nondirectory file)))
+	(save-excursion
+	  (find-file-read-only file)
+	  (setq str (with-current-buffer (get-buffer buf-name)
+		      (buffer-substring-no-properties (point-min) (point-max))))
+	  (message (format "Sekka辞書 %s を開いています...完了！" (file-name-nondirectory file)))
+	  (kill-buffer-if-not-modified (get-buffer buf-name)))
+	str)
+    (message (format "Sekka辞書 %s が存在しません..." file))))
+
+
+(defun sekka-add-new-word-to-jisyo (file yomi tango)
+  "FILE Sekka辞書ファイルと見做し、ファイルの先頭に「読み」と「単語」のペアを書き込む
+登録が成功したかどうかを t or nil で返す"
+  (if (sekka-file-existp file)
+      (let ((buf-name (file-name-nondirectory file))
+	    (added nil))
+	(save-excursion
+	  (find-file file)
+	  (with-current-buffer (get-buffer buf-name)
+	    (goto-char (point-min))
+	    (let ((newstr (format "%s /%s/" yomi tango)))
+	      (when (not (search-forward newstr nil t))
+		(insert newstr)
+		(insert "\n")
+		(save-buffer)
+		(setq added t)
+		)))
+	  (kill-buffer-if-not-modified (get-buffer buf-name)))
+	added)
+    (progn
+      (message (format "Sekka辞書 %s が存在しません..." file))
+      nil)))
+    
+	     
 
 
 ;; ポータブル文字列置換( EmacsとXEmacsの両方で動く )
@@ -645,7 +681,7 @@
 (define-key sekka-select-mode-map "\C-k"                   'sekka-select-katakana)
 (define-key sekka-select-mode-map "\C-l"                   'sekka-select-hankaku)
 (define-key sekka-select-mode-map "\C-e"                   'sekka-select-zenkaku)
-(define-key sekka-select-mode-map "\C-r"                   'sekka-register-new-word)
+(define-key sekka-select-mode-map "\C-r"                   'sekka-add-new-word)
 
 
 
@@ -731,23 +767,27 @@
     (car (reverse lst))))
     
 ;; 指定された type の候補に強制的に切りかえる
+;; 切りかえが成功したかどうかを t or nil で返す。
 (defun sekka-select-by-type ( _type )
   (let ((kouho (sekka-select-by-type-filter _type)))
     (if (null kouho)
-	(cond
-	 ((eq _type 'j)
-	  (message "Sekka: 漢字の候補はありません。"))
-	 ((eq _type 'h)
-	  (message "Sekka: ひらがなの候補はありません。"))
-	 ((eq _type 'k)
-	  (message "Sekka: カタカナの候補はありません。"))
-	 ((eq _type 'l)
-	  (message "Sekka: 半角の候補はありません。"))
-	 ((eq _type 'z)
-	  (message "Sekka: 全角の候補はありません。")))
+	(begin
+	 (cond
+	  ((eq _type 'j)
+	   (message "Sekka: 漢字の候補はありません。"))
+	  ((eq _type 'h)
+	   (message "Sekka: ひらがなの候補はありません。"))
+	  ((eq _type 'k)
+	   (message "Sekka: カタカナの候補はありません。"))
+	  ((eq _type 'l)
+	   (message "Sekka: 半角の候補はありません。"))
+	  ((eq _type 'z)
+	   (message "Sekka: 全角の候補はありません。"))
+	  nil))
       (let ((num   (nth sekka-id-index kouho)))
 	(setq sekka-cand-cur num)
-	(sekka-select-update-display)))))
+	(sekka-select-update-display)
+	t))))
 
 (defun sekka-select-kanji ()
   "漢字候補に強制的に切りかえる"
@@ -775,29 +815,54 @@
   (sekka-select-by-type 'z))
 
 
+(defun sekka-replace-kakutei-word (b e insert-word)
+  ;; UNDO抑制開始
+  (sekka-disable-undo)
+    
+  (delete-region b e)
+  
+  (insert insert-word)
+  (message (format "replaced by new word [%s]" insert-word))
+  ;; UNDO再開
+  (sekka-enable-undo))
+
+
 ;; 登録語リストからユーザーに該当単語を選択してもらう
-(defun sekka-register-new-word-sub (yomi lst)
+(defun sekka-add-new-word-sub (yomi lst)
   (let* ((etc "(自分で入力する)")
 	 (result (popup-menu*
-		  (append lst `(,etc)))))
+		  (append lst `(,etc))))
+	 (b (copy-marker sekka-fence-start))
+	 (e (copy-marker sekka-fence-end)))
     (let ((tango
 	   (if (string-equal result etc)
-	       (read-string (format "%sに対応する単語:" yomi))
+	       (save-current-buffer
+		 (read-string (format "%sに対応する単語:" yomi)))
 	     result)))
-      (message tango))))
+      ;; 新しい単語で確定する
+      (sekka-replace-kakutei-word (marker-position b)
+				  (marker-position e)
+				  tango)
+      ;; .sekka-jisyoとサーバーの両方に新しい単語を登録する
+      (let ((added (sekka-add-new-word-to-jisyo sekka-jisyo-filename yomi tango)))
+	(if added
+	    (progn
+	      (sekka-register-userdict-internal t)
+	      (message (format "Sekka辞書 %s に単語(%s /%s/)を保存しました！" sekka-jisyo-filename yomi tango)))
+	  (message (format "Sekka辞書 %s に 単語(%s /%s/)を追加しませんでした(登録済)" sekka-jisyo-filename yomi tango)))))))
 
 
-(defun sekka-register-new-word ()
+(defun sekka-add-new-word ()
   "変換候補のよみ(平仮名)に対応する新しい単語を追加する"
   (interactive)
-  (sekka-select-by-type 'h)
-  (let* ((kouho      (nth sekka-cand-cur sekka-henkan-kouho-list))
-	 (yomi       (car kouho)))
-    (sekka-debug-print (format "sekka-register-new-word: yomi=%s" yomi))
-    (sekka-select-kakutei)
-    (sekka-register-new-word-sub
-     yomi
-     (sekka-googleime-request yomi))))
+  (when (sekka-select-by-type 'h)
+    (let* ((kouho      (nth sekka-cand-cur sekka-henkan-kouho-list))
+	   (yomi       (car kouho)))
+      (sekka-debug-print (format "sekka-register-new-word: yomi=%s" yomi))
+      (sekka-select-kakutei)
+      (sekka-add-new-word-sub
+       yomi
+       (sekka-googleime-request yomi)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
