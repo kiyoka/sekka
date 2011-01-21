@@ -93,6 +93,12 @@
   :type  'string
   :group 'sekka)
 
+(defcustom sekka-use-googleime t
+  "変換結果に、漢字のエントリ type=j が含まれていなかったら、自動的にGoogleIMEを APIを使って変換候補を取得する。
+non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
+  :type  'boolean
+  :group 'sekka)
+
 
 (defface sekka-guide-face
   '((((class color) (background light)) (:background "#E0E0E0" :foreground "#F03030")))
@@ -766,6 +772,10 @@
     (sekka-debug-print (format "filterd-lst = %S" (reverse lst)))
     (car (reverse lst))))
     
+;; 指定された type の候補が存在するか調べる
+(defun sekka-include-typep ( _type )
+  (not (null (sekka-select-by-type-filter _type))))
+
 ;; 指定された type の候補に強制的に切りかえる
 ;; 切りかえが成功したかどうかを t or nil で返す。
 (defun sekka-select-by-type ( _type )
@@ -1025,8 +1035,10 @@
 	      (setq e (point))
 	      (sekka-display-function b e nil)
 	      (sekka-select-kakutei)
+	      (when sekka-use-googleime
+		(when (not (sekka-include-typep 'j))
+		  (sekka-add-new-word)))
 	      )))))
-
      
      ((sekka-kanji (preceding-char))
     
@@ -1322,7 +1334,7 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
 (setq default-input-method "japanese-sekka")
 
 (defconst sekka-version
-  "0.8.2" ;;SEKKA-VERSION
+  "0.8.3" ;;SEKKA-VERSION
   )
 (defun sekka-version (&optional arg)
   "入力モード変更"
