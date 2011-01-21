@@ -56,6 +56,7 @@ module SekkaServer
       (@kvs,@cachesv) = @core.openSekkaJisyo( SekkaServer::Config.dictSource,
                                               SekkaServer::Config.cacheSource )
       @queue = EM::Queue.new
+      @mutex = Mutex.new
 
       STDERR.puts(   "----- Sekka Server Started -----" )
       STDERR.printf( "  version  :  %s\n", SekkaVersion.version            )
@@ -69,28 +70,60 @@ module SekkaServer
           Thread.pass
           EventMachine::run {
             d = DateTime.now
-            EventMachine::PeriodicTimer.new( 5 ) do
-              while not @queue.empty?
+            EventMachine::PeriodicTimer.new( 1 ) do
+              if not @queue.empty?
                 @queue.pop { |word|
                   arr = word.split( /[ ]+/ )
-                  userid   = arr[0]
-                  dictline = 
-                  if 3 == arr.size 
-                    arr[1] + " " + arr[2]
-                  else
-                    ";; comment"
-                  end
-                  registered = @core.registerUserJisyo(userid, @kvs, dictline)
-                  if registered
-                    str = d.strftime( "%D %X" )
-                    puts "Info: [" + str + "]added to dict                      userid[" + userid + "] dictline[" + dictline + "]"
-                    @core.flushCacheServer( @cachesv )
-                  else
-                    puts "Info: ignored (already added or comment) userid[" + userid + "] dictline[" + dictline + "]"
-                  end
+                  command   = arr[0]
+                  userid    = arr[1]
+                  @mutex.synchronize {
+                    case command
+                    when 'r' # register
+                      dictline = 
+                        if 4 == arr.size 
+                          arr[2] + " " + arr[3]
+                        else
+                          ";; comment"
+                        end
+                      puts "Info: processing [register(" + dictline + ")] batch command..."
+                      begin
+                        registered = @core.registerUserJisyo(userid, @kvs, dictline)
+                      rescue RuntimeError
+                        "Info: missing [register(" + dictline + ")] batch command..."
+                      end
+                      if registered
+                        str = d.strftime( "%D %X" )
+                        puts "Info: [" + str + "]added to dict                      userid[" + userid + "] dictline[" + dictline + "]"
+                        @core.flushCacheServer( @cachesv )
+                      else
+                        puts "Info: ignored (already added or comment) userid[" + userid + "] dictline[" + dictline + "]"
+                      end
+                    when 'k' # kakutei
+                      arr = word.split( /[ ]+/ )
+                      _key   = arr[2]
+                      _tango = arr[3]
+                      puts "Info: processing [kakutei(" + _tango + ")] batch command..."
+                      begin
+                        @core.sekkaKakutei( userid, @kvs, @cachesv, _key, _tango )
+                      rescue RuntimeError
+                        puts "Info: missing [kakutei(" + _tango + ")] batch command..."
+                      end
+
+                      puts( sprintf( "Info: kakutei [%s:%s] ", _key, _tango ))
+                    when 'f' # flush
+                      puts "Info: processing [flush] batch command..."
+                      begin
+                        n = @core.flushUserJisyo( userid, @kvs )
+                      rescue RuntimeError
+                        puts "Info: missing [flush] batch command..."
+                      end
+                      @core.flushCacheServer( @cachesv )
+                      printf( "info : flush [%s] user's dict %d entries.\n", userid, n )
+                    end
+                  }
                 }
               end
-            end
+            end          
           }
         end
         @thread.run
@@ -110,20 +143,23 @@ module SekkaServer
                  _yomi   = URI.decode( req.params[  'yomi'].force_encoding("UTF-8") )
                  _limit  = URI.decode( req.params[ 'limit'].force_encoding("UTF-8") )
                  _method = URI.decode( req.params['method'].force_encoding("UTF-8") )
-                 @core.writeToString( @core.sekkaHenkan( userid, @kvs, @cachesv, _yomi, _limit.to_i, _method ))
+                 @mutex.synchronize {
+                    @core.writeToString( @core.sekkaHenkan( userid, @kvs, @cachesv, _yomi, _limit.to_i, _method ))
+                 }
                when "/kakutei"
                  _key    = URI.decode( req.params[   'key'].force_encoding("UTF-8") )
                  _tango  = URI.decode( req.params[ 'tango'].force_encoding("UTF-8") )
-                 @core.sekkaKakutei( userid, @kvs, @cachesv, _key, _tango )
+                 @queue.push( 'k ' + userid + " " + _key + " " + _tango )
                when "/register"
                  dict    = URI.decode( req.params['dict'].force_encoding( "UTF-8" ) ).split( "\n" )
-                 dict.each { |x| @queue.push( userid + " " + x ) }
+                 dict.each { |x|
+                    #puts "register:PUSH!"
+                    @queue.push( 'r ' + userid + " " + x )
+                 }
                  sprintf( "sekka-server:register request (%s) words added, current-queue-size (%s)", dict.size, @queue.size )
                when "/flush"
-                 @core.flushCacheServer( @cachesv )
-                 n = @core.flushUserJisyo( userid, @kvs )
-                 printf( "info : flush [%s] user's dict %d entries.\n", userid, n )
-                 sprintf( "sekka-server:flush request successful. flush (%d) entries.", n )
+                 @queue.push( 'f ' + userid )
+                 sprintf( "sekka-server:flush request successful." )
                when "/googleime"
                  _yomi   = URI.decode( req.params[  'yomi'].force_encoding("UTF-8") )
                  printf( "info : google-ime request [%s]\n", _yomi )
