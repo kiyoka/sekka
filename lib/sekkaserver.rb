@@ -122,7 +122,7 @@ module SekkaServer
                when "/flush"
                  @core.flushCacheServer( @cachesv )
                  n = @core.flushUserJisyo( userid, @kvs )
-                 printf( "info : flush [%s] user's dict %d entries.", userid, n )
+                 printf( "info : flush [%s] user's dict %d entries.\n", userid, n )
                  sprintf( "sekka-server:flush request successful. flush (%d) entries.", n )
                when "/googleime"
                  _yomi   = URI.decode( req.params[  'yomi'].force_encoding("UTF-8") )
