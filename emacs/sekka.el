@@ -776,6 +776,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   (setq sekka-select-mode nil)
   (run-hooks 'sekka-select-mode-end-hook)
   (sekka-select-operation-reset)
+  (sekka-select-update-display)
   (sekka-history-push))
 
 
