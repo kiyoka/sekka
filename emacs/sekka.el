@@ -68,7 +68,7 @@
 
 (defcustom sekka-realtime-guide-interval  0.2
   "リアルタイムガイド表示を更新する時間間隔"
-  :type  'integer
+  :type  'float
   :group 'sekka)
 
 (defcustom sekka-roman-method "normal"
