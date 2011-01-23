@@ -2,7 +2,7 @@
 ;;
 ;; "sekka.el" is a client for Sekka server
 ;;
-;;   Copyright (C) 2010 Kiyoka Nishiyama
+;;   Copyright (C) 2010,2011 Kiyoka Nishiyama
 ;;   This program was derived from sumibi.el and yc.el-4.0.13(auther: knak)
 ;;
 ;;
