@@ -137,6 +137,8 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 
 (defconst sekka-login-name   (user-login-name))
 
+(defconst sekka-tango-index  0)
+(defconst sekka-annotation-index  1)
 (defconst sekka-kind-index   3)
 (defconst sekka-id-index     4)
 
@@ -176,6 +178,8 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 (defvar sekka-cand-cur-backup 0)        ; カレント候補番号(UNDO用に退避する変数)
 (defvar sekka-cand-len nil)             ; 候補数
 (defvar sekka-last-fix "")              ; 最後に確定した文字列
+(defvar sekka-last-roman "")            ; 最後にsekka-serverにリクエストしたローマ字文字列
+(defvar sekka-select-operation-times 0) ; 選択操作回数
 (defvar sekka-henkan-kouho-list nil)    ; 変換結果リスト(サーバから帰ってきたデータそのもの)
 
 
@@ -690,6 +694,54 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 (define-key sekka-select-mode-map "\C-r"                   'sekka-add-new-word)
 
 
+(defvar sekka-popup-menu-keymap
+  (let ((map (make-sparse-keymap)))
+    (define-key map "\r"        'popup-select)
+    (define-key map "\C-f"      'popup-open)
+    (define-key map [right]     'popup-open)
+    (define-key map "\C-b"      'popup-close)
+    (define-key map [left]      'popup-close)
+
+    (define-key map "\C-n"      'popup-next)
+    (define-key map "\C-j"      'popup-next)
+    (define-key map [down]      'popup-next)
+    (define-key map "\C-p"      'popup-previous)
+    (define-key map [up]        'popup-previous)
+
+    (define-key map [f1]        'popup-help)
+    (define-key map (kbd "\C-?") 'popup-help)
+
+    (define-key map "\C-s"      'popup-isearch)
+    (define-key map "\C-g"      'popup-close)
+    map))
+
+;; 選択操作回数のインクリメント
+(defun sekka-select-operation-inc ()
+  (incf sekka-select-operation-times)
+  (when (< 3 sekka-select-operation-times)
+    (sekka-select-operation-reset)
+    (let* ((lst 
+	    (mapcar
+	     (lambda (x)
+	       (concat 
+		(nth sekka-tango-index x)
+		"   ; "
+		(nth sekka-annotation-index x)))
+	     sekka-henkan-kouho-list))
+	   (map (make-sparse-keymap))
+	   (result 
+	    (popup-menu* lst
+			 :scroll-bar t
+			 :margin t
+			 :keymap sekka-popup-menu-keymap)))
+      (let ((selected-word (car (split-string result " "))))
+	(setq sekka-cand-cur (sekka-find-by-tango selected-word))
+	(sekka-select-kakutei)))))
+      
+
+;; 選択操作回数のリセット
+(defun sekka-select-operation-reset ()
+  (setq sekka-select-operation-times 0))
 
 ;; 変換を確定し入力されたキーを再入力する関数
 (defun sekka-kakutei-and-self-insert (arg)
@@ -723,7 +775,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
       (sekka-kakutei-request key tango)))
   (setq sekka-select-mode nil)
   (run-hooks 'sekka-select-mode-end-hook)
-  (sekka-select-update-display)
+  (sekka-select-operation-reset)
   (sekka-history-push))
 
 
@@ -747,6 +799,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   (decf sekka-cand-cur)
   (when (> 0 sekka-cand-cur)
     (setq sekka-cand-cur (- sekka-cand-len 1)))
+  (sekka-select-operation-inc)
   (sekka-select-update-display))
 
 ;; 次の候補に進める
@@ -758,7 +811,20 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	(if (< sekka-cand-cur (- sekka-cand-len 1))
 	    (+ sekka-cand-cur 1)
 	  0))
+  (sekka-select-operation-inc)
   (sekka-select-update-display))
+
+;; 指定された tango のindex番号を返す
+(defun sekka-find-by-tango ( tango )
+  (let ((result-index nil))
+    (mapcar
+     (lambda (x)
+       (let ((_tango (nth sekka-tango-index x)))
+	 (when (string-equal _tango tango)
+	   (setq result-index (nth sekka-id-index x)))))
+     sekka-henkan-kouho-list)
+    (sekka-debug-print (format "sekka-find-by-tango: tango=%s result=%S \n" tango result-index))
+    result-index))
 
 ;; 指定された type の候補を抜き出す
 (defun sekka-select-by-type-filter ( _type )
@@ -769,7 +835,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	 (when (eq sym _type)
 	   (push x lst))))
      sekka-henkan-kouho-list)
-    (sekka-debug-print (format "filterd-lst = %S" (reverse lst)))
+    (sekka-debug-print (format "filterd-lst = %S\n" (reverse lst)))
     (car (reverse lst))))
     
 ;; 指定された type の候補が存在するか調べる
@@ -841,7 +907,9 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 (defun sekka-add-new-word-sub (yomi lst)
   (let* ((etc "(自分で入力する)")
 	 (result (popup-menu*
-		  (append lst `(,etc))))
+		  (append lst `(,etc))
+		  :margin t
+		  :keymap sekka-popup-menu-keymap))
 	 (b (copy-marker sekka-fence-start))
 	 (e (copy-marker sekka-fence-end)))
     (let ((tango
@@ -865,14 +933,16 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 (defun sekka-add-new-word ()
   "変換候補のよみ(平仮名)に対応する新しい単語を追加する"
   (interactive)
+  (setq case-fold-search nil)
   (when (sekka-select-by-type 'h)
     (let* ((kouho      (nth sekka-cand-cur sekka-henkan-kouho-list))
-	   (yomi       (car kouho)))
-      (sekka-debug-print (format "sekka-register-new-word: yomi=%s" yomi))
-      (sekka-select-kakutei)
-      (sekka-add-new-word-sub
-       yomi
-       (sekka-googleime-request yomi)))))
+	   (hiragana   (car kouho)))
+      (sekka-debug-print (format "sekka-register-new-word: sekka-last-roman=[%s] hiragana=%s result=%S\n" sekka-last-roman hiragana (string-match-p "^[A-Z][^A-Z]+$" sekka-last-roman)))
+      (when (string-match-p "^[A-Z][^A-Z]+$" sekka-last-roman)
+	(sekka-select-kakutei)
+	(sekka-add-new-word-sub
+	 hiragana
+	 (sekka-googleime-request hiragana))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1029,6 +1099,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	    (when (sekka-henkan-region b e)
 	      (if (eq (char-before b) ?/)
 		  (setq b (- b 1)))
+	      (setq sekka-last-roman (buffer-substring-no-properties b e))
 	      (delete-region b e)
 	      (goto-char b)
 	      (insert (sekka-get-display-string))
