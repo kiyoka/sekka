@@ -12,6 +12,8 @@ require File.expand_path(File.dirname(__FILE__) + "/../lib/sekka/sekkaversion")
 DICTDIR = File.expand_path( "~/.sekka-server" )
 DICTURL = "http://sumibi.org/sekka/dict/" + SekkaVersion.version
 
+PIDFILE = DICTDIR + "/pid"
+
 TC_FILE = DICTDIR + "/SEKKA-JISYO.SMALL.tch"
 SUMFILE = DICTDIR + "/SEKKA-JISYO.SMALL.md5"
 TC_URL  = DICTURL + "/SEKKA-JISYO.SMALL.tch"
@@ -29,6 +31,11 @@ def main
     Dir.mkdir( DICTDIR )
     STDERR.printf( "Info: created directory [%s]\n", DICTDIR )
   end
+
+  # sekka-server自身のpidを書きこむ(デーモン化したときの停止用)
+  open( PIDFILE, "w" ) {|f|
+    f.printf( "%d\n", Process.pid )
+  }
 
   if not File.exist?( TC_FILE )
     STDERR.printf( "Info: Downloading SEKKA-JISYO\n" )

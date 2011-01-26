@@ -132,6 +132,8 @@ end
 
 task :rackup_nohup do
   sh "nohup ruby -I ./lib ./bin/sekka-server > ./rackup.log &"
+  sh "sleep 3"
+  sh "tail -f ./rackup.log"
 end
 
 task :katakanago do
