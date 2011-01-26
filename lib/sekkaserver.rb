@@ -85,7 +85,7 @@ module SekkaServer
                         else
                           ";; comment"
                         end
-                      puts "Info: processing [register(" + dictline + ")] batch command..."
+                      STDERR.puts "Info: processing [register(" + dictline + ")] batch command..."
                       begin
                         registered = @core.registerUserJisyo(userid, @kvs, dictline)
                       rescue RuntimeError
@@ -93,32 +93,32 @@ module SekkaServer
                       end
                       if registered
                         str = d.strftime( "%D %X" )
-                        puts "Info: [" + str + "]added to dict                      userid[" + userid + "] dictline[" + dictline + "]"
+                        STDERR.puts "Info: [" + str + "]added to dict                      userid[" + userid + "] dictline[" + dictline + "]"
                         @core.flushCacheServer( @cachesv )
                       else
-                        puts "Info: ignored (already added or comment) userid[" + userid + "] dictline[" + dictline + "]"
+                        STDERR.puts "Info: ignored (already added or comment) userid[" + userid + "] dictline[" + dictline + "]"
                       end
                     when 'k' # kakutei
                       arr = word.split( /[ ]+/ )
                       _key   = arr[2]
                       _tango = arr[3]
-                      puts "Info: processing [kakutei(" + _tango + ")] batch command..."
+                      STDERR.puts "Info: processing [kakutei(" + _tango + ")] batch command..."
                       begin
                         @core.sekkaKakutei( userid, @kvs, @cachesv, _key, _tango )
                       rescue RuntimeError
-                        puts "Info: missing [kakutei(" + _tango + ")] batch command..."
+                        STDERR.puts "Info: missing [kakutei(" + _tango + ")] batch command..."
                       end
 
-                      puts( sprintf( "Info: kakutei [%s:%s] ", _key, _tango ))
+                      STDERR.printf( "Info: kakutei [%s:%s] \n", _key, _tango )
                     when 'f' # flush
-                      puts "Info: processing [flush] batch command..."
+                      STDERR.puts "Info: processing [flush] batch command..."
                       begin
                         n = @core.flushUserJisyo( userid, @kvs )
                       rescue RuntimeError
-                        puts "Info: missing [flush] batch command..."
+                        STDERR.puts "Info: missing [flush] batch command..."
                       end
                       @core.flushCacheServer( @cachesv )
-                      printf( "info : flush [%s] user's dict %d entries.\n", userid, n )
+                      STDERR.printf( "info : flush [%s] user's dict %d entries. \n", userid, n )
                     end
                   }
                 }
@@ -153,7 +153,6 @@ module SekkaServer
                when "/register"
                  dict    = URI.decode( req.params['dict'].force_encoding( "UTF-8" ) ).split( "\n" )
                  dict.each { |x|
-                    #puts "register:PUSH!"
                     @queue.push( 'r ' + userid + " " + x )
                  }
                  sprintf( "sekka-server:register request (%s) words added, current-queue-size (%s)", dict.size, @queue.size )

@@ -2,6 +2,7 @@
 /DESIGN~
 /README~
 /pkg
+/rackup.log
 /test.kct
 /test.log
 /test.record
