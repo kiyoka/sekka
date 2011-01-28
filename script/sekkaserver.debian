@@ -1,0 +1,55 @@
+#!/bin/sh
+
+###
+### /etc/init.d/sekkaserver file for Debian
+###
+
+### BEGIN INIT INFO
+# Provides:          samba
+# Required-Start:    $network $local_fs $remote_fs
+# Required-Stop:     $network $local_fs $remote_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: start sekka-server daemon
+### END INIT INFO
+
+
+# Defaults
+RUN_MODE="daemons"
+
+PIDFILE=/home/sekka/.sekka-server/pid
+LOGFILE=/home/sekka/.sekka-server/server.log
+
+# clear conflicting settings from the environment
+unset TMPDIR
+
+. /lib/lsb/init-functions
+
+case "$1" in
+    start)
+	log_daemon_msg "Starting sekka-server daemon"
+	su - sekka -c "nohup sekka-server > ${LOGFILE}"
+	log_end_msg 0
+	;;
+    stop)
+	log_daemon_msg "Stopping sekka-server daemon"
+	log_progress_msg "sekka-server(null)"
+	log_end_msg 0
+	;;
+    stat)
+	log_daemon_msg "sekka-server status"
+	cat ${PIDFILE}
+	log_end_msg 0
+	;;
+    restart|force-reload)
+	$0 stop
+	sleep 1
+	$0 start
+	;;
+    *)
+	echo "Usage: /etc/init.d/sekkaserver {stat|start|stop|reload|restart|force-reload}"
+	exit 1
+	;;
+esac
+
+exit 0
