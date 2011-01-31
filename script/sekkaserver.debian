@@ -40,19 +40,19 @@ case "$1" in
 	log_daemon_msg "sekka-server status"
 	ps -p `cat ${PIDFILE}` | grep sekka-server
 	if [ "$?" = "0" ] ; then 
-		echo "   sekka-server is alive" 
+		echo "   sekka-server is running" 
 	else	
-		echo "   sekka-server is down" 
+		echo "   sekka-server is not running" 
 	fi
 	log_end_msg 0
 	;;
-    restart|force-reload)
+    restart)
 	$0 stop
 	sleep 1
 	$0 start
 	;;
     *)
-	echo "Usage: /etc/init.d/sekkaserver {status|start|stop|reload|restart|force-reload}"
+	echo "Usage: /etc/init.d/sekkaserver {status|start|stop|restart}"
 	exit 1
 	;;
 esac
