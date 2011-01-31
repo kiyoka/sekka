@@ -28,17 +28,22 @@ unset TMPDIR
 case "$1" in
     start)
 	log_daemon_msg "Starting sekka-server daemon"
-	su - sekka -c "nohup sekka-server > ${LOGFILE}"
+	su - sekka -c "nohup sekka-server > ${LOGFILE} &"
 	log_end_msg 0
 	;;
     stop)
 	log_daemon_msg "Stopping sekka-server daemon"
-	log_progress_msg "sekka-server(null)"
+	kill -KILL `cat ${PIDFILE}`
 	log_end_msg 0
 	;;
-    stat)
+    status)
 	log_daemon_msg "sekka-server status"
-	cat ${PIDFILE}
+	ps -p `cat ${PIDFILE}` | grep sekka-server
+	if [ "$?" = "0" ] ; then 
+		echo "   sekka-server is alive" 
+	else	
+		echo "   sekka-server is down" 
+	fi
 	log_end_msg 0
 	;;
     restart|force-reload)
@@ -47,7 +52,7 @@ case "$1" in
 	$0 start
 	;;
     *)
-	echo "Usage: /etc/init.d/sekkaserver {stat|start|stop|reload|restart|force-reload}"
+	echo "Usage: /etc/init.d/sekkaserver {status|start|stop|reload|restart|force-reload}"
 	exit 1
 	;;
 esac
