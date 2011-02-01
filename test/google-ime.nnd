@@ -67,24 +67,21 @@
 (test-section "request to google-ime")
 
 (test* "request online (1)"
-       '("四文字熟語" "４文字熟語" "4文字熟語" "よんもじじゅくご" "ヨンモジジュクゴ")
-       (request-google-ime "よんもじじゅくご" #f))
+       '("日本語" "ニホンゴ" "ニホン語" "にほんご" "ﾆﾎﾝｺﾞ")
+       (request-google-ime "1" #t))
 
 (test* "request online (2)"
-       '("初回起動" "諸快気堂" "諸開基堂" "しょかいきどう" "ショカイキドウ")
-       (request-google-ime "しょかいきどう" #f))
+       '("変換" "返還" "へんかん" "偏官" "変漢")
+       (request-google-ime "2" #t))
 
 (test* "request online (3)"
-       '("イクメン" "イクメン")
-       (request-google-ime "イクメン" #f)) ;; 2010年流行語より
+       '()
+       (request-google-ime "3" #t))
 
 (test* "request online (4)"
-       '("マジパネェ" "マジぱねぇ" "まじパネェ" "まじぱねぇ" "マジパネェ")
-       (request-google-ime "まじぱねぇ" #f)) ;; 若者言葉
-
-(test* "request offline (1)"
        '()
-       (request-google-ime "しょかいきどう" #t))
+       (request-google-ime "4" #t))
+
 
 
 ;;===================================================================
