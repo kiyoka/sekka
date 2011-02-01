@@ -30,6 +30,7 @@ begin
                              'bin/sekka-benchmark',
                              'test/*.nnd',
                              'test/*.rb',
+                             'script/sekkaserver.*',
                              'emacs/*.el'].to_a
     gemspec.add_development_dependency "rspec"
     gemspec.add_development_dependency "rubyforge"
