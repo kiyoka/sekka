@@ -54,16 +54,16 @@
 
 
 (define (request-google-ime keyword unit-test)
-  (let1 host "google-ime-api-normalizer.heroku.com"
-    (let1 body ""
-      (Net::HTTP.version_1_2)
-      ;;(Net::HTTP.open_timeout 5)
-      ;;(Net::HTTP.read_timeout 5)
-      (Net::HTTP.start host 80
-                       (&block (http)
-                         (let* ((path (sprintf "/transliterate%s?langpair=%s&text=%s"
-                                               (if unit-test "_test" "")
-                                               "ja-Hira|ja" (URI.encode keyword)))
-                                (response (http.get path)))
-                           (set! body response.body))))
-      (json-string->sekka-result-string body))))
+  (let* ((body "")
+         (_ (Net::HTTP.version_1_2))
+         (http (Net::HTTP.new "google-ime-api-normalizer.heroku.com")))
+    (set! http.open_timeout 5)
+    (set! http.read_timeout 5)
+    (http.start 
+     (&block ()
+       (let* ((path (sprintf "/transliterate%s?langpair=%s&text=%s"
+                             (if unit-test "_test" "")
+                             "ja-Hira|ja" (URI.encode keyword)))
+              (response (http.get path)))
+         (set! body response.body))))
+    (json-string->sekka-result-string body)))
