@@ -56,6 +56,11 @@
   :type  'string
   :group 'sekka)
 
+(defcustom sekka-no-proxy-hosts ""
+  "http proxyを使わないホスト名を指定する。複数指定する場合は、コンマで区切る。"
+  :type  'string
+  :group 'sekka)
+
 (defcustom sekka-realtime-guide-running-seconds 30
   "リアルタイムガイド表示の継続時間(秒数)・ゼロでガイド表示機能が無効になる"
   :type  'integer
@@ -304,6 +309,9 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
     (let ((command
 	   (concat
 	    sekka-curl " --silent --show-error "
+	    (if (< 0 (length sekka-no-proxy-hosts))
+		(concat " --noproxy " sekka-no-proxy-hosts)
+	      "")
 	    (format " --max-time %d " sekka-server-timeout)
 	    " --insecure "
 	    " --header 'Content-Type: application/x-www-form-urlencoded' "
