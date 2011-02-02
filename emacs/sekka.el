@@ -915,6 +915,11 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 ;; 登録語リストからユーザーに該当単語を選択してもらう
 (defun sekka-add-new-word-sub (yomi lst)
   (let* ((etc "(自分で入力する)")
+	 (lst (if (stringp lst) 
+		  (progn
+		    (message lst) ;; サーバーから返ってきたエラーメッセージを表示
+		    '())
+		lst))
 	 (result (popup-menu*
 		  (append lst `(,etc))
 		  :margin t
