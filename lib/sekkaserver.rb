@@ -164,9 +164,19 @@ module SekkaServer
                when "/googleime"
                  _yomi   = URI.decode( req.params[  'yomi'].force_encoding("UTF-8") )
                  printf( "info : google-ime request [%s]\n", _yomi )
-                 @core.writeToString( @core.googleIme( _yomi,
-                                                       SekkaServer::Config.proxyHost,
-                                                       SekkaServer::Config.proxyPort ))
+                 result = "sekka-server: google-ime error"
+                 begin
+                   result = @core.googleIme( _yomi,
+                                             SekkaServer::Config.proxyHost,
+                                             SekkaServer::Config.proxyPort )
+                 rescue Timeout
+                   result = "sekka-server: Timeout to request google-ime (may be offline)"
+                 rescue SocketError
+                   result = "sekka-server: SocketError to request google-ime (may be offline)"
+                 rescue Errno::ECONNREFUSED
+                   result = "sekka-server: http proxy server is down (or may be offline)"
+                 end
+                 @core.writeToString( result )
                else
                  sprintf( "sekka-server:unknown path name. [%s]", req.path )
                end
