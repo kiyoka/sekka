@@ -4,6 +4,7 @@
 require 'digest/md5'
 require 'fileutils'
 require 'rack'
+require 'uri'
 require File.expand_path(File.dirname(__FILE__) + "/../lib/sekkaconfig")
 require File.expand_path(File.dirname(__FILE__) + "/../lib/sekka/sekkaversion")
 
@@ -36,6 +37,15 @@ def main
   open( PIDFILE, "w" ) {|f|
     f.printf( "%d\n", Process.pid )
   }
+
+  # 環境変数からHTTPプロキシサーバーの情報を取得する
+  proxyHost = nil
+  proxyPort = nil
+  if ENV.key?( 'http_proxy' )
+    uri = URI.parse ENV[ 'http_proxy' ]
+    proxyPort = uri.port
+    proxyHost = uri.host
+  end
 
   if not File.exist?( TC_FILE )
     STDERR.printf( "Info: Downloading SEKKA-JISYO\n" )
@@ -71,7 +81,7 @@ def main
   list = TC_FILE_LIST.select { |name| File.exist?( name ) }
 
   # 設定項目をConfigオブジェクトに代入
-  SekkaServer::Config.setup( list[0], MEMCACHED, 12929 )
+  SekkaServer::Config.setup( list[0], MEMCACHED, 12929, proxyHost, proxyPort )
 
   # サーバースクリプトのrootディレクトリへ移動
   FileUtils.cd(File.dirname(__FILE__) + "/../")

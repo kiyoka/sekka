@@ -59,10 +59,12 @@ module SekkaServer
       @mutex = Mutex.new
 
       STDERR.puts(   "----- Sekka Server Started -----" )
-      STDERR.printf( "  version  :  %s\n", SekkaVersion.version            )
-      STDERR.printf( "  dict-db  :  %s\n", SekkaServer::Config.dictSource  )
-      STDERR.printf( "  memcached:  %s\n", SekkaServer::Config.cacheSource )
+      STDERR.printf( "  version   : %s\n", SekkaVersion.version            )
+      STDERR.printf( "  dict-db   : %s\n", SekkaServer::Config.dictSource  )
+      STDERR.printf( "  memcached : %s\n", SekkaServer::Config.cacheSource )
       STDERR.printf( "  listenPort: %s\n", SekkaServer::Config.listenPort  )
+      STDERR.printf( "  proxyHost : %s\n", SekkaServer::Config.proxyHost   )
+      STDERR.printf( "  proxyPort : %s\n", SekkaServer::Config.proxyPort   )
       STDERR.puts(   "--------------------------------" )
 
       begin
@@ -162,7 +164,9 @@ module SekkaServer
                when "/googleime"
                  _yomi   = URI.decode( req.params[  'yomi'].force_encoding("UTF-8") )
                  printf( "info : google-ime request [%s]\n", _yomi )
-                 @core.writeToString( @core.googleIme( _yomi ))
+                 @core.writeToString( @core.googleIme( _yomi,
+                                                       SekkaServer::Config.proxyHost,
+                                                       SekkaServer::Config.proxyPort ))
                else
                  sprintf( "sekka-server:unknown path name. [%s]", req.path )
                end

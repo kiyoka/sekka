@@ -53,10 +53,14 @@
          (apply zip kouho-list)))))
 
 
-(define (request-google-ime keyword unit-test)
+(define (request-google-ime keyword unit-test proxy-host proxy-port)
   (let* ((body "")
+         (target "google-ime-api-normalizer.heroku.com")
          (_ (Net::HTTP.version_1_2))
-         (http (Net::HTTP.new "google-ime-api-normalizer.heroku.com")))
+         (http (if #?=proxy-host
+                   (let1 proxy-class (Net::HTTP.Proxy proxy-host proxy-port)
+                     (proxy-class.new #?=target))
+                   (Net::HTTP.new #?=target))))
     (set! http.open_timeout 5)
     (set! http.read_timeout 5)
     (http.start 

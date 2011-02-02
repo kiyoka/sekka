@@ -68,20 +68,19 @@
 
 (test* "request online (1)"
        '("日本語" "ニホンゴ" "ニホン語" "にほんご" "ﾆﾎﾝｺﾞ")
-       (request-google-ime "1" #t))
+       (request-google-ime "1" #t nil nil))
 
 (test* "request online (2)"
        '("変換" "返還" "へんかん" "偏官" "変漢")
-       (request-google-ime "2" #t))
+       (request-google-ime "2" #t nil nil))
 
 (test* "request online (3)"
        '()
-       (request-google-ime "3" #t))
+       (request-google-ime "3" #t nil nil))
 
 (test* "request online (4)"
        '()
-       (request-google-ime "4" #t))
-
+       (request-google-ime "4" #t nil nil))
 
 
 ;;===================================================================

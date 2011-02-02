@@ -40,10 +40,12 @@ module SekkaServer
   class Config
     include Singleton
     
-    def self.setup( dictSource, cacheSource = false, listenPort )
+    def self.setup( dictSource, cacheSource = false, listenPort, proxyHost, proxyPort )
       @@dictSource  = dictSource
       @@cacheSource = cacheSource
       @@listenPort  = listenPort
+      @@proxyHost   = proxyHost
+      @@proxyPort   = proxyPort
     end
     
     def self.dictSource
@@ -56,6 +58,14 @@ module SekkaServer
 
     def self.listenPort
       @@listenPort
+    end
+
+    def self.proxyHost
+      @@proxyHost
+    end
+
+    def self.proxyPort
+      @@proxyPort
     end
   end
 end
