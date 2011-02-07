@@ -42,6 +42,7 @@ require 'uri'
 require 'date'
 require './lib/sekkaconfig'
 require './lib/sekka/sekkaversion'
+require 'memcache'
 
 module SekkaServer
   class Server
@@ -146,7 +147,11 @@ module SekkaServer
                  _limit  = URI.decode( req.params[ 'limit'].force_encoding("UTF-8") )
                  _method = URI.decode( req.params['method'].force_encoding("UTF-8") )
                  @mutex.synchronize {
-                    @core.writeToString( @core.sekkaHenkan( userid, @kvs, @cachesv, _yomi, _limit.to_i, _method ))
+                    begin
+                      @core.writeToString( @core.sekkaHenkan( userid, @kvs, @cachesv, _yomi, _limit.to_i, _method ))
+                    rescue MemCache::MemCacheError
+                      "sekka-server: memcached server is down (or may be offline)"
+                    end
                  }
                when "/kakutei"
                  _key    = URI.decode( req.params[   'key'].force_encoding("UTF-8") )
