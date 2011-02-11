@@ -1,4 +1,4 @@
-#-*- mode: ruby; -*-
+# -*- mode: ruby; -*-
 #                                                  Rakefile for Sekka
 # Release Engineering
 #   1. edit the VERSION.yml file
@@ -62,7 +62,7 @@ task :compile do
   # Replace Version Number
   targetFile = "./emacs/sekka.el"
   vh = Jeweler::VersionHelper.new "."
-  (original, modified) = open( targetFile ) {|f|
+  (original, modified) = open( targetFile, "r:utf-8" ) {|f|
     lines = f.readlines
     [ lines,
       lines.map {|line|

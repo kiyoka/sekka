@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kiyoka Nishiyama"]
-  s.date = %q{2011-01-22}
+  s.date = %q{2011-02-11}
   s.description = %q{Sekka is a SKK like input method. Sekka server provides REST Based API. If you are SKK user, let's try it.}
   s.email = %q{kiyoka@sumibi.org}
   s.executables = ["sekka-benchmark", "sekka-jisyo", "sekka-server"]
@@ -39,6 +39,7 @@ Gem::Specification.new do |s|
     "lib/sekka/util.nnd",
     "lib/sekkaconfig.rb",
     "lib/sekkaserver.rb",
+    "script/sekkaserver.debian",
     "test/alphabet-lib.nnd",
     "test/approximate-bench.nnd",
     "test/azik-verification.nnd",
@@ -67,7 +68,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<fuzzy-string-match>, [">= 0"])
       s.add_runtime_dependency(%q<jeweler>, [">= 0"])
       s.add_runtime_dependency(%q<memcache-client>, [">= 0"])
-      s.add_runtime_dependency(%q<nendo>, [">= 0.4.0"])
+      s.add_runtime_dependency(%q<nendo>, [">= 0.4.1"])
       s.add_runtime_dependency(%q<rack>, [">= 0"])
       s.add_runtime_dependency(%q<tokyocabinet>, [">= 0"])
     else
@@ -77,7 +78,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<fuzzy-string-match>, [">= 0"])
       s.add_dependency(%q<jeweler>, [">= 0"])
       s.add_dependency(%q<memcache-client>, [">= 0"])
-      s.add_dependency(%q<nendo>, [">= 0.4.0"])
+      s.add_dependency(%q<nendo>, [">= 0.4.1"])
       s.add_dependency(%q<rack>, [">= 0"])
       s.add_dependency(%q<tokyocabinet>, [">= 0"])
     end
@@ -88,7 +89,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<fuzzy-string-match>, [">= 0"])
     s.add_dependency(%q<jeweler>, [">= 0"])
     s.add_dependency(%q<memcache-client>, [">= 0"])
-    s.add_dependency(%q<nendo>, [">= 0.4.0"])
+    s.add_dependency(%q<nendo>, [">= 0.4.1"])
     s.add_dependency(%q<rack>, [">= 0"])
     s.add_dependency(%q<tokyocabinet>, [">= 0"])
   end
