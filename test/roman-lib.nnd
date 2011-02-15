@@ -68,13 +68,13 @@
        '("fu" "hu" "hf")
        (hash-table-get sekka-kana->roman-hash-short "ふ" #f))
 (test* "kana->roman 2"
-       '("la" "xxa")
+       '("la" "xa" "xxa")
        (hash-table-get sekka-kana->roman-hash-short "ぁ" #f))
 (test* "kana->roman 3"
        '("chi" "tyi" "ti" "ci")
        (hash-table-get sekka-kana->roman-hash-short "ち" #f))
 (test* "kana->roman 4"
-       '("tt" "@" ";" "ltu")
+       '("tt" "@" ";" "ltu" "xtu")
        (hash-table-get sekka-kana->roman-hash-short "っ" #f))
 (test* "kana->roman 5"
        '("-" "^" ":" "'")
@@ -120,6 +120,15 @@
 (test* "roman->kana 8"
        '("っ")
        (hash-table-get sekka-roman->kana-hash-short ";" #f))
+(test* "roman->kana 9"
+       '("っ")
+       (hash-table-get sekka-roman->kana-hash-short "xtu" #f))
+(test* "roman->kana 10"
+       '("ぁ")
+       (hash-table-get sekka-roman->kana-hash-short "xa" #f))
+(test* "roman->kana 11"
+       '("ぁ")
+       (hash-table-get sekka-roman->kana-hash-short "xxa" #f))
 
 ;;-------------------------------------------------------------------
 (test-section "roman->kana conversion hash (long)")
@@ -284,7 +293,7 @@
        (gen-hiragana->roman-pattens "かんじへんかん"))
 (test* "hiragana -> roman-pattern4"
        '(
-         (("shi" "si" "xi") ("ze" "zf") ("nn" "n" "q") ("ge") ("nn" "n" "q") ("go") ("sho" "syo" "xo") ("ri"))
+         (("shi" "si") ("ze" "zf") ("nn" "n" "q") ("ge") ("nn" "n" "q") ("go") ("sho" "syo") ("ri"))
          (("shi" "si" "xi") ("zd") ("gd") ("go") ("sho" "syo" "xo") ("ri")))
        (gen-hiragana->roman-pattens "しぜんげんごしょり"))
 (test* "hiragana -> roman-pattern5"
@@ -416,7 +425,15 @@
 (test* "roman -> hiragana 30"
        '("かった")
        (gen-roman->hiragana "ka;ta" :normal))
-
+(test* "roman -> hiragana 31"
+       '("ぁぃぅぇぉ" "しゃししゅしぇしょ")
+       (gen-roman->hiragana "xaxixuxexo" :normal))
+(test* "roman -> hiragana 32"
+       '("ゃゅょ")
+       (gen-roman->hiragana "xyaxyuxyo" :normal))
+(test* "roman -> hiragana 33"
+       '("ゎっ")
+       (gen-roman->hiragana "xwaxtu" :normal))
 
 
 ;;===================================================================

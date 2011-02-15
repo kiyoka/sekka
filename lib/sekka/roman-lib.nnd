@@ -41,20 +41,20 @@
 (define sekka-kana->roman-alist-short
   '(
     ;; normal roman                                ---AZIK---
-    ("ぁ"                                            "la" "xxa")
+    ("ぁ"                                            "la" "xa" "xxa")
     ("あ"        "a")
-    ("ぃ"                                            "li" "xxi")
+    ("ぃ"                                            "li" "xi" "xxi")
     ("い"        "i")
-    ("ぅ"                                            "lu" "xxu")
+    ("ぅ"                                            "lu" "xu" "xxu")
     ("う"        "u"                                 "whu")
     ("う゛"      "vu")
     ("う゛ぁ"    "va")
     ("う゛ぃ"    "vi")
     ("う゛ぇ"    "ve")
     ("う゛ぉ"    "vo")
-    ("ぇ"                                            "le" "xxe")
+    ("ぇ"                                            "le" "xe" "xxe")
     ("え"        "e")
-    ("ぉ"                                            "lo" "xxo")
+    ("ぉ"                                            "lo" "xo" "xxo")
     ("お"        "o")
     ("か"        "ka")
     ("が"        "ga")
@@ -76,12 +76,12 @@
     ("ご"        "go")
     ("さ"        "sa")
     ("ざ"        "za"                                "zc") ;; AZIKザ行の特別措置
-    ("し"        "shi"                               "si" "xi")
-    ("しゃ"      "sha" "sya"                         "xa" "xc")
+    ("し"        "shi"                               "si")
+    ("しゃ"      "sha" "sya"                         )
     ;; hu の例外処理: shu は sfu になってはいけない
-    ("しゅ"      "shu" "syu"                         "xu")
-    ("しぇ"      "she" "sye"                         "xe")
-    ("しょ"      "sho" "syo"                         "xo")
+    ("しゅ"      "shu" "syu"                         )
+    ("しぇ"      "she" "sye"                         )
+    ("しょ"      "sho" "syo"                         )
     ("じ"        "ji" "zi")
     ("じゃ"      "ja" "jya"                          "zya")
     ("じゅ"      "ju" "jyu"                          "zyu" "jf")
@@ -107,7 +107,7 @@
     ("ぢゅ"      "dyu")
     ("ぢぇ"      "dye")
     ("ぢょ"      "dyo")
-    ("っ"        "tt"                                 "@" ";" "ltu")
+    ("っ"        "tt"                                 "@" ";" "ltu" "xtu")
     ;; normal roman                                ---AZIK---
     ("つ"        "tsu"                                "tu")
     ("づ"        "du")
@@ -165,11 +165,11 @@
     ("め"        "me")
     ("も"        "mo")
     ;; normal roman                                ---AZIK---
-    ("ゃ"                                             "lya")
+    ("ゃ"        "xya"                                "lya")
     ("や"        "ya")
-    ("ゅ"                                             "lyu")
+    ("ゅ"        "xyu"                                "lyu")
     ("ゆ"        "yu"                                 "yf")
-    ("ょ"                                             "lyo")
+    ("ょ"        "xyo"                                "lyo")
     ("よ"        "yo")
     ("ら"        "ra")
     ("り"        "ri")
@@ -179,7 +179,7 @@
     ("る"        "ru")
     ("れ"        "re")
     ("ろ"        "ro")
-    ("ゎ"                                             "lwa")
+    ("ゎ"        "xwa"                                "lwa")
     ("わ"        "wa")
     ("うぃ"      "wi"                                 "whi")
     ("うぇ"      "we"                                 "whe")
@@ -315,6 +315,14 @@
 
     ;; 非AZIKで "cc" で 撥音「っ」から始まるかなを表現を消す可能性があるので "cc" はAZIK側だけに定義する
     ("ちゃ"      "cha" "tya"                          "ca" "cc")
+
+    ;; 非AZIKで "xa" "xi" "xu" "ae" "ao" の捨て仮名を ぁぃぅぇぉ の入力に使うため以下の定義を
+    ;; 非AZIKとAZIKで分割する
+    ("し"        "shi"                               "si" "xi")
+    ("しゃ"      "sha" "sya"                         "xa" "xc")
+    ("しゅ"      "shu" "syu"                         "xu")
+    ("しぇ"      "she" "sye"                         "xe")
+    ("しょ"      "sho" "syo"                         "xo")
 
     ;; ---以下AZIK---
     ;; ------ AZIK 撥音拡張
