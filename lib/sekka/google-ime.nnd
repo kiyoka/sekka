@@ -61,8 +61,8 @@
                    (let1 proxy-class (Net::HTTP.Proxy proxy-host proxy-port)
                      (proxy-class.new target))
                    (Net::HTTP.new target))))
-    (set! http.open_timeout (if unit-test 30 5))
-    (set! http.read_timeout (if unit-test 30 5))
+    (set! http.open_timeout 20)
+    (set! http.read_timeout 20)
     (http.start 
      (&block ()
        (let* ((path (sprintf "/transliterate%s?langpair=%s&text=%s"
