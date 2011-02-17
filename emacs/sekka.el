@@ -743,9 +743,8 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 			 :margin t
 			 :keymap sekka-popup-menu-keymap)))
       (let ((selected-word (car (split-string result " "))))
-	(setq sekka-cand-cur (sekka-find-by-tango selected-word))
-	(sekka-select-kakutei)))))
-      
+	(setq sekka-cand-cur (sekka-find-by-tango selected-word))))))
+
 
 ;; 選択操作回数のリセット
 (defun sekka-select-operation-reset ()
