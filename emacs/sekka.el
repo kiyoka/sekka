@@ -512,27 +512,21 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 (defun sekka-add-new-word-to-jisyo (file yomi tango)
   "FILE Sekka辞書ファイルと見做し、ファイルの先頭に「読み」と「単語」のペアを書き込む
 登録が成功したかどうかを t or nil で返す"
-  (if (sekka-file-existp file)
-      (let ((buf-name (file-name-nondirectory file))
-	    (added nil))
-	(save-excursion
-	  (find-file file)
-	  (with-current-buffer (get-buffer buf-name)
-	    (goto-char (point-min))
-	    (let ((newstr (format "%s /%s/" yomi tango)))
-	      (when (not (search-forward newstr nil t))
-		(insert newstr)
-		(insert "\n")
-		(save-buffer)
+  (let ((buf-name (file-name-nondirectory file)))
+    (save-excursion
+      (find-file file)
+      (with-current-buffer (get-buffer buf-name)
+	(goto-char (point-min))
+	(let ((newstr (format "%s /%s/" yomi tango)))
+	  (when (not (search-forward newstr nil t))
+	    (insert newstr)
+	    (insert "\n")
+	    (save-buffer)
 		(setq added t)
 		)))
-	  (kill-buffer-if-not-modified (get-buffer buf-name)))
-	added)
-    (progn
-      (message (format "Sekka辞書 %s が存在しません..." file))
-      nil)))
-    
-	     
+      (kill-buffer-if-not-modified (get-buffer buf-name)))
+    t))
+
 
 
 ;; ポータブル文字列置換( EmacsとXEmacsの両方で動く )
