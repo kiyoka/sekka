@@ -28,11 +28,15 @@ begin
                              'bin/sekka-jisyo',
                              'bin/sekka-server',
                              'bin/sekka-benchmark',
+                             'bin/sekka-path',
                              'test/*.nnd',
                              'test/*.rb',
                              'script/sekkaserver.*',
                              'emacs/*.el'].to_a
-    gemspec.add_development_dependency "rspec"
+    gemspec.executables = ["sekka-jisyo",
+                           "sekka-server",
+                           "sekka-benchmark",
+                           "sekka-path"]
     gemspec.add_development_dependency "rubyforge"
     gemspec.required_ruby_version = '>= 1.9.1'
     gemspec.add_dependency( "eventmachine" )
