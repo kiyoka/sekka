@@ -655,8 +655,8 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	  (setq sekka-last-fix insert-word)
 	   
 	  ;; 選択中の場所を装飾する。
-	  (overlay-put ov 'face 'default)
 	  (when select-mode
+	    (overlay-put ov 'face 'default)
 	    (overlay-put ov 'face 'highlight))
 	  (setq sekka-markers (cons start end))
 	  (sekka-debug-print (format "insert:[%s] point:%d-%d\n" insert-word (marker-position start) (marker-position end))))))
