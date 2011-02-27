@@ -79,6 +79,9 @@
 (test* "kana->roman 5"
        '("-" "^" ":" "'")
        (hash-table-get sekka-kana->roman-hash-short "ー" #f))
+(test* "kana->roman 6"
+       '("#")
+       (hash-table-get sekka-kana->roman-hash-short "#" #f))
 
 ;;-------------------------------------------------------------------
 (test-section "kana->roman conversion hash (long)")
@@ -129,6 +132,9 @@
 (test* "roman->kana 11"
        '("ぁ")
        (hash-table-get sekka-roman->kana-hash-short "xxa" #f))
+(test* "roman->kana 12"
+       '("#")
+       (hash-table-get sekka-roman->kana-hash-short "#" #f))
 
 ;;-------------------------------------------------------------------
 (test-section "roman->kana conversion hash (long)")
@@ -268,8 +274,8 @@
 
 (let1 hira-list
     (hash-table-keys sekka-kana->roman-hash-long)
-  (test* "kana->roman table length"        523 (length hira-list))
-  (test* "kana->roman key duplicate check" 523 (length (uniq (sort hira-list)))))
+  (test* "kana->roman table length"        524 (length hira-list))
+  (test* "kana->roman key duplicate check" 524 (length (uniq (sort hira-list)))))
 
 (test* "hiragana -> roman-pattern0"
        '(
@@ -331,6 +337,14 @@
 (test* "hiragana -> roman-list5"
        '("tsumikf" "tsumiki" "tumikf" "tumiki")
        (gen-hiragana->roman-list "つみき"))
+
+(test* "hiragana -> roman-list6"
+       '("gyoume" "gyowhume" "gypme")
+       (gen-hiragana->roman-list "ぎょうめ"))
+
+(test* "hiragana -> roman-list7"
+       '("#gyoume" "#gyowhume" "#gypme")
+       (gen-hiragana->roman-list "#ぎょうめ"))
 
 
 ;;-------------------------------------------------------------------

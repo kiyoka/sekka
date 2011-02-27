@@ -63,6 +63,15 @@
 (test* "expanding SKK(1) entry to SEKKA(n) entry. (送りあり1)"
        '(("shiroI" . "Cしろi") ("siroI" . "Cしろi") ("xiroI" . "Cしろi") ("しろi" . "/白"))
        (expand-okuri-ari-entry   "しろ" "i" "/白"))
+(test* "expanding SKK(1) entry to SEKKA(n) entry. (#付き1)"
+       '(("#ji" . "C#じ") ("#zi" . "C#じ") ("#じ" . "/#0時/#1時/#2時/#0次/#3次/#1次/"))
+       (expand-okuri-nashi-entry   "#じ" "/#0時/#1時/#2時/#0次/#3次/#1次/"))
+(test* "expanding SKK(1) entry to SEKKA(n) entry. (#付き2)"
+       '(("#gatsu#nichi" . "C#がつ#にち") ("#gatsu#nici" . "C#がつ#にち") ("#gatsu#niti" . "C#がつ#にち") ("#gatsu#nityi" . "C#がつ#にち") ("#gatsu#nt" . "C#がつ#にち") ("#gatu#nichi" . "C#がつ#にち") ("#gatu#nici" . "C#がつ#にち") ("#gatu#niti" . "C#がつ#にち") ("#gatu#nityi" . "C#がつ#にち") ("#gatu#nt" . "C#がつ#にち") ("#がつ#にち" . "/#1月#1日/#0月#0日/#2月#2日/#2月#1日/"))
+       (expand-okuri-nashi-entry   "#がつ#にち" "/#1月#1日/#0月#0日/#2月#2日/#2月#1日/"))
+(test* "expanding SKK(1) entry to SEKKA(n) entry. (#付き3)"
+       '(("#kara#" . "C#から#") ("#kr#" . "C#から#") ("#から#" . "/#1〜#1/"))
+       (expand-okuri-nashi-entry   "#から#" "/#1〜#1/"))
 (test* "expanding SKK(1) entry to SEKKA(n) entry. (送りあり2)"
        '(("kaK" . "Cかk") ("かk" . "/書/掛/欠/架/駆/懸"))
        (expand-okuri-ari-entry   "か" "k" "/書/掛/欠/架/駆/懸"))
