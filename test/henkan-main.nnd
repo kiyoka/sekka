@@ -66,7 +66,7 @@
                  (with-open "./test/sekka-jisyo-out-1.txt"
                             (lambda (f)
                               (read f)))
-       
+
                (test* "Create test jisyo"
                       sekka-jisyo-data          
                       (convert-skk-jisyo-f _input))
@@ -98,7 +98,6 @@
                                        "w")
                             (_output.string)))))))
   
-
 
 (test-section "Open the test-suite DB")
 (define a-search (ApproximateSearch.new 0.94))
@@ -175,15 +174,20 @@
        "ka+ kaT ka`"
        (. (hash-table-get db "MASTER::(KA)" #f) force_encoding "UTF-8"))
 
-(test* "db fetch 8"
+(when #f
+  (test* "db fetch 8"
+         "#kara#"
+         (. (hash-table-get db "MASTER::(#k)" #f) force_encoding "UTF-8")))
+
+(test* "db fetch 9"
        "burogu+ buroguR buroguT burogu`"
        (. (hash-table-get db "dummy::(BU)" #f) force_encoding "UTF-8"))
 
-(test* "db fetch 9"
+(test* "db fetch 10"
        "/ユーザー辞書"
        (. (hash-table-get db "dummy::ゆーざーじしょ" #f) force_encoding "UTF-8"))
 
-(test* "db fetch 10"
+(test* "db fetch 11"
        "yu'za'jisho yu'za'jisyo yu'za'jixo yu'za'zisho yu'za'zisyo yu'za'zixo yu'za-jisho yu'za-jisyo yu'za-jixo yu'za-zisho yu'za-zisyo yu'za-zixo yu'za:jisho yu'za:jisyo yu'za:jixo yu'za:zisho yu'za:zisyo yu'za:zixo yu'za^jisho yu'za^jisyo yu'za^jixo yu'za^zisho yu'za^zisyo yu'za^zixo yu'zc'jisho yu'zc'jisyo yu'zc'jixo yu'zc'zisho yu'zc'zisyo yu'zc'zixo yu'zc-jisho yu'zc-jisyo yu'zc-jixo yu'zc-zisho yu'zc-zisyo yu'zc-zixo yu'zc:jisho yu'zc:jisyo yu'zc:jixo yu'zc:zisho yu'zc:zisyo yu'zc:zixo yu'zc^jisho yu'zc^jisyo yu'zc^jixo yu'zc^zisho yu'zc^zisyo yu'zc^zixo yu-za'jisho yu-za'jisyo yu-za'jixo yu-za'zisho yu-za'zisyo yu-za'zixo yu-za-jisho yu-za-jisyo yu-za-jixo yu-za-zisho yu-za-zisyo yu-za-zixo yu-za:jisho yu-za:jisyo yu-za:jixo yu-za:zisho yu-za:zisyo yu-za:zixo yu-za^jisho yu-za^jisyo yu-za^jixo yu-za^zisho yu-za^zisyo yu-za^zixo yu-zc'jisho yu-zc'jisyo yu-zc'jixo yu-zc'zisho yu-zc'zisyo yu-zc'zixo yu-zc-jisho yu-zc-jisyo yu-zc-jixo yu-zc-zisho yu-zc-zisyo yu-zc-zixo yu-zc:jisho yu-zc:jisyo yu-zc:jixo yu-zc:zisho yu-zc:zisyo yu-zc:zixo yu-zc^jisho yu-zc^jisyo yu-zc^jixo yu-zc^zisho yu-zc^zisyo yu-zc^zixo yu:za'jisho yu:za'jisyo yu:za'jixo yu:za'zisho yu:za'zisyo yu:za'zixo yu:za-jisho yu:za-jisyo yu:za-jixo yu:za-zisho yu:za-zisyo yu:za-zixo yu:za:jisho yu:za:jisyo yu:za:jixo yu:za:zisho yu:za:zisyo yu:za:zixo yu:za^jisho yu:za^jisyo yu:za^jixo yu:za^zisho yu:za^zisyo yu:za^zixo yu:zc'jisho yu:zc'jisyo yu:zc'jixo yu:zc'zisho yu:zc'zisyo yu:zc'zixo yu:zc-jisho yu:zc-jisyo yu:zc-jixo yu:zc-zisho yu:zc-zisyo yu:zc-zixo yu:zc:jisho yu:zc:jisyo yu:zc:jixo yu:zc:zisho yu:zc:zisyo yu:zc:zixo yu:zc^jisho yu:zc^jisyo yu:zc^jixo yu:zc^zisho yu:zc^zisyo yu:zc^zixo yu^za'jisho yu^za'jisyo yu^za'jixo yu^za'zisho yu^za'zisyo yu^za'zixo yu^za-jisho yu^za-jisyo yu^za-jixo yu^za-zisho yu^za-zisyo yu^za-zixo yu^za:jisho yu^za:jisyo yu^za:jixo yu^za:zisho yu^za:zisyo yu^za:zixo yu^za^jisho yu^za^jisyo yu^za^jixo yu^za^zisho yu^za^zisyo yu^za^zixo yu^zc'jisho yu^zc'jisyo yu^zc'jixo yu^zc'zisho yu^zc'zisyo yu^zc'zixo yu^zc-jisho yu^zc-jisyo yu^zc-jixo yu^zc-zisho yu^zc-zisyo yu^zc-zixo yu^zc:jisho yu^zc:jisyo yu^zc:jixo yu^zc:zisho yu^zc:zisyo yu^zc:zixo yu^zc^jisho yu^zc^jisyo yu^zc^jixo yu^zc^zisho yu^zc^zisyo yu^zc^zixo"
        (. (hash-table-get db "dummy::(yu)" #f) force_encoding "UTF-8"))
 

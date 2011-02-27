@@ -95,7 +95,7 @@
         ;; フォーマットエラー
         #f)
        ((or (is-hiragana (first fields))
-            (rxmatch #/^([>あ-ん]+)$/ (first fields)))
+            (rxmatch #/^([>#あ-ん]+)$/ (first fields)))
         ;; 送り仮名なしデータ
         (expand-okuri-nashi-entry (first fields) (second fields)))
        ((rxmatch #/^([>あ-ん]+)([a-z])$/ (first fields))
@@ -106,6 +106,9 @@
                                      (second fields))))
        ((rxmatch #/[亜-瑤]+/ (first fields))
         ;; 漢字が1文字でも含まれている
+        #f)
+       ((rxmatch #/[#]+/ (first fields))
+        ;; # が1文字でも含まれている
         #f)
        (else
         (list (cons (first fields) (second fields)))))))
