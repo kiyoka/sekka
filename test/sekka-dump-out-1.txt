@@ -285,9 +285,24 @@ MASTER::ka` Cか`
 MASTER::か` /勝/買/飼/刈;(crop)草を刈る
 MASTER::ka+ Cか+
 MASTER::か+ /勝/買/飼/刈;(crop)草を刈る
-MASTER::#nichi /#1日
-MASTER::#ji /#1時
+MASTER::#gyoume C#ぎょうめ
+MASTER::#gyowhume C#ぎょうめ
+MASTER::#gypme C#ぎょうめ
 MASTER::#ぎょうめ /#0行目/#1行目
+MASTER::#gatsu#nichi C#がつ#にち
+MASTER::#gatsu#nici C#がつ#にち
+MASTER::#gatsu#niti C#がつ#にち
+MASTER::#gatsu#nityi C#がつ#にち
+MASTER::#gatsu#nt C#がつ#にち
+MASTER::#gatu#nichi C#がつ#にち
+MASTER::#gatu#nici C#がつ#にち
+MASTER::#gatu#niti C#がつ#にち
+MASTER::#gatu#nityi C#がつ#にち
+MASTER::#gatu#nt C#がつ#にち
+MASTER::#がつ#にち /#1月#1日/#0月#0日/#2月#2日/#2月#1日
+MASTER::#kara# C#から#
+MASTER::#kr# C#から#
+MASTER::#から# /#1〜#1
 MASTER::aA 
 MASTER::aB 
 MASTER::aC 
@@ -316,6 +331,7 @@ MASTER::aZ
 MASTER::a> 
 MASTER::a` 
 MASTER::a+ 
+MASTER::a# 
 MASTER::aa 
 MASTER::ab 
 MASTER::ac 
@@ -373,6 +389,7 @@ MASTER::bZ
 MASTER::b> 
 MASTER::b` 
 MASTER::b+ 
+MASTER::b# 
 MASTER::ba 
 MASTER::bb 
 MASTER::bc 
@@ -430,6 +447,7 @@ MASTER::cZ
 MASTER::c> 
 MASTER::c` 
 MASTER::c+ 
+MASTER::c# 
 MASTER::ca 
 MASTER::cb 
 MASTER::cc 
@@ -487,6 +505,7 @@ MASTER::dZ
 MASTER::d> 
 MASTER::d` 
 MASTER::d+ 
+MASTER::d# 
 MASTER::da 
 MASTER::db 
 MASTER::dc 
@@ -543,6 +562,7 @@ MASTER::eZ
 MASTER::e> 
 MASTER::e` 
 MASTER::e+ 
+MASTER::e# 
 MASTER::ea 
 MASTER::eb 
 MASTER::ec 
@@ -600,6 +620,7 @@ MASTER::fZ
 MASTER::f> 
 MASTER::f` 
 MASTER::f+ 
+MASTER::f# 
 MASTER::fa 
 MASTER::fb 
 MASTER::fc 
@@ -657,6 +678,7 @@ MASTER::gZ
 MASTER::g> 
 MASTER::g` 
 MASTER::g+ 
+MASTER::g# 
 MASTER::ga 
 MASTER::gb 
 MASTER::gc 
@@ -714,6 +736,7 @@ MASTER::hZ
 MASTER::h> 
 MASTER::h` 
 MASTER::h+ 
+MASTER::h# 
 MASTER::ha 
 MASTER::hb 
 MASTER::hc 
@@ -771,6 +794,7 @@ MASTER::iZ
 MASTER::i> 
 MASTER::i` 
 MASTER::i+ 
+MASTER::i# 
 MASTER::ia 
 MASTER::ib 
 MASTER::ic 
@@ -828,6 +852,7 @@ MASTER::jZ
 MASTER::j> 
 MASTER::j` 
 MASTER::j+ 
+MASTER::j# 
 MASTER::ja 
 MASTER::jb 
 MASTER::jc 
@@ -885,6 +910,7 @@ MASTER::kZ
 MASTER::k> 
 MASTER::k` 
 MASTER::k+ 
+MASTER::k# 
 MASTER::ka 
 MASTER::kb 
 MASTER::kc 
@@ -942,6 +968,7 @@ MASTER::lZ
 MASTER::l> 
 MASTER::l` 
 MASTER::l+ 
+MASTER::l# 
 MASTER::la 
 MASTER::lb 
 MASTER::lc 
@@ -999,6 +1026,7 @@ MASTER::mZ
 MASTER::m> 
 MASTER::m` 
 MASTER::m+ 
+MASTER::m# 
 MASTER::ma 
 MASTER::mb 
 MASTER::mc 
@@ -1056,6 +1084,7 @@ MASTER::nZ
 MASTER::n> 
 MASTER::n` 
 MASTER::n+ 
+MASTER::n# 
 MASTER::na 
 MASTER::nb 
 MASTER::nc 
@@ -1113,6 +1142,7 @@ MASTER::oZ
 MASTER::o> 
 MASTER::o` 
 MASTER::o+ 
+MASTER::o# 
 MASTER::oa 
 MASTER::ob 
 MASTER::oc 
@@ -1170,6 +1200,7 @@ MASTER::pZ
 MASTER::p> 
 MASTER::p` 
 MASTER::p+ 
+MASTER::p# 
 MASTER::pa 
 MASTER::pb 
 MASTER::pc 
@@ -1227,6 +1258,7 @@ MASTER::qZ
 MASTER::q> 
 MASTER::q` 
 MASTER::q+ 
+MASTER::q# 
 MASTER::qa 
 MASTER::qb 
 MASTER::qc 
@@ -1284,6 +1316,7 @@ MASTER::rZ
 MASTER::r> 
 MASTER::r` 
 MASTER::r+ 
+MASTER::r# 
 MASTER::ra 
 MASTER::rb 
 MASTER::rc 
@@ -1341,6 +1374,7 @@ MASTER::sZ
 MASTER::s> 
 MASTER::s` 
 MASTER::s+ 
+MASTER::s# 
 MASTER::sa 
 MASTER::sb 
 MASTER::sc 
@@ -1398,6 +1432,7 @@ MASTER::tZ
 MASTER::t> 
 MASTER::t` 
 MASTER::t+ 
+MASTER::t# 
 MASTER::ta 
 MASTER::tb 
 MASTER::tc 
@@ -1455,6 +1490,7 @@ MASTER::uZ
 MASTER::u> 
 MASTER::u` 
 MASTER::u+ 
+MASTER::u# 
 MASTER::ua 
 MASTER::ub 
 MASTER::uc 
@@ -1512,6 +1548,7 @@ MASTER::vZ
 MASTER::v> 
 MASTER::v` 
 MASTER::v+ 
+MASTER::v# 
 MASTER::va 
 MASTER::vb 
 MASTER::vc 
@@ -1569,6 +1606,7 @@ MASTER::wZ
 MASTER::w> 
 MASTER::w` 
 MASTER::w+ 
+MASTER::w# 
 MASTER::wa 
 MASTER::wb 
 MASTER::wc 
@@ -1625,6 +1663,7 @@ MASTER::xZ
 MASTER::x> 
 MASTER::x` 
 MASTER::x+ 
+MASTER::x# 
 MASTER::xa 
 MASTER::xb 
 MASTER::xc 
@@ -1682,6 +1721,7 @@ MASTER::yZ
 MASTER::y> 
 MASTER::y` 
 MASTER::y+ 
+MASTER::y# 
 MASTER::ya 
 MASTER::yb 
 MASTER::yc 
@@ -1739,6 +1779,7 @@ MASTER::zZ
 MASTER::z> 
 MASTER::z` 
 MASTER::z+ 
+MASTER::z# 
 MASTER::za 
 MASTER::zb 
 MASTER::zc 
@@ -1796,6 +1837,7 @@ MASTER::>Z
 MASTER::>> 
 MASTER::>` 
 MASTER::>+ 
+MASTER::># 
 MASTER::>a 
 MASTER::>b 
 MASTER::>c 
@@ -1853,6 +1895,7 @@ MASTER::@Z
 MASTER::@> 
 MASTER::@` 
 MASTER::@+ 
+MASTER::@# 
 MASTER::@a 
 MASTER::@b 
 MASTER::@c 
@@ -1910,6 +1953,7 @@ MASTER::;Z
 MASTER::;> 
 MASTER::;` 
 MASTER::;+ 
+MASTER::;# 
 MASTER::;a 
 MASTER::;b 
 MASTER::;c 
@@ -1938,6 +1982,64 @@ MASTER::;y
 MASTER::;z 
 MASTER::;@ 
 MASTER::;; 
+MASTER::#A 
+MASTER::#B 
+MASTER::#C 
+MASTER::#D 
+MASTER::#E 
+MASTER::#F 
+MASTER::#G 
+MASTER::#H 
+MASTER::#I 
+MASTER::#J 
+MASTER::#K 
+MASTER::#L 
+MASTER::#M 
+MASTER::#N 
+MASTER::#O 
+MASTER::#P 
+MASTER::#Q 
+MASTER::#R 
+MASTER::#S 
+MASTER::#T 
+MASTER::#U 
+MASTER::#V 
+MASTER::#W 
+MASTER::#X 
+MASTER::#Y 
+MASTER::#Z 
+MASTER::#> 
+MASTER::#` 
+MASTER::#+ 
+MASTER::## 
+MASTER::#a 
+MASTER::#b 
+MASTER::#c 
+MASTER::#d 
+MASTER::#e 
+MASTER::#f 
+MASTER::#g 
+MASTER::#h 
+MASTER::#i 
+MASTER::#j 
+MASTER::#k 
+MASTER::#l 
+MASTER::#m 
+MASTER::#n 
+MASTER::#o 
+MASTER::#p 
+MASTER::#q 
+MASTER::#r 
+MASTER::#s 
+MASTER::#t 
+MASTER::#u 
+MASTER::#v 
+MASTER::#w 
+MASTER::#x 
+MASTER::#y 
+MASTER::#z 
+MASTER::#@ 
+MASTER::#; 
 MASTER::(KA) ka+ kaT ka`
 MASTER::(AU) aU
 MASTER::(MI) miR
@@ -1947,6 +2049,8 @@ MASTER::(HD) hdkaS
 MASTER::(OK) okonaU
 MASTER::(WT) wtshiH wtsiH wtxiH
 MASTER::(WA) watashiH watasiH
+MASTER::(#k) #kara# #kr#
+MASTER::(#g) #gatsu#nichi #gatsu#nici #gatsu#niti #gatsu#nityi #gatsu#nt #gatu#nichi #gatu#nici #gatu#niti #gatu#nityi #gatu#nt #gyoume #gyowhume #gypme
 MASTER::(iq) iqngp iqnyou iqnyowhu iqnyp iqyou iqyowhu iqyp
 MASTER::(in) inngp innngp innnyou innnyowhu innnyp innyou innyowhu innyp inyou inyowhu inyp
 MASTER::(sa) sakf saki saku
