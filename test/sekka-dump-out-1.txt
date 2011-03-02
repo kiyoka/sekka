@@ -300,6 +300,9 @@ MASTER::#gatu#niti C#がつ#にち
 MASTER::#gatu#nityi C#がつ#にち
 MASTER::#gatu#nt C#がつ#にち
 MASTER::#がつ#にち /#1月#1日/#0月#0日/#2月#2日/#2月#1日
+MASTER::#gatsu#ka C#がつ#か
+MASTER::#gatu#ka C#がつ#か
+MASTER::#がつ#か /#1月#1日/#0月#0日/#2月#2日/#2月#1日
 MASTER::#kara# C#から#
 MASTER::#kr# C#から#
 MASTER::#から# /#1〜#1
@@ -2050,7 +2053,7 @@ MASTER::(OK) okonaU
 MASTER::(WT) wtshiH wtsiH wtxiH
 MASTER::(WA) watashiH watasiH
 MASTER::(#k) #kara# #kr#
-MASTER::(#g) #gatsu#nichi #gatsu#nici #gatsu#niti #gatsu#nityi #gatsu#nt #gatu#nichi #gatu#nici #gatu#niti #gatu#nityi #gatu#nt #gyoume #gyowhume #gypme
+MASTER::(#g) #gatsu#ka #gatsu#nichi #gatsu#nici #gatsu#niti #gatsu#nityi #gatsu#nt #gatu#ka #gatu#nichi #gatu#nici #gatu#niti #gatu#nityi #gatu#nt #gyoume #gyowhume #gypme
 MASTER::(iq) iqngp iqnyou iqnyowhu iqnyp iqyou iqyowhu iqyp
 MASTER::(in) inngp innngp innnyou innnyowhu innnyp innyou innyowhu innyp inyou inyowhu inyp
 MASTER::(sa) sakf saki saku
