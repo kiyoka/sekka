@@ -174,10 +174,9 @@
        "ka+ kaT ka`"
        (. (hash-table-get db "MASTER::(KA)" #f) force_encoding "UTF-8"))
 
-(when #f
-  (test* "db fetch 8"
-         "#kara#"
-         (. (hash-table-get db "MASTER::(#k)" #f) force_encoding "UTF-8")))
+(test* "db fetch 8"
+       "#kaime #kara# #kqme #kr#"
+       (. (hash-table-get db "MASTER::(#k)" #f) force_encoding "UTF-8"))
 
 (test* "db fetch 9"
        "burogu+ buroguR buroguT burogu`"
@@ -330,6 +329,16 @@
        (my-round-map
         (approximate-search userid kvs "innyou" #f 0)))
 
+(test* "approximate search 11"
+       '((0.981 "#gyoume" "C#ぎょうめ"))
+       (my-round-map
+        (approximate-search userid kvs "#gyoum" #f 0)))
+
+(test* "approximate search 12"
+       '((0.9722 "#kara#" "C#から#"))
+       (my-round-map
+        (approximate-search userid kvs "#kara" #f 0)))
+
 
 ;;-------------------------------------------------------------------
 (test-section "henkan (okuri nashi)")
@@ -425,6 +434,37 @@
 (test* "okuri nashi 23"
        '(("ユーザー辞書" #f "ゆーざーじしょ" j))
        (henkan-okuri-nashi userid kvs "Yu'za'jisyo" 0))
+
+;;-------------------------------------------------------------------
+(test-section "henkan (okuri nashi and number)")
+
+(test* "okuri nashi and number 1"
+       '("2行目" "２行目")
+       (henkan-okuri-nashi-and-number userid kvs "2gyoume" 0))
+
+(test* "okuri nashi and number 2"
+       '("10行目" "１０行目")
+       (henkan-okuri-nashi-and-number userid kvs "10gyoume" 0))
+
+(test* "okuri nashi and number 3"
+       '()
+       (henkan-okuri-nashi-and-number userid kvs "100kaime" 0))
+
+(test* "okuri nashi and number 4"
+       '((""))
+       (henkan-okuri-nashi-and-number userid kvs "3gatu3ka" 0))
+
+(test* "okuri nashi and number 5"
+       '((""))
+       (henkan-okuri-nashi-and-number userid kvs "12gatu31nichi" 0))
+
+(test* "okuri nashi and number 6"
+       '("１〜１０")
+       (henkan-okuri-nashi-and-number userid kvs "1kara10" 0))
+
+(test* "okuri nashi and number 7"
+       '("１０００〜２０００")
+       (henkan-okuri-nashi-and-number userid kvs "1000kara2000" 0))
 
 
 ;;-------------------------------------------------------------------

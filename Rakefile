@@ -90,6 +90,7 @@ task :check do
   files = []
   files << "./test/util.nnd"
   files << "./test/alphabet-lib.nnd"
+  files << "./test/sharp-number.nnd"
   files << "./test/roman-lib.nnd"
   files << "./test/azik-verification.nnd"
   files << "./test/jisyo.nnd" 

@@ -289,6 +289,9 @@ MASTER::#gyoume C#ぎょうめ
 MASTER::#gyowhume C#ぎょうめ
 MASTER::#gypme C#ぎょうめ
 MASTER::#ぎょうめ /#0行目/#1行目
+MASTER::#kaime C#かいめ
+MASTER::#kqme C#かいめ
+MASTER::#かいめ /#0回目/#3回目
 MASTER::#gatsu#nichi C#がつ#にち
 MASTER::#gatsu#nici C#がつ#にち
 MASTER::#gatsu#niti C#がつ#にち
@@ -2052,7 +2055,7 @@ MASTER::(HD) hdkaS
 MASTER::(OK) okonaU
 MASTER::(WT) wtshiH wtsiH wtxiH
 MASTER::(WA) watashiH watasiH
-MASTER::(#k) #kara# #kr#
+MASTER::(#k) #kaime #kara# #kqme #kr#
 MASTER::(#g) #gatsu#ka #gatsu#nichi #gatsu#nici #gatsu#niti #gatsu#nityi #gatsu#nt #gatu#ka #gatu#nichi #gatu#nici #gatu#niti #gatu#nityi #gatu#nt #gyoume #gyowhume #gypme
 MASTER::(iq) iqngp iqnyou iqnyowhu iqnyp iqyou iqyowhu iqyp
 MASTER::(in) inngp innngp innnyou innnyowhu innnyp innyou innyowhu innyp inyou inyowhu inyp

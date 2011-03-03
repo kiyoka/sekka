@@ -39,6 +39,7 @@
 (use sekka.convert-jisyo)
 (use sekka.jisyo-db)
 (use sekka.alphabet-lib)
+(use sekka.sharp-number)
 (use sekka.google-ime)
 (require "sekka/approximatesearch")
 
@@ -163,6 +164,29 @@
           lst
           (take* lst limit)))))
           
+  
+  
+;; 送り仮名なし、かつ、数字で始まるキーワードの変換
+(define (henkan-okuri-nashi-and-number userid kvs keyword limit)
+  ;; 数字部分を抜きだして '#' に変換
+  (let ([num-list (to-list (keyword.scan #/[0-9]+/))]
+        [replaced (keyword.gsub #/[0-9]+/ "#")])
+    ;; 辞書引きした結果の # 部分を 再度数値に戻す。
+    (let1 result (henkan-okuri-nashi userid kvs replaced limit)
+      (map
+       (lambda (entry)
+         (let* ([type-list (to-list (. (car entry) scan #/[#][0-9]/))]
+                [converted-list 
+                 (map
+                  (lambda  (_type _num)
+                    (sekka-henkan-sharp-number _type _num))
+                  type-list
+                  num-list)]
+                [format-str (. (car entry) gsub #/[#][0-9]/ "%s")])
+           (apply sprintf
+                  (cons format-str
+                        converted-list))))
+       result))))
 
 
 ;; 送り仮名ありの変換
@@ -284,6 +308,9 @@
                '()
                (henkan-hiragana kvs (sekka-downcase k) roman-method)))
           (henkan-alphabet kvs keyword))))))
+    ;; 10進数数値で始まるキーワード
+    ((rxmatch #/^[0-9]+[0-9a-zA-Z@-]+$/ keyword)
+     '())
     ((not (null? (gen-roman->hiragana keyword roman-method)))
      (append
       (append
