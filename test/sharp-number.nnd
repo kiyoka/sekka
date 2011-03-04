@@ -69,5 +69,47 @@
        (sekka-henkan-sharp-number "#1" "01234567890123456789"))
 
 
+;;-------------------------------------------------------------------
+(test-section "type #2")
+(test* "type #2 (1)"
+       "一"
+       (sekka-henkan-sharp-number "#2" "1"))
+
+(test* "type #2 (2)"
+       "五五〇〇"
+       (sekka-henkan-sharp-number "#2" "5500"))
+
+(test* "type #2 (3)"
+       "〇一二三四五六七八九"
+       (sekka-henkan-sharp-number "#2" "0123456789"))
+
+
+;;-------------------------------------------------------------------
+(test-section "type #3")
+(test* "type #3 (1)"
+       "一"
+       (sekka-henkan-sharp-number "#3" "1"))
+
+(test* "type #3 (2)"
+       "十"
+       (sekka-henkan-sharp-number "#3" "10"))
+
+(test* "type #3 (3)"
+       "百"
+       (sekka-henkan-sharp-number "#3" "100"))
+
+(test* "type #3 (4)"
+       "五千五百"
+       (sekka-henkan-sharp-number "#3" "5500"))
+
+(test* "type #3 (5)"
+       "五万五千五百五十五"
+       (sekka-henkan-sharp-number "#3" "5555"))
+
+(test* "type #3 (6)"
+       ""
+       (sekka-henkan-sharp-number "#3" "0123456789"))
+
+
 ;;===================================================================
 (test-end)

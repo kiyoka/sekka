@@ -35,11 +35,17 @@
 ;;;
 (use sekka.alphabet-lib)
 
+
 ;; #0 から #9 の変換
 (define (sekka-henkan-sharp-number type-str num-str)
+  ;; 平仮名->カタカナ 変換
+  (define (kurai-nashi str)
+    (str.tr "0123456789" "〇一二三四五六七八九"))
+
   (cond
    ((= type-str "#1")
     (gen-alphabet-han->zen num-str))
+   ((= type-str "#2")
+    (kurai-nashi num-str))
    (else
     num-str)))
-
