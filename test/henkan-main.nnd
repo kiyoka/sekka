@@ -439,31 +439,31 @@
 (test-section "henkan (okuri nashi and number)")
 
 (test* "okuri nashi and number 1"
-       '("2行目" "２行目")
+       '(("2行目" #f "#ぎょうめ" n) ("２行目" #f "#ぎょうめ" n))
        (henkan-okuri-nashi-and-number userid kvs "2gyoume" 0))
 
 (test* "okuri nashi and number 2"
-       '("10行目" "１０行目")
+       '(("10行目" #f "#ぎょうめ" n) ("１０行目" #f "#ぎょうめ" n))
        (henkan-okuri-nashi-and-number userid kvs "10gyoume" 0))
 
 (test* "okuri nashi and number 3"
-       '()
+       '(("100回目" #f "#かいめ" n) ("百回目" #f "#かいめ" n))
        (henkan-okuri-nashi-and-number userid kvs "100kaime" 0))
 
 (test* "okuri nashi and number 4"
-       '((""))
+       '(("３月３日" #f "#がつ#か" n) ("3月3日" #f "#がつ#か" n) ("三月三日" #f "#がつ#か" n) ("三月３日" #f "#がつ#か" n))
        (henkan-okuri-nashi-and-number userid kvs "3gatu3ka" 0))
 
 (test* "okuri nashi and number 5"
-       '((""))
+       '(("１２月３１日" #f "#がつ#にち" n) ("12月31日" #f "#がつ#にち" n) ("一二月三一日" #f "#がつ#にち" n) ("一二月３１日" #f "#がつ#にち" n))
        (henkan-okuri-nashi-and-number userid kvs "12gatu31nichi" 0))
 
 (test* "okuri nashi and number 6"
-       '("１〜１０")
+       '(("１〜１０" #f "#から#" n))
        (henkan-okuri-nashi-and-number userid kvs "1kara10" 0))
 
 (test* "okuri nashi and number 7"
-       '("１０００〜２０００")
+       '(("１０００〜２０００" #f "#から#" n))
        (henkan-okuri-nashi-and-number userid kvs "1000kara2000" 0))
 
 
@@ -812,6 +812,10 @@
        '(("確固" #f "かっこ" j 0) ("かっこ" #f "ka;ko" h 1) ("カッコ" #f "ka;ko" k 2) ("Ｋａ；ｋｏ" #f "Ka;ko" z 3) ("Ka;ko" #f "Ka;ko" l 4))
        (sekka-henkan userid kvs "Ka;ko" 1 :normal))
 
+(test* "henkan toplevel 30"
+       '(("100回目" #f "#かいめ" n 0) ("百回目" #f "#かいめ" n 1) ("１００ｋａｉｍｅ" #f "100kaime" z 2) ("100kaime" #f "100kaime" l 3))
+       (sekka-henkan userid kvs "100kaime" 0 :normal))
+
 
 
 (test* "henkan toplevel(for Elisp) 1"
@@ -881,6 +885,10 @@
 (test* "henkan toplevel(for Elisp) 17"
        '(("ユーザー辞書" nil "ゆーざーじしょ" j 0) ("ゆーざーじしょ" nil "yu-za-jisyo" h 1) ("ユーザージショ" nil "yu-za-jisyo" k 2) ("Ｙｕ－ｚａ－ｊｉｓｙｏ" nil "Yu-za-jisyo" z 3) ("Yu-za-jisyo" nil "Yu-za-jisyo" l 4))
        (sekkaHenkan userid kvs #f "Yu-za-jisyo" 2 "normal"))
+
+(test* "henkan toplevel(for Elisp) 18"
+       '(("２月２８日" nil "#がつ#にち" n 0) ("2月28日" nil "#がつ#にち" n 1) ("２ｇａｔｕ２８ｎｉｃｈｉ" nil "2gatu28nichi" z 2) ("2gatu28nichi" nil "2gatu28nichi" l 3))
+       (sekkaHenkan userid kvs #f "2gatu28nichi" 2 "normal"))
 
 
 ;;-------------------------------------------------------------------

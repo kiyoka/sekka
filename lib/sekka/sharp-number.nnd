@@ -33,19 +33,67 @@
 ;;;  
 ;;;  $Id: 
 ;;;
+(use srfi-1)
 (use sekka.alphabet-lib)
 
+(define (sekka-henkan-kansuuji-sen num-str)
+  (let ([num-lst       (reverse (map (lambda (x) x.to_i) (to-list (num-str.split ""))))]
+        [kurai1-lst    (to-list (. "□十百千" split ""))]
+        [kan-vector    (. "〇一二三四五六七八九" split "")])
+    (string-join
+     (reverse
+      (map
+       (lambda (num kurai1)
+         (case num
+           ((0)
+            "")
+           ((1)
+            (+
+             (if (eq? "□" kurai1)
+                 (vector-ref kan-vector num)
+                 kurai1)))
+           (else
+            (+ 
+             (if (eq? "□" kurai1)
+                 (vector-ref kan-vector num)
+                 (+ (vector-ref kan-vector num)
+                    kurai1))))))
+       num-lst
+       kurai1-lst)))))
+
+
+
+(define (sekka-henkan-kansuuji num-str)
+  (let ([kurai2-lst    (cons "" (to-list (. "万億兆京" split "")))]
+        [sliced        (map
+                        (lambda (x) (x.reverse))
+                        (to-list (num-str.reverse.scan #/[0-9][0-9]?[0-9]?[0-9]?/)))])
+    (string-join
+     (reverse
+      (map
+       (lambda (sen kurai2)
+         (if (rxmatch #/^[0]+$/ sen)
+             ""
+             (+
+              (sekka-henkan-kansuuji-sen sen)
+              kurai2)))
+       sliced
+       kurai2-lst)))))
+
+    
 
 ;; #0 から #9 の変換
 (define (sekka-henkan-sharp-number type-str num-str)
   ;; 平仮名->カタカナ 変換
   (define (kurai-nashi str)
     (str.tr "0123456789" "〇一二三四五六七八九"))
-
-  (cond
-   ((= type-str "#1")
-    (gen-alphabet-han->zen num-str))
-   ((= type-str "#2")
-    (kurai-nashi num-str))
-   (else
-    num-str)))
+  
+  (case type-str
+    (("#1")
+     (gen-alphabet-han->zen num-str))
+    (("#2")
+     (kurai-nashi num-str))
+    (("#3")
+     (sekka-henkan-kansuuji num-str))
+    (else
+     num-str)))

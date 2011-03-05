@@ -85,6 +85,97 @@
 
 
 ;;-------------------------------------------------------------------
+(test-section "kansuuji henkan sen")
+(test* "kansuuji sen (1)"
+       "一"
+       (sekka-henkan-kansuuji-sen "1"))
+
+(test* "kansuuji sen (2)"
+       "十"
+       (sekka-henkan-kansuuji-sen "10"))
+
+(test* "kansuuji sen (3)"
+       "百"
+       (sekka-henkan-kansuuji-sen "100"))
+
+(test* "kansuuji sen (4)"
+       "千"
+       (sekka-henkan-kansuuji-sen "1000"))
+
+(test* "kansuuji sen (5)"
+       "五千五百"
+       (sekka-henkan-kansuuji-sen "5500"))
+
+(test* "kansuuji sen (6)"
+       "五千五百五十五"
+       (sekka-henkan-kansuuji-sen "5555"))
+
+(test* "kansuuji sen (7)"
+       "九千九百九十九"
+       (sekka-henkan-kansuuji-sen "9999"))
+
+
+;;-------------------------------------------------------------------
+(test-section "kansuuji henkan")
+
+(test* "kansuuji (1)"
+       "一"
+       (sekka-henkan-kansuuji "1"))
+
+(test* "kansuuji (2)"
+       "十"
+       (sekka-henkan-kansuuji "10"))
+
+(test* "kansuuji (3)"
+       "百"
+       (sekka-henkan-kansuuji "100"))
+
+(test* "kansuuji (4)"
+       "千"
+       (sekka-henkan-kansuuji "1000"))
+
+(test* "kansuuji (5)"
+       "五千五百"
+       (sekka-henkan-kansuuji "5500"))
+
+(test* "kansuuji (6)"
+       "五千五百五十五"
+       (sekka-henkan-kansuuji "5555"))
+
+(test* "kansuuji (7)"
+       "九千九百九十九"
+       (sekka-henkan-kansuuji "9999"))
+
+(test* "kansuuji (8)"
+       "一万"
+       (sekka-henkan-kansuuji "10000"))
+
+(test* "kansuuji (9)"
+       "一億"
+       (sekka-henkan-kansuuji "100000000"))
+
+(test* "kansuuji (10)"
+       "十億"
+       (sekka-henkan-kansuuji "1000000000"))
+
+(test* "kansuuji (11)"
+       "一兆"
+       (sekka-henkan-kansuuji "1000000000000"))
+
+(test* "kansuuji (12)"
+       "一兆二"
+       (sekka-henkan-kansuuji "1000000000002"))
+
+(test* "kansuuji (13)"
+       "一億二千三百四十五万六千七百八十九"
+       (sekka-henkan-kansuuji "0123456789"))
+
+(test* "kansuuji (14)"
+       "九千八百七十六京五千四百三十二兆千九十八億七千六百五十四万三千二百十"
+       (sekka-henkan-kansuuji "98765432109876543210"))
+
+
+;;-------------------------------------------------------------------
 (test-section "type #3")
 (test* "type #3 (1)"
        "一"
@@ -104,10 +195,10 @@
 
 (test* "type #3 (5)"
        "五万五千五百五十五"
-       (sekka-henkan-sharp-number "#3" "5555"))
+       (sekka-henkan-sharp-number "#3" "55555"))
 
 (test* "type #3 (6)"
-       ""
+       "一億二千三百四十五万六千七百八十九"
        (sekka-henkan-sharp-number "#3" "0123456789"))
 
 

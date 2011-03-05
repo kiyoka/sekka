@@ -183,9 +183,12 @@
                   type-list
                   num-list)]
                 [format-str (. (car entry) gsub #/[#][0-9]/ "%s")])
-           (apply sprintf
-                  (cons format-str
-                        converted-list))))
+           (cons
+            (apply sprintf
+                   (cons format-str
+                         converted-list))
+            (append (drop-right (cdr entry) 1)
+                    (list 'n)))))
        result))))
 
 
@@ -310,7 +313,9 @@
           (henkan-alphabet kvs keyword))))))
     ;; 10進数数値で始まるキーワード
     ((rxmatch #/^[0-9]+[0-9a-zA-Z@-]+$/ keyword)
-     '())
+     (append
+      (henkan-okuri-nashi-and-number userid kvs keyword limit)
+      (henkan-alphabet kvs keyword)))
     ((not (null? (gen-roman->hiragana keyword roman-method)))
      (append
       (append
