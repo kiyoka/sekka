@@ -312,7 +312,7 @@
                (henkan-hiragana kvs (sekka-downcase k) roman-method)))
           (henkan-alphabet kvs keyword))))))
     ;; 10進数数値で始まるキーワード
-    ((rxmatch #/^[0-9]+[0-9a-zA-Z@-]+$/ keyword)
+    ((rxmatch #/^[0-9]+[a-zA-Z@-]+$/ keyword)
      (append
       (henkan-okuri-nashi-and-number userid kvs keyword limit)
       (henkan-alphabet kvs keyword)))

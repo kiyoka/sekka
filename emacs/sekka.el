@@ -838,7 +838,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	 (when (eq sym _type)
 	   (push x lst))))
      sekka-henkan-kouho-list)
-    (sekka-debug-print (format "filterd-lst = %S\n" (reverse lst)))
+    (sekka-debug-print (format "filtered-lst = %S\n" (reverse lst)))
     (car (reverse lst))))
     
 ;; 指定された type の候補が存在するか調べる
@@ -862,7 +862,9 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	   (message "Sekka: 半角の候補はありません。"))
 	  ((eq _type 'z)
 	   (message "Sekka: 全角の候補はありません。"))
-	  nil))
+	  ((eq _type 'n)
+	   (message "Sekka: 数字混在の候補はありません．")))
+	 nil)
       (let ((num   (nth sekka-id-index kouho)))
 	(setq sekka-cand-cur num)
 	(sekka-select-update-display)
@@ -1413,7 +1415,7 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
 (setq default-input-method "japanese-sekka")
 
 (defconst sekka-version
-  "0.8.4" ;;SEKKA-VERSION
+  "0.8.5" ;;SEKKA-VERSION
   )
 (defun sekka-version (&optional arg)
   "入力モード変更"
