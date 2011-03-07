@@ -839,18 +839,20 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	   (push x lst))))
      sekka-henkan-kouho-list)
     (sekka-debug-print (format "filtered-lst = %S\n" (reverse lst)))
-    (car (reverse lst))))
+    (if (null lst)
+	nil
+      (car (reverse lst)))))
     
 ;; 指定された type の候補が存在するか調べる
 (defun sekka-include-typep ( _type )
-  (not (null (sekka-select-by-type-filter _type))))
+  (sekka-select-by-type-filter _type))
 
 ;; 指定された type の候補に強制的に切りかえる
 ;; 切りかえが成功したかどうかを t or nil で返す。
 (defun sekka-select-by-type ( _type )
   (let ((kouho (sekka-select-by-type-filter _type)))
-    (if (null kouho)
-	(begin
+    (if (not kouho)
+	(progn
 	 (cond
 	  ((eq _type 'j)
 	   (message "Sekka: 漢字の候補はありません。"))
