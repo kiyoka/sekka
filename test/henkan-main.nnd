@@ -468,6 +468,30 @@
 
 
 ;;-------------------------------------------------------------------
+(test-section "henkan (number)")
+
+(test* "number 1"
+       '(("1" nil "1" n) ("１" nil "1" n) ("一" nil "1" n) ("一" nil "1" n))
+       (henkan-number kvs "1"))
+
+(test* "number 2"
+       '(("10" nil "10" n) ("１０" nil "10" n) ("一〇" nil "10" n) ("十" nil "10" n))
+       (henkan-number kvs "10"))
+
+(test* "number 3"
+       '(("100" nil "100" n) ("１００" nil "100" n) ("一〇〇" nil "100" n) ("百" nil "100" n))
+       (henkan-number kvs "100"))
+
+(test* "number 4"
+       '(("1234567890" nil "1234567890" n) ("１２３４５６７８９０" nil "1234567890" n) ("一二三四五六七八九〇" nil "1234567890" n) ("十二億三千四百五十六万七千八百九十" nil "1234567890" n))
+       (henkan-number kvs "1234567890"))
+
+(test* "number 5"
+       '(("1234567890" nil "1234567890" n) ("１２３４５６７８９０" nil "1234567890" n) ("一二三四五六七八九〇" nil "1234567890" n) ("十二億三千四百五十六万七千八百九十" nil "1234567890" n))
+       (henkan-number kvs "1234567890"))
+
+
+;;-------------------------------------------------------------------
 (test-section "henkan (okuri ari)")
 
 (test* "approximate search 1"
@@ -887,8 +911,16 @@
        (sekkaHenkan userid kvs #f "Yu-za-jisyo" 2 "normal"))
 
 (test* "henkan toplevel(for Elisp) 18"
-       '(("２月２８日" nil "#がつ#にち" n 0) ("2月28日" nil "#がつ#にち" n 1) ("２ｇａｔｕ２８ｎｉｃｈｉ" nil "2gatu28nichi" z 2) ("2gatu28nichi" nil "2gatu28nichi" l 3))
-       (sekkaHenkan userid kvs #f "2gatu28nichi" 2 "normal"))
+       '(("２月２８日" nil "#がつ#にち" n 0) ("2月28日" nil "#がつ#にち" n 1) ("二月二八日" nil "#がつ#にち" n 2) ("二月２８日" nil "#がつ#にち" n 3) ("２ｇａｔｕ２８ｎｉｃｈｉ" nil "2gatu28nichi" z 4) ("2gatu28nichi" nil "2gatu28nichi" l 5))
+       (sekkaHenkan userid kvs #f "2gatu28nichi" 0 "normal"))
+
+(test* "henkan toplevel(for Elisp) 19"
+       '(("100" nil "100" n 0) ("１００" nil "100" n 1) ("一〇〇" nil "100" n 2) ("百" nil "100" n 3))
+       (sekkaHenkan userid kvs #f "100" 0 "normal"))
+
+(test* "henkan toplevel(for Elisp) 20"
+       '(("1000020003" nil "1000020003" n 0) ("１００００２０００３" nil "1000020003" n 1) ("一〇〇〇〇二〇〇〇三" nil "1000020003" n 2) ("十億二万三" nil "1000020003" n 3))
+       (sekkaHenkan userid kvs #f "1000020003" 0 "normal"))
 
 
 ;;-------------------------------------------------------------------

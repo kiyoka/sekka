@@ -273,6 +273,16 @@
      kouho)))
 
 
+;; 数字だけで構成されるキーワードの変換
+(define (henkan-number kvs keyword)
+  ;; 数字部分を抜きだして '#' に変換
+  `(
+    (,(sekka-henkan-sharp-number "#0" keyword) nil ,keyword n)
+    (,(sekka-henkan-sharp-number "#1" keyword) nil ,keyword n)
+    (,(sekka-henkan-sharp-number "#2" keyword) nil ,keyword n)
+    (,(sekka-henkan-sharp-number "#3" keyword) nil ,keyword n)))
+
+
 ;; keyword には ローマ字のみを受け付ける
 (define (sekka-henkan userid kvs keyword limit roman-method)
   ;; 変換候補にindex番号を付加する
@@ -311,8 +321,11 @@
                '()
                (henkan-hiragana kvs (sekka-downcase k) roman-method)))
           (henkan-alphabet kvs keyword))))))
+    ;; 10進数数値のみで構成されるキーワード
+    ((rxmatch #/^[0-9]+$/ keyword)
+     (henkan-number kvs keyword))
     ;; 10進数数値で始まるキーワード
-    ((rxmatch #/^[0-9]+[a-zA-Z@-]+$/ keyword)
+    ((rxmatch #/^[0-9]+[0-9a-zA-Z@-]+$/ keyword)
      (append
       (henkan-okuri-nashi-and-number userid kvs keyword limit)
       (henkan-alphabet kvs keyword)))
