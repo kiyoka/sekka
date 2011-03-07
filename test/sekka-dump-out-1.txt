@@ -309,6 +309,39 @@ MASTER::#がつ#か /#1月#1日/#0月#0日/#2月#2日/#2月#1日
 MASTER::#kara# C#から#
 MASTER::#kr# C#から#
 MASTER::#から# /#1〜#1
+MASTER::#chi'mf C#ちーむ
+MASTER::#chi'mu C#ちーむ
+MASTER::#chi-mf C#ちーむ
+MASTER::#chi-mu C#ちーむ
+MASTER::#chi:mf C#ちーむ
+MASTER::#chi:mu C#ちーむ
+MASTER::#chi^mf C#ちーむ
+MASTER::#chi^mu C#ちーむ
+MASTER::#ci'mf C#ちーむ
+MASTER::#ci'mu C#ちーむ
+MASTER::#ci-mf C#ちーむ
+MASTER::#ci-mu C#ちーむ
+MASTER::#ci:mf C#ちーむ
+MASTER::#ci:mu C#ちーむ
+MASTER::#ci^mf C#ちーむ
+MASTER::#ci^mu C#ちーむ
+MASTER::#ti'mf C#ちーむ
+MASTER::#ti'mu C#ちーむ
+MASTER::#ti-mf C#ちーむ
+MASTER::#ti-mu C#ちーむ
+MASTER::#ti:mf C#ちーむ
+MASTER::#ti:mu C#ちーむ
+MASTER::#ti^mf C#ちーむ
+MASTER::#ti^mu C#ちーむ
+MASTER::#tyi'mf C#ちーむ
+MASTER::#tyi'mu C#ちーむ
+MASTER::#tyi-mf C#ちーむ
+MASTER::#tyi-mu C#ちーむ
+MASTER::#tyi:mf C#ちーむ
+MASTER::#tyi:mu C#ちーむ
+MASTER::#tyi^mf C#ちーむ
+MASTER::#tyi^mu C#ちーむ
+MASTER::#ちーむ /#0チーム
 MASTER::aA 
 MASTER::aB 
 MASTER::aC 
@@ -2055,6 +2088,8 @@ MASTER::(HD) hdkaS
 MASTER::(OK) okonaU
 MASTER::(WT) wtshiH wtsiH wtxiH
 MASTER::(WA) watashiH watasiH
+MASTER::(#t) #ti'mf #ti'mu #ti-mf #ti-mu #ti:mf #ti:mu #ti^mf #ti^mu #tyi'mf #tyi'mu #tyi-mf #tyi-mu #tyi:mf #tyi:mu #tyi^mf #tyi^mu
+MASTER::(#c) #chi'mf #chi'mu #chi-mf #chi-mu #chi:mf #chi:mu #chi^mf #chi^mu #ci'mf #ci'mu #ci-mf #ci-mu #ci:mf #ci:mu #ci^mf #ci^mu
 MASTER::(#k) #kaime #kara# #kqme #kr#
 MASTER::(#g) #gatsu#ka #gatsu#nichi #gatsu#nici #gatsu#niti #gatsu#nityi #gatsu#nt #gatu#ka #gatu#nichi #gatu#nici #gatu#niti #gatu#nityi #gatu#nt #gyoume #gyowhume #gypme
 MASTER::(iq) iqngp iqnyou iqnyowhu iqnyp iqyou iqyowhu iqyp

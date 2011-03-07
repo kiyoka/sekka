@@ -72,6 +72,9 @@
 (test* "expanding SKK(1) entry to SEKKA(n) entry. (#付き3)"
        '(("#kara#" . "C#から#") ("#kr#" . "C#から#") ("#から#" . "/#1〜#1/"))
        (expand-okuri-nashi-entry   "#から#" "/#1〜#1/"))
+(test* "expanding SKK(1) entry to SEKKA(n) entry. (#付き4)"
+       '(("#chi'mf" . "C#ちーむ") ("#chi'mu" . "C#ちーむ") ("#chi-mf" . "C#ちーむ") ("#chi-mu" . "C#ちーむ") ("#chi:mf" . "C#ちーむ") ("#chi:mu" . "C#ちーむ") ("#chi^mf" . "C#ちーむ") ("#chi^mu" . "C#ちーむ") ("#ci'mf" . "C#ちーむ") ("#ci'mu" . "C#ちーむ") ("#ci-mf" . "C#ちーむ") ("#ci-mu" . "C#ちーむ") ("#ci:mf" . "C#ちーむ") ("#ci:mu" . "C#ちーむ") ("#ci^mf" . "C#ちーむ") ("#ci^mu" . "C#ちーむ") ("#ti'mf" . "C#ちーむ") ("#ti'mu" . "C#ちーむ") ("#ti-mf" . "C#ちーむ") ("#ti-mu" . "C#ちーむ") ("#ti:mf" . "C#ちーむ") ("#ti:mu" . "C#ちーむ") ("#ti^mf" . "C#ちーむ") ("#ti^mu" . "C#ちーむ") ("#tyi'mf" . "C#ちーむ") ("#tyi'mu" . "C#ちーむ") ("#tyi-mf" . "C#ちーむ") ("#tyi-mu" . "C#ちーむ") ("#tyi:mf" . "C#ちーむ") ("#tyi:mu" . "C#ちーむ") ("#tyi^mf" . "C#ちーむ") ("#tyi^mu" . "C#ちーむ") ("#ちーむ" . "/#0チーム/"))
+       (expand-okuri-nashi-entry   "#ちーむ" "/#0チーム/"))
 (test* "expanding SKK(1) entry to SEKKA(n) entry. (送りあり2)"
        '(("kaK" . "Cかk") ("かk" . "/書/掛/欠/架/駆/懸"))
        (expand-okuri-ari-entry   "か" "k" "/書/掛/欠/架/駆/懸"))

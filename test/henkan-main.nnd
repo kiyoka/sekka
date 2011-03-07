@@ -921,6 +921,9 @@
 (test* "henkan toplevel(for Elisp) 20"
        '(("１００００２０００３" nil "1000020003" n 0) ("1000020003" nil "1000020003" n 1) ("一〇〇〇〇二〇〇〇三" nil "1000020003" n 2) ("十億二万三" nil "1000020003" n 3))
        (sekkaHenkan userid kvs #f "1000020003" 0 "normal"))
+(test* "henkan toplevel(for Elisp) 21"
+       '(("3チーム" nil "#ちーむ" n 0) ("３ｃｈｉ－ｍｕ" nil "3chi-mu" z 1) ("3chi-mu" nil "3chi-mu" l 2))
+       (sekkaHenkan userid kvs #f "3chi-mu" 0 "normal"))
 
 
 ;;-------------------------------------------------------------------

@@ -95,10 +95,10 @@
         ;; フォーマットエラー
         #f)
        ((or (is-hiragana (first fields))
-            (rxmatch #/^([>#あ-ん]+)$/ (first fields)))
+            (rxmatch #/^([>#あ-んー]+)$/ (first fields)))
         ;; 送り仮名なしデータ
         (expand-okuri-nashi-entry (first fields) (second fields)))
-       ((rxmatch #/^([>あ-ん]+)([a-z])$/ (first fields))
+       ((rxmatch #/^([>あ-んー]+)([a-z])$/ (first fields))
         => (lambda (m)
              ;; 送り仮名ありデータ
              (expand-okuri-ari-entry (rxmatch-substring m 1)
