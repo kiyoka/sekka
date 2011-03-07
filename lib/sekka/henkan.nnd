@@ -277,8 +277,8 @@
 (define (henkan-number kvs keyword)
   ;; 数字部分を抜きだして '#' に変換
   `(
-    (,(sekka-henkan-sharp-number "#0" keyword) nil ,keyword n)
     (,(sekka-henkan-sharp-number "#1" keyword) nil ,keyword n)
+    (,(sekka-henkan-sharp-number "#0" keyword) nil ,keyword n)
     (,(sekka-henkan-sharp-number "#2" keyword) nil ,keyword n)
     (,(sekka-henkan-sharp-number "#3" keyword) nil ,keyword n)))
 
