@@ -85,7 +85,7 @@ task :compile do
   end
 end
 
-task :check do
+task :test do
   sh "/bin/rm -f test.record"
   files = []
   files << "./test/util.nnd"
