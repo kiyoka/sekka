@@ -60,12 +60,13 @@ module SekkaServer
       @mutex = Mutex.new
 
       STDERR.puts(   "----- Sekka Server Started -----" )
-      STDERR.printf( "  version   : %s\n", SekkaVersion.version            )
-      STDERR.printf( "  dict-db   : %s\n", SekkaServer::Config.dictSource  )
-      STDERR.printf( "  memcached : %s\n", SekkaServer::Config.cacheSource )
-      STDERR.printf( "  listenPort: %s\n", SekkaServer::Config.listenPort  )
-      STDERR.printf( "  proxyHost : %s\n", SekkaServer::Config.proxyHost   )
-      STDERR.printf( "  proxyPort : %s\n", SekkaServer::Config.proxyPort   )
+      STDERR.printf( "  Sekka version  : %s\n", SekkaVersion.version            )
+      STDERR.printf( "  Nendo version  : %s\n", Nendo::Core.version             )
+      STDERR.printf( "  dict-db        : %s\n", SekkaServer::Config.dictSource  )
+      STDERR.printf( "  memcached      : %s\n", SekkaServer::Config.cacheSource )
+      STDERR.printf( "  listenPort     : %s\n", SekkaServer::Config.listenPort  )
+      STDERR.printf( "  proxyHost      : %s\n", SekkaServer::Config.proxyHost   )
+      STDERR.printf( "  proxyPort      : %s\n", SekkaServer::Config.proxyPort   )
       STDERR.puts(   "--------------------------------" )
 
       begin
