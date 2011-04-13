@@ -33,6 +33,8 @@
 ;;;  
 ;;;  $Id: 
 ;;;
+(use util.list)
+
 (define (string-drop str n)
   (or (str.slice n (str.size))
       ""))
@@ -54,11 +56,5 @@
     (list (car (to-list (line.split #/[ ]+/)))
           (. (line.slice index (line.size)) strip))
     #f))
-
-(define (take* lst limit)
-  (let1 len (length lst)
-    (if (< len limit)
-        lst
-        (take lst limit))))
 
 
