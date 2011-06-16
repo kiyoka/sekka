@@ -35,6 +35,7 @@
 ;;;
 (use srfi-1)
 (use util.list)
+(use util.combinations)
 
 ;; 子音が1音だけ入ったテーブル
 ;; このテーブルはruby-romkan から変換し、一部不足を追加した。
@@ -772,17 +773,6 @@
    (lambda (x)
      (gen-hiragana->katakana x))
    (gen-roman->hiragana roman-str roman-method)))
-
-;; This function port from Gauche-0.9's util.combinations.
-(define (cartesian-product lol)
-  (if (null? lol)
-      (list '())
-      (let ((l (car lol))
-            (rest (cartesian-product (cdr lol))))
-        (append-map
-         (lambda (x)
-           (map (lambda (sub-prod) (cons x sub-prod)) rest))
-         l))))
 
 
 (define (patterns->roman-list patterns)
