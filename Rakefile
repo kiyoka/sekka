@@ -93,14 +93,13 @@ task :test do
   files << "./test/sharp-number.nnd"
   files << "./test/roman-lib.nnd"
   files << "./test/azik-verification.nnd"
-  files << "./test/jisyo.nnd" 
+  files << "./test/jisyo.nnd"
   files << "./test/google-ime.nnd"
   files << "./test/henkan-main.nnd  tokyocabinet"
-  files << "./test/approximate-bench.nnd  memcache"
   files.each {|filename|
     sh  sprintf( "time ruby -I ./lib /usr/local/bin/nendo %s", filename )
   }
-  sh "cat test.record" 
+  sh "cat test.record"
 end
 
 task :alljisyo => [ :jisyoS, :jisyoL, :loadS, :loadL ]

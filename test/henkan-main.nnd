@@ -52,7 +52,7 @@
  ((eq? dbtype 'tokyocabinet)
   (set! target "./test.tch"))
  ((eq? dbtype 'memcache)
-  (set! target "localhost:11211"))
+  (error "memcached interface is obsolute."))
  (else
   (errorf "Unsupported db type [%s]" (symbol->string dbtype))))
 
@@ -107,8 +107,7 @@
   (kvs.open target)
   (require "tokyocabinet"))
  ((eq? dbtype 'memcache)
-  (kvs.open target)
-  (require "memcache"))
+  (error "memcached interface is obsolute."))
  (else
   (errorf "Unsupported db type [%s]" (symbol->string dbtype))))
 
