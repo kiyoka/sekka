@@ -32,6 +32,7 @@
 #  $Id:
 #
 require 'tokyocabinet'
+require 'memcache'
 
 
 class Kvs
@@ -41,6 +42,8 @@ class Kvs
     when :tokyocabinet
       @db = TokyoCabinet::HDB.new( )
       # @db.setxmsiz(512 * 1024 * 1024)  # expand memory
+    when :memcache
+      # do nothing
     else
       raise ArgumentError, "Kvs.new() requires reserved DB typename"
     end
@@ -54,6 +57,8 @@ class Kvs
       elsif not @db.optimize( )
         raise RuntimeError, sprintf( "TokyoCabinet::HDB.optimize error: file=%s", name )
       end
+    when :memcache
+      @db = MemCache.new( name )
     else
       raise RuntimeError
     end
@@ -67,10 +72,13 @@ class Kvs
         if not @db[ key.force_encoding("ASCII-8BIT") ] = value.force_encoding("ASCII-8BIT")
           raise RuntimeError sprintf( "TokyoCabinet::HDB.put error: key=%s", key.force_encoding("ASCII-8BIT"))
         end
+      when :memcache
+        @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"), timeout )
       else
         raise RuntimeError
       end
     end
+    value
   end
 
   def get( key, fallback = false )
@@ -94,6 +102,8 @@ class Kvs
     case @dbtype
     when :tokyocabinet
       @db.clear
+    when :memcache
+      # do nothing
     else
       raise RuntimeError
     end
@@ -106,6 +116,8 @@ class Kvs
       @db.keys.map { |k|
         k.force_encoding("UTF-8")
       }
+    when :memcache
+      raise RuntimeError, "Kvs#keys method was not implemented for memcache."
     else
       raise RuntimeError
     end
@@ -117,6 +129,8 @@ class Kvs
       @db.fwmkeys( prefix ).each { |k|
         k.force_encoding("UTF-8")
       }
+    when :memcache
+      raise RuntimeError, "Kvs#forward_match_keys method was not implemented for memcache."
     else
       raise RuntimeError
     end
@@ -126,6 +140,8 @@ class Kvs
     case @dbtype
     when :tokyocabinet
       @db.close
+    when :memcache
+      # do nothign
     else
       raise RuntimeError
     end

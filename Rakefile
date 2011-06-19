@@ -96,6 +96,7 @@ task :test do
   files << "./test/jisyo.nnd"
   files << "./test/google-ime.nnd"
   files << "./test/henkan-main.nnd  tokyocabinet"
+  files << "./test/memcache.nnd"
   files.each {|filename|
     sh  sprintf( "time ruby -I ./lib /usr/local/bin/nendo %s", filename )
   }
