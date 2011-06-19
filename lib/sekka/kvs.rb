@@ -51,6 +51,8 @@ class Kvs
     when :tokyocabinet
       if not @db.open( name, TokyoCabinet::HDB::OWRITER | TokyoCabinet::HDB::OCREAT )
         raise RuntimeError, sprintf( "TokyoCabinet::HDB.open error: file=%s", name )
+      elsif not @db.optimize( )
+        raise RuntimeError, sprintf( "TokyoCabinet::HDB.optimize error: file=%s", name )
       end
     else
       raise RuntimeError
