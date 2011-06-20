@@ -54,14 +54,19 @@ class Kvs
     when :tokyocabinet
       if not @db.open( name, TokyoCabinet::HDB::OWRITER | TokyoCabinet::HDB::OCREAT )
         raise RuntimeError, sprintf( "TokyoCabinet::HDB.open error: file=%s", name )
-      elsif not @db.optimize( )
-        raise RuntimeError, sprintf( "TokyoCabinet::HDB.optimize error: file=%s", name )
       end
     when :memcache
       @db = MemCache.new( name )
     else
       raise RuntimeError
     end
+  end
+
+  def fixdb( )
+    if not @db.optimize( )
+      raise RuntimeError, sprintf( "TokyoCabinet::HDB.optimize error: file=%s", name )
+    end
+    true
   end
 
   def put!( key, value, timeout = 0 )
