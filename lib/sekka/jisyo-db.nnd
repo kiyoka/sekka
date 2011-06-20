@@ -181,7 +181,7 @@
                       #f)
       ;; 読み書きできるか調べる
       (let ([d (. (Date.new 0) to_s)])
-        (if (and (kvs.put! "key_for_ping" d)
+        (if (and (kvs.pure_put! "key_for_ping" d)
                  (string=? (kvs.get  "key_for_ping") d))
             (STDERR.puts "Info: database file was clean")
             ;; 正常に読み書きできないようであれば、データベースを修復する

@@ -70,13 +70,17 @@ class Kvs
   end
 
   def put!( key, value, timeout = 0 )
+    if not self.pure_put!( key, value, timeout )
+      raise RuntimeError sprintf( "put! error: key=%s", key.force_encoding("ASCII-8BIT"))
+    end
+    value
+  end
+
+  def pure_put!( key, value, timeout = 0 )
     if 0 < key.size
-      #p "put! " + key + ":" + value
       case @dbtype
       when :tokyocabinet
-        if not @db[ key.force_encoding("ASCII-8BIT") ] = value.force_encoding("ASCII-8BIT")
-          raise RuntimeError sprintf( "TokyoCabinet::HDB.put error: key=%s", key.force_encoding("ASCII-8BIT"))
-        end
+        @db[ key.force_encoding("ASCII-8BIT") ] = value.force_encoding("ASCII-8BIT")
       when :memcache
         @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"), timeout )
       else
