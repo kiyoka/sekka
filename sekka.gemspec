@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kiyoka Nishiyama"]
-  s.date = %q{2011-06-17}
+  s.date = %q{2011-06-24}
   s.description = %q{Sekka is a SKK like input method. Sekka server provides REST Based API. If you are SKK user, let's try it.}
   s.email = %q{kiyoka@sumibi.org}
   s.executables = ["sekka-jisyo", "sekka-server", "sekka-benchmark", "sekka-path"]
@@ -49,6 +49,7 @@ Gem::Specification.new do |s|
     "test/google-ime.nnd",
     "test/henkan-main.nnd",
     "test/jisyo.nnd",
+    "test/memcache.nnd",
     "test/roman-lib.nnd",
     "test/sharp-number.nnd",
     "test/skk-azik-table.nnd",
