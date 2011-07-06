@@ -131,6 +131,11 @@ task :dump do
   sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.LARGE.tch > ./data/SEKKA-JISYO.LARGE.dump"
 end
 
+
+task :phrase do
+  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase.nnd ./data/6gm-0000.txt | tee log"
+end
+
 task :rackup do
   # how to install mongrel is "gem install mongrel --pre"
   sh "ruby -I ./lib ./bin/sekka-server"

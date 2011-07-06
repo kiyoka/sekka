@@ -1,0 +1,28 @@
+#!/bin/sh
+:; #-*- mode: nendo; syntax: scheme -*-;;
+:; exec /usr/local/bin/nendo $0 $*
+
+
+(define (include-slash-s? lst)
+  (any
+   (lambda (x)
+     (string=? "</S>" x))
+   lst))
+
+(define (grep-last-phrase filename)
+  (with-open
+   filename
+   (lambda (f)
+     (for-each
+      (lambda (line)
+        (let1 lst (to-list (line.chomp.split #/[ \t]+/))
+          (when (include-slash-s? lst)
+            (print lst))))
+      (f.readlines.to_list)))))
+  
+(define (main argv)
+  (if (> 1 (length argv))
+      (error "hiragana_phrase.nnd requires [6gram web corpus file]")
+      (grep-last-phrase (car (to-list argv)))))
+
+
