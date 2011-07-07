@@ -5,11 +5,19 @@
 (use srfi-1)
 (use sekka.roman-lib)
 
-(define (hiragana-filter lst)
-  (filter
-   (lambda (x)
-     (is-hiragana     x))
-   lst))
+(define (hiragana-filter words)
+  (define (hiras lst)
+    (cond
+     ((null? lst)
+      lst)
+     ((is-hiragana (car lst))
+      (cons
+       (car lst)
+       (hiras (cdr lst))))))
+     
+  (let1 lst (cdr (reverse words))
+    (reverse (hiras lst))))
+
 
 (define (include-slash-s? lst)
   (any
@@ -27,14 +35,17 @@
    (lambda (f)
      (for-each
       (lambda (line)
-        (let1 lst (to-list (line.chomp.split #/[ \t]+/))
-          (when (include-slash-s? lst)
-            (display (apply + (hiragana-filter lst)))
-            (display "  ;;  ")
-            (display lst)
-            (newline))))
+        (let* ([lst   (to-list (line.chomp.split #/[ \t]+/))]
+               [freq  (take-right lst 1)]
+               [words (drop-right lst 1)])
+          (when (include-slash-s? words)
+            (let1 phrase (apply + (hiragana-filter words))
+              (printf "%s    ;; %2d ;; %s\n"
+                      phrase
+                      phrase.size
+                      (write-to-string lst))))))
       (f.readlines.to_list)))))
-  
+
 (define (main argv)
   (if (> 1 (length argv))
       (error "hiragana_phrase.nnd requires [6gram web corpus file]")

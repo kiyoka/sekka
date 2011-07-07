@@ -133,7 +133,8 @@ end
 
 
 task :phrase do
-  sh "head -1000 ./data/6gm-0000.txt > ./data/head.txt"
+  sh "/bin/cp ./data/6gm-0000.txt ./data/head.txt"
+#  sh "head -1000 ./data/6gm-0000.txt > ./data/head.txt"
   sh "time ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase.nnd ./data/head.txt > ./data/log"
 end
 
