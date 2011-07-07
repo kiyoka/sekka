@@ -133,7 +133,8 @@ end
 
 
 task :phrase do
-  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase.nnd ./data/6gm-0000.txt | tee log"
+  sh "head -1000 ./data/6gm-0000.txt > ./data/head.txt"
+  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase.nnd ./data/head.txt > ./data/log"
 end
 
 task :rackup do

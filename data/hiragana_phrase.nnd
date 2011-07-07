@@ -2,12 +2,24 @@
 :; #-*- mode: nendo; syntax: scheme -*-;;
 :; exec /usr/local/bin/nendo $0 $*
 
+(use srfi-1)
+(use sekka.roman-lib)
+
+(define (hiragana-filter lst)
+  (filter
+   (lambda (x)
+     (is-hiragana     x))
+   lst))
 
 (define (include-slash-s? lst)
   (any
-   (lambda (x)
-     (string=? "</S>" x))
+   (lambda (x y)
+     (and
+      (string=? "</S>" y)
+      (is-hiragana     x)))
+   (cons "" lst)
    lst))
+   
 
 (define (grep-last-phrase filename)
   (with-open
@@ -17,7 +29,10 @@
       (lambda (line)
         (let1 lst (to-list (line.chomp.split #/[ \t]+/))
           (when (include-slash-s? lst)
-            (print lst))))
+            (display (apply + (hiragana-filter lst)))
+            (display "  ;;  ")
+            (display lst)
+            (newline))))
       (f.readlines.to_list)))))
   
 (define (main argv)
