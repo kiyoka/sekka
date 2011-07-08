@@ -180,17 +180,17 @@ Sekkaはモードレスなローマ字かな漢字変換エンジンです。SKK
      { } で囲った aa から zz までのインデックスを保持する。
      
       [key]               [value]
-     "MASTER::{sh}"       "shita shimashita shiteimasu"
-     "MASTER::{mo}"       "motto mottomo"
+     "MASTER::{sh}"       "=shita =shimashita =shiteimasu"
+     "MASTER::{mo}"       "=motto =mottomo"
 
   3) マスター辞書の平仮名フレーズエントリの例
-      key の先頭にスペースが付いたエントリとなる。バリュー側は変換ターゲットの平仮名文字列が入る。
+      key の先頭にイコール(=)が付いたエントリとなる。バリュー側は変換ターゲットの平仮名文字列が入る。
 
       [key]                   [value]
-      "MASTER:: shita"         "した"
-      "MASTER:: shimashita"    "しました"
-      "MASTER:: shiteimasu"    "しています"
-      "MASTER:: motto"         "もっと"
+      "MASTER::=shita"         "した"
+      "MASTER::=shimashita"    "しました"
+      "MASTER::=shiteimasu"    "しています"
+      "MASTER::=motto"         "もっと"
 
 
 6. コマンド

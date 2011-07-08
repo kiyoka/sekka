@@ -38,6 +38,17 @@
 (use sekka.roman-lib)
 
 
+(define (expand-hiragana-phrase-entry key)
+  (let1 roman-list (gen-hiragana->roman-list key)
+    (if (< 1000 (length roman-list))
+        (begin
+          (STDERR.printf " Warning: ignored entry [%s] (hiragana phrase), because too many pattens.\n" key)
+          #f) ;; パターン数が爆発した単語は無視する
+        (map
+         (lambda (x)
+           (cons x (+ "=" key)))
+         roman-list))))
+
 (define (expand-okuri-nashi-entry key value)
   (let1 roman-list (gen-hiragana->roman-list key)
     (if (< 1000 (length roman-list))
@@ -94,6 +105,10 @@
        ((not fields)
         ;; フォーマットエラー
         #f)
+       ((and (is-hiragana (first fields))
+             (rxmatch #/^\/$/ #?=(second fields)))
+        ;; 平仮名フレーズ
+        (expand-hiragana-phrase-entry (first fields)))
        ((or (is-hiragana (first fields))
             (rxmatch #/^([>#あ-んー]+)$/ (first fields)))
         ;; 送り仮名なしデータ
