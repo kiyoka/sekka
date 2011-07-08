@@ -46,7 +46,7 @@
           #f) ;; パターン数が爆発した単語は無視する
         (map
          (lambda (x)
-           (cons x (+ "=" key)))
+           (cons (+ "=" x) key))
          roman-list))))
 
 (define (expand-okuri-nashi-entry key value)
@@ -106,7 +106,7 @@
         ;; フォーマットエラー
         #f)
        ((and (is-hiragana (first fields))
-             (rxmatch #/^\/$/ #?=(second fields)))
+             (rxmatch #/^\/$/ (second fields)))
         ;; 平仮名フレーズ
         (expand-hiragana-phrase-entry (first fields)))
        ((or (is-hiragana (first fields))
