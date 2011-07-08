@@ -72,21 +72,29 @@
       opt)))
 
 (define (create-2char-hash keylist)
-  (define okuri-ari-hash   (make-hash-table))
-  (define okuri-nashi-hash (make-hash-table))
+  (define okuri-ari-hash         (make-hash-table))
+  (define okuri-nashi-hash       (make-hash-table))
+  (define hiragana-phrase-hash   (make-hash-table))
   (define (create-hash keylist)
     (for-each
      (lambda (k)
-       (when (rxmatch #/^[a-zA-Z#^>-@`\;+:'\-]+$/ k)
-         (let1 sliced (sekka-downcase (k.slice 0 2))
-           (when (= 2 sliced.size)
-             (if (rxmatch #/[A-Z`+]$/ k)
-                 (hash-table-push! okuri-ari-hash   sliced k)
-                 (hash-table-push! okuri-nashi-hash sliced k))))))
+       (when (rxmatch #/^[=a-zA-Z#^>-@`\;+:'\-]+$/ k)
+         (if (rxmatch #/^=/ k)
+             ;; HIRAGANA-PHRASE
+             (let1 sliced (sekka-downcase (k.slice 1 2))
+               (when (= 2 sliced.size)
+                 (hash-table-push! hiragana-phrase-hash   sliced k)))
+             ;; OKURI-ARI and OKURI-NASHI
+             (let1 sliced (sekka-downcase (k.slice 0 2))
+               (when (= 2 sliced.size)
+                 (if (rxmatch #/[A-Z`+]$/ k)
+                     (hash-table-push! okuri-ari-hash   sliced k)
+                     (hash-table-push! okuri-nashi-hash sliced k)))))))
      keylist))
   (create-hash keylist)
   (values okuri-ari-hash
-          okuri-nashi-hash))
+          okuri-nashi-hash
+          hiragana-phrase-hash))
 
 (define (setup-ready-made-keylist kvs keylist)
   (for-each
@@ -97,7 +105,8 @@
    alphabet-pairs)
   
   (receive (okuri-ari-hash
-            okuri-nashi-hash)
+            okuri-nashi-hash
+            hiragana-phrase-hash)
       (create-2char-hash keylist)
 
     ;; OKURI-ARI
@@ -112,7 +121,14 @@
      (lambda (key)
        (kvs.put! (+ masterid "::" "(" (sekka-downcase key) ")")
                  (string-join (uniq (sort (hash-table-get okuri-nashi-hash key))) " ")))
-     (hash-table-keys okuri-nashi-hash))))
+     (hash-table-keys okuri-nashi-hash))
+
+    ;; HIRAGANA-PHRASE
+    (for-each
+     (lambda (key)
+       (kvs.put! (+ masterid "::" "{" (sekka-downcase key) "}")
+                 (string-join (uniq (sort (hash-table-get hiragana-phrase-hash key))) " ")))
+     (hash-table-keys hiragana-phrase-hash))))
 
 
 (define (append-entry userid kvs key value)

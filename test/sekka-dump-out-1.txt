@@ -342,6 +342,9 @@ MASTER::#tyi:mu C#ちーむ
 MASTER::#tyi^mf C#ちーむ
 MASTER::#tyi^mu C#ちーむ
 MASTER::#ちーむ /#0チーム
+MASTER::=shita した
+MASTER::=sita した
+MASTER::=st した
 MASTER::aA 
 MASTER::aB 
 MASTER::aC 
@@ -2112,3 +2115,6 @@ MASTER::(si) sizdgdgo sizdgdgorikq sizdgdgoshori sizdgdgosyori sizdgdgoxori size
 MASTER::(sh) shizdgdgo shizdgdgorikq shizdgdgoshori shizdgdgosyori shizdgdgoxori shizengengo shizengengorikai shizengengoshori shizengengosyori shizengenngo shizengenngorikai shizengenngoshori shizengenngosyori shizengeqgo shizengeqgorikai shizengeqgoshori shizengeqgosyori shizenngengo shizenngengorikai shizenngengoshori shizenngengosyori shizenngenngo shizenngenngorikai shizenngenngoshori shizenngenngosyori shizenngeqgo shizenngeqgorikai shizenngeqgoshori shizenngeqgosyori shizeqgengo shizeqgengorikai shizeqgengoshori shizeqgengosyori shizeqgenngo shizeqgenngorikai shizeqgenngoshori shizeqgenngosyori shizeqgeqgo shizeqgeqgorikai shizeqgeqgoshori shizeqgeqgosyori shizfngengo shizfngengorikai shizfngengoshori shizfngengosyori shizfngenngo shizfngenngorikai shizfngenngoshori shizfngenngosyori shizfngeqgo shizfngeqgorikai shizfngeqgoshori shizfngeqgosyori shizfnngengo shizfnngengorikai shizfnngengoshori shizfnngengosyori shizfnngenngo shizfnngenngorikai shizfnngenngoshori shizfnngenngosyori shizfnngeqgo shizfnngeqgorikai shizfnngeqgoshori shizfnngeqgosyori shizfqgengo shizfqgengorikai shizfqgengoshori shizfqgengosyori shizfqgenngo shizfqgenngorikai shizfqgenngoshori shizfqgenngosyori shizfqgeqgo shizfqgeqgorikai shizfqgeqgoshori shizfqgeqgosyori
 MASTER::(he) henka henkan henkann henkaq hennka hennkan hennkann hennkaq heqka heqkan heqkann heqkaq
 MASTER::(hd) hdka hdkn hdkz
+MASTER::{st} =st
+MASTER::{si} =sita
+MASTER::{sh} =shita

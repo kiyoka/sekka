@@ -468,7 +468,8 @@
     
   (define (_create-ready-made-keylist keylist)
     (receive (okuri-ari-hash
-              okuri-nashi-hash)
+              okuri-nashi-hash
+              hiragana-and-okuri)
         (create-2char-hash keylist)
       
       ;; OKURI-ARI
@@ -492,7 +493,7 @@
                                                       (hash-table-get okuri-nashi-hash key))))
                                   " "))))
        (hash-table-keys okuri-nashi-hash))))
-         
+  
   ;; "ユーザー語彙を"(stored)"にpush!する"
   (define (kvs-push! userid kvs entry-str)
     (let* ((orig (kvs.get (+ userid "::(stored)") "()"))
