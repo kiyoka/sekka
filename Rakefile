@@ -88,13 +88,13 @@ end
 task :test do
   sh "/bin/rm -f test.record"
   files = []
-  files << "./test/util.nnd"
-  files << "./test/alphabet-lib.nnd"
-  files << "./test/sharp-number.nnd"
-  files << "./test/roman-lib.nnd"
-  files << "./test/azik-verification.nnd"
-  files << "./test/jisyo.nnd"
-  files << "./test/google-ime.nnd"
+#  files << "./test/util.nnd"
+#  files << "./test/alphabet-lib.nnd"
+#  files << "./test/sharp-number.nnd"
+#  files << "./test/roman-lib.nnd"
+#  files << "./test/azik-verification.nnd"
+#  files << "./test/jisyo.nnd"
+#  files << "./test/google-ime.nnd"
   files << "./test/henkan-main.nnd  tokyocabinet"
   files << "./test/memcache.nnd"
   files.each {|filename|
