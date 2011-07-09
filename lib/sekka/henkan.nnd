@@ -79,7 +79,7 @@
 
 ;; 曖昧検索
 ;;  リストで返す。 (ソート済み検索結果)
-(define (approximate-search userid kvs keyword okuri-ari-flag limit)
+(define (approximate-search userid kvs keyword type limit)
   (define jarow-shikii 0.94)
   (let* ((a-search (ApproximateSearch.new jarow-shikii))
          (lst      (my-append-many
@@ -95,7 +95,7 @@
                          (lambda (element)
                            (list val k (+ v-first element)))
                          (to-list (v-rest.split "/")))))
-                     (to-list (a-search.search userid kvs keyword okuri-ari-flag)))))
+                     (to-list (a-search.search userid kvs keyword type)))))
          (nn-heuristics-result (nn-heuristics keyword lst))
          (sorted-lst  (sort-by nn-heuristics-result (lambda (item) (- 1.0 (car item))))))
     (if (= limit 0)
@@ -143,7 +143,7 @@
 
 ;; 送り仮名なしの変換
 (define (henkan-okuri-nashi userid kvs keyword limit)
-  (let* ((result (approximate-search userid kvs keyword #f limit))
+  (let* ((result (approximate-search userid kvs keyword "k" limit))
          (kouho  (uniq (map
                         (lambda (x)
                           (third x))
@@ -204,7 +204,7 @@
                                            (+ (rxmatch-substring m 1)
                                               (rxmatch-substring m 2)
                                               (rxmatch-substring m 3))
-                                           #t
+                                           "K"
                                            limit))
                (okurigana-lst  (gen-roman->hiragana (sekka-downcase
                                                      (+
@@ -236,19 +236,38 @@
                 (take* lst limit)))))))
 
 
+;; 平仮名フレーズ辞書を使った曖昧検索
+(define (henkan-hiragana-phrase userid kvs keyword limit roman-method)
+  (let* ([result (approximate-search userid kvs
+                                     (+ "=" (sekka-downcase keyword))
+                                     "h"
+                                     limit)]
+         [lst #?=(map
+                  (lambda (x)
+                    (list (third x) #f keyword 'h))
+                  #?=result)])
+    (if (= limit 0)
+        lst
+        (take* lst limit))))
+
+  
+  
 ;; 平仮名の変換
-(define (henkan-hiragana kvs keyword roman-method)
-  (let* ((str  (sekka-downcase keyword))
-         (hira (gen-roman->hiragana str roman-method))
-         (kata (gen-roman->katakana str roman-method)))
-    (if (null? hira)
-        `((,keyword #f ,keyword j))
-        (append-map (lambda (h k)
-                      `(
-                        (,h #f ,keyword h)
-                        (,k #f ,keyword k)))
-                    hira
-                    kata))))
+(define (henkan-hiragana userid kvs keyword roman-method)
+  (let* ([phrase-limit  5]
+         [str  (sekka-downcase keyword)]
+         [hira (gen-roman->hiragana str roman-method)]
+         [kata (gen-roman->katakana str roman-method)])
+    (append
+     (henkan-hiragana-phrase userid kvs keyword phrase-limit roman-method)
+     (if (null? hira)
+         `((,keyword #f ,keyword j))
+         (append-map (lambda (h k)
+                       `(
+                         (,h #f ,keyword h)
+                         (,k #f ,keyword k)))
+                     hira
+                     kata)))))
 
 
 ;; アルファベットの単純変換
@@ -303,23 +322,21 @@
        (cond
         ((rxmatch #/[a-z][A-Z`+]/ k)
          ;; 送りあり
-         ;;(let1 result (approximate-search db k #t)  (disp-search-result result))
          (append
           (append
            (henkan-okuri-ari userid kvs k limit roman-method)
            (if (null? (gen-roman->hiragana (sekka-downcase k) roman-method))
                '()
-              (henkan-hiragana kvs (sekka-downcase k) roman-method)))
+              (henkan-hiragana userid kvs (sekka-downcase k) roman-method)))
           (henkan-alphabet kvs keyword)))
         (else
          ;; 送りなし
-         ;;(let1 result (approximate-search db k #f)  (disp-search-result result))
          (append
           (append
            (henkan-okuri-nashi userid kvs k limit)
            (if (null? (gen-roman->hiragana (sekka-downcase k) roman-method))
                '()
-               (henkan-hiragana kvs (sekka-downcase k) roman-method)))
+               (henkan-hiragana userid kvs (sekka-downcase k) roman-method)))
           (henkan-alphabet kvs keyword))))))
     ;; 10進数数値のみで構成されるキーワード
     ((rxmatch #/^[0-9]+$/ keyword)
@@ -332,7 +349,7 @@
     ((not (null? (gen-roman->hiragana keyword roman-method)))
      (append
       (append
-       (henkan-hiragana kvs keyword roman-method)
+       (henkan-hiragana userid kvs keyword roman-method)
        (henkan-alphabet kvs keyword))
       (henkan-okuri-nashi userid kvs keyword limit)))
     (else

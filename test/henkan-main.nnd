@@ -260,103 +260,125 @@
        '((1.0 "henkan") (0.981 "henkann") (0.9722 "henka") (0.9611 "hennka") (0.9444 "henkaq"))
        (my-round-map
         (arr->list
-         (a-search.search userid kvs "henkan" #f))))
+         (a-search.search userid kvs "henkan" "k"))))
 
 (test* "search keyword list 2"
        '((1.0 "hennkan") (0.9875 "hennkann") (0.981 "hennka") (0.9667 "henkann") (0.9619 "hennkaq") (0.9421 "hennkanenzin") (0.9421 "hennkanenjiq") (0.9421 "hennkaneqjin") (0.9421 "hennkaneqjiq") (0.9421 "hennkaneqzin") (0.9421 "hennkaneqziq") (0.9421 "hennkanenjin") (0.9421 "hennkanenziq"))
        (my-round-map
         (arr->list
-         (a-search.search userid kvs "hennkan" #f))))
+         (a-search.search userid kvs "hennkan" "k"))))
 
 (test* "search keyword list 3"
        '((1.0 "henkann") (0.981 "henkan") (0.9667 "hennkan") (0.9524 "henka") (0.9449 "henkanenzin") (0.9449 "henkanenziq") (0.9449 "henkaneqjin") (0.9449 "henkaneqzin") (0.9449 "henkanenjiq") (0.9449 "henkanenjin") (0.9421 "henkannenzin") (0.9421 "henkannenjiq") (0.9421 "henkannenziq") (0.9421 "henkanneqjin") (0.9421 "henkanneqjiq") (0.9421 "henkanneqzin") (0.9421 "henkanneqziq") (0.9421 "henkannenjin"))
        (my-round-map
         (arr->list
-         (a-search.search userid kvs "henkann" #f))))
+         (a-search.search userid kvs "henkann" "k"))))
 
 (test* "search keyword list 4"
        '((1.0 "hennkann") (0.9875 "hennkan") (0.9667 "hennka") (0.9537 "hennkanenjiq") (0.9537 "hennkanenjin") (0.9537 "hennkanenzin") (0.9537 "hennkaneqjin") (0.9537 "hennkanenziq") (0.9537 "hennkaneqzin") (0.9507 "hennkannenjiq") (0.9507 "hennkannenzin") (0.9507 "hennkannenjin") (0.9507 "hennkanneqziq") (0.9507 "hennkanneqzin") (0.9507 "hennkannenziq") (0.9507 "hennkanneqjin") (0.9507 "hennkanneqjiq") (0.9476 "hennkaq") (0.9444 "hennkaqenjin") (0.9444 "hennkaqenzin") (0.9408 "hennkanenjinn") (0.9408 "hennkaneqzinn") (0.9408 "hennkanennjin") (0.9408 "hennkaneqjinn") (0.9408 "hennkanennjiq") (0.9408 "hennkanennzin") (0.9408 "hennkanenzinn") (0.9408 "hennkanennziq"))
        (my-round-map
         (arr->list
-         (a-search.search userid kvs "hennkann" #f))))
+         (a-search.search userid kvs "hennkann" "k"))))
 
 (test* "search keyword list 5"
        '((1.0 "heqkaq") (0.9722 "heqka") (0.9444 "heqkan"))
        (my-round-map
         (arr->list
-         (a-search.search userid kvs "heqkaq" #f))))
+         (a-search.search userid kvs "heqkaq" "k"))))
 
 (test* "search keyword list 6"
        '((0.9762 "henkaS") (0.9667 "hennkaS"))       
        (my-round-map
         (arr->list
-         (a-search.search userid kvs "henkanS" #t))))
+         (a-search.search userid kvs "henkanS" "K"))))
 
 (test* "search keyword list 7"
        '((0.9833 "hennkaS") (0.9417 "henkaS"))
        (my-round-map
         (arr->list
-         (a-search.search userid kvs "hennkanS" #t))))
+         (a-search.search userid kvs "hennkanS" "K"))))
 
 (test* "approximate search 1"
        '((1.0 "henka" "Cへんか") (0.9722 "henkan" "Cへんかん") (0.9722 "henkaq" "Cへんかん") (0.9611 "hennka" "Cへんか") (0.9524 "henkann" "Cへんかん"))
        (my-round-map
-        (approximate-search userid kvs "henka" #f 0)))
+        (approximate-search userid kvs "henka"  "k" 0)))
 
 (test* "approximate search 2"
        '((1.1 "hennka" "Cへんか") (1.079 "hennkaq" "Cへんかん") (1.079 "hennkan" "Cへんかん") (1.0633 "hennkann" "Cへんかん") (0.9611 "henkan" "Cへんかん") (0.9611 "henka" "Cへんか"))
        (my-round-map
-        (approximate-search userid kvs "hennka" #f 0)))
+        (approximate-search userid kvs "hennka"  "k" 0)))
 
 (test* "approximate search 3"
        '((0.9722 "henka" "Cへんか") (0.9444 "henkan" "Cへんかん") (0.9444 "henkaq" "Cへんかん"))
        (my-round-map
-        (approximate-search userid kvs "henkaS" #f 0)))
+        (approximate-search userid kvs "henkaS"  "k" 0)))
 
 (test* "approximate search 4"
        '((1.079 "hennka" "Cへんか") (1.0581 "hennkan" "Cへんかん") (1.0581 "hennkaq" "Cへんかん") (1.0424 "hennkann" "Cへんかん"))
        (my-round-map
-        (approximate-search userid kvs "hennkaS" #f 0)))
+        (approximate-search userid kvs "hennkaS"  "k" 0)))
 
 (test* "approximate search 5"
        '((1.0 "kani" "Cかに") (1.0 "kani" "Cかんい") (0.9533 "kanni" "Cかんい"))
        (my-round-map
-        (approximate-search userid kvs "kani" #f 0)))
+        (approximate-search userid kvs "kani"  "k" 0)))
 
 (test* "approximate search 6"
        '((1.1 "hennka" "Cへんか"))
        (my-round-map
-        (approximate-search userid kvs "hennka" #f 1)))
+        (approximate-search userid kvs "hennka"  "k" 1)))
 
 (test* "approximate search 7"
        '((1.1 "hennka" "Cへんか") (1.079 "hennkaq" "Cへんかん"))
        (my-round-map
-        (approximate-search userid kvs "hennka" #f 2)))
+        (approximate-search userid kvs "hennka"  "k" 2)))
 
 (test* "approximate search 8"
        '((1.0 "saki" "Cさき"))
        (my-round-map
-        (approximate-search userid kvs "saki" #f 0)))
+        (approximate-search userid kvs "saki"  "k" 0)))
 
 (test* "approximate search 9"
        '((1.0 "inyou" "Cいんよう") (0.9556 "innyou" "Cいんにょう") (0.9556 "innyou" "Cいんよう") (0.9429 "inyowhu" "Cいんよう"))
        (my-round-map
-        (approximate-search userid kvs "inyou" #f 0)))
+        (approximate-search userid kvs "inyou"  "k" 0)))
 
 (test* "approximate search 10"
        '((1.1 "innyou" "Cいんよう") (1.0542 "innyowhu" "Cいんよう") (1.0 "innyou" "Cいんにょう") (0.9667 "innnyou" "Cいんにょう") (0.9583 "innyowhu" "Cいんにょう") (0.9556 "inyou" "Cいんよう"))
        (my-round-map
-        (approximate-search userid kvs "innyou" #f 0)))
+        (approximate-search userid kvs "innyou"  "k" 0)))
 
 (test* "approximate search 11"
        '((0.981 "#gyoume" "C#ぎょうめ"))
        (my-round-map
-        (approximate-search userid kvs "#gyoum" #f 0)))
+        (approximate-search userid kvs "#gyoum"  "k" 0)))
 
 (test* "approximate search 12"
        '((0.9722 "#kara#" "C#から#"))
        (my-round-map
-        (approximate-search userid kvs "#kara" #f 0)))
+        (approximate-search userid kvs "#kara"  "k" 0)))
+
+(test* "approximate search 13"
+       '((1.0 "=shita" "した") (0.981 "=shitai" "したい"))
+       (my-round-map
+        (approximate-search userid kvs "=shita"  "h" 0)))
+
+(test* "approximate search 14"
+       '((0.9722 "=shita" "した") (0.9524 "=shitai" "したい"))
+       (my-round-map
+        (approximate-search userid kvs "=shit"  "h" 0)))
+
+(test* "approximate search 15"
+       '((1.0 "=sr" "する"))
+       (my-round-map
+        (approximate-search userid kvs "=sr"  "h" 0)))
+
+(test* "approximate search 16"
+       '((0.96 "=suru" "する"))
+       (my-round-map
+        (approximate-search userid kvs "=sur"  "h" 0)))
+
+
 
 
 ;;-------------------------------------------------------------------
@@ -516,37 +538,37 @@
 (test* "approximate search 1"
        '((1.0 "henkaS" "Cへんかs") (0.9667 "hennkaS" "Cへんかs"))
        (my-round-map
-        (approximate-search userid kvs "henkaS" #t 0)))
+        (approximate-search userid kvs "henkaS" "K" 0)))
 
 (test* "approximate search 2"
        '((0.9762 "henkaS" "Cへんかs") (0.9667 "hennkaS" "Cへんかs"))
        (my-round-map
-        (approximate-search userid kvs "henkanS" #t 0)))
+        (approximate-search userid kvs "henkanS" "K" 0)))
 
 (test* "approximate search 3"
        '((1.0 "okonaU" "Cおこなu"))
        (my-round-map
-        (approximate-search userid kvs "okonaU" #t 0)))
+        (approximate-search userid kvs "okonaU" "K" 0)))
 
 (test* "approximate search 4"
        '((0.9667 "okonaU" "Cおこなu"))
        (my-round-map
-        (approximate-search userid kvs "okonU" #t 0)))
+        (approximate-search userid kvs "okonU" "K" 0)))
 
 (test* "approximate search 5"
        '((1.0 "eR" "Cえr"))
        (my-round-map
-        (approximate-search userid kvs "eR" #t 0)))
+        (approximate-search userid kvs "eR" "K" 0)))
 
 (test* "approximate search 6"
        '((1.0 "henkaS" "Cへんかs"))
        (my-round-map
-        (approximate-search userid kvs "henkaS" #t 1)))
+        (approximate-search userid kvs "henkaS" "K" 1)))
 
 (test* "approximate search 7"
        '((1.0 "henkaS" "Cへんかs") (0.9667 "hennkaS" "Cへんかs"))
        (my-round-map
-        (approximate-search userid kvs "henkaS" #t 2)))
+        (approximate-search userid kvs "henkaS" "K" 2)))
 
 
 (test* "okuri ari 1"
@@ -652,44 +674,61 @@
 
 (test* "hiragana 1"
        '(("あいうえお" #f "aiueo" h) ("アイウエオ" #f "aiueo" k))
-       (henkan-hiragana kvs "aiueo" :normal))
+       (henkan-hiragana userid kvs "aiueo" :normal))
 
 (test* "hiragana 2"
        '(("の" #f "no" h) ("ノ" #f "no" k))
-       (henkan-hiragana kvs "no" :normal))
+       (henkan-hiragana userid kvs "no" :normal))
 
 (test* "hiragana 3"
        '(("b" #f "b" j))
-       (henkan-hiragana kvs "b" :normal))
+       (henkan-hiragana userid kvs "b" :normal))
 
 (test* "hiragana 4"
        '(("if" #f "if" j))
-       (henkan-hiragana kvs "if" :normal))
+       (henkan-hiragana userid kvs "if" :normal))
 
 (test* "hiragana 5"
        '(("ぁぃぅぇぉゃゅょ" #f "lalilulelolyalyulyo" h) ("ァィゥェォャュョ" #f "lalilulelolyalyulyo" k))
-       (henkan-hiragana kvs "lalilulelolyalyulyo" :normal))
+       (henkan-hiragana userid kvs "lalilulelolyalyulyo" :normal))
 
 (test* "hiragana 6"
        '(("ぁぃぅぇぉゃゅょ" #f "xaxixuxexoxyaxyuxyo" h) ("ァィゥェォャュョ" #f "xaxixuxexoxyaxyuxyo" k) ("しゃししゅしぇしょゃゅょ" #f "xaxixuxexoxyaxyuxyo" h) ("シャシシュシェショャュョ" #f "xaxixuxexoxyaxyuxyo" k))
-       (henkan-hiragana kvs "xaxixuxexoxyaxyuxyo" :normal))
+       (henkan-hiragana userid kvs "xaxixuxexoxyaxyuxyo" :normal))
 
 (test* "hiragana 7"
        '(("することです" #f "srktds" h) ("スルコトデス" #f "srktds" k))
-       (henkan-hiragana kvs "srktds" :normal))
+       (henkan-hiragana userid kvs "srktds" :normal))
 
 (test* "hiragana 8"
        '(("することです" #f "srktds" h) ("スルコトデス" #f "srktds" k))
-       (henkan-hiragana kvs "srktds" :azik))
+       (henkan-hiragana userid kvs "srktds" :azik))
 
 (test* "hiragana 9"
        '(("んんあんはんわんぱ" #f "nqanhanwanpa" h) ("ンンアンハンワンパ" #f "nqanhanwanpa" k) ("ないあぬうあねいあのうあ" #f "nqanhanwanpa" h) ("ナイアヌウアネイアノウア" #f "nqanhanwanpa" k))
-       (henkan-hiragana kvs "nqanhanwanpa" :normal))
+       (henkan-hiragana userid kvs "nqanhanwanpa" :normal))
 
 (test* "hiragana 10"
        '(("ないあぬうあねいあのうあ" #f "nqanhanwanpa" h) ("ナイアヌウアネイアノウア" #f "nqanhanwanpa" k) ("んんあんはんわんぱ" #f "nqanhanwanpa" h) ("ンンアンハンワンパ" #f "nqanhanwanpa" k))
-       (henkan-hiragana kvs "nqanhanwanpa" :azik))
+       (henkan-hiragana userid kvs "nqanhanwanpa" :azik))
 
+;;-------------------------------------------------------------------
+(test-section "henkan hiragana-phrase")
+(test* "hiragana-phrase 1"
+       '(("した" #f "shita" h) ("したい" #f "shita" h) ("した" #f "shita" h) ("シタ" #f "shita" k))
+       (henkan-hiragana userid kvs "shita" :normal))
+
+(test* "hiragana-phrase 2"
+       '(("した" #f "shit" h) ("したい" #f "shit" h) ("shit" #f "shit" j))
+       (henkan-hiragana userid kvs "shit" :normal))
+
+(test* "hiragana-phrase 3"
+       '(("したい" #f "shitai" h) ("した" #f "shitai" h) ("したい" #f "shitai" h) ("シタイ" #f "shitai" k))
+       (henkan-hiragana userid kvs "shitai" :normal))
+
+(test* "hiragana-phrase 4"
+       '(("したい" #f "shitaii" h) ("した" #f "shitaii" h) ("したいい" #f "shitaii" h) ("シタイイ" #f "shitaii" k))
+       (henkan-hiragana userid kvs "shitaii" :normal))
 
 
 ;;-------------------------------------------------------------------

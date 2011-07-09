@@ -88,13 +88,13 @@ end
 task :test do
   sh "/bin/rm -f test.record"
   files = []
-#  files << "./test/util.nnd"
-#  files << "./test/alphabet-lib.nnd"
-#  files << "./test/sharp-number.nnd"
-#  files << "./test/roman-lib.nnd"
-#  files << "./test/azik-verification.nnd"
-#  files << "./test/jisyo.nnd"
-#  files << "./test/google-ime.nnd"
+  files << "./test/util.nnd"
+  files << "./test/alphabet-lib.nnd"
+  files << "./test/sharp-number.nnd"
+  files << "./test/roman-lib.nnd"
+  files << "./test/azik-verification.nnd"
+  files << "./test/jisyo.nnd"
+  files << "./test/google-ime.nnd"
   files << "./test/henkan-main.nnd  tokyocabinet"
   files << "./test/memcache.nnd"
   files.each {|filename|
@@ -133,9 +133,9 @@ end
 
 
 task :phrase do
-  sh "/bin/cp ./data/6gm-0000.txt ./data/head.txt"
-#  sh "head -1000 ./data/6gm-0000.txt > ./data/head.txt"
-  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase.nnd ./data/head.txt > ./data/log"
+#  sh "/bin/cp ./data/6gm-0000.txt ./data/head.txt"
+#  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase.nnd ./data/head.txt > ./data/log"
+  sh "awk '{ print $1; }' ./data/log | sort | uniq > ./data/hiragana_list.txt"
 end
 
 task :rackup do
