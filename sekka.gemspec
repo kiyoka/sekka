@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sekka}
-  s.version = "0.8.7"
+  s.version = "0.8.8"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kiyoka Nishiyama"]
-  s.date = %q{2011-06-24}
+  s.date = %q{2011-07-11}
   s.description = %q{Sekka is a SKK like input method. Sekka server provides REST Based API. If you are SKK user, let's try it.}
   s.email = %q{kiyoka@sumibi.org}
   s.executables = ["sekka-jisyo", "sekka-server", "sekka-benchmark", "sekka-path"]
@@ -58,11 +58,10 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/kiyoka/sekka}
   s.require_paths = ["lib"]
   s.required_ruby_version = Gem::Requirement.new(">= 1.9.1")
-  s.rubygems_version = %q{1.3.7}
+  s.rubygems_version = %q{1.7.2}
   s.summary = %q{Sekka is a SKK like input method.}
 
   if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then

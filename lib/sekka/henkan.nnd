@@ -242,10 +242,10 @@
                                      (+ "=" (sekka-downcase keyword))
                                      "h"
                                      limit)]
-         [lst #?=(map
-                  (lambda (x)
-                    (list (third x) #f keyword 'h))
-                  #?=result)])
+         [lst (map
+               (lambda (x)
+                 (list (third x) #f keyword 'h))
+               result)])
     (if (= limit 0)
         lst
         (take* lst limit))))
