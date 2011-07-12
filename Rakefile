@@ -103,7 +103,7 @@ task :test do
   sh "cat test.record"
 end
 
-task :alljisyo => [ :jisyoS, :jisyoM, :jisyoL, :loadS, :loadL ]
+task :alljisyo => [ :jisyoS, :jisyoM, :jisyoL, :loadS, :loadM, :loadL ]
 
 task :jisyoS do
   sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.L.201008           >  ./data/SEKKA-JISYO.SMALL"
