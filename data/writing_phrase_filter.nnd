@@ -14,13 +14,15 @@
    (lambda (f)
      (for-each
       (lambda (line)
-        (let* ([lst   (to-list (line.chomp.split #/[ \t]+/))])
-          (when (writing-phrase? line)
-            (print line))))
+        (let* ([lst   (to-list (line.chomp.split #/[ \t]+/))]
+               [word  (car lst)])
+          (when (and (<= 2 (word.size))
+                     (<= (word.size) 7)
+                     (writing-phrase? word))
+            (printf "%s  //\n" word))))
       (f.readlines.to_list)))))
 
 (define (main argv)
   (if (> 1 (length argv))
       (error "writing_phrase_filter.nnd requires file as 'hiragana  ;; ....' ")
       (writing-phrase-filter (car (to-list argv)))))
-
