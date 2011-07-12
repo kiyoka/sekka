@@ -110,6 +110,10 @@ task :jisyoS do
   sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.SMALL"
 end
 
+task :jisyoS_2 do
+  sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.hiragana-phrase    >  ./data/SEKKA-JISYO.SMALL2"
+end
+
 task :jisyoL do
   sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.L.201008           >  ./data/SEKKA-JISYO.LARGE"
   sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.LARGE"
