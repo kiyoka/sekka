@@ -135,7 +135,7 @@ end
 task :phrase do
 #  sh "/bin/cp ./data/6gm-0000.txt ./data/head.txt"
 #  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase.nnd ./data/head.txt > ./data/log"
-  sh "awk '{ print $1; }' ./data/log | sort | uniq > ./data/hiragana_list.txt"
+  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/writing_phrase_filter.nnd ./data/log | sort | uniq > ./data/SKK-JISYO.hiragana-phrase"
 end
 
 task :rackup do

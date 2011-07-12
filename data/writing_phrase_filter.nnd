@@ -1,0 +1,26 @@
+#!/bin/sh
+:; #-*- mode: nendo; syntax: scheme -*-;;
+:; exec /usr/local/bin/nendo $0 $*
+
+(define (writing-phrase? str)
+  (not
+   (or
+    (rxmatch #/ー/ str)
+    (rxmatch #/[ぁぃぅぇぉゃゅょっー]$/ str))))
+  
+(define (writing-phrase-filter filename)
+  (with-open
+   filename
+   (lambda (f)
+     (for-each
+      (lambda (line)
+        (let* ([lst   (to-list (line.chomp.split #/[ \t]+/))])
+          (when (writing-phrase? line)
+            (print line))))
+      (f.readlines.to_list)))))
+
+(define (main argv)
+  (if (> 1 (length argv))
+      (error "writing_phrase_filter.nnd requires file as 'hiragana  ;; ....' ")
+      (writing-phrase-filter (car (to-list argv)))))
+
