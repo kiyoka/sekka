@@ -103,15 +103,16 @@ task :test do
   sh "cat test.record"
 end
 
-task :alljisyo => [ :jisyoS, :jisyoL, :loadS, :loadL ]
+task :alljisyo => [ :jisyoS, :jisyoM, :jisyoL, :loadS, :loadL ]
 
 task :jisyoS do
   sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.L.201008           >  ./data/SEKKA-JISYO.SMALL"
   sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.SMALL"
 end
 
-task :jisyoS_2 do
-  sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.hiragana-phrase    >  ./data/SEKKA-JISYO.SMALL2"
+task :jisyoM do
+  sh "/bin/cp ./data/SEKKA-JISYO.SMALL ./data/SEKKA-JISYO.MEDIUM "
+  sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.hiragana-phrase    >> ./data/SEKKA-JISYO.MEDIUM"
 end
 
 task :jisyoL do
@@ -123,11 +124,15 @@ task :jisyoL do
 end
 
 task :loadS do
-  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.SMALL ./data/SEKKA-JISYO.SMALL.tch"
+  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.SMALL  ./data/SEKKA-JISYO.SMALL.tch"
+end
+
+task :loadM do
+  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.MEDIUM ./data/SEKKA-JISYO.MEDIUM.tch"
 end
 
 task :loadL do
-  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.LARGE ./data/SEKKA-JISYO.LARGE.tch"
+  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.LARGE  ./data/SEKKA-JISYO.LARGE.tch"
 end
 
 task :dump do
