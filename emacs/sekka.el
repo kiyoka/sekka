@@ -236,27 +236,15 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 
 (defvar sekka-init nil)
 
+
 ;;
 ;; 初期化
 ;;
 (defun sekka-init ()
-  ;; 最初の n 件のリストを取得する
-  (defun sekka-take (arg-list n)
-    (let ((lst '()))
-      (dotimes (i n (reverse lst))
-        (let ((item (nth i arg-list)))
-	  (when item
-	    (push item lst))))))
-  
   (when (not sekka-init)
     ;; ユーザー語彙のロード + サーバーへの登録
     (sekka-register-userdict-internal)
-
-    ;; Emacs終了時の処理
-    (add-hook 'kill-emacs-hook
-	      (lambda ()
-		;; 何もすることは無い
-		t))
+    
     ;; 初期化完了
     (setq sekka-init t)))
 
@@ -1318,6 +1306,11 @@ sekka-modeがONの間中呼び出される可能性がある。"
     (overlay-put sekka-guide-overlay 'face 'sekka-guide-face))))
 
 
+(defun sekka-stop-realtime-guide ()
+  (when (eq this-command 'keyboard-quit)
+    (setq sekka-timer-rest 0)))
+
+
 ;;;
 ;;; human interface
 ;;;
@@ -1367,6 +1360,8 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
 
 ;; sekka-mode を変更する共通関数
 (defun sekka-mode-internal (arg global)
+  (sekka-debug-print "sekka-mode-internal :1\n")
+
   (or (local-variable-p 'sekka-mode (current-buffer))
       (make-local-variable 'sekka-mode))
   (if global
@@ -1378,7 +1373,13 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
 			(> (prefix-numeric-value arg) 0))))
   (when sekka-sticky-shift
     (add-hook 'sekka-mode-hook 'sekka-sticky-shift-init-function))
-  (when sekka-mode (run-hooks 'sekka-mode-hook)))
+  (when sekka-mode (run-hooks 'sekka-mode-hook))
+
+  (sekka-debug-print "sekka-mode-internal :2\n")
+
+  ;; Ctrl-G押下時、リアルタイムガイドをOFFにするhook
+  (add-hook 'post-command-hook 'sekka-stop-realtime-guide)
+  (add-hook 'pre-command-hook  'sekka-stop-realtime-guide))
 
 
 ;; buffer local な sekka-mode を削除する関数
