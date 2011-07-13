@@ -131,31 +131,36 @@
      (hash-table-keys hiragana-phrase-hash))))
 
 
-(define (append-entry userid kvs key value)
-  (let1 key (+ userid "::" key)
-    (if-let1 got (kvs.get key #f)
-      (let* ((trimmed-a-first1 (car (string-split-first-and-rest  got)))
-             (trimmed-a        (if-let1 m (rxmatch #/^[C\/](.+)$/ got)
-                                 (rxmatch-substring m 1)
-                                 got))
-             (trimmed-b-first1 (car (string-split-first-and-rest  value)))
-             (trimmed-b        (if-let1 m (rxmatch #/^[C\/](.+)$/ value)
-                                 (rxmatch-substring m 1)
-                                 value))
-             (lst (delete-duplicates (append (to-list (trimmed-a.split "/"))
-                                             (to-list (trimmed-b.split "/"))))))
-        (if (= trimmed-a-first1 trimmed-b-first1)
-            (kvs.put! key (+ trimmed-a-first1 (string-join lst "/")))
-            (begin
-              ;; "/" よりも "C" を優先する
-              (cond
-               ((= "C" trimmed-a-first1) ;; aを優先
-                (kvs.put! key got))
-               ((= "C" trimmed-b-first1) ;; bを優先
-                (kvs.put! key value))
-               (else
-                (errorf "Error: [%s] entry is wrong format" value))))))
-      (kvs.put! key value))))
+(define (append-entry userid kvs _key value)
+  (let1 key (+ userid "::" _key)
+    (cond
+     ((rxmatch #/^=/ _key)
+      ;; hiragana-phrase entry
+      (kvs.put! key value))
+     (else
+      (if-let1 got (kvs.get key #f)
+        (let* ((trimmed-a-first1 (car (string-split-first-and-rest  got)))
+               (trimmed-a        (if-let1 m (rxmatch #/^[C\/](.+)$/ got)
+                                   (rxmatch-substring m 1)
+                                   got))
+               (trimmed-b-first1 (car (string-split-first-and-rest  value)))
+               (trimmed-b        (if-let1 m (rxmatch #/^[C\/](.+)$/ value)
+                                     (rxmatch-substring m 1)
+                                     value))
+               (lst (delete-duplicates (append (to-list (trimmed-a.split "/"))
+                                               (to-list (trimmed-b.split "/"))))))
+          (if (= trimmed-a-first1 trimmed-b-first1)
+              (kvs.put! key (+ trimmed-a-first1 (string-join lst "/")))
+              (begin
+                ;; "/" よりも "C" を優先する
+                (cond
+                 ((= "C" trimmed-a-first1) ;; aを優先
+                  (kvs.put! key got))
+                 ((= "C" trimmed-b-first1) ;; bを優先
+                  (kvs.put! key value))
+                 (else
+                  (errorf "Error: [%s][%s] entry is wrong format" key value))))))
+        (kvs.put! key value))))))
 
 
 (define (load-sekka-jisyo-f f filename)
