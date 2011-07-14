@@ -140,8 +140,18 @@
    (#f  ,userid "") ;; 空行
    (#f  ,userid "aaaa") ;; 明らかなフォーマットエラー
    (#f  ,userid "単語 /たんご/") ;; フォーマットエラー
-   (#t  ,userid "する //")       ;; 平仮名フレーズ
-   (#t  ,userid "したい //")     ;; 平仮名フレーズ
+   (#t  ,userid "する //")                 ;; 平仮名フレーズ
+   (#t  ,userid "したい //")               ;; 平仮名フレーズ
+   (#t  ,userid "なります //")             ;; 平仮名フレーズ
+   (#t  ,userid "なりました //")           ;; 平仮名フレーズ
+   (#t  ,userid "なりません //")           ;; 平仮名フレーズ
+   (#t  ,userid "はい       //")           ;; 平仮名フレーズ
+   (#t  ,userid "あい       //")           ;; 平仮名フレーズ
+   (#t  ,userid "あいう       //")         ;; 平仮名フレーズ
+   (#t  ,userid "あいうえ       //")       ;; 平仮名フレーズ
+   (#t  ,userid "あいうえお      //")      ;; 平仮名フレーズ
+   (#t  ,userid "あいうえおか       //")   ;; 平仮名フレーズ
+   (#t  ,userid "あいうえおかき      //")  ;; 平仮名フレーズ
    ))
 
 
@@ -364,7 +374,7 @@
         (approximate-search userid kvs "=shita"  "h" 0)))
 
 (test* "approximate search 14"
-       '((0.9722 "=shita" "した") (0.9524 "=shitai" "したい"))
+       '((0.9722 "=shita" "した"))
        (my-round-map
         (approximate-search userid kvs "=shit"  "h" 0)))
 
@@ -374,10 +384,14 @@
         (approximate-search userid kvs "=sr"  "h" 0)))
 
 (test* "approximate search 16"
-       '((0.96 "=suru" "する"))
+       '()
        (my-round-map
         (approximate-search userid kvs "=sur"  "h" 0)))
 
+(test* "approximate search 17"
+       '()
+       (my-round-map
+        (approximate-search userid kvs "=sure"  "h" 0)))
 
 
 
@@ -673,7 +687,7 @@
 (test-section "henkan hiragana")
 
 (test* "hiragana 1"
-       '(("あいうえお" #f "aiueo" h) ("アイウエオ" #f "aiueo" k))
+       '(("あいうえお" #f "aiueo" h) ("あいうえ" #f "aiueo" h) ("あいうえおか" #f "aiueo" h) ("あいうえお" #f "aiueo" h) ("アイウエオ" #f "aiueo" k))
        (henkan-hiragana userid kvs "aiueo" :normal))
 
 (test* "hiragana 2"
@@ -719,7 +733,7 @@
        (henkan-hiragana userid kvs "shita" :normal))
 
 (test* "hiragana-phrase 2"
-       '(("した" #f "shit" h) ("したい" #f "shit" h) ("shit" #f "shit" j))
+       '(("した" #f "shit" h) ("shit" #f "shit" j))
        (henkan-hiragana userid kvs "shit" :normal))
 
 (test* "hiragana-phrase 3"
@@ -729,6 +743,50 @@
 (test* "hiragana-phrase 4"
        '(("したい" #f "shitaii" h) ("した" #f "shitaii" h) ("したいい" #f "shitaii" h) ("シタイイ" #f "shitaii" k))
        (henkan-hiragana userid kvs "shitaii" :normal))
+
+(test* "hiragana-phrase 5"
+       '(("なります" #f "narimasu" h) ("なりません" #f "narimasu" h) ("なりました" #f "narimasu" h) ("なります" #f "narimasu" h) ("ナリマス" #f "narimasu" k))
+       (henkan-hiragana userid kvs "narimasu" :normal))
+
+(test* "hiragana-phrase 6"
+       '(("なりました" #f "narimashita" h) ("なりました" #f "narimashita" h) ("ナリマシタ" #f "narimashita" k))
+       (henkan-hiragana userid kvs "narimashita" :normal))
+
+(test* "hiragana-phrase 7"
+       '(("なりません" #f "narimasen" h) ("なりません" #f "narimasen" h) ("ナリマセン" #f "narimasen" k))
+       (henkan-hiragana userid kvs "narimasen" :normal))
+
+(test* "hiragana-phrase 8"
+       '(("なりました" #f "narimashitaga" h) ("なりましたが" #f "narimashitaga" h) ("ナリマシタガ" #f "narimashitaga" k))
+       (henkan-hiragana userid kvs "narimashitaga" :normal))
+
+(test* "hiragana-phrase 9"
+       '(("なりました" #f "narimashitanode" h) ("なりましたので" #f "narimashitanode" h) ("ナリマシタノデ" #f "narimashitanode" k))
+       (henkan-hiragana userid kvs "narimashitanode" :normal))
+
+(test* "hiragana-phrase 10"
+       '(("なります" #f "narimasumai" h) ("なりました" #f "narimasumai" h) ("なりますまい" #f "narimasumai" h) ("ナリマスマイ" #f "narimasumai" k))
+       (henkan-hiragana userid kvs "narimasumai" :normal))
+
+(test* "hiragana-phrase 11"
+       '(("は" #f "ha" h) ("ハ" #f "ha" k))
+       (henkan-hiragana userid kvs "ha" :normal))
+
+(test* "hiragana-phrase 12"
+       '(
+         (("あ" #f "a" h) ("ア" #f "a" k))
+         (("あい" #f "ai" h) ("あい" #f "ai" h) ("アイ" #f "ai" k))
+         (("あいう" #f "aiu" h) ("あいう" #f "aiu" h) ("アイウ" #f "aiu" k))
+         (("あいうえ" #f "aiue" h) ("あいうえお" #f "aiue" h) ("あいうえ" #f "aiue" h) ("アイウエ" #f "aiue" k))
+         (("あいうえお" #f "aiueo" h) ("あいうえ" #f "aiueo" h) ("あいうえおか" #f "aiueo" h) ("あいうえお" #f "aiueo" h) ("アイウエオ" #f "aiueo" k))
+         (("あいうえおか" #f "aiueoka" h) ("あいうえおかき" #f "aiueoka" h) ("あいうえおか" #f "aiueoka" h) ("アイウエオカ" #f "aiueoka" k))
+         (("あいうえおかき" #f "aiueokaki" h) ("あいうえおか" #f "aiueokaki" h) ("あいうえおかき" #f "aiueokaki" h) ("アイウエオカキ" #f "aiueokaki" k))
+         (("あいうえおかき" #f "aiueokakiku" h) ("あいうえおか" #f "aiueokakiku" h) ("あいうえおかきく" #f "aiueokakiku" h) ("アイウエオカキク" #f "aiueokakiku" k))
+         (("あいうえおかき" #f "aiueokakikuke" h) ("あいうえおかきくけ" #f "aiueokakikuke" h) ("アイウエオカキクケ" #f "aiueokakikuke" k)) (("あいうえおかきくけこ" #f "aiueokakikukeko" h) ("アイウエオカキクケコ" #f "aiueokakikukeko" k)))
+       (map
+        (lambda (query)
+          (henkan-hiragana userid kvs   query   :normal))
+        '("a" "ai" "aiu" "aiue" "aiueo" "aiueoka" "aiueokaki" "aiueokakiku" "aiueokakikuke" "aiueokakikukeko")))
 
 
 ;;-------------------------------------------------------------------

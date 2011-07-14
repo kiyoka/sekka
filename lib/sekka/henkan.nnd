@@ -80,28 +80,31 @@
 ;; 曖昧検索
 ;;  リストで返す。 (ソート済み検索結果)
 (define (approximate-search userid kvs keyword type limit)
-  (define jarow-shikii 0.94)
-  (let* ((a-search (ApproximateSearch.new jarow-shikii))
-         (lst      (my-append-many
-                    (map
-                     (lambda (x)
-                      (let* ((val (vector-ref x 0))
-                             (k   (vector-ref x 1))
-                             (v   (dict-get userid kvs k ""))
-                             (v-pair (string-split-first-and-rest v))
-                             (v-first (car v-pair))
-                             (v-rest  (cdr v-pair)))
-                        (map
-                         (lambda (element)
-                           (list val k (+ v-first element)))
-                         (to-list (v-rest.split "/")))))
-                     (to-list (a-search.search userid kvs keyword type)))))
-         (nn-heuristics-result (nn-heuristics keyword lst))
-         (sorted-lst  (sort-by nn-heuristics-result (lambda (item) (- 1.0 (car item))))))
-    (if (= limit 0)
-        sorted-lst
-        (take* sorted-lst limit))))
+  (let ([jarow-threshold
+         (if (= "h" type)
+             0.96
+             0.94)])
 
+    (let* ((a-search (ApproximateSearch.new jarow-threshold))
+           (lst      (my-append-many
+                      (map
+                       (lambda (x)
+                         (let* ((val (vector-ref x 0))
+                                (k   (vector-ref x 1))
+                                (v   (dict-get userid kvs k ""))
+                                (v-pair (string-split-first-and-rest v))
+                                (v-first (car v-pair))
+                                (v-rest  (cdr v-pair)))
+                           (map
+                            (lambda (element)
+                              (list val k (+ v-first element)))
+                            (to-list (v-rest.split "/")))))
+                       (to-list (a-search.search userid kvs keyword type)))))
+           (nn-heuristics-result (nn-heuristics keyword lst))
+           (sorted-lst  (sort-by nn-heuristics-result (lambda (item) (- 1.0 (car item))))))
+      (if (= limit 0)
+          sorted-lst
+          (take* sorted-lst limit)))))
 
 
 ;; 厳密検索
@@ -242,10 +245,17 @@
                                      (+ "=" (sekka-downcase keyword))
                                      "h"
                                      limit)]
+         [uniq-result
+          (delete-duplicates
+           (map
+            (lambda (x) (third x))
+            result))]
+          
          [lst (map
                (lambda (x)
-                 (list (third x) #f keyword 'h))
-               result)])
+                 (list x #f keyword 'h))
+               uniq-result)])
+
     (if (= limit 0)
         lst
         (take* lst limit))))
@@ -254,7 +264,7 @@
   
 ;; 平仮名の変換
 (define (henkan-hiragana userid kvs keyword roman-method)
-  (let* ([phrase-limit  5]
+  (let* ([phrase-limit  3]
          [str  (sekka-downcase keyword)]
          [hira (gen-roman->hiragana str roman-method)]
          [kata (gen-roman->katakana str roman-method)])
