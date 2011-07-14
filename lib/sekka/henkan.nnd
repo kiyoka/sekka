@@ -82,7 +82,7 @@
 (define (approximate-search userid kvs keyword type limit)
   (let ([jarow-threshold
          (if (= "h" type)
-             0.96
+             0.98
              0.94)])
 
     (let* ((a-search (ApproximateSearch.new jarow-threshold))
