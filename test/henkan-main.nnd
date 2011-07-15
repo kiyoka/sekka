@@ -152,6 +152,7 @@
    (#t  ,userid "あいうえお      //")      ;; 平仮名フレーズ
    (#t  ,userid "あいうえおか       //")   ;; 平仮名フレーズ
    (#t  ,userid "あいうえおかき      //")  ;; 平仮名フレーズ
+   (#t  ,userid "なっている          //")  ;; 平仮名フレーズ
    ))
 
 
@@ -394,7 +395,7 @@
         (approximate-search userid kvs "=sure"  "h" 0)))
 
 (test* "approximate search 18"
-       '((0.9926 "=narimasd" "なりません") (0.9926 "=narimasu" "なります") (0.9926 "=narimast" "なりました") (0.9867 "=narimasen" "なりません") (0.9867 "=narimaseq" "なりません") (0.9833 "=narims" "なります"))
+       '((0.9926 "=narimasd" "なりません") (0.9926 "=narimast" "なりました") (0.9926 "=narimasu" "なります") (0.9867 "=narimaseq" "なりません") (0.9867 "=narimasen" "なりません") (0.9833 "=narims" "なります") (0.9752 "=narimasenn" "なりません") (0.9752 "=narimasita" "なりました"))
        (my-round-map
         (approximate-search userid kvs "=narimas"  "h" 0)))
 
@@ -404,14 +405,24 @@
         (approximate-search userid kvs "=narimase"  "h" 0)))
 
 (test* "approximate search 20"
-       '((0.9852 "=narimasd" "なりません") (0.9852 "=narimast" "なりました") (0.9852 "=narimasu" "なります"))
+       '((0.9852 "=narimasd" "なりません") (0.9852 "=narimast" "なりました") (0.9852 "=narimasu" "なります") (0.9793 "=narimasen" "なりません") (0.9793 "=narimaseq" "なりません") (0.9792 "=narimashita" "なりました"))
        (my-round-map
         (approximate-search userid kvs "=narimash"  "h" 0)))
 
 (test* "approximate search 21"
-       '((0.9907 "=narimashita" "なりました"))
+       '((0.9907 "=narimashita" "なりました") (0.9793 "=narimasd" "なりません") (0.9793 "=narimast" "なりました") (0.9793 "=narimasu" "なります"))
        (my-round-map
         (approximate-search userid kvs "=narimashi"  "h" 0)))
+
+(test* "approximate search 22"
+       '((1.0 "=natteiru" "なっている"))
+       (my-round-map
+        (approximate-search userid kvs "=natteiru"  "h" 0)))
+
+(test* "approximate search 23"
+       '((0.9778 "=natteiru" "なっている"))
+       (my-round-map
+        (approximate-search userid kvs "=nateiru"  "h" 0)))
 
 
 
@@ -781,11 +792,11 @@
        (henkan-hiragana userid kvs "narimashitaga" :normal))
 
 (test* "hiragana-phrase 9"
-       '(("なりましたので" #f "narimashitanode" h) ("ナリマシタノデ" #f "narimashitanode" k))
+       '(("なりました" #f "narimashitanode" h) ("なりましたので" #f "narimashitanode" h) ("ナリマシタノデ" #f "narimashitanode" k))
        (henkan-hiragana userid kvs "narimashitanode" :normal))
 
 (test* "hiragana-phrase 10"
-       '(("なりますまい" #f "narimasumai" h) ("ナリマスマイ" #f "narimasumai" k))
+       '(("なります" #f "narimasumai" h) ("なりますまい" #f "narimasumai" h) ("ナリマスマイ" #f "narimasumai" k))
        (henkan-hiragana userid kvs "narimasumai" :normal))
 
 (test* "hiragana-phrase 11"
@@ -807,6 +818,10 @@
         (lambda (query)
           (henkan-hiragana userid kvs   query   :normal))
         '("a" "ai" "aiu" "aiue" "aiueo" "aiueoka" "aiueokaki" "aiueokakiku" "aiueokakikuke" "aiueokakikukeko")))
+
+(test* "hiragana-phrase 13"
+       '(("なっている" #f "nateiru" h) ("なている" #f "nateiru" h) ("ナテイル" #f "nateiru" k))
+       (henkan-hiragana userid kvs "nateiru" :normal))
 
 
 ;;-------------------------------------------------------------------
