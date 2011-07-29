@@ -561,12 +561,12 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 ;; カーソル前の文字種を返却する関数
 (eval-and-compile
   (if (>= emacs-major-version 20)
-      (progn
-	(defalias 'sekka-char-charset (symbol-function 'char-charset))
-	(when (and (boundp 'byte-compile-depth)
-		   (not (fboundp 'char-category)))
-	  (defalias 'char-category nil))) ; for byte compiler
+      (defun sekka-char-charset (ch)
+	(let ((result (char-charset ch)))
+	  (sekka-debug-print (format "sekka-char-charset:1(%s) => %s\n" ch result))
+	  result))
     (defun sekka-char-charset (ch)
+      (sekka-debug-print (format "sekka-char-charset:2(%s) => %s\n" ch (char-category)))
       (cond ((equal (char-category ch) "a") 'ascii)
 	    ((equal (char-category ch) "k") 'katakana-jisx0201)
 	    ((string-match "[SAHK]j" (char-category ch)) 'japanese-jisx0208)
@@ -612,52 +612,72 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
     word))
 
 (defun sekka-display-function (b e select-mode)
-  (setq sekka-henkan-separeter (if sekka-use-fence " " ""))
-  (when sekka-henkan-kouho-list
-    ;; UNDO抑制開始
-    (sekka-disable-undo)
+  (let ((insert-word (sekka-get-display-string))
+	(word (buffer-substring-no-properties b e)))
+    (cond
+     ((and (not select-mode)
+	   (string-equal insert-word word))
+      ;; sekka-markersの更新
+      (setq sekka-fence-start (progn
+				(goto-char b)
+				(point-marker)))
+      (setq sekka-fence-end   (progn
+				(goto-char e)
+				(point-marker)))
+      (setq sekka-markers
+	    (cons sekka-fence-start sekka-fence-end))
+
+      ;; 確定文字列の作成
+      (setq sekka-last-fix insert-word)
+      
+      (sekka-debug-print (format "don't touch:[%s] point:%d-%d\n" insert-word (marker-position sekka-fence-start) (marker-position sekka-fence-end))))
+
+     (t
+      (setq sekka-henkan-separeter (if sekka-use-fence " " ""))
+      (when sekka-henkan-kouho-list
+	;; UNDO抑制開始
+	(sekka-disable-undo)
+	
+	(delete-region b e)
+
+	;; リスト初期化
+	(setq sekka-markers '())
+
+	(setq sekka-last-fix "")
+
+	;; 変換したpointの保持
+	(setq sekka-fence-start (point-marker))
+	(when select-mode (insert "|"))
     
-    (delete-region b e)
-
-    ;; リスト初期化
-    (setq sekka-markers '())
-
-    (setq sekka-last-fix "")
-
-    ;; 変換したpointの保持
-    (setq sekka-fence-start (point-marker))
-    (when select-mode (insert "|"))
-    
-    (let* (
-	   (start       (point-marker))
-	   (_cur        sekka-cand-cur)
-	   (_len        sekka-cand-len)
-	   (insert-word (sekka-get-display-string)))
-      (progn
-	(insert insert-word)
-	(message (format "[%s] candidate (%d/%d)" insert-word (+ _cur 1) _len))
-	(let* ((end         (point-marker))
-	       (ov          (make-overlay start end)))
-	    
-	  ;; 確定文字列の作成
-	  (setq sekka-last-fix insert-word)
-	   
-	  ;; 選択中の場所を装飾する。
-	  (when select-mode
-	    (overlay-put ov 'face 'default)
-	    (overlay-put ov 'face 'highlight))
-	  (setq sekka-markers (cons start end))
-	  (sekka-debug-print (format "insert:[%s] point:%d-%d\n" insert-word (marker-position start) (marker-position end))))))
-
-    ;; fenceの範囲を設定する
-    (when select-mode (insert "|"))
-    (setq sekka-fence-end   (point-marker))
-    
-    (sekka-debug-print (format "total-point:%d-%d\n"
-			       (marker-position sekka-fence-start)
-			       (marker-position sekka-fence-end)))
-    ;; UNDO再開
-    (sekka-enable-undo)))
+	(let* (
+	       (start       (point-marker))
+	       (_cur        sekka-cand-cur)
+	       (_len        sekka-cand-len))
+	  (progn
+	    (insert insert-word)
+	    (message (format "[%s] candidate (%d/%d)" insert-word (+ _cur 1) _len))
+	    (let* ((end         (point-marker))
+		   (ov          (make-overlay start end)))
+	      
+	      ;; 確定文字列の作成
+	      (setq sekka-last-fix insert-word)
+	      
+	      ;; 選択中の場所を装飾する。
+	      (when select-mode
+		(overlay-put ov 'face 'default)
+		(overlay-put ov 'face 'highlight))
+	      (setq sekka-markers (cons start end))
+	      (sekka-debug-print (format "insert:[%s] point:%d-%d\n" insert-word (marker-position start) (marker-position end))))))
+	
+	;; fenceの範囲を設定する
+	(when select-mode (insert "|"))
+	(setq sekka-fence-end   (point-marker))
+	
+	(sekka-debug-print (format "total-point:%d-%d\n"
+				   (marker-position sekka-fence-start)
+				   (marker-position sekka-fence-end)))
+	;; UNDO再開
+	(sekka-enable-undo))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -951,10 +971,15 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 
 (defun sekka-history-gc ()
   ;; sekka-history-stack中の無効なマークを持つエントリを削除する
+  (sekka-debug-print (format "sekka-history-gc before len=%d\n" (length sekka-history-stack)))
+
   (let ((temp-list '()))
     (mapcar
      (lambda (alist)
        (let ((markers  (sekka-assoc-ref 'markers  alist nil)))
+	 (sekka-debug-print (format "markers=%S\n" markers))
+	 (sekka-debug-print (format "marker-position car=%d\n" (marker-position (car markers))))
+	 (sekka-debug-print (format "marker-position cdr=%d\n" (marker-position (cdr markers))))
 	 (when (and (marker-position (car markers))	 ;; 存在するバッファを指しているか
 		    (marker-position (cdr markers)))
 	   (if (= (marker-position (car markers))
@@ -967,6 +992,8 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	     (push alist temp-list)))))
      sekka-history-stack)
 
+    (sekka-debug-print (format "sekka-history-gc temp-list  len=%d\n" (length temp-list)))
+
     ;; temp-list から limit 件数だけコピーする
     (setq sekka-history-stack '())
     (mapcar
@@ -974,7 +1001,8 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
        (when (< (length sekka-history-stack)
 		sekka-history-stack-limit)
 	 (push alist sekka-history-stack)))
-     (reverse temp-list))))
+     (reverse temp-list)))
+  (sekka-debug-print (format "sekka-history-gc after  len=%d\n" (length sekka-history-stack))))
 
 
 ;;確定ヒストリから、指定_pointに変換済の単語が埋まっているかどうか調べる
@@ -1048,6 +1076,8 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 ・カーソルから行頭方向にローマ字列が続く範囲でローマ字漢字変換を行う。"
   (interactive)
 ;  (print last-command)			; DEBUG
+  (sekka-debug-print "sekka-rK-trans()")
+
 
   (cond 
    ;; タイマーイベントを設定しない条件
@@ -1080,6 +1110,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 
   (cond
    (sekka-select-mode
+    (sekka-debug-print "<<sekka-select-mode>>\n")
     ;; 候補選択モード中に呼出されたら、keymapから再度候補選択モードに入る
     (funcall (lookup-key sekka-select-mode-map sekka-rK-trans-key)))
 
@@ -1088,6 +1119,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
     (cond
 
      ((eq (sekka-char-charset (preceding-char)) 'ascii)
+      (sekka-debug-print (format "ascii? (%s) => t\n" (preceding-char)))
       ;; カーソル直前が alphabet だったら
       (let ((end (point))
 	    (gap (sekka-skip-chars-backward)))
@@ -1112,6 +1144,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	      )))))
      
      ((sekka-kanji (preceding-char))
+      (sekka-debug-print (format "sekka-kanji(%s) => t\n" (preceding-char)))
     
       ;; カーソル直前が 全角で漢字以外 だったら候補選択モードに移行する。
       ;; また、最後に確定した文字列と同じかどうかも確認する。
@@ -1124,7 +1157,11 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	(sekka-display-function
 	 (marker-position (car sekka-markers))
 	 (marker-position (cdr sekka-markers))
-	 t)))))))
+	 t)))
+
+     (t
+      (sekka-debug-print (format "<<OTHER:non-ascii,non-kanji>> (%s)\n" (preceding-char))))))))
+      
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1264,7 +1301,7 @@ sekka-modeがONの間中呼び出される可能性がある。"
     (setq sekka-timer-rest (- sekka-timer-rest 1))
 
     ;; カーソルがsekka-realtime-guide-limit-lines をはみ出していないかチェック
-    (sekka-debug-print (format "sekka-last-lineno [%d] : current-line" sekka-last-lineno (line-number-at-pos (point))))
+    (sekka-debug-print (format "sekka-last-lineno [%d] : current-line\n" sekka-last-lineno (line-number-at-pos (point))))
     (when (< 0 sekka-realtime-guide-limit-lines)
       (let ((diff-lines (abs (- (line-number-at-pos (point)) sekka-last-lineno))))
 	(when (<= sekka-realtime-guide-limit-lines diff-lines)
