@@ -70,7 +70,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<fuzzy-string-match>, [">= 0"])
       s.add_runtime_dependency(%q<jeweler>, [">= 0"])
       s.add_runtime_dependency(%q<memcache-client>, [">= 0"])
-      s.add_runtime_dependency(%q<nendo>, ["= 0.5.1"])
+      s.add_runtime_dependency(%q<nendo>, ["= 0.5.2"])
       s.add_runtime_dependency(%q<rack>, [">= 0"])
       s.add_runtime_dependency(%q<tokyocabinet>, [">= 0"])
     else
@@ -79,7 +79,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<fuzzy-string-match>, [">= 0"])
       s.add_dependency(%q<jeweler>, [">= 0"])
       s.add_dependency(%q<memcache-client>, [">= 0"])
-      s.add_dependency(%q<nendo>, ["= 0.5.1"])
+      s.add_dependency(%q<nendo>, ["= 0.5.2"])
       s.add_dependency(%q<rack>, [">= 0"])
       s.add_dependency(%q<tokyocabinet>, [">= 0"])
     end
@@ -89,7 +89,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<fuzzy-string-match>, [">= 0"])
     s.add_dependency(%q<jeweler>, [">= 0"])
     s.add_dependency(%q<memcache-client>, [">= 0"])
-    s.add_dependency(%q<nendo>, ["= 0.5.1"])
+    s.add_dependency(%q<nendo>, ["= 0.5.2"])
     s.add_dependency(%q<rack>, [">= 0"])
     s.add_dependency(%q<tokyocabinet>, [">= 0"])
   end
