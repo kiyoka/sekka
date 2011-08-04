@@ -165,17 +165,17 @@
 
 (define (load-sekka-jisyo-f f filename)
   (define keylist '())
-  (define (create-keylist kvs lines)
+  (define (create-keylist kvs f)
     (for-each
      (lambda (line)
        (let1 fields (split-dict-line line)
          (set! keylist (cons (first fields) keylist))
          (append-entry masterid kvs (first fields) (second fields))))
-     lines))
+     (f.readlines)))
   (let1 kvs (Kvs.new (get-kvs-type))
     (kvs.open filename)
     (kvs.clear)
-    (create-keylist kvs (f.readlines.to_list))
+    (create-keylist kvs f)
     (setup-ready-made-keylist kvs keylist)
     (kvs.close)))
 
@@ -186,7 +186,7 @@
     (for-each
      (lambda (key)
        (f.puts (+ key " " (kvs.get key))))
-     (to-list (kvs.keys)))
+     (kvs.keys))
     (kvs.close)))
 
 
