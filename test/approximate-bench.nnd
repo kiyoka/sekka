@@ -74,9 +74,19 @@
 (require "benchmark")
 (.puts Benchmark::CAPTION)
 (.puts (Benchmark.measure
-        (for-each
-         (lambda (n)
-           (a-search.search "uuuu" kvs "henkan" "k"))
-         (Range.new 0 1000))))
+        (&block ()
+          (for-each
+           (lambda (n)
+             (approximate-search-old "uuuu" kvs "henkan" "k" 0))
+           (Range.new 0 1000)))))
+
+(.puts Benchmark::CAPTION)
+(.puts (Benchmark.measure
+        (&block ()
+          (for-each
+           (lambda (n)
+             (approximate-search     "uuuu" kvs "henkan" "k" 0))
+           (Range.new 0 1000)))))
+
 ;;===================================================================
 (test-end)

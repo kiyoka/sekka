@@ -105,6 +105,7 @@ end
 
 task :bench do
   sh "time ruby -I ./lib /usr/local/bin/nendo ./test/approximate-bench.nnd"
+  sh "time ruby -I ./lib /usr/local/bin/nendo ./test/henkan-bench.nnd"
 end
 
 task :alljisyo => [ :jisyoS, :jisyoL, :loadS, :loadL ]
