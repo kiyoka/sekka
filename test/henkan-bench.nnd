@@ -53,7 +53,7 @@
         (&block ()
           (for-each
            (lambda (n)
-             (henkan-okuri-nashi "uuuu" kvs "shizengengo" 0))
-           (Range.new 0 1000)))))
+             (henkan-okuri-nashi "uuuu" kvs "henkan" 0))
+           (Range.new 0 100)))))
 ;;===================================================================
 (test-end)
