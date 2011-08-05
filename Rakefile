@@ -103,6 +103,10 @@ task :test do
   sh "cat test.record"
 end
 
+task :bench do
+  sh "time ruby -I ./lib /usr/local/bin/nendo ./test/approximate-bench.nnd"
+end
+
 task :alljisyo => [ :jisyoS, :jisyoL, :loadS, :loadL ]
 
 task :jisyoS do

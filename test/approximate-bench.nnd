@@ -38,7 +38,7 @@
 (use sekka.henkan)
 (load "./test/common.nnd")
 
-(define dbtype (string->symbol (first *argv*)))
+(define dbtype 'tokyocabinet)
 
 (test-start "aprorimate bench")
 ;;===================================================================
@@ -74,10 +74,9 @@
 (require "benchmark")
 (.puts Benchmark::CAPTION)
 (.puts (Benchmark.measure
-        (&block ()
-          (. (Range.new 0 1000) each
-             (&block (n)
-               (a-search.search "uuuu" kvs "henkan" #f))))))
-
+        (for-each
+         (lambda (n)
+           (a-search.search "uuuu" kvs "henkan" "k"))
+         (Range.new 0 1000))))
 ;;===================================================================
 (test-end)
