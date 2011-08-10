@@ -151,9 +151,20 @@ task :phrase => [:getWebCorpus] do
 end
 
 task :getWebCorpus do
-  sh "wget http://dist.s-yata.jp/corpus/nwc2010/ngrams/word/over999/6gms/6gm-0000.xz -O ./data/6gm-0000.xz"
-  sh "xz -cd ./data/6gm-0000.xz > ./data/6gm-0000.txt"
+  sh "wget http://dist.s-yata.jp/corpus/nwc2010/ngrams/word/over999/6gms/6gm-0000.xz -O /tmp/6gm-0000.xz"
+  sh "xz -cd /tmp/6gm-0000.xz > ./data/6gm-0000.txt"
 end
+
+
+task :phrase2 => [:getIPADIC] do
+end
+
+task :getIPADIC do
+  sh "wget http://chasen.aist-nara.ac.jp/stable/ipadic/ipadic-2.7.0.tar.gz -O /tmp/ipadic-2.7.0.tar.gz"
+  sh "tar zxfC /tmp/ipadic-2.7.0.tar.gz /tmp"
+  sh "iconv -f euc-jp -t utf-8 /tmp/ipadic-2.7.0/*.dic > ./data/ipadic.all.utf8.txt"
+end
+
 
 task :rackup do
   # how to install mongrel is "gem install mongrel --pre"
