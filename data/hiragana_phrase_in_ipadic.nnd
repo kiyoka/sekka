@@ -29,10 +29,22 @@
        kind-list))))
 
 (define (phrase-is-valid? word-and-kind)
-  (if (string? (car word-and-kind))
-      (is-hiragana (car word-and-kind))
-      #f))
-  
+  (let ([word (car word-and-kind)]
+        [kind-list (cdr word-and-kind)])
+    (when (string? word)
+      (when (is-hiragana word)
+        (when (< 1 (word.size))
+          (= 0 (length
+                (filter
+                 (lambda (ng-kind)
+                   (memq ng-kind kind-list))
+                 '(
+                   "フィラー"
+                   "固有名詞"
+                   "サ変接続"
+                   "感動詞"
+                   )))))))))
+       
 (define (test-code)
   (let* ([lines '(
                   "(品詞 (副詞 助詞類接続)) ((見出し語 (ありのまま 2116)) (読み アリノママ) (発音 アリノママ) )  "
