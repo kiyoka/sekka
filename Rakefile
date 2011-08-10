@@ -145,21 +145,21 @@ end
 
 # Fetched data from
 #   http://s-yata.jp/corpus/nwc2010/ngrams/
-task :phrase => [:getWebCorpus] do
+task :phrase => [ "./data/6gm-0000.txt" ]  do
   sh "time ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase_in_webcorpus.nnd           ./data/6gm-0000.txt | sort | uniq > /tmp/tmp.txt"
   sh "time ruby -I ./lib /usr/local/bin/nendo ./data/writing_phrase_filter.nnd /tmp/tmp.txt  | sort | uniq     > ./data/SKK-JISYO.hiragana-phrase"
 end
 
-task :getWebCorpus do
+file "./data/6gm-0000.txt"  do
   sh "wget http://dist.s-yata.jp/corpus/nwc2010/ngrams/word/over999/6gms/6gm-0000.xz -O /tmp/6gm-0000.xz"
   sh "xz -cd /tmp/6gm-0000.xz > ./data/6gm-0000.txt"
 end
 
-task :phrase2 => [:getIPADIC] do
-  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase_in_ipadic.nnd             ./data/ipadic.all.utf8.txt"
+task :phrase2 => [ "./data/ipadic.all.utf8.txt" ] do
+  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase_in_ipadic.nnd             ./data/ipadic.all.utf8.txt | sort | uniq > ./data/SKK-JISYO.hiragana-phrase2"
 end
 
-task :getIPADIC do
+file "./data/ipadic.all.utf8.txt" do
   sh "wget http://chasen.aist-nara.ac.jp/stable/ipadic/ipadic-2.7.0.tar.gz -O /tmp/ipadic-2.7.0.tar.gz"
   sh "tar zxfC /tmp/ipadic-2.7.0.tar.gz /tmp"
   sh "iconv -f euc-jp -t utf-8 /tmp/ipadic-2.7.0/*.dic > ./data/ipadic.all.utf8.txt"
