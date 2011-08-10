@@ -5,9 +5,13 @@
 (use srfi-1)
 (use sekka.roman-lib)
 
+(debug-print-length 300)
+
 (define (analyze-line line)
   (define (quoting-kanji-as-string line)
-    (line.gsub #/([^\(\)0-9 ]+)/ "\"\\1\""))
+    (let* ([line (line.gsub "\"(\"" "kakko")]
+           [line (line.gsub "\")\"" "kakko")])
+      (line.gsub #/([^\(\)0-9 ]+)/ "\"\\1\"")))
 
   (define (read-one-line line)
     (let1 pair (read-from-string (+ "("
@@ -25,7 +29,9 @@
        kind-list))))
 
 (define (phrase-is-valid? word-and-kind)
-  (is-hiragana (car word-and-kind)))
+  (if (string? (car word-and-kind))
+      (is-hiragana (car word-and-kind))
+      #f))
   
 (define (test-code)
   (let* ([lines '(
