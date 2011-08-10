@@ -147,7 +147,7 @@ end
 #   http://s-yata.jp/corpus/nwc2010/ngrams/
 task :phrase => [:getWebCorpus] do
   sh "time ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase_in_webcorpus.nnd           ./data/6gm-0000.txt | sort | uniq > /tmp/tmp.txt"
-  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/writing_phrase_filter.nnd /tmp/tmp.txt      > ./data/SKK-JISYO.hiragana-phrase"
+  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/writing_phrase_filter.nnd /tmp/tmp.txt  | sort | uniq     > ./data/SKK-JISYO.hiragana-phrase"
 end
 
 task :getWebCorpus do

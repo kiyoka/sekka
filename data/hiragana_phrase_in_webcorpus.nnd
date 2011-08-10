@@ -66,7 +66,7 @@
   (if (> 1 (length argv))
       (begin
         (test-code)
-        (error "hiragana_phrase.nnd requires [6gram web corpus file]"))
+        (error "hiragana_phrase_in_webcorpus.nnd requires [6gram web corpus file]"))
       (grep-last-phrase (car (to-list argv)))))
 
 
