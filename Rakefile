@@ -146,8 +146,8 @@ end
 # Fetched data from
 #   http://s-yata.jp/corpus/nwc2010/ngrams/
 task :phrase => [:getWebCorpus] do
-  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase.nnd ./data/6gm-0000.txt | sort | uniq > /tmp/tmp.txt"
-  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/writing_phrase_filter.nnd /tmp/tmp.txt                > ./data/SKK-JISYO.hiragana-phrase"
+  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase_in_webcorpus.nnd           ./data/6gm-0000.txt | sort | uniq > /tmp/tmp.txt"
+  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/writing_phrase_filter.nnd /tmp/tmp.txt      > ./data/SKK-JISYO.hiragana-phrase"
 end
 
 task :getWebCorpus do
@@ -155,8 +155,8 @@ task :getWebCorpus do
   sh "xz -cd /tmp/6gm-0000.xz > ./data/6gm-0000.txt"
 end
 
-
 task :phrase2 => [:getIPADIC] do
+  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase_in_ipadic.nnd             ./data/ipadic.all.utf8.txt"
 end
 
 task :getIPADIC do
