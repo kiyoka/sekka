@@ -46,9 +46,27 @@
                       (write-to-string lst))))))
       (f.readlines.to_list)))))
 
+
+(define (test-code)
+  (let* ([line  ",▼ から ▲ まで 追記 </S>	1355"]
+         [lst   (to-list (line.chomp.split #/[ \t]+/))]
+         [freq  (take-right #?=lst 1)]
+         [words (drop-right #?=lst 1)])
+    #?=words
+    (print (include-slash-s? words))
+    (print (hiragana-filter '("あ" "い" "う" "abc")))
+    (print (hiragana-filter '("abc" "あ" "い" "う")))
+    (print (hiragana-filter '("なり" "まし" "た" "</S>")))
+    (print (hiragana-filter '("," "▼" "</S>")))
+    (print (apply + (hiragana-filter '("," "▼" "</S>"))))
+    (print (apply + (hiragana-filter '("なり" "まし" "た" "</S>"))))
+    ))
+
 (define (main argv)
   (if (> 1 (length argv))
-      (error "hiragana_phrase.nnd requires [6gram web corpus file]")
+      (begin
+        (test-code)
+        (error "hiragana_phrase.nnd requires [6gram web corpus file]"))
       (grep-last-phrase (car (to-list argv)))))
 
 

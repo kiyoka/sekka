@@ -43,7 +43,7 @@ begin
     gemspec.add_dependency( "fuzzy-string-match" )
     gemspec.add_dependency( "jeweler" )
     gemspec.add_dependency( "memcache-client" )
-    gemspec.add_dependency( "nendo", "= 0.5.1" )
+    gemspec.add_dependency( "nendo", "= 0.5.3" )
     gemspec.add_dependency( "rack" )
     gemspec.add_dependency( "tokyocabinet" )
   end
@@ -143,10 +143,16 @@ task :dump do
 end
 
 
-task :phrase do
-#  sh "/bin/cp ./data/6gm-0000.txt ./data/head.txt"
-#  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase.nnd ./data/head.txt > ./data/log"
-  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/writing_phrase_filter.nnd ./data/log | sort | uniq > ./data/SKK-JISYO.hiragana-phrase"
+# Fetched data from
+#   http://s-yata.jp/corpus/nwc2010/ngrams/
+task :phrase => [:getWebCorpus] do
+  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase.nnd ./data/6gm-0000.txt | sort | uniq > /tmp/tmp.txt"
+  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/writing_phrase_filter.nnd /tmp/tmp.txt                > ./data/SKK-JISYO.hiragana-phrase"
+end
+
+task :getWebCorpus do
+  sh "wget http://dist.s-yata.jp/corpus/nwc2010/ngrams/word/over999/6gms/6gm-0000.xz -O ./data/6gm-0000.xz"
+  sh "xz -cd ./data/6gm-0000.xz > ./data/6gm-0000.txt"
 end
 
 task :rackup do
