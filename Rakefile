@@ -114,6 +114,7 @@ task :jisyoS do
   sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.L.201008           >  ./data/SEKKA-JISYO.SMALL"
   sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.SMALL"
   sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.hiragana-phrase    >> ./data/SEKKA-JISYO.SMALL"
+  sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.hiragana-phrase2   >> ./data/SEKKA-JISYO.SMALL"
 end
 
 task :jisyoL do
@@ -123,6 +124,7 @@ task :jisyoL do
   sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.jinmei             >> ./data/SEKKA-JISYO.LARGE"
   sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.station            >> ./data/SEKKA-JISYO.LARGE"
   sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.hiragana-phrase    >> ./data/SEKKA-JISYO.LARGE"
+  sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.hiragana-phrase2   >> ./data/SEKKA-JISYO.LARGE"
 end
 
 task :loadS do
