@@ -65,9 +65,11 @@
                 (lambda (line)
                   (let1 word-and-kind (analyze-line line)
                     (when (phrase-is-valid? word-and-kind)
-                      (printf "%s  //  ;; %s\n"
+                      (printf ";; %s %s  \n"
                               (car word-and-kind)
-                              (write-to-string (cdr word-and-kind))))))
+                              (write-to-string (cdr word-and-kind)))
+                      (printf "%s  //\n"
+                              (car word-and-kind)))))
                 (f.readlines)))))
 
 (define (main argv)
