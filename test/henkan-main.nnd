@@ -425,7 +425,6 @@
         (approximate-search userid kvs "=nateiru"  "h" 0)))
 
 
-
 ;;-------------------------------------------------------------------
 (test-section "henkan (okuri nashi)")
 
@@ -520,6 +519,10 @@
 (test* "okuri nashi 23"
        '(("ユーザー辞書" #f "ゆーざーじしょ" j))
        (henkan-okuri-nashi userid kvs "Yu'za'jisyo" 0))
+
+(test* "okuri nashi 24"
+       '(("組み込み" #f "くみこみ" j) ("組込" #f "くみこみ" j))
+       (henkan-okuri-nashi userid kvs "Kumikomu" 0))
 
 ;;-------------------------------------------------------------------
 (test-section "henkan (okuri nashi and number)")

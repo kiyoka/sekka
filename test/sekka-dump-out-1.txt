@@ -279,6 +279,8 @@ MASTER::iqyou Cいんよう
 MASTER::iqyowhu Cいんよう
 MASTER::iqyp Cいんよう
 MASTER::いんよう /引用/飲用/陰陽
+MASTER::kumikomi Cくみこみ
+MASTER::くみこみ /組み込み/組込
 MASTER::kaT Cかt
 MASTER::かt /勝/買/飼/刈;(crop)草を刈る
 MASTER::ka` Cか`
@@ -353,6 +355,8 @@ MASTER::=nq んん
 MASTER::=qn んん
 MASTER::=qnn んん
 MASTER::=qq んん
+MASTER::=kumikomf くみこむ
+MASTER::=kumikomu くみこむ
 MASTER::aA 
 MASTER::aB 
 MASTER::aC 
@@ -2103,6 +2107,7 @@ MASTER::(#t) #ti'mf #ti'mu #ti-mf #ti-mu #ti:mf #ti:mu #ti^mf #ti^mu #tyi'mf #ty
 MASTER::(#c) #chi'mf #chi'mu #chi-mf #chi-mu #chi:mf #chi:mu #chi^mf #chi^mu #ci'mf #ci'mu #ci-mf #ci-mu #ci:mf #ci:mu #ci^mf #ci^mu
 MASTER::(#k) #kaime #kara# #kqme #kr#
 MASTER::(#g) #gatsu#ka #gatsu#nichi #gatsu#nici #gatsu#niti #gatsu#nityi #gatsu#nt #gatu#ka #gatu#nichi #gatu#nici #gatu#niti #gatu#nityi #gatu#nt #gyoume #gyowhume #gypme
+MASTER::(ku) kumikomi
 MASTER::(iq) iqngp iqnyou iqnyowhu iqnyp iqyou iqyowhu iqyp
 MASTER::(in) inngp innngp innnyou innnyowhu innnyp innyou innyowhu innyp inyou inyowhu inyp
 MASTER::(sa) sakf saki saku
@@ -2123,6 +2128,7 @@ MASTER::(si) sizdgdgo sizdgdgorikq sizdgdgoshori sizdgdgosyori sizdgdgoxori size
 MASTER::(sh) shizdgdgo shizdgdgorikq shizdgdgoshori shizdgdgosyori shizdgdgoxori shizengengo shizengengorikai shizengengoshori shizengengosyori shizengenngo shizengenngorikai shizengenngoshori shizengenngosyori shizengeqgo shizengeqgorikai shizengeqgoshori shizengeqgosyori shizenngengo shizenngengorikai shizenngengoshori shizenngengosyori shizenngenngo shizenngenngorikai shizenngenngoshori shizenngenngosyori shizenngeqgo shizenngeqgorikai shizenngeqgoshori shizenngeqgosyori shizeqgengo shizeqgengorikai shizeqgengoshori shizeqgengosyori shizeqgenngo shizeqgenngorikai shizeqgenngoshori shizeqgenngosyori shizeqgeqgo shizeqgeqgorikai shizeqgeqgoshori shizeqgeqgosyori shizfngengo shizfngengorikai shizfngengoshori shizfngengosyori shizfngenngo shizfngenngorikai shizfngenngoshori shizfngenngosyori shizfngeqgo shizfngeqgorikai shizfngeqgoshori shizfngeqgosyori shizfnngengo shizfnngengorikai shizfnngengoshori shizfnngengosyori shizfnngenngo shizfnngenngorikai shizfnngenngoshori shizfnngenngosyori shizfnngeqgo shizfnngeqgorikai shizfnngeqgoshori shizfnngeqgosyori shizfqgengo shizfqgengorikai shizfqgengoshori shizfqgengosyori shizfqgenngo shizfqgenngorikai shizfqgenngoshori shizfqgenngosyori shizfqgeqgo shizfqgeqgorikai shizfqgeqgoshori shizfqgeqgosyori
 MASTER::(he) henka henkan henkann henkaq hennka hennkan hennkann hennkaq heqka heqkan heqkann heqkaq
 MASTER::(hd) hdka hdkn hdkz
+MASTER::{ku} =kumikomf =kumikomu
 MASTER::{qq} =qq
 MASTER::{qn} =qn =qnn
 MASTER::{nq} =nq
