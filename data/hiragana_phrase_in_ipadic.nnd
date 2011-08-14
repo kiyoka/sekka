@@ -63,14 +63,14 @@
              (lambda (f)
                (for-each
                 (lambda (line)
-                  (let1 word-and-kind (analyze-line line)
+                  (let1 word-and-kind (analyze-line line.chomp)
                     (when (phrase-is-valid? word-and-kind)
                       (printf ";; %s %s  \n"
                               (car word-and-kind)
                               (write-to-string (cdr word-and-kind)))
                       (printf "%s  //\n"
                               (car word-and-kind)))))
-                (f.readlines)))))
+                f))))
 
 (define (main argv)
   (if (> 1 (length argv))
