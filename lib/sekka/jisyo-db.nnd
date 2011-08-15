@@ -186,7 +186,7 @@
     (for-each
      (lambda (key)
        (f.puts (+ key " " (kvs.get key))))
-     (kvs.keys))
+     (kvs.keys.sort))
     (kvs.close)))
 
 

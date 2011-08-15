@@ -31,18 +31,29 @@
 #
 #  $Id:
 #
-require 'tokyocabinet'
 require 'memcache'
-
+require 'dbm'
 
 class Kvs
   def initialize( dbtype )
+    @tcFlag = true
+    begin
+      require 'tokyocabinet'
+    rescue LoadError
+      @tcFlag = false
+    end
+
     @dbtype = dbtype
     case dbtype
     when :tokyocabinet
-      @db = TokyoCabinet::HDB.new( )
-      # @db.setxmsiz(512 * 1024 * 1024)  # expand memory
+      if @tcFlag
+        @db = TokyoCabinet::HDB.new( )
+      else
+        raise RuntimeError, "Kvs.new() missed require( 'tokyocabinet' )."
+      end
     when :memcache
+      # do nothing
+    when :dbm
       # do nothing
     else
       raise ArgumentError, "Kvs.new() requires reserved DB typename"
@@ -57,6 +68,8 @@ class Kvs
       end
     when :memcache
       @db = MemCache.new( name )
+    when :dbm
+      @db = DBM.new( name )
     else
       raise RuntimeError
     end
@@ -79,7 +92,7 @@ class Kvs
   def pure_put!( key, value, timeout = 0 )
     if 0 < key.size
       case @dbtype
-      when :tokyocabinet
+      when :tokyocabinet, :dbm
         @db[ key.force_encoding("ASCII-8BIT") ] = value.force_encoding("ASCII-8BIT")
       when :memcache
         @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"), timeout )
@@ -94,7 +107,7 @@ class Kvs
     if 0 == key.size
       fallback
     else
-      val = @db.get( key )
+      val = @db[ key ]
       if val
         val.force_encoding("UTF-8")
       else
@@ -109,7 +122,7 @@ class Kvs
 
   def clear()
     case @dbtype
-    when :tokyocabinet
+    when :tokyocabinet, :dbm
       @db.clear
     when :memcache
       # do nothing
@@ -121,7 +134,7 @@ class Kvs
   # return array of key string
   def keys()
     case @dbtype
-    when :tokyocabinet
+    when :tokyocabinet, :dbm
       @db.keys.map { |k|
         k.force_encoding("UTF-8")
       }
@@ -140,6 +153,13 @@ class Kvs
       }
     when :memcache
       raise RuntimeError, "Kvs#forward_match_keys method was not implemented for memcache."
+    when :dbm
+      result = self.keys( ).select {|key|
+        key.match( "^" + prefix )
+      }
+      result.map { |k|
+        k.force_encoding("UTF-8")
+      }
     else
       raise RuntimeError
     end
@@ -147,7 +167,7 @@ class Kvs
 
   def close()
     case @dbtype
-    when :tokyocabinet
+    when :tokyocabinet, :dbm
       @db.close
     when :memcache
       # do nothign

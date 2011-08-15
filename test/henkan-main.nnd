@@ -51,6 +51,8 @@
 (cond
  ((eq? dbtype 'tokyocabinet)
   (set! target "./test.tch"))
+ ((eq? dbtype 'dbm)
+  (set! target "./test"))
  ((eq? dbtype 'memcache)
   (error "memcached interface is obsolute."))
  (else
@@ -87,16 +89,17 @@
              (let ((_input (f.read))
                    (_output (StringIO.new)))
                (_output.set_encoding "utf-8")
-               (when (eq? dbtype 'tokyocabinet)
-                   (test-section "dump db")
-                   (test* "dump DB to SEKKA jisyo file. (1)"
-                          _input
-                          (begin
-                            (dump-sekka-jisyo-f _output target)
-                            (with-open "./test/sekka-dump-out-1.tmp"
-                                       (lambda (f) (f.write (_output.string)))
-                                       "w")
-                            (_output.string)))))))
+               (when (or (eq? dbtype 'tokyocabinet)
+                         (eq? dbtype 'dbm))
+                 (test-section "dump db")
+                 (test* "dump DB to SEKKA jisyo file. (1)"
+                        _input
+                        (begin
+                          (dump-sekka-jisyo-f _output target)
+                          (with-open "./test/sekka-dump-out-1.tmp"
+                                     (lambda (f) (f.write (_output.string)))
+                                     "w")
+                          (_output.string)))))))
   
 
 (test-section "Open the test-suite DB")
@@ -106,6 +109,9 @@
  ((eq? dbtype 'tokyocabinet)
   (kvs.open target)
   (require "tokyocabinet"))
+ ((eq? dbtype 'dbm)
+  (kvs.open target)
+  (require "dbm"))
  ((eq? dbtype 'memcache)
   (error "memcached interface is obsolute."))
  (else

@@ -1,6 +1,7 @@
 # -*- mode: ruby; -*-
 #                                                  Rakefile for Sekka
-# Release Engineering
+#
+# Release Engineering:
 #   1. edit the VERSION.yml file
 #   2. rake compile  &&   rake test
 #   3. rake gemspec  &&   rake build
@@ -8,6 +9,13 @@
 #   4. install sekka-x.x.x.gem to clean environment and test
 #   5. rake release
 #   6. gem push pkg/sekka-x.x.x.gem   ( need gem version 1.3.6 or higer. Please "gem update --system" to update )
+#
+# Enviroment Variables:
+#   Please select from
+#     DB=dbm
+#     DB=tokyocabinet
+#     DB=all             (default)
+#
 
 require 'rake'
 begin
@@ -45,7 +53,7 @@ begin
     gemspec.add_dependency( "memcache-client" )
     gemspec.add_dependency( "nendo", "= 0.5.3" )
     gemspec.add_dependency( "rack" )
-    gemspec.add_dependency( "tokyocabinet" )
+    # gemspec.add_dependency( "tokyocabinet" )
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install jeweler"
@@ -95,7 +103,16 @@ task :test do
   files << "./test/azik-verification.nnd"
   files << "./test/jisyo.nnd"
   files << "./test/google-ime.nnd"
-  files << "./test/henkan-main.nnd  tokyocabinet"
+  STDERR.printf( "Info:  env DB=%s\n", ENV['DB'] )
+  case ENV['DB']
+  when 'dbm'
+    files << "./test/henkan-main.nnd  dbm"
+  when 'tokyocabinet'
+    files << "./test/henkan-main.nnd  tokyocabinet"
+  else
+    files << "./test/henkan-main.nnd  dbm"
+    files << "./test/henkan-main.nnd  tokyocabinet"
+  end
   files << "./test/memcache.nnd"
   files.each {|filename|
     sh  sprintf( "time ruby -I ./lib /usr/local/bin/nendo %s", filename )
