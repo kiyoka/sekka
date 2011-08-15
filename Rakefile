@@ -59,6 +59,10 @@ rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install jeweler"
 end
 
+
+task :default => [:test] do
+end
+
 task :compile do
   # generate version.rb
   vh = Jeweler::VersionHelper.new "."
