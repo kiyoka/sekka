@@ -98,6 +98,7 @@ task :compile do
 end
 
 task :test do
+  sh "which nendo"
   sh "/bin/rm -f test.record"
   files = []
   files << "./test/util.nnd"
