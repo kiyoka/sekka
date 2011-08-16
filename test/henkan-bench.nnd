@@ -34,26 +34,52 @@
 ;;;  $Id: 
 ;;;
 (require "sekka/kvs")
-(use nendo.test)
+(require "ruby-prof")
+(require "benchmark")
 (use sekka.henkan)
 (load "./test/common.nnd")
 
-(test-start "henkan bench")
-;;===================================================================
+;; ------------------ macro --------------------
+(define bench-task
+  (macro (profile-flag title proc)
+    `(begin
+       (.puts ,title)
+       (.puts Benchmark::CAPTION)
+       ,(if profile-flag
+            `(let* ((result (RubyProf.profile
+                             (&block ()
+                               ,proc)))
+                    (printer (RubyProf::GraphPrinter.new result)))
+               (printer.print STDOUT))
+            `(.puts (Benchmark.measure
+                     (&block ()
+                       ,proc))))
+       (.puts ""))))
+
 
 ;;-------------------------------------------------------------------
-(test-section "Open the test-suite DB")
-(define kvs      (Kvs.new     'tokyocabinet))
-(define db       (kvs.open    "./test.tch"))
+(let1 kvs      (Kvs.new     'dbm)
+  (kvs.open    "./test")
 
-(test-section "bench start 1")
-(require "benchmark")
-(.puts Benchmark::CAPTION)
-(.puts (Benchmark.measure
-        (&block ()
-          (for-each
-           (lambda (n)
-             (henkan-okuri-nashi "uuuu" kvs "henkan" 0))
-           (Range.new 0 100)))))
+  (bench-task #f
+              "henkan-okuri-nashi (DBM)"
+              (for-each
+               (lambda (n)
+                 (henkan-okuri-nashi "uuuu" kvs "henkan" 0))
+               (Range.new 0 100)))
+  (kvs.close))
+
+;;-------------------------------------------------------------------
+(let1 kvs      (Kvs.new     'tokyocabinet)
+  (kvs.open    "./test.tch")
+
+  (bench-task #f
+              "henkan-okuri-nashi (Tokyo Cabinet)"
+              (for-each
+               (lambda (n)
+                 (henkan-okuri-nashi "uuuu" kvs "henkan" 0))
+               (Range.new 0 100)))
+  (kvs.close))
+
+
 ;;===================================================================
-(test-end)

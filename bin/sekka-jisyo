@@ -55,7 +55,10 @@ core.evalStr( <<";;END-OF-SCRIPT" )
   (with-open
    sekka-file
    (lambda (f)
-     (load-sekka-jisyo-f f target))))
+     (load-sekka-jisyo-f
+      f
+      (target.gsub #/[.]db$/ "") ;; drop ".db" suffix
+      ))))
 
 
 (define (dump-sekka-jisyo sekka-file)
@@ -65,9 +68,19 @@ core.evalStr( <<";;END-OF-SCRIPT" )
 (define (display-help)
   (print "Usage : ")
   (print "  sekka-jisyo convert SKK-JISYO.X  > SEKKA-JISYO.X       ... output SEKKA-JISYO to STDOUT")
-  (print "  sekka-jisyo load    SEKKA-JISYO.X  SEKKA-JISYO.X.tch   ... load   SEKKA-JISYO to DB(*.tch)")
-  (print "  sekka-jisyo dump    SEKKA-JISYO.X.tch                  ... dump   DB(*.tch) to SEKKA-JISYO(STDOUT)"))
+  (print "  sekka-jisyo load    SEKKA-JISYO.X  SEKKA-JISYO.X.tch   ... load   SEKKA-JISYO to Tokyo Cabinet DB")
+  (print "  sekka-jisyo load    SEKKA-JISYO.X  SEKKA-JISYO.X.db    ... load   SEKKA-JISYO to ndbm          DB")
+  (print "  sekka-jisyo dump    SEKKA-JISYO.X.tch                  ... dump   Tokyo Cabinet DB to SEKKA-JISYO(STDOUT)")
+  (print "  sekka-jisyo dump    SEKKA-JISYO.X.db                   ... dump   ndbm          DB to SEKKA-JISYO(STDOUT)"))
 
+(define (analyze-kvs-type filename)
+  (cond
+   ((rxmatch #/[.]tch$/ filename)
+    'tokyocabinet)
+   ((rxmatch #/[.]db$/ filename)
+    'dbm)
+   (else
+    (errorf "Error: analyze-kvs-type() got unsupported filename [%s] \n" filename))))
 
 (define (main argv)
   (cond
@@ -81,13 +94,17 @@ core.evalStr( <<";;END-OF-SCRIPT" )
             (display-help)
             (convert-skk-jisyo (second argv))))
        ((eq? 'load command)
-        (if (< (length argv) 3)
-            (display-help)
-            (load-sekka-jisyo (second argv) (third argv))))
+        (let1 filename (third argv)
+          (set-kvs-type (analyze-kvs-type filename))
+          (if (< (length argv) 3)
+              (display-help)
+              (load-sekka-jisyo (second argv) filename))))
        ((eq? 'dump command)
-        (if (< (length argv) 2)
-            (display-help)
-            (dump-sekka-jisyo (second argv))))
+        (let1 filename (second argv)
+          (set-kvs-type (analyze-kvs-type filename))
+          (if (< (length argv) 2)
+              (display-help)
+              (dump-sekka-jisyo filename))))
        (else
         (errorf "Error: no such command [%s] \n" command )))))))
 
