@@ -1,0 +1,72 @@
+#!/bin/sh
+:; #-*- mode: nendo; syntax: scheme -*-;;
+:; exec /usr/local/bin/nendo $0 $*
+
+(use srfi-1)
+(use sekka.roman-lib)
+
+(define (hiragana-filter words)
+  (define (hiras lst)
+    (cond
+     ((null? lst)
+      lst)
+     ((is-hiragana (car lst))
+      (cons
+       (car lst)
+       (hiras (cdr lst))))))
+     
+  (let1 lst (cdr (reverse words))
+    (reverse (hiras lst))))
+
+
+(define (include-slash-s? lst)
+  (any
+   (lambda (x y)
+     (and
+      (string=? "</S>" y)
+      (is-hiragana     x)))
+   (cons "" lst)
+   lst))
+   
+
+(define (grep-last-phrase filename)
+  (with-open
+   filename
+   (lambda (f)
+     (for-each
+      (lambda (line)
+        (let* ([lst   (to-list (line.chomp.split #/[ \t]+/))]
+               [freq  (take-right lst 1)]
+               [words (drop-right lst 1)])
+          (when (include-slash-s? words)
+            (let1 phrase (apply + (hiragana-filter words))
+              (printf "%s    ;; %2d ;; %s\n"
+                      phrase
+                      phrase.size
+                      (write-to-string lst))))))
+      (f.readlines.to_list)))))
+
+
+(define (test-code)
+  (let* ([line  ",▼ から ▲ まで 追記 </S>	1355"]
+         [lst   (to-list (line.chomp.split #/[ \t]+/))]
+         [freq  (take-right #?=lst 1)]
+         [words (drop-right #?=lst 1)])
+    #?=words
+    (print (include-slash-s? words))
+    (print (hiragana-filter '("あ" "い" "う" "abc")))
+    (print (hiragana-filter '("abc" "あ" "い" "う")))
+    (print (hiragana-filter '("なり" "まし" "た" "</S>")))
+    (print (hiragana-filter '("," "▼" "</S>")))
+    (print (apply + (hiragana-filter '("," "▼" "</S>"))))
+    (print (apply + (hiragana-filter '("なり" "まし" "た" "</S>"))))
+    ))
+
+(define (main argv)
+  (if (> 1 (length argv))
+      (begin
+        (test-code)
+        (error "hiragana_phrase_in_webcorpus.nnd requires [6gram web corpus file]"))
+      (grep-last-phrase (car (to-list argv)))))
+
+

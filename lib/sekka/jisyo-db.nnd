@@ -72,21 +72,29 @@
       opt)))
 
 (define (create-2char-hash keylist)
-  (define okuri-ari-hash   (make-hash-table))
-  (define okuri-nashi-hash (make-hash-table))
+  (define okuri-ari-hash         (make-hash-table))
+  (define okuri-nashi-hash       (make-hash-table))
+  (define hiragana-phrase-hash   (make-hash-table))
   (define (create-hash keylist)
     (for-each
      (lambda (k)
-       (when (rxmatch #/^[a-zA-Z#^>-@`\;+:'\-]+$/ k)
-         (let1 sliced (sekka-downcase (k.slice 0 2))
-           (when (= 2 sliced.size)
-             (if (rxmatch #/[A-Z`+]$/ k)
-                 (hash-table-push! okuri-ari-hash   sliced k)
-                 (hash-table-push! okuri-nashi-hash sliced k))))))
+       (when (rxmatch #/^[=a-zA-Z#^>-@`\;+:'\-]+$/ k)
+         (if (rxmatch #/^=/ k)
+             ;; HIRAGANA-PHRASE
+             (let1 sliced (sekka-downcase (k.slice 1 2))
+               (when (= 2 sliced.size)
+                 (hash-table-push! hiragana-phrase-hash   sliced k)))
+             ;; OKURI-ARI and OKURI-NASHI
+             (let1 sliced (sekka-downcase (k.slice 0 2))
+               (when (= 2 sliced.size)
+                 (if (rxmatch #/[A-Z`+]$/ k)
+                     (hash-table-push! okuri-ari-hash   sliced k)
+                     (hash-table-push! okuri-nashi-hash sliced k)))))))
      keylist))
   (create-hash keylist)
   (values okuri-ari-hash
-          okuri-nashi-hash))
+          okuri-nashi-hash
+          hiragana-phrase-hash))
 
 (define (setup-ready-made-keylist kvs keylist)
   (for-each
@@ -97,7 +105,8 @@
    alphabet-pairs)
   
   (receive (okuri-ari-hash
-            okuri-nashi-hash)
+            okuri-nashi-hash
+            hiragana-phrase-hash)
       (create-2char-hash keylist)
 
     ;; OKURI-ARI
@@ -112,49 +121,61 @@
      (lambda (key)
        (kvs.put! (+ masterid "::" "(" (sekka-downcase key) ")")
                  (string-join (uniq (sort (hash-table-get okuri-nashi-hash key))) " ")))
-     (hash-table-keys okuri-nashi-hash))))
+     (hash-table-keys okuri-nashi-hash))
+
+    ;; HIRAGANA-PHRASE
+    (for-each
+     (lambda (key)
+       (kvs.put! (+ masterid "::" "{" (sekka-downcase key) "}")
+                 (string-join (uniq (sort (hash-table-get hiragana-phrase-hash key))) " ")))
+     (hash-table-keys hiragana-phrase-hash))))
 
 
-(define (append-entry userid kvs key value)
-  (let1 key (+ userid "::" key)
-    (if-let1 got (kvs.get key #f)
-      (let* ((trimmed-a-first1 (car (string-split-first-and-rest  got)))
-             (trimmed-a        (if-let1 m (rxmatch #/^[C\/](.+)$/ got)
-                                 (rxmatch-substring m 1)
-                                 got))
-             (trimmed-b-first1 (car (string-split-first-and-rest  value)))
-             (trimmed-b        (if-let1 m (rxmatch #/^[C\/](.+)$/ value)
-                                 (rxmatch-substring m 1)
-                                 value))
-             (lst (delete-duplicates (append (to-list (trimmed-a.split "/"))
-                                             (to-list (trimmed-b.split "/"))))))
-        (if (= trimmed-a-first1 trimmed-b-first1)
-            (kvs.put! key (+ trimmed-a-first1 (string-join lst "/")))
-            (begin
-              ;; "/" よりも "C" を優先する
-              (cond
-               ((= "C" trimmed-a-first1) ;; aを優先
-                (kvs.put! key got))
-               ((= "C" trimmed-b-first1) ;; bを優先
-                (kvs.put! key value))
-               (else
-                (errorf "Error: [%s] entry is wrong format" value))))))
-      (kvs.put! key value))))
+(define (append-entry userid kvs _key value)
+  (let1 key (+ userid "::" _key)
+    (cond
+     ((rxmatch #/^=/ _key)
+      ;; hiragana-phrase entry
+      (kvs.put! key value))
+     (else
+      (if-let1 got (kvs.get key #f)
+        (let* ((trimmed-a-first1 (car (string-split-first-and-rest  got)))
+               (trimmed-a        (if-let1 m (rxmatch #/^[C\/](.+)$/ got)
+                                   (rxmatch-substring m 1)
+                                   got))
+               (trimmed-b-first1 (car (string-split-first-and-rest  value)))
+               (trimmed-b        (if-let1 m (rxmatch #/^[C\/](.+)$/ value)
+                                     (rxmatch-substring m 1)
+                                     value))
+               (lst (delete-duplicates (append (to-list (trimmed-a.split "/"))
+                                               (to-list (trimmed-b.split "/"))))))
+          (if (= trimmed-a-first1 trimmed-b-first1)
+              (kvs.put! key (+ trimmed-a-first1 (string-join lst "/")))
+              (begin
+                ;; "/" よりも "C" を優先する
+                (cond
+                 ((= "C" trimmed-a-first1) ;; aを優先
+                  (kvs.put! key got))
+                 ((= "C" trimmed-b-first1) ;; bを優先
+                  (kvs.put! key value))
+                 (else
+                  (errorf "Error: [%s][%s] entry is wrong format" key value))))))
+        (kvs.put! key value))))))
 
 
 (define (load-sekka-jisyo-f f filename)
   (define keylist '())
-  (define (create-keylist kvs lines)
+  (define (create-keylist kvs f)
     (for-each
      (lambda (line)
        (let1 fields (split-dict-line line)
          (set! keylist (cons (first fields) keylist))
          (append-entry masterid kvs (first fields) (second fields))))
-     lines))
+     (f.readlines)))
   (let1 kvs (Kvs.new (get-kvs-type))
     (kvs.open filename)
     (kvs.clear)
-    (create-keylist kvs (f.readlines.to_list))
+    (create-keylist kvs f)
     (setup-ready-made-keylist kvs keylist)
     (kvs.close)))
 
@@ -165,7 +186,7 @@
     (for-each
      (lambda (key)
        (f.puts (+ key " " (kvs.get key))))
-     (to-list (kvs.keys)))
+     (kvs.keys.sort))
     (kvs.close)))
 
 

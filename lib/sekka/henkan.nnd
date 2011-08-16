@@ -68,40 +68,39 @@
    lst))
 
 
-(define (my-append-many lst)
-  (let1 result '()
-    (for-each
-     (lambda (x)
-       (set! result (append result x)))
-     lst)
-    result))
+(define (flatten-vector vec)
+  (vec.flatten))
 
 
 ;; 曖昧検索
 ;;  リストで返す。 (ソート済み検索結果)
-(define (approximate-search userid kvs keyword okuri-ari-flag limit)
-  (define jarow-shikii 0.94)
-  (let* ((a-search (ApproximateSearch.new jarow-shikii))
-         (lst      (my-append-many
-                    (map
-                     (lambda (x)
-                      (let* ((val (vector-ref x 0))
-                             (k   (vector-ref x 1))
-                             (v   (dict-get userid kvs k ""))
-                             (v-pair (string-split-first-and-rest v))
-                             (v-first (car v-pair))
-                             (v-rest  (cdr v-pair)))
-                        (map
-                         (lambda (element)
-                           (list val k (+ v-first element)))
-                         (to-list (v-rest.split "/")))))
-                     (to-list (a-search.search userid kvs keyword okuri-ari-flag)))))
-         (nn-heuristics-result (nn-heuristics keyword lst))
-         (sorted-lst  (sort-by nn-heuristics-result (lambda (item) (- 1.0 (car item))))))
-    (if (= limit 0)
-        sorted-lst
-        (take* sorted-lst limit))))
+(define (approximate-search userid kvs keyword type limit)
+  (let ([jarow-threshold
+         (if (= "h" type)
+             0.975
+             0.94)])
 
+    (let* ((a-search (ApproximateSearch.new jarow-threshold))
+           (lst      (to-list
+                      (flatten-vector
+                       (map
+                        (lambda (x)
+                          (let* ((val (vector-ref x 0))
+                                 (k   (vector-ref x 1))
+                                 (v   (dict-get userid kvs k ""))
+                                 (v-pair (string-split-first-and-rest v))
+                                 (v-first (car v-pair))
+                                 (v-rest  (cdr v-pair)))
+                            (map
+                             (lambda (element)
+                               (list val k (+ v-first element)))
+                             (v-rest.split "/"))))
+                        (a-search.search userid kvs keyword type)))))
+           (nn-heuristics-result (nn-heuristics keyword lst))
+           (sorted-lst  (sort-by nn-heuristics-result (lambda (item) (- 1.0 (car item))))))
+      (if (= limit 0)
+          sorted-lst
+          (take* sorted-lst limit)))))
 
 
 ;; 厳密検索
@@ -143,7 +142,7 @@
 
 ;; 送り仮名なしの変換
 (define (henkan-okuri-nashi userid kvs keyword limit)
-  (let* ((result (approximate-search userid kvs keyword #f limit))
+  (let* ((result (approximate-search userid kvs keyword "k" limit))
          (kouho  (uniq (map
                         (lambda (x)
                           (third x))
@@ -204,7 +203,7 @@
                                            (+ (rxmatch-substring m 1)
                                               (rxmatch-substring m 2)
                                               (rxmatch-substring m 3))
-                                           #t
+                                           "K"
                                            limit))
                (okurigana-lst  (gen-roman->hiragana (sekka-downcase
                                                      (+
@@ -236,19 +235,45 @@
                 (take* lst limit)))))))
 
 
+;; 平仮名フレーズ辞書を使った曖昧検索
+(define (henkan-hiragana-phrase userid kvs keyword limit roman-method)
+  (let* ([result (approximate-search userid kvs
+                                     (+ "=" (sekka-downcase keyword))
+                                     "h"
+                                     limit)]
+         [uniq-result
+          (delete-duplicates
+           (map
+            (lambda (x) (third x))
+            result))]
+          
+         [lst (map
+               (lambda (x)
+                 (list x #f keyword 'h))
+               uniq-result)])
+
+    (if (= limit 0)
+        lst
+        (take* lst limit))))
+
+  
+  
 ;; 平仮名の変換
-(define (henkan-hiragana kvs keyword roman-method)
-  (let* ((str  (sekka-downcase keyword))
-         (hira (gen-roman->hiragana str roman-method))
-         (kata (gen-roman->katakana str roman-method)))
-    (if (null? hira)
-        `((,keyword #f ,keyword j))
-        (append-map (lambda (h k)
-                      `(
-                        (,h #f ,keyword h)
-                        (,k #f ,keyword k)))
-                    hira
-                    kata))))
+(define (henkan-hiragana userid kvs keyword roman-method)
+  (let* ([phrase-limit  3]
+         [str  (sekka-downcase keyword)]
+         [hira (gen-roman->hiragana str roman-method)]
+         [kata (gen-roman->katakana str roman-method)])
+    (append
+     (henkan-hiragana-phrase userid kvs keyword phrase-limit roman-method)
+     (if (null? hira)
+         `((,keyword #f ,keyword j))
+         (append-map (lambda (h k)
+                       `(
+                         (,h #f ,keyword h)
+                         (,k #f ,keyword k)))
+                     hira
+                     kata)))))
 
 
 ;; アルファベットの単純変換
@@ -303,23 +328,21 @@
        (cond
         ((rxmatch #/[a-z][A-Z`+]/ k)
          ;; 送りあり
-         ;;(let1 result (approximate-search db k #t)  (disp-search-result result))
          (append
           (append
            (henkan-okuri-ari userid kvs k limit roman-method)
            (if (null? (gen-roman->hiragana (sekka-downcase k) roman-method))
                '()
-              (henkan-hiragana kvs (sekka-downcase k) roman-method)))
+              (henkan-hiragana userid kvs (sekka-downcase k) roman-method)))
           (henkan-alphabet kvs keyword)))
         (else
          ;; 送りなし
-         ;;(let1 result (approximate-search db k #f)  (disp-search-result result))
          (append
           (append
            (henkan-okuri-nashi userid kvs k limit)
            (if (null? (gen-roman->hiragana (sekka-downcase k) roman-method))
                '()
-               (henkan-hiragana kvs (sekka-downcase k) roman-method)))
+               (henkan-hiragana userid kvs (sekka-downcase k) roman-method)))
           (henkan-alphabet kvs keyword))))))
     ;; 10進数数値のみで構成されるキーワード
     ((rxmatch #/^[0-9]+$/ keyword)
@@ -332,7 +355,7 @@
     ((not (null? (gen-roman->hiragana keyword roman-method)))
      (append
       (append
-       (henkan-hiragana kvs keyword roman-method)
+       (henkan-hiragana userid kvs keyword roman-method)
        (henkan-alphabet kvs keyword))
       (henkan-okuri-nashi userid kvs keyword limit)))
     (else
@@ -468,7 +491,8 @@
     
   (define (_create-ready-made-keylist keylist)
     (receive (okuri-ari-hash
-              okuri-nashi-hash)
+              okuri-nashi-hash
+              hiragana-phrase-hash)
         (create-2char-hash keylist)
       
       ;; OKURI-ARI
@@ -491,8 +515,19 @@
                      (string-join (uniq (sort (append (to-list (fetched.split #/[ ]+/))
                                                       (hash-table-get okuri-nashi-hash key))))
                                   " "))))
-       (hash-table-keys okuri-nashi-hash))))
-         
+       (hash-table-keys okuri-nashi-hash))
+
+      ;; HIRAGANA-PHRASE
+      (for-each
+       (lambda (key)
+         (let1 fetched (kvs.get  (+ userid "::" "{" (sekka-downcase key) "}")
+                                 (kvs.get  (+ masterid "::" "{" (sekka-downcase key) "}") ""))
+           (kvs.put! (+ userid "::" "{" (sekka-downcase key) "}")
+                     (string-join (uniq (sort (append (to-list (fetched.split #/[ ]+/))
+                                                      (hash-table-get hiragana-phrase-hash key))))
+                                  " "))))
+       (hash-table-keys hiragana-phrase-hash))))
+
   ;; "ユーザー語彙を"(stored)"にpush!する"
   (define (kvs-push! userid kvs entry-str)
     (let* ((orig (kvs.get (+ userid "::(stored)") "()"))

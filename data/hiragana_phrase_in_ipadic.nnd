@@ -1,0 +1,80 @@
+#!/bin/sh
+:; #-*- mode: nendo; syntax: scheme -*-;;
+:; exec /usr/local/bin/nendo $0 $*
+
+(use srfi-1)
+(use sekka.roman-lib)
+
+(debug-print-length 300)
+
+(define (analyze-line line)
+  (define (quoting-kanji-as-string line)
+    (let* ([line (line.gsub "\"(\"" "kakko")]
+           [line (line.gsub "\")\"" "kakko")])
+      (line.gsub #/([^\(\)0-9 ]+)/ "\"\\1\"")))
+
+  (define (read-one-line line)
+    (let1 pair (read-from-string (+ "("
+                                    (quoting-kanji-as-string line)
+                                    ")"))
+      (values (second (first pair))
+              (second pair))))
+
+  (receive (kind-list data-alist)
+      (read-one-line line)
+
+    (let1 word (assq-ref "見出し語" data-alist)
+      (cons
+       (caar word)
+       kind-list))))
+
+(define (phrase-is-valid? word-and-kind)
+  (let ([word (car word-and-kind)]
+        [kind-list (cdr word-and-kind)])
+    (when (string? word)
+      (when (is-hiragana word)
+        (when (< 1 (word.size))
+          (= 0 (length
+                (filter
+                 (lambda (ng-kind)
+                   (memq ng-kind kind-list))
+                 '(
+                   "フィラー"
+                   "固有名詞"
+                   "サ変接続"
+                   "感動詞"
+                   )))))))))
+       
+(define (test-code)
+  (let* ([lines '(
+                  "(品詞 (副詞 助詞類接続)) ((見出し語 (ありのまま 2116)) (読み アリノママ) (発音 アリノママ) )  "
+                  "(品詞 (副詞 一般)) ((見出し語 (やすやす 2875)) (読み ヤスヤス) (発音 ヤスヤス) )   "
+                  "(品詞 (副詞 一般)) ((見出し語 (とりいそぎ 2875)) (読み トリイソギ) (発音 トリイソギ) )  "
+                  "(品詞 (副詞 一般)) ((見出し語 (しかしながら 2875)) (読み シカシナガラ) (発音 シカシナガラ) )    "
+                  "(品詞 (形容詞 自立)) ((見出し語 (赤い 2074)) (読み アカイ) (発音 アカイ) (活用型 形容詞・アウオ段) )")])
+    (for-each
+     (lambda (line)
+       (let1 word-and-kind #?=(analyze-line line)
+         #?=(phrase-is-valid? word-and-kind)))
+     lines)))
+
+(define (grep-valid-phrase filename)
+  (with-open filename
+             (lambda (f)
+               (for-each
+                (lambda (line)
+                  (let1 word-and-kind (analyze-line line.chomp)
+                    (when (phrase-is-valid? word-and-kind)
+                      (printf ";; %s %s  \n"
+                              (car word-and-kind)
+                              (write-to-string (cdr word-and-kind)))
+                      (printf "%s  //\n"
+                              (car word-and-kind)))))
+                f))))
+
+(define (main argv)
+  (if (> 1 (length argv))
+      (begin
+        (test-code)
+        (error "hiragana_phrase_in_ipadic.nnd requires [ipadic file(utf8)]"))
+      (grep-valid-phrase (car (to-list argv)))))

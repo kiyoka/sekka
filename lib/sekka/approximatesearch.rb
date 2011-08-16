@@ -49,19 +49,23 @@ class ApproximateSearch
     }.select { |v| v }.sort_by {|item| 1.0 - item[0]}
   end
 
-  def search( userid, kvs, keyword, okuri_ari )
-    readymade_key = if okuri_ari
-                      keyword.slice( 0, 2 ).upcase
+  def search( userid, kvs, keyword, type )
+    readymade_key = case type
+                    when 'k' # okuri nashi kanji entry
+                      "(" + keyword.slice( 0, 2 ).downcase + ")"
+                    when 'K' # okuri ari   kanji entry
+                      "(" + keyword.slice( 0, 2 ).upcase   + ")"
+                    when 'h' # hiragana phrase entry
+                      "{" + keyword.slice( 1, 2 ).downcase + "}"
                     else
-                      keyword.slice( 0, 2 ).downcase
+                      raise sprintf( "Error: ApproximateSearch#search unknown type %s ", type )
                     end
-    readymade_key = "(" + readymade_key + ")"
-    
+
     str = kvs.get( userid + "::" + readymade_key, false )
-    if not str 
+    if not str
       str = kvs.get( "MASTER::" + readymade_key )
     end
-    
+
     #printf( "#readymade_key %s : %s\n", readymade_key, str )
     if str
       filtering( keyword, str.split( /[ ]+/ ))
