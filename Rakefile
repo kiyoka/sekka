@@ -98,7 +98,6 @@ task :compile do
 end
 
 task :test do
-  sh "which nendo"
   sh "/bin/rm -f test.record"
   files = []
   files << "./test/util.nnd"
@@ -120,7 +119,8 @@ task :test do
   end
   files << "./test/memcache.nnd"
   files.each {|filename|
-    sh  sprintf( "time ruby -I ./lib /usr/local/bin/nendo %s", filename )
+    nendopath = `which nendo`.chomp
+    sh  sprintf( "time ruby -I ./lib %s %s", nendopath, filename )
   }
   sh "cat test.record"
 end
