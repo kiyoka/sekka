@@ -152,10 +152,6 @@ task :loadS do
   sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.SMALL  ./data/SEKKA-JISYO.SMALL.tch"
 end
 
-task :loadM do
-  sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.MEDIUM ./data/SEKKA-JISYO.MEDIUM.tch"
-end
-
 task :loadL do
   sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.LARGE  ./data/SEKKA-JISYO.LARGE.tch"
 end
