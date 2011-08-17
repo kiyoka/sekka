@@ -91,10 +91,11 @@ class Kvs
       @name = name
       if File.exist?( @name )
         File.open( @name ) {|f|
-          @db = Marshal.load( f )
+          @db = eval( f.read() )
         }
+        @db
       else
-        @db = Marshal.new()
+        @db = Hash.new
       end
     else
       raise RuntimeError
@@ -200,7 +201,7 @@ class Kvs
       # do nothign
     when :pure
       File.open( @name, "w" ) { |f|
-        Marshal.dump( @db, f )
+        f.print( @db )
       }
     else
       raise RuntimeError
