@@ -53,6 +53,8 @@
   (set! target "./test.tch"))
  ((eq? dbtype 'dbm)
   (set! target "./test"))
+ ((eq? dbtype 'pure)
+  (set! target "./test.dump"))
  ((eq? dbtype 'memcache)
   (error "memcached interface is obsolute."))
  (else
@@ -90,7 +92,8 @@
                    (_output (StringIO.new)))
                (_output.set_encoding "utf-8")
                (when (or (eq? dbtype 'tokyocabinet)
-                         (eq? dbtype 'dbm))
+                         (eq? dbtype 'dbm)
+                         (eq? dbtype 'pure))
                  (test-section "dump db")
                  (test* "dump DB to SEKKA jisyo file. (1)"
                         _input
@@ -112,6 +115,8 @@
  ((eq? dbtype 'dbm)
   (kvs.open target)
   (require "dbm"))
+ ((eq? dbtype 'pure)
+  (kvs.open target))
  ((eq? dbtype 'memcache)
   (error "memcached interface is obsolute."))
  (else
@@ -1192,7 +1197,7 @@
 ;;===================================================================
 
 ;; ---後処理---
-(db.close)
+(kvs.close)
 ;; 最終的な辞書の状態を目視するためのダンプ
 (dump-sekka-jisyo-f STDOUT target)
 

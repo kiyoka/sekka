@@ -32,7 +32,6 @@
 #  $Id:
 #
 require 'memcache'
-require 'dbm'
 
 class Kvs
   def initialize( dbtype )
@@ -43,6 +42,13 @@ class Kvs
       @tcFlag = false
     end
 
+    @dbmFlag = true
+    begin
+      require 'dbm'
+    rescue LoadError
+      @dbmFlag = false
+    end
+
     @dbtype = dbtype
     case dbtype
     when :tokyocabinet
@@ -51,9 +57,20 @@ class Kvs
       else
         raise RuntimeError, "Kvs.new() missed require( 'tokyocabinet' )."
       end
+
     when :memcache
       # do nothing
+
     when :dbm
+      if @dbmFlag
+        # do nothing
+      else
+        raise RuntimeError, "Kvs.new() missed require( 'dbm' )."
+      end
+      
+      # do nothing
+
+    when :pure
       # do nothing
     else
       raise ArgumentError, "Kvs.new() requires reserved DB typename"
@@ -70,6 +87,15 @@ class Kvs
       @db = MemCache.new( name )
     when :dbm
       @db = DBM.new( name )
+    when :pure
+      @name = name
+      if File.exist?( @name )
+        File.open( @name ) {|f|
+          @db = Marshal.load( f )
+        }
+      else
+        @db = Marshal.new()
+      end
     else
       raise RuntimeError
     end
@@ -96,6 +122,8 @@ class Kvs
         @db[ key.force_encoding("ASCII-8BIT") ] = value.force_encoding("ASCII-8BIT")
       when :memcache
         @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"), timeout )
+      when :pure
+        @db[ key ] = value
       else
         raise RuntimeError
       end
@@ -122,7 +150,7 @@ class Kvs
 
   def clear()
     case @dbtype
-    when :tokyocabinet, :dbm
+    when :tokyocabinet, :dbm, :pure
       @db.clear
     when :memcache
       # do nothing
@@ -140,6 +168,8 @@ class Kvs
       }
     when :memcache
       raise RuntimeError, "Kvs#keys method was not implemented for memcache."
+    when :pure
+      @db.keys
     else
       raise RuntimeError
     end
@@ -153,12 +183,9 @@ class Kvs
       }
     when :memcache
       raise RuntimeError, "Kvs#forward_match_keys method was not implemented for memcache."
-    when :dbm
-      result = self.keys( ).select {|key|
+    when :dbm, :pure
+      self.keys( ).select {|key|
         key.match( "^" + prefix )
-      }
-      result.map { |k|
-        k.force_encoding("UTF-8")
       }
     else
       raise RuntimeError
@@ -171,6 +198,10 @@ class Kvs
       @db.close
     when :memcache
       # do nothign
+    when :pure
+      File.open( @name, "w" ) { |f|
+        Marshal.dump( @db, f )
+      }
     else
       raise RuntimeError
     end

@@ -7,6 +7,7 @@
 /pkg
 /rackup.log
 /test.db
+/test.dump
 /test.kct
 /test.log
 /test.record
