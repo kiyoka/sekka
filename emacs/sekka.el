@@ -104,6 +104,12 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   :type  'boolean
   :group 'sekka)
 
+(defcustom sekka-kakutei-with-spacekey t
+  "*Non-nil であれば、リアルタイムガイド表示中のSPACEキーでの確定動作を有効にする"
+  :type  'boolean
+  :group 'sekka)
+
+
 
 (defface sekka-guide-face
   '((((class color) (background light)) (:background "#E0E0E0" :foreground "#F03030")))
@@ -695,7 +701,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 (define-key sekka-select-mode-map "\C-p"                   'sekka-select-prev)
 (define-key sekka-select-mode-map "\C-n"                   'sekka-select-next)
 (define-key sekka-select-mode-map sekka-rK-trans-key       'sekka-select-next)
-(define-key sekka-select-mode-map " "                      'sekka-select-next)
+(define-key sekka-select-mode-map (kbd "SPC")              'sekka-select-next)
 (define-key sekka-select-mode-map "\C-u"                   'sekka-select-hiragana)
 (define-key sekka-select-mode-map "\C-i"                   'sekka-select-katakana)
 (define-key sekka-select-mode-map "\C-k"                   'sekka-select-katakana)
@@ -714,6 +720,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 
     (define-key map "\C-n"      'popup-next)
     (define-key map "\C-j"      'popup-next)
+    (define-key map (kbd "SPC") 'popup-next)
     (define-key map [down]      'popup-next)
     (define-key map "\C-p"      'popup-previous)
     (define-key map [up]        'popup-previous)
@@ -1287,6 +1294,16 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	  sticky-list)
   (define-key sticky-map sticky-key '(lambda ()(interactive)(insert sticky-key))))
 
+
+(defun sekka-spacekey-init-function ()
+  (define-key global-map (kbd "SPC")
+    '(lambda ()(interactive)
+       (if (and (< 0 sekka-timer-rest) 
+		sekka-kakutei-with-spacekey)
+	   (sekka-rK-trans)
+	 (insert " ")))))
+
+
 (defun sekka-realtime-guide ()
   "リアルタイムで変換中のガイドを出す
 sekka-modeがONの間中呼び出される可能性がある。"
@@ -1410,6 +1427,9 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
 			(> (prefix-numeric-value arg) 0))))
   (when sekka-sticky-shift
     (add-hook 'sekka-mode-hook 'sekka-sticky-shift-init-function))
+
+  (add-hook 'sekka-mode-hook 'sekka-spacekey-init-function)
+
   (when sekka-mode (run-hooks 'sekka-mode-hook))
 
   (sekka-debug-print "sekka-mode-internal :2\n")
