@@ -985,8 +985,8 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
      (lambda (alist)
        (let ((markers  (sekka-assoc-ref 'markers  alist nil)))
 	 (sekka-debug-print (format "markers=%S\n" markers))
-	 (sekka-debug-print (format "marker-position car=%d\n" (marker-position (car markers))))
-	 (sekka-debug-print (format "marker-position cdr=%d\n" (marker-position (cdr markers))))
+	 (sekka-debug-print (format "marker-position car=%S\n" (marker-position (car markers))))
+	 (sekka-debug-print (format "marker-position cdr=%S\n" (marker-position (cdr markers))))
 	 (when (and (marker-position (car markers))	 ;; 存在するバッファを指しているか
 		    (marker-position (cdr markers)))
 	   (if (= (marker-position (car markers))
