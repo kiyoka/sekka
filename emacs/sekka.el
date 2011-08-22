@@ -1298,15 +1298,26 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 (defun sekka-spacekey-init-function ()
   (define-key global-map (kbd "SPC")
     '(lambda (&optional arg)(interactive "P")
-       (if (and (< 0 sekka-timer-rest) 
-		sekka-kakutei-with-spacekey)
-	   (sekka-rK-trans)
-	 (cond
-	  ((null arg)
-	   (insert " "))
-	  (t
-	   (dotimes(i arg)
-	     (insert " "))9))))))
+       (cond ((and (< 0 sekka-timer-rest) 
+		   sekka-kakutei-with-spacekey)
+	      (cond
+	       ((string= " " (char-to-string (preceding-char)))
+		(insert " "))
+	       ((eq       10                 (preceding-char))   ;; 直前に改行があった
+		(insert " "))
+	       ((string= "/" (char-to-string (preceding-char)))
+		(delete-region (- (point) 1) (point))
+		(insert " "))
+	       (t
+		(sekka-rK-trans))))
+	     (t
+	      (cond
+	       ((null arg)
+		(insert " "))
+	       (t
+		(dotimes(i arg)
+		  (insert " ")))))))))
+
 
 (defun sekka-realtime-guide ()
   "リアルタイムで変換中のガイドを出す
