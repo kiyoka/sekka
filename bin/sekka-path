@@ -2,13 +2,12 @@
 # -*- coding: utf-8 -*-
 
 require 'rubygems'
-arr = Gem.latest_load_paths.select { |x|
-  x.match( /\/sekka[-]/ )
-}
+require 'sekkaconfig'
 
-if 0 == arr.size 
-  STDERR.puts "Error: gem of sekka is not installed yet..."
-  exit( 1 )
-else
-  puts arr[0].sub( /\/lib$/, "" )
-end
+gemRoot = Gem.loaded_specs['sekka']
+puts "#{gemRoot.base_dir}/gems/#{gemRoot.name}-#{gemRoot.version.to_s}/emacs/sekka.el"
+
+
+
+
+
