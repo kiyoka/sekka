@@ -4,5 +4,4 @@
 require 'rubygems'
 require 'sekka/path'
 
-p SekkaPath.path
-
+puts SekkaPath.path
