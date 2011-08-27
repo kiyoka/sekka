@@ -98,6 +98,16 @@ task :compile do
 end
 
 task :test do
+  sh "ruby -I ./lib ./bin/sekka-path > /tmp/path1"
+  path1 = open( "/tmp/path1" ) {|f|
+    f.readline.chomp
+  }
+  path2 = File.dirname( __FILE__ )
+  unless path1 == path2
+    puts STDERR.printf( "Error: on <sekka-path> requires [%s] but got [%s].", path2, path1 )
+    exit 1
+  end
+
   sh "/bin/rm -f test.record"
   files = []
   files << "./test/util.nnd"
