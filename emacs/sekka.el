@@ -1323,6 +1323,12 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   (define-key sticky-map sticky-key '(lambda ()(interactive)(insert sticky-key))))
 
 
+(defun sekka-insert-space (times)
+  (if (null times)
+      (insert " ")
+    (dotimes(i times)
+      (insert " "))))
+
 (defun sekka-spacekey-init-function ()
   (define-key global-map (kbd "SPC")
     '(lambda (&optional arg)(interactive "P")
@@ -1330,21 +1336,16 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 		   sekka-kakutei-with-spacekey)
 	      (cond
 	       ((string= " " (char-to-string (preceding-char)))
-		(insert " "))
+		(sekka-insert-space arg))
 	       ((eq       10                 (preceding-char))   ;; 直前に改行があった
-		(insert " "))
+		(sekka-insert-space arg))
 	       ((string= "/" (char-to-string (preceding-char)))
 		(delete-region (- (point) 1) (point))
-		(insert " "))
+		(sekka-insert-space arg))
 	       (t
 		(sekka-rK-trans))))
 	     (t
-	      (cond
-	       ((null arg)
-		(insert " "))
-	       (t
-		(dotimes(i arg)
-		  (insert " ")))))))))
+	      (sekka-insert-space arg))))))
 
 
 (defun sekka-realtime-guide ()
