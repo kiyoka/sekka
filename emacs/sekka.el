@@ -730,6 +730,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 
     (define-key map "\C-s"      'popup-isearch)
     (define-key map "\C-g"      'popup-close)
+    (define-key map "\C-r"      'sekka-add-new-word)
     map))
 
 ;; 選択操作回数のインクリメント
@@ -856,7 +857,8 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
     (sekka-debug-print (format "filtered-lst = %S\n" (reverse lst)))
     (if (null lst)
 	nil
-      (car (reverse lst)))))
+      (reverse lst))))
+  
     
 ;; 指定された type の候補が存在するか調べる
 (defun sekka-include-typep ( _type )
@@ -865,7 +867,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 ;; 指定された type の候補に強制的に切りかえる
 ;; 切りかえが成功したかどうかを t or nil で返す。
 (defun sekka-select-by-type ( _type )
-  (let ((kouho (sekka-select-by-type-filter _type)))
+  (let ((kouho (car (sekka-select-by-type-filter _type))))
     (if (not kouho)
 	(progn
 	 (cond
@@ -926,7 +928,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 
 
 ;; 登録語リストからユーザーに該当単語を選択してもらう
-(defun sekka-add-new-word-sub (yomi lst)
+(defun sekka-add-new-word-sub (yomi lst hiragana-lst)
   (let* ((etc "(自分で入力する)")
 	 (lst (if (stringp lst) 
 		  (progn
@@ -934,7 +936,8 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 		    '())
 		lst))
 	 (result (popup-menu*
-		  (append lst `(,etc))
+		  (append hiragana-lst
+			  (append lst `(,etc)))
 		  :margin t
 		  :keymap sekka-popup-menu-keymap))
 	 (b (copy-marker sekka-fence-start))
@@ -948,6 +951,11 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
       (sekka-replace-kakutei-word (marker-position b)
 				  (marker-position e)
 				  tango)
+
+      (when (member result hiragana-lst) ;; 平仮名フレーズの場合
+	(setq yomi  result)
+	(setq tango ""))
+
       ;; .sekka-jisyoとサーバーの両方に新しい単語を登録する
       (let ((added (sekka-add-new-word-to-jisyo sekka-jisyo-filename yomi tango)))
 	(if added
@@ -965,11 +973,26 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
     (let* ((kouho      (nth sekka-cand-cur sekka-henkan-kouho-list))
 	   (hiragana   (car kouho)))
       (sekka-debug-print (format "sekka-register-new-word: sekka-last-roman=[%s] hiragana=%s result=%S\n" sekka-last-roman hiragana (string-match-p "^[A-Z][^A-Z]+$" sekka-last-roman)))
-      (when (string-match-p "^[A-Z][^A-Z]+$" sekka-last-roman)
+      (cond
+       ;; 漢字語彙をgoogleimeで取得
+       ((string-match-p "^[A-Z][^A-Z]+$" sekka-last-roman)
 	(sekka-select-kakutei)
 	(sekka-add-new-word-sub
 	 hiragana
-	 (sekka-googleime-request hiragana))))))
+	 (sekka-googleime-request hiragana)
+	 '()))
+       ;; 平仮名フレーズから選択
+       ((string-match-p "^[a-z][^A-Z]+$" sekka-last-roman)
+	(sekka-select-kakutei)
+	(let ((kouho (sekka-select-by-type-filter 'h)))
+	  (sekka-debug-print (format "sekka-register-new-word: kouho=%S\n" kouho))
+	  (sekka-add-new-word-sub
+	   hiragana
+	   '()
+	   (mapcar
+	    (lambda (x)
+	      (car x))
+	    kouho))))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1145,11 +1168,16 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	      (setq e (point))
 	      (sekka-display-function b e nil)
 	      (sekka-select-kakutei)
-	      (when sekka-use-googleime
-		(when (not (sekka-include-typep 'j))
-		  (sekka-add-new-word)))
-	      )))))
-     
+	      (cond
+	       ((string-match-p "^[A-Z][^A-Z]+$" sekka-last-roman)
+		;; 漢字語彙
+		(when sekka-use-googleime
+		  (if (not (sekka-include-typep 'j))
+		      (sekka-add-new-word))))
+	       (t
+		;; 平仮名フレーズはGoogleIMEの問い合わせの自動起動はしない
+		)))))))
+	      
      ((sekka-kanji (preceding-char))
       (sekka-debug-print (format "sekka-kanji(%s) => t\n" (preceding-char)))
     
