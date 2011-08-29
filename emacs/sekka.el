@@ -730,8 +730,9 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 
     (define-key map "\C-s"      'popup-isearch)
     (define-key map "\C-g"      'popup-close)
-    (define-key map "\C-r"      'sekka-add-new-word)
+    (define-key map "\C-r"      'popup-select)
     map))
+
 
 ;; 選択操作回数のインクリメント
 (defun sekka-select-operation-inc ()
@@ -969,30 +970,40 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   "変換候補のよみ(平仮名)に対応する新しい単語を追加する"
   (interactive)
   (setq case-fold-search nil)
-  (when (sekka-select-by-type 'h)
+  (let ((type
+	 (cond
+	  ((string-match-p "^[A-Z][^A-Z]+$" sekka-last-roman)
+	   (if (sekka-select-by-type 'h) ;; 平仮名候補に自動切り替え
+	       'H
+	     nil))
+	  ((string-match-p "^[a-z][^A-Z]+$" sekka-last-roman)
+	   'h)
+	  (t
+	   nil))))
     (let* ((kouho      (nth sekka-cand-cur sekka-henkan-kouho-list))
 	   (hiragana   (car kouho)))
       (sekka-debug-print (format "sekka-register-new-word: sekka-last-roman=[%s] hiragana=%s result=%S\n" sekka-last-roman hiragana (string-match-p "^[A-Z][^A-Z]+$" sekka-last-roman)))
       (cond
        ;; 漢字語彙をgoogleimeで取得
-       ((string-match-p "^[A-Z][^A-Z]+$" sekka-last-roman)
+       ((eq 'H type)
 	(sekka-select-kakutei)
 	(sekka-add-new-word-sub
 	 hiragana
 	 (sekka-googleime-request hiragana)
 	 '()))
        ;; 平仮名フレーズから選択
-       ((string-match-p "^[a-z][^A-Z]+$" sekka-last-roman)
+       ((eq 'h type)
 	(sekka-select-kakutei)
 	(let ((kouho (sekka-select-by-type-filter 'h)))
 	  (sekka-debug-print (format "sekka-register-new-word: kouho=%S\n" kouho))
 	  (sekka-add-new-word-sub
 	   hiragana
 	   '()
-	   (mapcar
-	    (lambda (x)
-	      (car x))
-	    kouho))))))))
+	   (cons
+	    hiragana ;; 確定値の平仮名文言を先頭に追加。
+	    (mapcar
+	     (lambda (x) (car x)) kouho))))))
+      )))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
