@@ -108,7 +108,7 @@ task :test do
     exit 1
   end
 
-  sh "/bin/rm -f test.record"
+  sh "/bin/rm -f test.record test.tch"
   files = []
   files << "./test/util.nnd"
   files << "./test/alphabet-lib.nnd"
