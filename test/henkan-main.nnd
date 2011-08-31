@@ -567,11 +567,11 @@
        (henkan-okuri-nashi-and-number userid kvs "1000kara2000" 0))
 
 (test* "okuri nashi and number 8"
-       '()
+       '(("２０１１年" #f "#ねん" n) ("2011年" #f "#ねん" n) ("二千十一年" #f "#ねん" n) ("二〇一一年" #f "#ねん" n))
        (henkan-okuri-nashi-and-number userid kvs "2011nen" 0))
 
 (test* "okuri nashi and number 9"
-       '()
+       '(("１００００年" #f "#ねん" n) ("10000年" #f "#ねん" n) ("一万年" #f "#ねん" n) ("一〇〇〇〇年" #f "#ねん" n))
        (henkan-okuri-nashi-and-number userid kvs "10000nen" 0))
 
 (test* "okuri nashi and number 10"
@@ -583,7 +583,7 @@
        (henkan-okuri-nashi-and-number userid kvs "2011nen10gatu" 0))
 
 (test* "okuri nashi and number 12"
-       '()
+       '(("１０月１０日" #f "#がつ#か" n) ("10月10日" #f "#がつ#か" n) ("一〇月一〇日" #f "#がつ#か" n) ("一〇月１０日" #f "#がつ#か" n))
        (henkan-okuri-nashi-and-number userid kvs "10gatu10ka" 0))
 
 (test* "okuri nashi and number 13"

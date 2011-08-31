@@ -171,24 +171,32 @@
   (let ([num-list (to-list (keyword.scan #/[0-9]+/))]
         [replaced (keyword.gsub #/[0-9]+/ "#")])
     ;; 辞書引きした結果の # 部分を 再度数値に戻す。
-    (let1 result (henkan-okuri-nashi userid kvs replaced limit)
-      (map
-       (lambda (entry)
-         (let* ([type-list (to-list (. (car entry) scan #/[#][0-9]/))]
-                [converted-list 
-                 (map
-                  (lambda  (_type _num)
-                    (sekka-henkan-sharp-number _type _num))
-                  type-list
-                  num-list)]
-                [format-str (. (car entry) gsub #/[#][0-9]/ "%s")])
-           (cons
-            (apply sprintf
-                   (cons format-str
-                         converted-list))
-            (append (drop-right (cdr entry) 1)
-                    (list 'n)))))
-       result))))
+    (let* ([result1 (henkan-okuri-nashi userid kvs replaced limit)]
+           [result2 (map
+                     (lambda (entry)
+                       (let* ([type-list (to-list (. (car entry) scan #/[#][0-9]/))]
+                              [converted-list 
+                               (map
+                                (lambda  (_type _num)
+                                  (sekka-henkan-sharp-number _type _num))
+                                type-list
+                                num-list)]
+                              [format-str (. (car entry) gsub #/[#][0-9]/ "%s")])
+                         ;; ユーザ入力クエリ中の数字のリストと辞書の中の # の個数がマッチしないといけない
+                         (if (= (length num-list)
+                                (length type-list))
+                             (cons
+                              (apply sprintf
+                                     (cons format-str
+                                           converted-list))
+                              (append (drop-right (cdr entry) 1)
+                                      (list 'n)))
+                             #f)))
+                     result1)])
+      (filter
+       (lambda (x) x)
+       result2))))
+           
 
 
 ;; 送り仮名ありの変換
