@@ -81,6 +81,36 @@ MASTER::#kr# C#から#
 MASTER::#l 
 MASTER::#m 
 MASTER::#n 
+MASTER::#nd C#ねん
+MASTER::#nd#gatsu#nt C#ねん#がつ#にち
+MASTER::#nd#gatu#nt C#ねん#がつ#にち
+MASTER::#nen C#ねん
+MASTER::#nen#gatsu#nichi C#ねん#がつ#にち
+MASTER::#nen#gatsu#nici C#ねん#がつ#にち
+MASTER::#nen#gatsu#niti C#ねん#がつ#にち
+MASTER::#nen#gatsu#nityi C#ねん#がつ#にち
+MASTER::#nen#gatu#nichi C#ねん#がつ#にち
+MASTER::#nen#gatu#nici C#ねん#がつ#にち
+MASTER::#nen#gatu#niti C#ねん#がつ#にち
+MASTER::#nen#gatu#nityi C#ねん#がつ#にち
+MASTER::#nenn C#ねん
+MASTER::#nenn#gatsu#nichi C#ねん#がつ#にち
+MASTER::#nenn#gatsu#nici C#ねん#がつ#にち
+MASTER::#nenn#gatsu#niti C#ねん#がつ#にち
+MASTER::#nenn#gatsu#nityi C#ねん#がつ#にち
+MASTER::#nenn#gatu#nichi C#ねん#がつ#にち
+MASTER::#nenn#gatu#nici C#ねん#がつ#にち
+MASTER::#nenn#gatu#niti C#ねん#がつ#にち
+MASTER::#nenn#gatu#nityi C#ねん#がつ#にち
+MASTER::#neq C#ねん
+MASTER::#neq#gatsu#nichi C#ねん#がつ#にち
+MASTER::#neq#gatsu#nici C#ねん#がつ#にち
+MASTER::#neq#gatsu#niti C#ねん#がつ#にち
+MASTER::#neq#gatsu#nityi C#ねん#がつ#にち
+MASTER::#neq#gatu#nichi C#ねん#がつ#にち
+MASTER::#neq#gatu#nici C#ねん#がつ#にち
+MASTER::#neq#gatu#niti C#ねん#がつ#にち
+MASTER::#neq#gatu#nityi C#ねん#がつ#にち
 MASTER::#o 
 MASTER::#p 
 MASTER::#q 
@@ -115,9 +145,12 @@ MASTER::#がつ#か /#1月#1日/#0月#0日/#2月#2日/#2月#1日
 MASTER::#がつ#にち /#1月#1日/#0月#0日/#2月#2日/#2月#1日
 MASTER::#ぎょうめ /#0行目/#1行目
 MASTER::#ちーむ /#0チーム
+MASTER::#ねん /#1年/#0年/#3年/#2年
+MASTER::#ねん#がつ#にち /#0年#0月#0日/#1年#1月#1日
 MASTER::(#c) #chi'mf #chi'mu #chi-mf #chi-mu #chi:mf #chi:mu #chi^mf #chi^mu #ci'mf #ci'mu #ci-mf #ci-mu #ci:mf #ci:mu #ci^mf #ci^mu
 MASTER::(#g) #gatsu#ka #gatsu#nichi #gatsu#nici #gatsu#niti #gatsu#nityi #gatsu#nt #gatu#ka #gatu#nichi #gatu#nici #gatu#niti #gatu#nityi #gatu#nt #gyoume #gyowhume #gypme
 MASTER::(#k) #kaime #kara# #kqme #kr#
+MASTER::(#n) #nd #nd#gatsu#nt #nd#gatu#nt #nen #nen#gatsu#nichi #nen#gatsu#nici #nen#gatsu#niti #nen#gatsu#nityi #nen#gatu#nichi #nen#gatu#nici #nen#gatu#niti #nen#gatu#nityi #nenn #nenn#gatsu#nichi #nenn#gatsu#nici #nenn#gatsu#niti #nenn#gatsu#nityi #nenn#gatu#nichi #nenn#gatu#nici #nenn#gatu#niti #nenn#gatu#nityi #neq #neq#gatsu#nichi #neq#gatsu#nici #neq#gatsu#niti #neq#gatsu#nityi #neq#gatu#nichi #neq#gatu#nici #neq#gatu#niti #neq#gatu#nityi
 MASTER::(#t) #ti'mf #ti'mu #ti-mf #ti-mu #ti:mf #ti:mu #ti^mf #ti^mu #tyi'mf #tyi'mu #tyi-mf #tyi-mu #tyi:mf #tyi:mu #tyi^mf #tyi^mu
 MASTER::(>a) >an >ann >aq
 MASTER::(AU) aU

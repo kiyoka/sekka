@@ -566,6 +566,36 @@
        '(("１０００〜２０００" #f "#から#" n))
        (henkan-okuri-nashi-and-number userid kvs "1000kara2000" 0))
 
+(test* "okuri nashi and number 8"
+       '()
+       (henkan-okuri-nashi-and-number userid kvs "2011nen" 0))
+
+(test* "okuri nashi and number 9"
+       '()
+       (henkan-okuri-nashi-and-number userid kvs "10000nen" 0))
+
+(test* "okuri nashi and number 10"
+       '(("2011年10月10日" #f "#ねん#がつ#にち" n) ("２０１１年１０月１０日" #f "#ねん#がつ#にち" n))
+       (henkan-okuri-nashi-and-number userid kvs "2011nen10gatu10ka" 0))
+
+(test* "okuri nashi and number 11"
+       '()
+       (henkan-okuri-nashi-and-number userid kvs "2011nen10gatu" 0))
+
+(test* "okuri nashi and number 12"
+       '()
+       (henkan-okuri-nashi-and-number userid kvs "10gatu10ka" 0))
+
+(test* "okuri nashi and number 13"
+       '()
+       (henkan-okuri-nashi-and-number userid kvs "10ka" 0))
+
+(test* "okuri nashi and number 14"
+       '()
+       (henkan-okuri-nashi-and-number userid kvs "2011nen10ka" 0))
+
+
+
 
 ;;-------------------------------------------------------------------
 (test-section "henkan (number)")
@@ -1089,6 +1119,7 @@
 (test* "henkan toplevel(for Elisp) 21"
        '(("3チーム" nil "#ちーむ" n 0) ("３ｃｈｉ－ｍｕ" nil "3chi-mu" z 1) ("3chi-mu" nil "3chi-mu" l 2))
        (sekkaHenkan userid kvs #f "3chi-mu" 0 "normal"))
+
 
 
 ;;-------------------------------------------------------------------
