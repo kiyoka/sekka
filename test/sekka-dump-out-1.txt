@@ -1,2171 +1,2171 @@
-MASTER::! /！/感嘆符
-MASTER::!= /≠
-MASTER::## 
-MASTER::#+ 
-MASTER::#; 
-MASTER::#> 
-MASTER::#@ 
-MASTER::#A 
-MASTER::#B 
-MASTER::#C 
-MASTER::#D 
-MASTER::#E 
-MASTER::#F 
-MASTER::#G 
-MASTER::#H 
-MASTER::#I 
-MASTER::#J 
-MASTER::#K 
-MASTER::#L 
-MASTER::#M 
-MASTER::#N 
-MASTER::#O 
-MASTER::#P 
-MASTER::#Q 
-MASTER::#R 
-MASTER::#S 
-MASTER::#T 
-MASTER::#U 
-MASTER::#V 
-MASTER::#W 
-MASTER::#X 
-MASTER::#Y 
-MASTER::#Z 
-MASTER::#` 
-MASTER::#a 
-MASTER::#b 
-MASTER::#c 
-MASTER::#chi'mf C#ちーむ
-MASTER::#chi'mu C#ちーむ
-MASTER::#chi-mf C#ちーむ
-MASTER::#chi-mu C#ちーむ
-MASTER::#chi:mf C#ちーむ
-MASTER::#chi:mu C#ちーむ
-MASTER::#chi^mf C#ちーむ
-MASTER::#chi^mu C#ちーむ
-MASTER::#ci'mf C#ちーむ
-MASTER::#ci'mu C#ちーむ
-MASTER::#ci-mf C#ちーむ
-MASTER::#ci-mu C#ちーむ
-MASTER::#ci:mf C#ちーむ
-MASTER::#ci:mu C#ちーむ
-MASTER::#ci^mf C#ちーむ
-MASTER::#ci^mu C#ちーむ
-MASTER::#d 
-MASTER::#e 
-MASTER::#f 
-MASTER::#g 
-MASTER::#gatsu#ka C#がつ#か
-MASTER::#gatsu#nichi C#がつ#にち
-MASTER::#gatsu#nici C#がつ#にち
-MASTER::#gatsu#niti C#がつ#にち
-MASTER::#gatsu#nityi C#がつ#にち
-MASTER::#gatsu#nt C#がつ#にち
-MASTER::#gatu#ka C#がつ#か
-MASTER::#gatu#nichi C#がつ#にち
-MASTER::#gatu#nici C#がつ#にち
-MASTER::#gatu#niti C#がつ#にち
-MASTER::#gatu#nityi C#がつ#にち
-MASTER::#gatu#nt C#がつ#にち
-MASTER::#gyoume C#ぎょうめ
-MASTER::#gyowhume C#ぎょうめ
-MASTER::#gypme C#ぎょうめ
-MASTER::#h 
-MASTER::#i 
-MASTER::#j 
-MASTER::#k 
-MASTER::#kaime C#かいめ
-MASTER::#kara# C#から#
-MASTER::#kqme C#かいめ
-MASTER::#kr# C#から#
-MASTER::#l 
-MASTER::#m 
-MASTER::#n 
-MASTER::#nd C#ねん
-MASTER::#nd#gatsu#nt C#ねん#がつ#にち
-MASTER::#nd#gatu#nt C#ねん#がつ#にち
-MASTER::#nen C#ねん
-MASTER::#nen#gatsu#nichi C#ねん#がつ#にち
-MASTER::#nen#gatsu#nici C#ねん#がつ#にち
-MASTER::#nen#gatsu#niti C#ねん#がつ#にち
-MASTER::#nen#gatsu#nityi C#ねん#がつ#にち
-MASTER::#nen#gatu#nichi C#ねん#がつ#にち
-MASTER::#nen#gatu#nici C#ねん#がつ#にち
-MASTER::#nen#gatu#niti C#ねん#がつ#にち
-MASTER::#nen#gatu#nityi C#ねん#がつ#にち
-MASTER::#nenn C#ねん
-MASTER::#nenn#gatsu#nichi C#ねん#がつ#にち
-MASTER::#nenn#gatsu#nici C#ねん#がつ#にち
-MASTER::#nenn#gatsu#niti C#ねん#がつ#にち
-MASTER::#nenn#gatsu#nityi C#ねん#がつ#にち
-MASTER::#nenn#gatu#nichi C#ねん#がつ#にち
-MASTER::#nenn#gatu#nici C#ねん#がつ#にち
-MASTER::#nenn#gatu#niti C#ねん#がつ#にち
-MASTER::#nenn#gatu#nityi C#ねん#がつ#にち
-MASTER::#neq C#ねん
-MASTER::#neq#gatsu#nichi C#ねん#がつ#にち
-MASTER::#neq#gatsu#nici C#ねん#がつ#にち
-MASTER::#neq#gatsu#niti C#ねん#がつ#にち
-MASTER::#neq#gatsu#nityi C#ねん#がつ#にち
-MASTER::#neq#gatu#nichi C#ねん#がつ#にち
-MASTER::#neq#gatu#nici C#ねん#がつ#にち
-MASTER::#neq#gatu#niti C#ねん#がつ#にち
-MASTER::#neq#gatu#nityi C#ねん#がつ#にち
-MASTER::#o 
-MASTER::#p 
-MASTER::#q 
-MASTER::#r 
-MASTER::#s 
-MASTER::#t 
-MASTER::#ti'mf C#ちーむ
-MASTER::#ti'mu C#ちーむ
-MASTER::#ti-mf C#ちーむ
-MASTER::#ti-mu C#ちーむ
-MASTER::#ti:mf C#ちーむ
-MASTER::#ti:mu C#ちーむ
-MASTER::#ti^mf C#ちーむ
-MASTER::#ti^mu C#ちーむ
-MASTER::#tyi'mf C#ちーむ
-MASTER::#tyi'mu C#ちーむ
-MASTER::#tyi-mf C#ちーむ
-MASTER::#tyi-mu C#ちーむ
-MASTER::#tyi:mf C#ちーむ
-MASTER::#tyi:mu C#ちーむ
-MASTER::#tyi^mf C#ちーむ
-MASTER::#tyi^mu C#ちーむ
-MASTER::#u 
-MASTER::#v 
-MASTER::#w 
-MASTER::#x 
-MASTER::#y 
-MASTER::#z 
-MASTER::#かいめ /#0回目/#3回目
-MASTER::#から# /#1〜#1
-MASTER::#がつ#か /#1月#1日/#0月#0日/#2月#2日/#2月#1日
-MASTER::#がつ#にち /#1月#1日/#0月#0日/#2月#2日/#2月#1日
-MASTER::#ぎょうめ /#0行目/#1行目
-MASTER::#ちーむ /#0チーム
-MASTER::#ねん /#1年/#0年/#3年/#2年
-MASTER::#ねん#がつ#にち /#0年#0月#0日/#1年#1月#1日
-MASTER::(#c) #chi'mf #chi'mu #chi-mf #chi-mu #chi:mf #chi:mu #chi^mf #chi^mu #ci'mf #ci'mu #ci-mf #ci-mu #ci:mf #ci:mu #ci^mf #ci^mu
-MASTER::(#g) #gatsu#ka #gatsu#nichi #gatsu#nici #gatsu#niti #gatsu#nityi #gatsu#nt #gatu#ka #gatu#nichi #gatu#nici #gatu#niti #gatu#nityi #gatu#nt #gyoume #gyowhume #gypme
-MASTER::(#k) #kaime #kara# #kqme #kr#
-MASTER::(#n) #nd #nd#gatsu#nt #nd#gatu#nt #nen #nen#gatsu#nichi #nen#gatsu#nici #nen#gatsu#niti #nen#gatsu#nityi #nen#gatu#nichi #nen#gatu#nici #nen#gatu#niti #nen#gatu#nityi #nenn #nenn#gatsu#nichi #nenn#gatsu#nici #nenn#gatsu#niti #nenn#gatsu#nityi #nenn#gatu#nichi #nenn#gatu#nici #nenn#gatu#niti #nenn#gatu#nityi #neq #neq#gatsu#nichi #neq#gatsu#nici #neq#gatsu#niti #neq#gatsu#nityi #neq#gatu#nichi #neq#gatu#nici #neq#gatu#niti #neq#gatu#nityi
-MASTER::(#t) #ti'mf #ti'mu #ti-mf #ti-mu #ti:mf #ti:mu #ti^mf #ti^mu #tyi'mf #tyi'mu #tyi-mf #tyi-mu #tyi:mf #tyi:mu #tyi^mf #tyi^mu
-MASTER::(>a) >an >ann >aq
-MASTER::(AU) aU
-MASTER::(ER) eR
-MASTER::(HD) hdkaS
-MASTER::(HE) henkaS hennkaS heqkaS
-MASTER::(KA) ka+ kaT ka`
-MASTER::(MI) miR
-MASTER::(OK) okonaU
-MASTER::(WA) watashiH watasiH
-MASTER::(WT) wtshiH wtsiH wtxiH
-MASTER::(de) developer
-MASTER::(hd) hdka hdkn hdkz
-MASTER::(he) henka henkan henkann henkaq hennka hennkan hennkann hennkaq heqka heqkan heqkann heqkaq
-MASTER::(i;) i;chi i;ci i;tyi
-MASTER::(i@) i@chi i@ci i@tyi
-MASTER::(ic) icchi icci
-MASTER::(in) inngp innngp innnyou innnyowhu innnyp innyou innyowhu innyp inyou inyowhu inyp
-MASTER::(iq) iqngp iqnyou iqnyowhu iqnyp iqyou iqyowhu iqyp
-MASTER::(it) ittyi
-MASTER::(ka) ka;ko ka@ko kakko kani kanni kaqi
-MASTER::(kn) kni
-MASTER::(ko) ko'hi' ko'hi- ko'hi: ko'hi^ ko-hi' ko-hi- ko-hi: ko-hi^ ko:hi' ko:hi- ko:hi: ko:hi^ ko;ka ko@ka ko^hi' ko^hi- ko^hi: ko^hi^ kokka
-MASTER::(ku) kumikomi
-MASTER::(kz) kzi
-MASTER::(sa) sakf saki saku
-MASTER::(sh) shizdgdgo shizdgdgorikq shizdgdgoshori shizdgdgosyori shizdgdgoxori shizengengo shizengengorikai shizengengoshori shizengengosyori shizengenngo shizengenngorikai shizengenngoshori shizengenngosyori shizengeqgo shizengeqgorikai shizengeqgoshori shizengeqgosyori shizenngengo shizenngengorikai shizenngengoshori shizenngengosyori shizenngenngo shizenngenngorikai shizenngenngoshori shizenngenngosyori shizenngeqgo shizenngeqgorikai shizenngeqgoshori shizenngeqgosyori shizeqgengo shizeqgengorikai shizeqgengoshori shizeqgengosyori shizeqgenngo shizeqgenngorikai shizeqgenngoshori shizeqgenngosyori shizeqgeqgo shizeqgeqgorikai shizeqgeqgoshori shizeqgeqgosyori shizfngengo shizfngengorikai shizfngengoshori shizfngengosyori shizfngenngo shizfngenngorikai shizfngenngoshori shizfngenngosyori shizfngeqgo shizfngeqgorikai shizfngeqgoshori shizfngeqgosyori shizfnngengo shizfnngengorikai shizfnngengoshori shizfnngengosyori shizfnngenngo shizfnngenngorikai shizfnngenngoshori shizfnngenngosyori shizfnngeqgo shizfnngeqgorikai shizfnngeqgoshori shizfnngeqgosyori shizfqgengo shizfqgengorikai shizfqgengoshori shizfqgengosyori shizfqgenngo shizfqgenngorikai shizfqgenngoshori shizfqgenngosyori shizfqgeqgo shizfqgeqgorikai shizfqgeqgoshori shizfqgeqgosyori
-MASTER::(si) sizdgdgo sizdgdgorikq sizdgdgoshori sizdgdgosyori sizdgdgoxori sizengengo sizengengorikai sizengengoshori sizengengosyori sizengenngo sizengenngorikai sizengenngoshori sizengenngosyori sizengeqgo sizengeqgorikai sizengeqgoshori sizengeqgosyori sizenngengo sizenngengorikai sizenngengoshori sizenngengosyori sizenngenngo sizenngenngorikai sizenngenngoshori sizenngenngosyori sizenngeqgo sizenngeqgorikai sizenngeqgoshori sizenngeqgosyori sizeqgengo sizeqgengorikai sizeqgengoshori sizeqgengosyori sizeqgenngo sizeqgenngorikai sizeqgenngoshori sizeqgenngosyori sizeqgeqgo sizeqgeqgorikai sizeqgeqgoshori sizeqgeqgosyori sizfngengo sizfngengorikai sizfngengoshori sizfngengosyori sizfngenngo sizfngenngorikai sizfngenngoshori sizfngenngosyori sizfngeqgo sizfngeqgorikai sizfngeqgoshori sizfngeqgosyori sizfnngengo sizfnngengorikai sizfnngengoshori sizfnngengosyori sizfnngenngo sizfnngenngorikai sizfnngenngoshori sizfnngenngosyori sizfnngeqgo sizfnngeqgorikai sizfnngeqgoshori sizfnngeqgosyori sizfqgengo sizfqgengorikai sizfqgengoshori sizfqgengosyori sizfqgenngo sizfqgenngorikai sizfqgenngoshori sizfqgenngosyori sizfqgeqgo sizfqgeqgorikai sizfqgeqgoshori sizfqgeqgosyori
-MASTER::(wa) wake
-MASTER::(wo) wo
-MASTER::(xi) xizdgdgo xizdgdgorikq xizdgdgoshori xizdgdgosyori xizdgdgoxori
-MASTER::* /＊/※/×
-MASTER::. /．/・/。/…;...
-MASTER::/ /／/÷
-MASTER::;# 
-MASTER::;+ 
-MASTER::;; 
-MASTER::;> 
-MASTER::;@ 
-MASTER::;A 
-MASTER::;B 
-MASTER::;C 
-MASTER::;D 
-MASTER::;E 
-MASTER::;F 
-MASTER::;G 
-MASTER::;H 
-MASTER::;I 
-MASTER::;J 
-MASTER::;K 
-MASTER::;L 
-MASTER::;M 
-MASTER::;N 
-MASTER::;O 
-MASTER::;P 
-MASTER::;Q 
-MASTER::;R 
-MASTER::;S 
-MASTER::;T 
-MASTER::;U 
-MASTER::;V 
-MASTER::;W 
-MASTER::;X 
-MASTER::;Y 
-MASTER::;Z 
-MASTER::;` 
-MASTER::;a 
-MASTER::;b 
-MASTER::;c 
-MASTER::;d 
-MASTER::;e 
-MASTER::;f 
-MASTER::;g 
-MASTER::;h 
-MASTER::;i 
-MASTER::;j 
-MASTER::;k 
-MASTER::;l 
-MASTER::;m 
-MASTER::;n 
-MASTER::;o 
-MASTER::;p 
-MASTER::;q 
-MASTER::;r 
-MASTER::;s 
-MASTER::;t 
-MASTER::;u 
-MASTER::;v 
-MASTER::;w 
-MASTER::;x 
-MASTER::;y 
-MASTER::;z 
-MASTER::=kumikomf くみこむ
-MASTER::=kumikomu くみこむ
-MASTER::=nn んん
-MASTER::=nnn んん
-MASTER::=nnnn んん
-MASTER::=nnq んん
-MASTER::=nq んん
-MASTER::=qn んん
-MASTER::=qnn んん
-MASTER::=qq んん
-MASTER::=shita した
-MASTER::=sita した
-MASTER::=st した
-MASTER::># 
-MASTER::>+ 
-MASTER::>; 
-MASTER::>> 
-MASTER::>@ 
-MASTER::>A 
-MASTER::>B 
-MASTER::>C 
-MASTER::>D 
-MASTER::>E 
-MASTER::>F 
-MASTER::>G 
-MASTER::>H 
-MASTER::>I 
-MASTER::>J 
-MASTER::>K 
-MASTER::>L 
-MASTER::>M 
-MASTER::>N 
-MASTER::>O 
-MASTER::>P 
-MASTER::>Q 
-MASTER::>R 
-MASTER::>S 
-MASTER::>T 
-MASTER::>U 
-MASTER::>V 
-MASTER::>W 
-MASTER::>X 
-MASTER::>Y 
-MASTER::>Z 
-MASTER::>` 
-MASTER::>a 
-MASTER::>an C>あん
-MASTER::>ann C>あん
-MASTER::>aq C>あん
-MASTER::>b 
-MASTER::>c 
-MASTER::>d 
-MASTER::>e 
-MASTER::>f 
-MASTER::>g 
-MASTER::>h 
-MASTER::>i 
-MASTER::>j 
-MASTER::>k 
-MASTER::>l 
-MASTER::>m 
-MASTER::>n 
-MASTER::>o 
-MASTER::>p 
-MASTER::>q 
-MASTER::>r 
-MASTER::>s 
-MASTER::>t 
-MASTER::>u 
-MASTER::>v 
-MASTER::>w 
-MASTER::>x 
-MASTER::>y 
-MASTER::>z 
-MASTER::>あん /案
-MASTER::? /？
-MASTER::@# 
-MASTER::@+ 
-MASTER::@; 
-MASTER::@> 
-MASTER::@@ 
-MASTER::@A 
-MASTER::@B 
-MASTER::@C 
-MASTER::@D 
-MASTER::@E 
-MASTER::@F 
-MASTER::@G 
-MASTER::@H 
-MASTER::@I 
-MASTER::@J 
-MASTER::@K 
-MASTER::@L 
-MASTER::@M 
-MASTER::@N 
-MASTER::@O 
-MASTER::@P 
-MASTER::@Q 
-MASTER::@R 
-MASTER::@S 
-MASTER::@T 
-MASTER::@U 
-MASTER::@V 
-MASTER::@W 
-MASTER::@X 
-MASTER::@Y 
-MASTER::@Z 
-MASTER::@` 
-MASTER::@a 
-MASTER::@b 
-MASTER::@c 
-MASTER::@d 
-MASTER::@e 
-MASTER::@f 
-MASTER::@g 
-MASTER::@h 
-MASTER::@i 
-MASTER::@j 
-MASTER::@k 
-MASTER::@l 
-MASTER::@m 
-MASTER::@n 
-MASTER::@o 
-MASTER::@p 
-MASTER::@q 
-MASTER::@r 
-MASTER::@s 
-MASTER::@t 
-MASTER::@u 
-MASTER::@v 
-MASTER::@w 
-MASTER::@x 
-MASTER::@y 
-MASTER::@z 
-MASTER::a# 
-MASTER::a+ 
-MASTER::a; 
-MASTER::a> 
-MASTER::a@ 
-MASTER::aA 
-MASTER::aB 
-MASTER::aC 
-MASTER::aD 
-MASTER::aE 
-MASTER::aF 
-MASTER::aG 
-MASTER::aH 
-MASTER::aI 
-MASTER::aJ 
-MASTER::aK 
-MASTER::aL 
-MASTER::aM 
-MASTER::aN 
-MASTER::aO 
-MASTER::aP 
-MASTER::aQ 
-MASTER::aR 
-MASTER::aS 
-MASTER::aT 
-MASTER::aU Cあu
-MASTER::aV 
-MASTER::aW 
-MASTER::aX 
-MASTER::aY 
-MASTER::aZ 
-MASTER::a` 
-MASTER::aa 
-MASTER::ab 
-MASTER::ac 
-MASTER::ad 
-MASTER::ae 
-MASTER::af 
-MASTER::ag 
-MASTER::ah 
-MASTER::ai 
-MASTER::aj 
-MASTER::ak 
-MASTER::al 
-MASTER::am 
-MASTER::an 
-MASTER::ao 
-MASTER::ap 
-MASTER::aq 
-MASTER::ar 
-MASTER::as 
-MASTER::at 
-MASTER::au 
-MASTER::av 
-MASTER::aw 
-MASTER::ax 
-MASTER::ay 
-MASTER::az 
-MASTER::b# 
-MASTER::b+ 
-MASTER::b; 
-MASTER::b> 
-MASTER::b@ 
-MASTER::bA 
-MASTER::bB 
-MASTER::bC 
-MASTER::bD 
-MASTER::bE 
-MASTER::bF 
-MASTER::bG 
-MASTER::bH 
-MASTER::bI 
-MASTER::bJ 
-MASTER::bK 
-MASTER::bL 
-MASTER::bM 
-MASTER::bN 
-MASTER::bO 
-MASTER::bP 
-MASTER::bQ 
-MASTER::bR 
-MASTER::bS 
-MASTER::bT 
-MASTER::bU 
-MASTER::bV 
-MASTER::bW 
-MASTER::bX 
-MASTER::bY 
-MASTER::bZ 
-MASTER::b` 
-MASTER::ba 
-MASTER::bb 
-MASTER::bc 
-MASTER::bd 
-MASTER::be 
-MASTER::bf 
-MASTER::bg 
-MASTER::bh 
-MASTER::bi 
-MASTER::bj 
-MASTER::bk 
-MASTER::bl 
-MASTER::bm 
-MASTER::bn 
-MASTER::bo 
-MASTER::bp 
-MASTER::bq 
-MASTER::br 
-MASTER::bs 
-MASTER::bt 
-MASTER::bu 
-MASTER::bv 
-MASTER::bw 
-MASTER::bx 
-MASTER::by 
-MASTER::bz 
-MASTER::c# 
-MASTER::c+ 
-MASTER::c; 
-MASTER::c> 
-MASTER::c@ 
-MASTER::cA 
-MASTER::cB 
-MASTER::cC 
-MASTER::cD 
-MASTER::cE 
-MASTER::cF 
-MASTER::cG 
-MASTER::cH 
-MASTER::cI 
-MASTER::cJ 
-MASTER::cK 
-MASTER::cL 
-MASTER::cM 
-MASTER::cN 
-MASTER::cO 
-MASTER::cP 
-MASTER::cQ 
-MASTER::cR 
-MASTER::cS 
-MASTER::cT 
-MASTER::cU 
-MASTER::cV 
-MASTER::cW 
-MASTER::cX 
-MASTER::cY 
-MASTER::cZ 
-MASTER::c` 
-MASTER::ca 
-MASTER::cb 
-MASTER::cc 
-MASTER::cd 
-MASTER::ce 
-MASTER::cf 
-MASTER::cg 
-MASTER::ch 
-MASTER::ci 
-MASTER::cj 
-MASTER::ck 
-MASTER::cl 
-MASTER::cm 
-MASTER::cn 
-MASTER::co 
-MASTER::cp 
-MASTER::cq 
-MASTER::cr 
-MASTER::cs 
-MASTER::ct 
-MASTER::cu 
-MASTER::cv 
-MASTER::cw 
-MASTER::cx 
-MASTER::cy 
-MASTER::cz 
-MASTER::d# 
-MASTER::d+ 
-MASTER::d; 
-MASTER::d> 
-MASTER::d@ 
-MASTER::dA 
-MASTER::dB 
-MASTER::dC 
-MASTER::dD 
-MASTER::dE 
-MASTER::dF 
-MASTER::dG 
-MASTER::dH 
-MASTER::dI 
-MASTER::dJ 
-MASTER::dK 
-MASTER::dL 
-MASTER::dM 
-MASTER::dN 
-MASTER::dO 
-MASTER::dP 
-MASTER::dQ 
-MASTER::dR 
-MASTER::dS 
-MASTER::dT 
-MASTER::dU 
-MASTER::dV 
-MASTER::dW 
-MASTER::dX 
-MASTER::dY 
-MASTER::dZ 
-MASTER::d` 
-MASTER::da 
-MASTER::db 
-MASTER::dc 
-MASTER::dd 
-MASTER::de 
-MASTER::developer /デベロッパー/ディベロッパー/デベロッパ
-MASTER::df 
-MASTER::dg 
-MASTER::dh 
-MASTER::di 
-MASTER::dj 
-MASTER::dk 
-MASTER::dl 
-MASTER::dm 
-MASTER::dn 
-MASTER::do 
-MASTER::dp 
-MASTER::dq 
-MASTER::dr 
-MASTER::ds 
-MASTER::dt 
-MASTER::du 
-MASTER::dv 
-MASTER::dw 
-MASTER::dx 
-MASTER::dy 
-MASTER::dz 
-MASTER::e# 
-MASTER::e+ 
-MASTER::e; 
-MASTER::e> 
-MASTER::e@ 
-MASTER::eA 
-MASTER::eB 
-MASTER::eC 
-MASTER::eD 
-MASTER::eE 
-MASTER::eF 
-MASTER::eG 
-MASTER::eH 
-MASTER::eI 
-MASTER::eJ 
-MASTER::eK 
-MASTER::eL 
-MASTER::eM 
-MASTER::eN 
-MASTER::eO 
-MASTER::eP 
-MASTER::eQ 
-MASTER::eR Cえr
-MASTER::eS 
-MASTER::eT 
-MASTER::eU 
-MASTER::eV 
-MASTER::eW 
-MASTER::eX 
-MASTER::eY 
-MASTER::eZ 
-MASTER::e` 
-MASTER::ea 
-MASTER::eb 
-MASTER::ec 
-MASTER::ed 
-MASTER::ee 
-MASTER::ef 
-MASTER::eg 
-MASTER::eh 
-MASTER::ei 
-MASTER::ej 
-MASTER::ek 
-MASTER::el 
-MASTER::em 
-MASTER::en 
-MASTER::eo 
-MASTER::ep 
-MASTER::eq 
-MASTER::er 
-MASTER::es 
-MASTER::et 
-MASTER::eu 
-MASTER::ev 
-MASTER::ew 
-MASTER::ex 
-MASTER::ey 
-MASTER::ez 
-MASTER::f# 
-MASTER::f+ 
-MASTER::f; 
-MASTER::f> 
-MASTER::f@ 
-MASTER::fA 
-MASTER::fB 
-MASTER::fC 
-MASTER::fD 
-MASTER::fE 
-MASTER::fF 
-MASTER::fG 
-MASTER::fH 
-MASTER::fI 
-MASTER::fJ 
-MASTER::fK 
-MASTER::fL 
-MASTER::fM 
-MASTER::fN 
-MASTER::fO 
-MASTER::fP 
-MASTER::fQ 
-MASTER::fR 
-MASTER::fS 
-MASTER::fT 
-MASTER::fU 
-MASTER::fV 
-MASTER::fW 
-MASTER::fX 
-MASTER::fY 
-MASTER::fZ 
-MASTER::f` 
-MASTER::fa 
-MASTER::fb 
-MASTER::fc 
-MASTER::fd 
-MASTER::fe 
-MASTER::ff 
-MASTER::fg 
-MASTER::fh 
-MASTER::fi 
-MASTER::fj 
-MASTER::fk 
-MASTER::fl 
-MASTER::fm 
-MASTER::fn 
-MASTER::fo 
-MASTER::fp 
-MASTER::fq 
-MASTER::fr 
-MASTER::fs 
-MASTER::ft 
-MASTER::fu 
-MASTER::fv 
-MASTER::fw 
-MASTER::fx 
-MASTER::fy 
-MASTER::fz 
-MASTER::g# 
-MASTER::g+ 
-MASTER::g; 
-MASTER::g> 
-MASTER::g@ 
-MASTER::gA 
-MASTER::gB 
-MASTER::gC 
-MASTER::gD 
-MASTER::gE 
-MASTER::gF 
-MASTER::gG 
-MASTER::gH 
-MASTER::gI 
-MASTER::gJ 
-MASTER::gK 
-MASTER::gL 
-MASTER::gM 
-MASTER::gN 
-MASTER::gO 
-MASTER::gP 
-MASTER::gQ 
-MASTER::gR 
-MASTER::gS 
-MASTER::gT 
-MASTER::gU 
-MASTER::gV 
-MASTER::gW 
-MASTER::gX 
-MASTER::gY 
-MASTER::gZ 
-MASTER::g` 
-MASTER::ga 
-MASTER::gb 
-MASTER::gc 
-MASTER::gd 
-MASTER::ge 
-MASTER::gf 
-MASTER::gg 
-MASTER::gh 
-MASTER::gi 
-MASTER::gj 
-MASTER::gk 
-MASTER::gl 
-MASTER::gm 
-MASTER::gn 
-MASTER::go 
-MASTER::gp 
-MASTER::gq 
-MASTER::gr 
-MASTER::gs 
-MASTER::gt 
-MASTER::gu 
-MASTER::gv 
-MASTER::gw 
-MASTER::gx 
-MASTER::gy 
-MASTER::gz 
-MASTER::h# 
-MASTER::h+ 
-MASTER::h; 
-MASTER::h> 
-MASTER::h@ 
-MASTER::hA 
-MASTER::hB 
-MASTER::hC 
-MASTER::hD 
-MASTER::hE 
-MASTER::hF 
-MASTER::hG 
-MASTER::hH 
-MASTER::hI 
-MASTER::hJ 
-MASTER::hK 
-MASTER::hL 
-MASTER::hM 
-MASTER::hN 
-MASTER::hO 
-MASTER::hP 
-MASTER::hQ 
-MASTER::hR 
-MASTER::hS 
-MASTER::hT 
-MASTER::hU 
-MASTER::hV 
-MASTER::hW 
-MASTER::hX 
-MASTER::hY 
-MASTER::hZ 
-MASTER::h` 
-MASTER::ha 
-MASTER::hb 
-MASTER::hc 
-MASTER::hd 
-MASTER::hdka Cへんか
-MASTER::hdkaS Cへんかs
-MASTER::hdkn Cへんかん
-MASTER::hdkz Cへんかん
-MASTER::he 
-MASTER::henka Cへんか
-MASTER::henkaS Cへんかs
-MASTER::henkan Cへんかん
-MASTER::henkann Cへんかん
-MASTER::henkaq Cへんかん
-MASTER::hennka Cへんか
-MASTER::hennkaS Cへんかs
-MASTER::hennkan Cへんかん
-MASTER::hennkann Cへんかん
-MASTER::hennkaq Cへんかん
-MASTER::heqka Cへんか
-MASTER::heqkaS Cへんかs
-MASTER::heqkan Cへんかん
-MASTER::heqkann Cへんかん
-MASTER::heqkaq Cへんかん
-MASTER::hf 
-MASTER::hg 
-MASTER::hh 
-MASTER::hi 
-MASTER::hj 
-MASTER::hk 
-MASTER::hl 
-MASTER::hm 
-MASTER::hn 
-MASTER::ho 
-MASTER::hp 
-MASTER::hq 
-MASTER::hr 
-MASTER::hs 
-MASTER::ht 
-MASTER::hu 
-MASTER::hv 
-MASTER::hw 
-MASTER::hx 
-MASTER::hy 
-MASTER::hz 
-MASTER::i# 
-MASTER::i+ 
-MASTER::i; 
-MASTER::i;chi Cいっち
-MASTER::i;ci Cいっち
-MASTER::i;tyi Cいっち
-MASTER::i> 
-MASTER::i@ 
-MASTER::i@chi Cいっち
-MASTER::i@ci Cいっち
-MASTER::i@tyi Cいっち
-MASTER::iA 
-MASTER::iB 
-MASTER::iC 
-MASTER::iD 
-MASTER::iE 
-MASTER::iF 
-MASTER::iG 
-MASTER::iH 
-MASTER::iI 
-MASTER::iJ 
-MASTER::iK 
-MASTER::iL 
-MASTER::iM 
-MASTER::iN 
-MASTER::iO 
-MASTER::iP 
-MASTER::iQ 
-MASTER::iR 
-MASTER::iS 
-MASTER::iT 
-MASTER::iU 
-MASTER::iV 
-MASTER::iW 
-MASTER::iX 
-MASTER::iY 
-MASTER::iZ 
-MASTER::i` 
-MASTER::ia 
-MASTER::ib 
-MASTER::ic 
-MASTER::icchi Cいっち
-MASTER::icci Cいっち
-MASTER::id 
-MASTER::ie 
-MASTER::if 
-MASTER::ig 
-MASTER::ih 
-MASTER::ii 
-MASTER::ij 
-MASTER::ik 
-MASTER::il 
-MASTER::im 
-MASTER::in 
-MASTER::inngp Cいんにょう
-MASTER::innngp Cいんにょう
-MASTER::innnyou Cいんにょう
-MASTER::innnyowhu Cいんにょう
-MASTER::innnyp Cいんにょう
-MASTER::innyou Cいんにょう/いんよう
-MASTER::innyowhu Cいんにょう/いんよう
-MASTER::innyp Cいんにょう/いんよう
-MASTER::inyou Cいんよう
-MASTER::inyowhu Cいんよう
-MASTER::inyp Cいんよう
-MASTER::io 
-MASTER::ip 
-MASTER::iq 
-MASTER::iqngp Cいんにょう
-MASTER::iqnyou Cいんにょう
-MASTER::iqnyowhu Cいんにょう
-MASTER::iqnyp Cいんにょう
-MASTER::iqyou Cいんよう
-MASTER::iqyowhu Cいんよう
-MASTER::iqyp Cいんよう
-MASTER::ir 
-MASTER::is 
-MASTER::it 
-MASTER::ittyi Cいっち
-MASTER::iu 
-MASTER::iv 
-MASTER::iw 
-MASTER::ix 
-MASTER::iy 
-MASTER::iz 
-MASTER::j# 
-MASTER::j+ 
-MASTER::j; 
-MASTER::j> 
-MASTER::j@ 
-MASTER::jA 
-MASTER::jB 
-MASTER::jC 
-MASTER::jD 
-MASTER::jE 
-MASTER::jF 
-MASTER::jG 
-MASTER::jH 
-MASTER::jI 
-MASTER::jJ 
-MASTER::jK 
-MASTER::jL 
-MASTER::jM 
-MASTER::jN 
-MASTER::jO 
-MASTER::jP 
-MASTER::jQ 
-MASTER::jR 
-MASTER::jS 
-MASTER::jT 
-MASTER::jU 
-MASTER::jV 
-MASTER::jW 
-MASTER::jX 
-MASTER::jY 
-MASTER::jZ 
-MASTER::j` 
-MASTER::ja 
-MASTER::jb 
-MASTER::jc 
-MASTER::jd 
-MASTER::je 
-MASTER::jf 
-MASTER::jg 
-MASTER::jh 
-MASTER::ji 
-MASTER::jj 
-MASTER::jk 
-MASTER::jl 
-MASTER::jm 
-MASTER::jn 
-MASTER::jo 
-MASTER::jp 
-MASTER::jq 
-MASTER::jr 
-MASTER::js 
-MASTER::jt 
-MASTER::ju 
-MASTER::jv 
-MASTER::jw 
-MASTER::jx 
-MASTER::jy 
-MASTER::jz 
-MASTER::k# 
-MASTER::k+ 
-MASTER::k; 
-MASTER::k> 
-MASTER::k@ 
-MASTER::kA 
-MASTER::kB 
-MASTER::kC 
-MASTER::kD 
-MASTER::kE 
-MASTER::kF 
-MASTER::kG 
-MASTER::kH 
-MASTER::kI 
-MASTER::kJ 
-MASTER::kK 
-MASTER::kL 
-MASTER::kM 
-MASTER::kN 
-MASTER::kO 
-MASTER::kP 
-MASTER::kQ 
-MASTER::kR 
-MASTER::kS 
-MASTER::kT 
-MASTER::kU 
-MASTER::kV 
-MASTER::kW 
-MASTER::kX 
-MASTER::kY 
-MASTER::kZ 
-MASTER::k` 
-MASTER::ka 
-MASTER::ka+ Cか+
-MASTER::ka;ko Cかっこ
-MASTER::ka@ko Cかっこ
-MASTER::kaT Cかt
-MASTER::ka` Cか`
-MASTER::kakko Cかっこ
-MASTER::kani Cかに/かんい
-MASTER::kanni Cかんい
-MASTER::kaqi Cかんい
-MASTER::kb 
-MASTER::kc 
-MASTER::kd 
-MASTER::ke 
-MASTER::kf 
-MASTER::kg 
-MASTER::kh 
-MASTER::ki 
-MASTER::kj 
-MASTER::kk 
-MASTER::kl 
-MASTER::km 
-MASTER::kn 
-MASTER::kni Cかんい
-MASTER::ko 
-MASTER::ko'hi' Cこーひー
-MASTER::ko'hi- Cこーひー
-MASTER::ko'hi: Cこーひー
-MASTER::ko'hi^ Cこーひー
-MASTER::ko-hi' Cこーひー
-MASTER::ko-hi- Cこーひー
-MASTER::ko-hi: Cこーひー
-MASTER::ko-hi^ Cこーひー
-MASTER::ko:hi' Cこーひー
-MASTER::ko:hi- Cこーひー
-MASTER::ko:hi: Cこーひー
-MASTER::ko:hi^ Cこーひー
-MASTER::ko;ka Cこっか
-MASTER::ko@ka Cこっか
-MASTER::ko^hi' Cこーひー
-MASTER::ko^hi- Cこーひー
-MASTER::ko^hi: Cこーひー
-MASTER::ko^hi^ Cこーひー
-MASTER::kokka Cこっか
-MASTER::kp 
-MASTER::kq 
-MASTER::kr 
-MASTER::ks 
-MASTER::kt 
-MASTER::ku 
-MASTER::kumikomi Cくみこみ
-MASTER::kv 
-MASTER::kw 
-MASTER::kx 
-MASTER::ky 
-MASTER::kz 
-MASTER::kzi Cかんい
-MASTER::l# 
-MASTER::l+ 
-MASTER::l; 
-MASTER::l> 
-MASTER::l@ 
-MASTER::lA 
-MASTER::lB 
-MASTER::lC 
-MASTER::lD 
-MASTER::lE 
-MASTER::lF 
-MASTER::lG 
-MASTER::lH 
-MASTER::lI 
-MASTER::lJ 
-MASTER::lK 
-MASTER::lL 
-MASTER::lM 
-MASTER::lN 
-MASTER::lO 
-MASTER::lP 
-MASTER::lQ 
-MASTER::lR 
-MASTER::lS 
-MASTER::lT 
-MASTER::lU 
-MASTER::lV 
-MASTER::lW 
-MASTER::lX 
-MASTER::lY 
-MASTER::lZ 
-MASTER::l` 
-MASTER::la 
-MASTER::lb 
-MASTER::lc 
-MASTER::ld 
-MASTER::le 
-MASTER::lf 
-MASTER::lg 
-MASTER::lh 
-MASTER::li 
-MASTER::lj 
-MASTER::lk 
-MASTER::ll 
-MASTER::lm 
-MASTER::ln 
-MASTER::lo 
-MASTER::lp 
-MASTER::lq 
-MASTER::lr 
-MASTER::ls 
-MASTER::lt 
-MASTER::lu 
-MASTER::lv 
-MASTER::lw 
-MASTER::lx 
-MASTER::ly 
-MASTER::lz 
-MASTER::m# 
-MASTER::m+ 
-MASTER::m; 
-MASTER::m> 
-MASTER::m@ 
-MASTER::mA 
-MASTER::mB 
-MASTER::mC 
-MASTER::mD 
-MASTER::mE 
-MASTER::mF 
-MASTER::mG 
-MASTER::mH 
-MASTER::mI 
-MASTER::mJ 
-MASTER::mK 
-MASTER::mL 
-MASTER::mM 
-MASTER::mN 
-MASTER::mO 
-MASTER::mP 
-MASTER::mQ 
-MASTER::mR 
-MASTER::mS 
-MASTER::mT 
-MASTER::mU 
-MASTER::mV 
-MASTER::mW 
-MASTER::mX 
-MASTER::mY 
-MASTER::mZ 
-MASTER::m` 
-MASTER::ma 
-MASTER::mb 
-MASTER::mc 
-MASTER::md 
-MASTER::me 
-MASTER::mf 
-MASTER::mg 
-MASTER::mh 
-MASTER::mi 
-MASTER::miR Cみr
-MASTER::mj 
-MASTER::mk 
-MASTER::ml 
-MASTER::mm 
-MASTER::mn 
-MASTER::mo 
-MASTER::mp 
-MASTER::mq 
-MASTER::mr 
-MASTER::ms 
-MASTER::mt 
-MASTER::mu 
-MASTER::mv 
-MASTER::mw 
-MASTER::mx 
-MASTER::my 
-MASTER::mz 
-MASTER::n# 
-MASTER::n+ 
-MASTER::n; 
-MASTER::n> 
-MASTER::n@ 
-MASTER::nA 
-MASTER::nB 
-MASTER::nC 
-MASTER::nD 
-MASTER::nE 
-MASTER::nF 
-MASTER::nG 
-MASTER::nH 
-MASTER::nI 
-MASTER::nJ 
-MASTER::nK 
-MASTER::nL 
-MASTER::nM 
-MASTER::nN 
-MASTER::nO 
-MASTER::nP 
-MASTER::nQ 
-MASTER::nR 
-MASTER::nS 
-MASTER::nT 
-MASTER::nU 
-MASTER::nV 
-MASTER::nW 
-MASTER::nX 
-MASTER::nY 
-MASTER::nZ 
-MASTER::n` 
-MASTER::na 
-MASTER::nb 
-MASTER::nc 
-MASTER::nd 
-MASTER::ne 
-MASTER::nf 
-MASTER::ng 
-MASTER::nh 
-MASTER::ni 
-MASTER::nj 
-MASTER::nk 
-MASTER::nl 
-MASTER::nm 
-MASTER::nn 
-MASTER::no 
-MASTER::np 
-MASTER::nq 
-MASTER::nr 
-MASTER::ns 
-MASTER::nt 
-MASTER::nu 
-MASTER::nv 
-MASTER::nw 
-MASTER::nx 
-MASTER::ny 
-MASTER::nz 
-MASTER::o# 
-MASTER::o+ 
-MASTER::o; 
-MASTER::o> 
-MASTER::o@ 
-MASTER::oA 
-MASTER::oB 
-MASTER::oC 
-MASTER::oD 
-MASTER::oE 
-MASTER::oF 
-MASTER::oG 
-MASTER::oH 
-MASTER::oI 
-MASTER::oJ 
-MASTER::oK 
-MASTER::oL 
-MASTER::oM 
-MASTER::oN 
-MASTER::oO 
-MASTER::oP 
-MASTER::oQ 
-MASTER::oR 
-MASTER::oS 
-MASTER::oT 
-MASTER::oU 
-MASTER::oV 
-MASTER::oW 
-MASTER::oX 
-MASTER::oY 
-MASTER::oZ 
-MASTER::o` 
-MASTER::oa 
-MASTER::ob 
-MASTER::oc 
-MASTER::od 
-MASTER::oe 
-MASTER::of 
-MASTER::og 
-MASTER::oh 
-MASTER::oi 
-MASTER::oj 
-MASTER::ok 
-MASTER::okonaU Cおこなu
-MASTER::ol 
-MASTER::om 
-MASTER::on 
-MASTER::oo 
-MASTER::op 
-MASTER::oq 
-MASTER::or 
-MASTER::os 
-MASTER::ot 
-MASTER::ou 
-MASTER::ov 
-MASTER::ow 
-MASTER::ox 
-MASTER::oy 
-MASTER::oz 
-MASTER::p# 
-MASTER::p+ 
-MASTER::p; 
-MASTER::p> 
-MASTER::p@ 
-MASTER::pA 
-MASTER::pB 
-MASTER::pC 
-MASTER::pD 
-MASTER::pE 
-MASTER::pF 
-MASTER::pG 
-MASTER::pH 
-MASTER::pI 
-MASTER::pJ 
-MASTER::pK 
-MASTER::pL 
-MASTER::pM 
-MASTER::pN 
-MASTER::pO 
-MASTER::pP 
-MASTER::pQ 
-MASTER::pR 
-MASTER::pS 
-MASTER::pT 
-MASTER::pU 
-MASTER::pV 
-MASTER::pW 
-MASTER::pX 
-MASTER::pY 
-MASTER::pZ 
-MASTER::p` 
-MASTER::pa 
-MASTER::pb 
-MASTER::pc 
-MASTER::pd 
-MASTER::pe 
-MASTER::pf 
-MASTER::pg 
-MASTER::ph 
-MASTER::pi 
-MASTER::pj 
-MASTER::pk 
-MASTER::pl 
-MASTER::pm 
-MASTER::pn 
-MASTER::po 
-MASTER::pp 
-MASTER::pq 
-MASTER::pr 
-MASTER::ps 
-MASTER::pt 
-MASTER::pu 
-MASTER::pv 
-MASTER::pw 
-MASTER::px 
-MASTER::py 
-MASTER::pz 
-MASTER::q# 
-MASTER::q+ 
-MASTER::q; 
-MASTER::q> 
-MASTER::q@ 
-MASTER::qA 
-MASTER::qB 
-MASTER::qC 
-MASTER::qD 
-MASTER::qE 
-MASTER::qF 
-MASTER::qG 
-MASTER::qH 
-MASTER::qI 
-MASTER::qJ 
-MASTER::qK 
-MASTER::qL 
-MASTER::qM 
-MASTER::qN 
-MASTER::qO 
-MASTER::qP 
-MASTER::qQ 
-MASTER::qR 
-MASTER::qS 
-MASTER::qT 
-MASTER::qU 
-MASTER::qV 
-MASTER::qW 
-MASTER::qX 
-MASTER::qY 
-MASTER::qZ 
-MASTER::q` 
-MASTER::qa 
-MASTER::qb 
-MASTER::qc 
-MASTER::qd 
-MASTER::qe 
-MASTER::qf 
-MASTER::qg 
-MASTER::qh 
-MASTER::qi 
-MASTER::qj 
-MASTER::qk 
-MASTER::ql 
-MASTER::qm 
-MASTER::qn 
-MASTER::qo 
-MASTER::qp 
-MASTER::qq 
-MASTER::qr 
-MASTER::qs 
-MASTER::qt 
-MASTER::qu 
-MASTER::qv 
-MASTER::qw 
-MASTER::qx 
-MASTER::qy 
-MASTER::qz 
-MASTER::r# 
-MASTER::r+ 
-MASTER::r; 
-MASTER::r> 
-MASTER::r@ 
-MASTER::rA 
-MASTER::rB 
-MASTER::rC 
-MASTER::rD 
-MASTER::rE 
-MASTER::rF 
-MASTER::rG 
-MASTER::rH 
-MASTER::rI 
-MASTER::rJ 
-MASTER::rK 
-MASTER::rL 
-MASTER::rM 
-MASTER::rN 
-MASTER::rO 
-MASTER::rP 
-MASTER::rQ 
-MASTER::rR 
-MASTER::rS 
-MASTER::rT 
-MASTER::rU 
-MASTER::rV 
-MASTER::rW 
-MASTER::rX 
-MASTER::rY 
-MASTER::rZ 
-MASTER::r` 
-MASTER::ra 
-MASTER::rb 
-MASTER::rc 
-MASTER::rd 
-MASTER::re 
-MASTER::rf 
-MASTER::rg 
-MASTER::rh 
-MASTER::ri 
-MASTER::rj 
-MASTER::rk 
-MASTER::rl 
-MASTER::rm 
-MASTER::rn 
-MASTER::ro 
-MASTER::rp 
-MASTER::rq 
-MASTER::rr 
-MASTER::rs 
-MASTER::rt 
-MASTER::ru 
-MASTER::rv 
-MASTER::rw 
-MASTER::rx 
-MASTER::ry 
-MASTER::rz 
-MASTER::s# 
-MASTER::s+ 
-MASTER::s; 
-MASTER::s> 
-MASTER::s@ 
-MASTER::sA 
-MASTER::sB 
-MASTER::sC 
-MASTER::sD 
-MASTER::sE 
-MASTER::sF 
-MASTER::sG 
-MASTER::sH 
-MASTER::sI 
-MASTER::sJ 
-MASTER::sK 
-MASTER::sL 
-MASTER::sM 
-MASTER::sN 
-MASTER::sO 
-MASTER::sP 
-MASTER::sQ 
-MASTER::sR 
-MASTER::sS 
-MASTER::sT 
-MASTER::sU 
-MASTER::sV 
-MASTER::sW 
-MASTER::sX 
-MASTER::sY 
-MASTER::sZ 
-MASTER::s` 
-MASTER::sa 
-MASTER::sakf Cさき
-MASTER::saki Cさき
-MASTER::saku Cさく
-MASTER::sb 
-MASTER::sc 
-MASTER::sd 
-MASTER::se 
-MASTER::sf 
-MASTER::sg 
-MASTER::sh 
-MASTER::shizdgdgo Cしぜんげんご
-MASTER::shizdgdgorikq Cしぜんげんごりかい
-MASTER::shizdgdgoshori Cしぜんげんごしょり
-MASTER::shizdgdgosyori Cしぜんげんごしょり
-MASTER::shizdgdgoxori Cしぜんげんごしょり
-MASTER::shizengengo Cしぜんげんご
-MASTER::shizengengorikai Cしぜんげんごりかい
-MASTER::shizengengoshori Cしぜんげんごしょり
-MASTER::shizengengosyori Cしぜんげんごしょり
-MASTER::shizengenngo Cしぜんげんご
-MASTER::shizengenngorikai Cしぜんげんごりかい
-MASTER::shizengenngoshori Cしぜんげんごしょり
-MASTER::shizengenngosyori Cしぜんげんごしょり
-MASTER::shizengeqgo Cしぜんげんご
-MASTER::shizengeqgorikai Cしぜんげんごりかい
-MASTER::shizengeqgoshori Cしぜんげんごしょり
-MASTER::shizengeqgosyori Cしぜんげんごしょり
-MASTER::shizenngengo Cしぜんげんご
-MASTER::shizenngengorikai Cしぜんげんごりかい
-MASTER::shizenngengoshori Cしぜんげんごしょり
-MASTER::shizenngengosyori Cしぜんげんごしょり
-MASTER::shizenngenngo Cしぜんげんご
-MASTER::shizenngenngorikai Cしぜんげんごりかい
-MASTER::shizenngenngoshori Cしぜんげんごしょり
-MASTER::shizenngenngosyori Cしぜんげんごしょり
-MASTER::shizenngeqgo Cしぜんげんご
-MASTER::shizenngeqgorikai Cしぜんげんごりかい
-MASTER::shizenngeqgoshori Cしぜんげんごしょり
-MASTER::shizenngeqgosyori Cしぜんげんごしょり
-MASTER::shizeqgengo Cしぜんげんご
-MASTER::shizeqgengorikai Cしぜんげんごりかい
-MASTER::shizeqgengoshori Cしぜんげんごしょり
-MASTER::shizeqgengosyori Cしぜんげんごしょり
-MASTER::shizeqgenngo Cしぜんげんご
-MASTER::shizeqgenngorikai Cしぜんげんごりかい
-MASTER::shizeqgenngoshori Cしぜんげんごしょり
-MASTER::shizeqgenngosyori Cしぜんげんごしょり
-MASTER::shizeqgeqgo Cしぜんげんご
-MASTER::shizeqgeqgorikai Cしぜんげんごりかい
-MASTER::shizeqgeqgoshori Cしぜんげんごしょり
-MASTER::shizeqgeqgosyori Cしぜんげんごしょり
-MASTER::shizfngengo Cしぜんげんご
-MASTER::shizfngengorikai Cしぜんげんごりかい
-MASTER::shizfngengoshori Cしぜんげんごしょり
-MASTER::shizfngengosyori Cしぜんげんごしょり
-MASTER::shizfngenngo Cしぜんげんご
-MASTER::shizfngenngorikai Cしぜんげんごりかい
-MASTER::shizfngenngoshori Cしぜんげんごしょり
-MASTER::shizfngenngosyori Cしぜんげんごしょり
-MASTER::shizfngeqgo Cしぜんげんご
-MASTER::shizfngeqgorikai Cしぜんげんごりかい
-MASTER::shizfngeqgoshori Cしぜんげんごしょり
-MASTER::shizfngeqgosyori Cしぜんげんごしょり
-MASTER::shizfnngengo Cしぜんげんご
-MASTER::shizfnngengorikai Cしぜんげんごりかい
-MASTER::shizfnngengoshori Cしぜんげんごしょり
-MASTER::shizfnngengosyori Cしぜんげんごしょり
-MASTER::shizfnngenngo Cしぜんげんご
-MASTER::shizfnngenngorikai Cしぜんげんごりかい
-MASTER::shizfnngenngoshori Cしぜんげんごしょり
-MASTER::shizfnngenngosyori Cしぜんげんごしょり
-MASTER::shizfnngeqgo Cしぜんげんご
-MASTER::shizfnngeqgorikai Cしぜんげんごりかい
-MASTER::shizfnngeqgoshori Cしぜんげんごしょり
-MASTER::shizfnngeqgosyori Cしぜんげんごしょり
-MASTER::shizfqgengo Cしぜんげんご
-MASTER::shizfqgengorikai Cしぜんげんごりかい
-MASTER::shizfqgengoshori Cしぜんげんごしょり
-MASTER::shizfqgengosyori Cしぜんげんごしょり
-MASTER::shizfqgenngo Cしぜんげんご
-MASTER::shizfqgenngorikai Cしぜんげんごりかい
-MASTER::shizfqgenngoshori Cしぜんげんごしょり
-MASTER::shizfqgenngosyori Cしぜんげんごしょり
-MASTER::shizfqgeqgo Cしぜんげんご
-MASTER::shizfqgeqgorikai Cしぜんげんごりかい
-MASTER::shizfqgeqgoshori Cしぜんげんごしょり
-MASTER::shizfqgeqgosyori Cしぜんげんごしょり
-MASTER::si 
-MASTER::sizdgdgo Cしぜんげんご
-MASTER::sizdgdgorikq Cしぜんげんごりかい
-MASTER::sizdgdgoshori Cしぜんげんごしょり
-MASTER::sizdgdgosyori Cしぜんげんごしょり
-MASTER::sizdgdgoxori Cしぜんげんごしょり
-MASTER::sizengengo Cしぜんげんご
-MASTER::sizengengorikai Cしぜんげんごりかい
-MASTER::sizengengoshori Cしぜんげんごしょり
-MASTER::sizengengosyori Cしぜんげんごしょり
-MASTER::sizengenngo Cしぜんげんご
-MASTER::sizengenngorikai Cしぜんげんごりかい
-MASTER::sizengenngoshori Cしぜんげんごしょり
-MASTER::sizengenngosyori Cしぜんげんごしょり
-MASTER::sizengeqgo Cしぜんげんご
-MASTER::sizengeqgorikai Cしぜんげんごりかい
-MASTER::sizengeqgoshori Cしぜんげんごしょり
-MASTER::sizengeqgosyori Cしぜんげんごしょり
-MASTER::sizenngengo Cしぜんげんご
-MASTER::sizenngengorikai Cしぜんげんごりかい
-MASTER::sizenngengoshori Cしぜんげんごしょり
-MASTER::sizenngengosyori Cしぜんげんごしょり
-MASTER::sizenngenngo Cしぜんげんご
-MASTER::sizenngenngorikai Cしぜんげんごりかい
-MASTER::sizenngenngoshori Cしぜんげんごしょり
-MASTER::sizenngenngosyori Cしぜんげんごしょり
-MASTER::sizenngeqgo Cしぜんげんご
-MASTER::sizenngeqgorikai Cしぜんげんごりかい
-MASTER::sizenngeqgoshori Cしぜんげんごしょり
-MASTER::sizenngeqgosyori Cしぜんげんごしょり
-MASTER::sizeqgengo Cしぜんげんご
-MASTER::sizeqgengorikai Cしぜんげんごりかい
-MASTER::sizeqgengoshori Cしぜんげんごしょり
-MASTER::sizeqgengosyori Cしぜんげんごしょり
-MASTER::sizeqgenngo Cしぜんげんご
-MASTER::sizeqgenngorikai Cしぜんげんごりかい
-MASTER::sizeqgenngoshori Cしぜんげんごしょり
-MASTER::sizeqgenngosyori Cしぜんげんごしょり
-MASTER::sizeqgeqgo Cしぜんげんご
-MASTER::sizeqgeqgorikai Cしぜんげんごりかい
-MASTER::sizeqgeqgoshori Cしぜんげんごしょり
-MASTER::sizeqgeqgosyori Cしぜんげんごしょり
-MASTER::sizfngengo Cしぜんげんご
-MASTER::sizfngengorikai Cしぜんげんごりかい
-MASTER::sizfngengoshori Cしぜんげんごしょり
-MASTER::sizfngengosyori Cしぜんげんごしょり
-MASTER::sizfngenngo Cしぜんげんご
-MASTER::sizfngenngorikai Cしぜんげんごりかい
-MASTER::sizfngenngoshori Cしぜんげんごしょり
-MASTER::sizfngenngosyori Cしぜんげんごしょり
-MASTER::sizfngeqgo Cしぜんげんご
-MASTER::sizfngeqgorikai Cしぜんげんごりかい
-MASTER::sizfngeqgoshori Cしぜんげんごしょり
-MASTER::sizfngeqgosyori Cしぜんげんごしょり
-MASTER::sizfnngengo Cしぜんげんご
-MASTER::sizfnngengorikai Cしぜんげんごりかい
-MASTER::sizfnngengoshori Cしぜんげんごしょり
-MASTER::sizfnngengosyori Cしぜんげんごしょり
-MASTER::sizfnngenngo Cしぜんげんご
-MASTER::sizfnngenngorikai Cしぜんげんごりかい
-MASTER::sizfnngenngoshori Cしぜんげんごしょり
-MASTER::sizfnngenngosyori Cしぜんげんごしょり
-MASTER::sizfnngeqgo Cしぜんげんご
-MASTER::sizfnngeqgorikai Cしぜんげんごりかい
-MASTER::sizfnngeqgoshori Cしぜんげんごしょり
-MASTER::sizfnngeqgosyori Cしぜんげんごしょり
-MASTER::sizfqgengo Cしぜんげんご
-MASTER::sizfqgengorikai Cしぜんげんごりかい
-MASTER::sizfqgengoshori Cしぜんげんごしょり
-MASTER::sizfqgengosyori Cしぜんげんごしょり
-MASTER::sizfqgenngo Cしぜんげんご
-MASTER::sizfqgenngorikai Cしぜんげんごりかい
-MASTER::sizfqgenngoshori Cしぜんげんごしょり
-MASTER::sizfqgenngosyori Cしぜんげんごしょり
-MASTER::sizfqgeqgo Cしぜんげんご
-MASTER::sizfqgeqgorikai Cしぜんげんごりかい
-MASTER::sizfqgeqgoshori Cしぜんげんごしょり
-MASTER::sizfqgeqgosyori Cしぜんげんごしょり
-MASTER::sj 
-MASTER::sk 
-MASTER::sl 
-MASTER::sm 
-MASTER::sn 
-MASTER::so 
-MASTER::sp 
-MASTER::sq 
-MASTER::sr 
-MASTER::ss 
-MASTER::st 
-MASTER::su 
-MASTER::sv 
-MASTER::sw 
-MASTER::sx 
-MASTER::sy 
-MASTER::sz 
-MASTER::t# 
-MASTER::t+ 
-MASTER::t; 
-MASTER::t> 
-MASTER::t@ 
-MASTER::tA 
-MASTER::tB 
-MASTER::tC 
-MASTER::tD 
-MASTER::tE 
-MASTER::tF 
-MASTER::tG 
-MASTER::tH 
-MASTER::tI 
-MASTER::tJ 
-MASTER::tK 
-MASTER::tL 
-MASTER::tM 
-MASTER::tN 
-MASTER::tO 
-MASTER::tP 
-MASTER::tQ 
-MASTER::tR 
-MASTER::tS 
-MASTER::tT 
-MASTER::tU 
-MASTER::tV 
-MASTER::tW 
-MASTER::tX 
-MASTER::tY 
-MASTER::tZ 
-MASTER::t` 
-MASTER::ta 
-MASTER::tb 
-MASTER::tc 
-MASTER::td 
-MASTER::te 
-MASTER::tf 
-MASTER::tg 
-MASTER::th 
-MASTER::ti 
-MASTER::tj 
-MASTER::tk 
-MASTER::tl 
-MASTER::tm 
-MASTER::tn 
-MASTER::to 
-MASTER::tp 
-MASTER::tq 
-MASTER::tr 
-MASTER::ts 
-MASTER::tt 
-MASTER::tu 
-MASTER::tv 
-MASTER::tw 
-MASTER::tx 
-MASTER::ty 
-MASTER::tz 
-MASTER::u# 
-MASTER::u+ 
-MASTER::u; 
-MASTER::u> 
-MASTER::u@ 
-MASTER::uA 
-MASTER::uB 
-MASTER::uC 
-MASTER::uD 
-MASTER::uE 
-MASTER::uF 
-MASTER::uG 
-MASTER::uH 
-MASTER::uI 
-MASTER::uJ 
-MASTER::uK 
-MASTER::uL 
-MASTER::uM 
-MASTER::uN 
-MASTER::uO 
-MASTER::uP 
-MASTER::uQ 
-MASTER::uR 
-MASTER::uS 
-MASTER::uT 
-MASTER::uU 
-MASTER::uV 
-MASTER::uW 
-MASTER::uX 
-MASTER::uY 
-MASTER::uZ 
-MASTER::u` 
-MASTER::ua 
-MASTER::ub 
-MASTER::uc 
-MASTER::ud 
-MASTER::ue 
-MASTER::uf 
-MASTER::ug 
-MASTER::uh 
-MASTER::ui 
-MASTER::uj 
-MASTER::uk 
-MASTER::ul 
-MASTER::um 
-MASTER::un 
-MASTER::uo 
-MASTER::up 
-MASTER::uq 
-MASTER::ur 
-MASTER::us 
-MASTER::ut 
-MASTER::uu 
-MASTER::uv 
-MASTER::uw 
-MASTER::ux 
-MASTER::uy 
-MASTER::uz 
-MASTER::v# 
-MASTER::v+ 
-MASTER::v; 
-MASTER::v> 
-MASTER::v@ 
-MASTER::vA 
-MASTER::vB 
-MASTER::vC 
-MASTER::vD 
-MASTER::vE 
-MASTER::vF 
-MASTER::vG 
-MASTER::vH 
-MASTER::vI 
-MASTER::vJ 
-MASTER::vK 
-MASTER::vL 
-MASTER::vM 
-MASTER::vN 
-MASTER::vO 
-MASTER::vP 
-MASTER::vQ 
-MASTER::vR 
-MASTER::vS 
-MASTER::vT 
-MASTER::vU 
-MASTER::vV 
-MASTER::vW 
-MASTER::vX 
-MASTER::vY 
-MASTER::vZ 
-MASTER::v` 
-MASTER::va 
-MASTER::vb 
-MASTER::vc 
-MASTER::vd 
-MASTER::ve 
-MASTER::vf 
-MASTER::vg 
-MASTER::vh 
-MASTER::vi 
-MASTER::vj 
-MASTER::vk 
-MASTER::vl 
-MASTER::vm 
-MASTER::vn 
-MASTER::vo 
-MASTER::vp 
-MASTER::vq 
-MASTER::vr 
-MASTER::vs 
-MASTER::vt 
-MASTER::vu 
-MASTER::vv 
-MASTER::vw 
-MASTER::vx 
-MASTER::vy 
-MASTER::vz 
-MASTER::w# 
-MASTER::w+ 
-MASTER::w; 
-MASTER::w> 
-MASTER::w@ 
-MASTER::wA 
-MASTER::wB 
-MASTER::wC 
-MASTER::wD 
-MASTER::wE 
-MASTER::wF 
-MASTER::wG 
-MASTER::wH 
-MASTER::wI 
-MASTER::wJ 
-MASTER::wK 
-MASTER::wL 
-MASTER::wM 
-MASTER::wN 
-MASTER::wO 
-MASTER::wP 
-MASTER::wQ 
-MASTER::wR 
-MASTER::wS 
-MASTER::wT 
-MASTER::wU 
-MASTER::wV 
-MASTER::wW 
-MASTER::wX 
-MASTER::wY 
-MASTER::wZ 
-MASTER::w` 
-MASTER::wa 
-MASTER::wake Cわけ
-MASTER::watashiH Cわたしh
-MASTER::watasiH Cわたしh
-MASTER::wb 
-MASTER::wc 
-MASTER::wd 
-MASTER::we 
-MASTER::wf 
-MASTER::wg 
-MASTER::wh 
-MASTER::wi 
-MASTER::wj 
-MASTER::wk 
-MASTER::wl 
-MASTER::wm 
-MASTER::wn 
-MASTER::wo Cを
-MASTER::wp 
-MASTER::wq 
-MASTER::wr 
-MASTER::ws 
-MASTER::wt 
-MASTER::wtshiH Cわたしh
-MASTER::wtsiH Cわたしh
-MASTER::wtxiH Cわたしh
-MASTER::wu 
-MASTER::wv 
-MASTER::ww 
-MASTER::wx 
-MASTER::wy 
-MASTER::wz 
-MASTER::x# 
-MASTER::x+ 
-MASTER::x; 
-MASTER::x> 
-MASTER::x@ 
-MASTER::xA 
-MASTER::xB 
-MASTER::xC 
-MASTER::xD 
-MASTER::xE 
-MASTER::xF 
-MASTER::xG 
-MASTER::xH 
-MASTER::xI 
-MASTER::xJ 
-MASTER::xK 
-MASTER::xL 
-MASTER::xM 
-MASTER::xN 
-MASTER::xO 
-MASTER::xP 
-MASTER::xQ 
-MASTER::xR 
-MASTER::xS 
-MASTER::xT 
-MASTER::xU 
-MASTER::xV 
-MASTER::xW 
-MASTER::xX 
-MASTER::xY 
-MASTER::xZ 
-MASTER::x` 
-MASTER::xa 
-MASTER::xb 
-MASTER::xc 
-MASTER::xd 
-MASTER::xe 
-MASTER::xf 
-MASTER::xg 
-MASTER::xh 
-MASTER::xi 
-MASTER::xizdgdgo Cしぜんげんご
-MASTER::xizdgdgorikq Cしぜんげんごりかい
-MASTER::xizdgdgoshori Cしぜんげんごしょり
-MASTER::xizdgdgosyori Cしぜんげんごしょり
-MASTER::xizdgdgoxori Cしぜんげんごしょり
-MASTER::xj 
-MASTER::xk 
-MASTER::xl 
-MASTER::xm 
-MASTER::xn 
-MASTER::xo 
-MASTER::xp 
-MASTER::xq 
-MASTER::xr 
-MASTER::xs 
-MASTER::xt 
-MASTER::xu 
-MASTER::xv 
-MASTER::xw 
-MASTER::xx 
-MASTER::xy 
-MASTER::xz 
-MASTER::y# 
-MASTER::y+ 
-MASTER::y; 
-MASTER::y> 
-MASTER::y@ 
-MASTER::yA 
-MASTER::yB 
-MASTER::yC 
-MASTER::yD 
-MASTER::yE 
-MASTER::yF 
-MASTER::yG 
-MASTER::yH 
-MASTER::yI 
-MASTER::yJ 
-MASTER::yK 
-MASTER::yL 
-MASTER::yM 
-MASTER::yN 
-MASTER::yO 
-MASTER::yP 
-MASTER::yQ 
-MASTER::yR 
-MASTER::yS 
-MASTER::yT 
-MASTER::yU 
-MASTER::yV 
-MASTER::yW 
-MASTER::yX 
-MASTER::yY 
-MASTER::yZ 
-MASTER::y` 
-MASTER::ya 
-MASTER::yb 
-MASTER::yc 
-MASTER::yd 
-MASTER::ye 
-MASTER::yf 
-MASTER::yg 
-MASTER::yh 
-MASTER::yi 
-MASTER::yj 
-MASTER::yk 
-MASTER::yl 
-MASTER::ym 
-MASTER::yn 
-MASTER::yo 
-MASTER::yp 
-MASTER::yq 
-MASTER::yr 
-MASTER::ys 
-MASTER::yt 
-MASTER::yu 
-MASTER::yv 
-MASTER::yw 
-MASTER::yx 
-MASTER::yy 
-MASTER::yz 
-MASTER::z# 
-MASTER::z+ 
-MASTER::z; 
-MASTER::z> 
-MASTER::z@ 
-MASTER::zA 
-MASTER::zB 
-MASTER::zC 
-MASTER::zD 
-MASTER::zE 
-MASTER::zF 
-MASTER::zG 
-MASTER::zH 
-MASTER::zI 
-MASTER::zJ 
-MASTER::zK 
-MASTER::zL 
-MASTER::zM 
-MASTER::zN 
-MASTER::zO 
-MASTER::zP 
-MASTER::zQ 
-MASTER::zR 
-MASTER::zS 
-MASTER::zT 
-MASTER::zU 
-MASTER::zV 
-MASTER::zW 
-MASTER::zX 
-MASTER::zY 
-MASTER::zZ 
-MASTER::z` 
-MASTER::za 
-MASTER::zb 
-MASTER::zc 
-MASTER::zd 
-MASTER::ze 
-MASTER::zf 
-MASTER::zg 
-MASTER::zh 
-MASTER::zi 
-MASTER::zj 
-MASTER::zk 
-MASTER::zl 
-MASTER::zm 
-MASTER::zn 
-MASTER::zo 
-MASTER::zp 
-MASTER::zq 
-MASTER::zr 
-MASTER::zs 
-MASTER::zt 
-MASTER::zu 
-MASTER::zv 
-MASTER::zw 
-MASTER::zx 
-MASTER::zy 
-MASTER::zz 
-MASTER::{ /｛
-MASTER::{ku} =kumikomf =kumikomu
-MASTER::{nn} =nn =nnn =nnnn =nnq
-MASTER::{nq} =nq
-MASTER::{qn} =qn =qnn
-MASTER::{qq} =qq
-MASTER::{sh} =shita
-MASTER::{si} =sita
-MASTER::{st} =st
-MASTER::あu /合;(一致) 話が合う/会;人と会う/遭;(偶然、特によくないことにあう) 事故に遭う/逢;(人と|運命的にあう) 巡り逢う/遇;≒遭う/會;「会」の旧字
-MASTER::いっち /一致/イッチ
-MASTER::いんにょう /飲尿/廴繞;[部首]
-MASTER::いんよう /引用/飲用/陰陽
-MASTER::えr /得/獲;NB:「とr」と同形/選;NB:「よr」「すぐr」と同形
-MASTER::おこなu /行/行な;※送り位置補正
-MASTER::か+ /勝/買/飼/刈;(crop)草を刈る
-MASTER::か` /勝/買/飼/刈;(crop)草を刈る
-MASTER::かt /勝/買/飼/刈;(crop)草を刈る
-MASTER::かっこ /確固/括弧/各個/各戸/確乎/羯鼓;雅楽の打楽器/格好/『』/【】/［］/〔〕/〈〉/《》/｛｝/「」/（）/‘’/“”
-MASTER::かに /蟹/可児/蠏
-MASTER::かんい /簡易/官位/冠位;-十二階/漢医;漢方医/敢為/官医/寛衣/換位/簡意
-MASTER::くみこみ /組み込み/組込
-MASTER::こっか /国家;state/国歌;anthem.「-斉唱」/国花/骨化/國家;「国」旧字/黒化/刻下/】/）/］/』
-MASTER::こーひー /コーヒー
-MASTER::さき /先/崎/左記/前/早紀/沙樹/早岐/沙貴/咲/埼/尖/嵜/碕/早記
-MASTER::さく /策/柵/作/佐久;地名/朔;朔日 ⇔晦/槊;ほこ/搾;搾取/昨;昨夜/咋;(くう)/窄;狭窄/酢;酢酸/柞;いすのき/炸;炸裂/筰;山田耕筰/削;削除/索;検索/錯;錯誤/筴/縒;より/鑿/做;「作」の異体字/簀;す/嘖;さいな・む/捉;(漢音) とら・える/齪;齷齪/冊;(慣用音)竹冊/册;「冊」の旧字/辟;?/乍;?
-MASTER::しぜんげんご /自然言語
-MASTER::しぜんげんごしょり /自然言語処理
-MASTER::しぜんげんごりかい /自然言語理解
-MASTER::へんか /変化/返歌
-MASTER::へんかs /変化
-MASTER::へんかん /変換/返還
-MASTER::みr /見/観;(字義:みわたす)/視;(字義:じっとみる)/診;(diagnose) 患者を診る/看;(nurse) 病母を看る/觀;「観」の旧字
-MASTER::わけ /訳/和気;地名/理由;当て字/分け/分/譯;「訳」の旧字/戯奴
-MASTER::わたしh /私
-MASTER::を /小/緒/雄/男/牡/尾/悪/汚/惡;「悪」の旧字(人名用漢字)
+MASTER::!	/！/感嘆符
+MASTER::!=	/≠
+MASTER::##	
+MASTER::#+	
+MASTER::#;	
+MASTER::#>	
+MASTER::#@	
+MASTER::#A	
+MASTER::#B	
+MASTER::#C	
+MASTER::#D	
+MASTER::#E	
+MASTER::#F	
+MASTER::#G	
+MASTER::#H	
+MASTER::#I	
+MASTER::#J	
+MASTER::#K	
+MASTER::#L	
+MASTER::#M	
+MASTER::#N	
+MASTER::#O	
+MASTER::#P	
+MASTER::#Q	
+MASTER::#R	
+MASTER::#S	
+MASTER::#T	
+MASTER::#U	
+MASTER::#V	
+MASTER::#W	
+MASTER::#X	
+MASTER::#Y	
+MASTER::#Z	
+MASTER::#`	
+MASTER::#a	
+MASTER::#b	
+MASTER::#c	
+MASTER::#chi'mf	C#ちーむ
+MASTER::#chi'mu	C#ちーむ
+MASTER::#chi-mf	C#ちーむ
+MASTER::#chi-mu	C#ちーむ
+MASTER::#chi:mf	C#ちーむ
+MASTER::#chi:mu	C#ちーむ
+MASTER::#chi^mf	C#ちーむ
+MASTER::#chi^mu	C#ちーむ
+MASTER::#ci'mf	C#ちーむ
+MASTER::#ci'mu	C#ちーむ
+MASTER::#ci-mf	C#ちーむ
+MASTER::#ci-mu	C#ちーむ
+MASTER::#ci:mf	C#ちーむ
+MASTER::#ci:mu	C#ちーむ
+MASTER::#ci^mf	C#ちーむ
+MASTER::#ci^mu	C#ちーむ
+MASTER::#d	
+MASTER::#e	
+MASTER::#f	
+MASTER::#g	
+MASTER::#gatsu#ka	C#がつ#か
+MASTER::#gatsu#nichi	C#がつ#にち
+MASTER::#gatsu#nici	C#がつ#にち
+MASTER::#gatsu#niti	C#がつ#にち
+MASTER::#gatsu#nityi	C#がつ#にち
+MASTER::#gatsu#nt	C#がつ#にち
+MASTER::#gatu#ka	C#がつ#か
+MASTER::#gatu#nichi	C#がつ#にち
+MASTER::#gatu#nici	C#がつ#にち
+MASTER::#gatu#niti	C#がつ#にち
+MASTER::#gatu#nityi	C#がつ#にち
+MASTER::#gatu#nt	C#がつ#にち
+MASTER::#gyoume	C#ぎょうめ
+MASTER::#gyowhume	C#ぎょうめ
+MASTER::#gypme	C#ぎょうめ
+MASTER::#h	
+MASTER::#i	
+MASTER::#j	
+MASTER::#k	
+MASTER::#kaime	C#かいめ
+MASTER::#kara#	C#から#
+MASTER::#kqme	C#かいめ
+MASTER::#kr#	C#から#
+MASTER::#l	
+MASTER::#m	
+MASTER::#n	
+MASTER::#nd	C#ねん
+MASTER::#nd#gatsu#nt	C#ねん#がつ#にち
+MASTER::#nd#gatu#nt	C#ねん#がつ#にち
+MASTER::#nen	C#ねん
+MASTER::#nen#gatsu#nichi	C#ねん#がつ#にち
+MASTER::#nen#gatsu#nici	C#ねん#がつ#にち
+MASTER::#nen#gatsu#niti	C#ねん#がつ#にち
+MASTER::#nen#gatsu#nityi	C#ねん#がつ#にち
+MASTER::#nen#gatu#nichi	C#ねん#がつ#にち
+MASTER::#nen#gatu#nici	C#ねん#がつ#にち
+MASTER::#nen#gatu#niti	C#ねん#がつ#にち
+MASTER::#nen#gatu#nityi	C#ねん#がつ#にち
+MASTER::#nenn	C#ねん
+MASTER::#nenn#gatsu#nichi	C#ねん#がつ#にち
+MASTER::#nenn#gatsu#nici	C#ねん#がつ#にち
+MASTER::#nenn#gatsu#niti	C#ねん#がつ#にち
+MASTER::#nenn#gatsu#nityi	C#ねん#がつ#にち
+MASTER::#nenn#gatu#nichi	C#ねん#がつ#にち
+MASTER::#nenn#gatu#nici	C#ねん#がつ#にち
+MASTER::#nenn#gatu#niti	C#ねん#がつ#にち
+MASTER::#nenn#gatu#nityi	C#ねん#がつ#にち
+MASTER::#neq	C#ねん
+MASTER::#neq#gatsu#nichi	C#ねん#がつ#にち
+MASTER::#neq#gatsu#nici	C#ねん#がつ#にち
+MASTER::#neq#gatsu#niti	C#ねん#がつ#にち
+MASTER::#neq#gatsu#nityi	C#ねん#がつ#にち
+MASTER::#neq#gatu#nichi	C#ねん#がつ#にち
+MASTER::#neq#gatu#nici	C#ねん#がつ#にち
+MASTER::#neq#gatu#niti	C#ねん#がつ#にち
+MASTER::#neq#gatu#nityi	C#ねん#がつ#にち
+MASTER::#o	
+MASTER::#p	
+MASTER::#q	
+MASTER::#r	
+MASTER::#s	
+MASTER::#t	
+MASTER::#ti'mf	C#ちーむ
+MASTER::#ti'mu	C#ちーむ
+MASTER::#ti-mf	C#ちーむ
+MASTER::#ti-mu	C#ちーむ
+MASTER::#ti:mf	C#ちーむ
+MASTER::#ti:mu	C#ちーむ
+MASTER::#ti^mf	C#ちーむ
+MASTER::#ti^mu	C#ちーむ
+MASTER::#tyi'mf	C#ちーむ
+MASTER::#tyi'mu	C#ちーむ
+MASTER::#tyi-mf	C#ちーむ
+MASTER::#tyi-mu	C#ちーむ
+MASTER::#tyi:mf	C#ちーむ
+MASTER::#tyi:mu	C#ちーむ
+MASTER::#tyi^mf	C#ちーむ
+MASTER::#tyi^mu	C#ちーむ
+MASTER::#u	
+MASTER::#v	
+MASTER::#w	
+MASTER::#x	
+MASTER::#y	
+MASTER::#z	
+MASTER::#かいめ	/#0回目/#3回目
+MASTER::#から#	/#1〜#1
+MASTER::#がつ#か	/#1月#1日/#0月#0日/#2月#2日/#2月#1日
+MASTER::#がつ#にち	/#1月#1日/#0月#0日/#2月#2日/#2月#1日
+MASTER::#ぎょうめ	/#0行目/#1行目
+MASTER::#ちーむ	/#0チーム
+MASTER::#ねん	/#1年/#0年/#3年/#2年
+MASTER::#ねん#がつ#にち	/#0年#0月#0日/#1年#1月#1日
+MASTER::(#c)	#chi'mf #chi'mu #chi-mf #chi-mu #chi:mf #chi:mu #chi^mf #chi^mu #ci'mf #ci'mu #ci-mf #ci-mu #ci:mf #ci:mu #ci^mf #ci^mu
+MASTER::(#g)	#gatsu#ka #gatsu#nichi #gatsu#nici #gatsu#niti #gatsu#nityi #gatsu#nt #gatu#ka #gatu#nichi #gatu#nici #gatu#niti #gatu#nityi #gatu#nt #gyoume #gyowhume #gypme
+MASTER::(#k)	#kaime #kara# #kqme #kr#
+MASTER::(#n)	#nd #nd#gatsu#nt #nd#gatu#nt #nen #nen#gatsu#nichi #nen#gatsu#nici #nen#gatsu#niti #nen#gatsu#nityi #nen#gatu#nichi #nen#gatu#nici #nen#gatu#niti #nen#gatu#nityi #nenn #nenn#gatsu#nichi #nenn#gatsu#nici #nenn#gatsu#niti #nenn#gatsu#nityi #nenn#gatu#nichi #nenn#gatu#nici #nenn#gatu#niti #nenn#gatu#nityi #neq #neq#gatsu#nichi #neq#gatsu#nici #neq#gatsu#niti #neq#gatsu#nityi #neq#gatu#nichi #neq#gatu#nici #neq#gatu#niti #neq#gatu#nityi
+MASTER::(#t)	#ti'mf #ti'mu #ti-mf #ti-mu #ti:mf #ti:mu #ti^mf #ti^mu #tyi'mf #tyi'mu #tyi-mf #tyi-mu #tyi:mf #tyi:mu #tyi^mf #tyi^mu
+MASTER::(>a)	>an >ann >aq
+MASTER::(AU)	aU
+MASTER::(ER)	eR
+MASTER::(HD)	hdkaS
+MASTER::(HE)	henkaS hennkaS heqkaS
+MASTER::(KA)	ka+ kaT ka`
+MASTER::(MI)	miR
+MASTER::(OK)	okonaU
+MASTER::(WA)	watashiH watasiH
+MASTER::(WT)	wtshiH wtsiH wtxiH
+MASTER::(de)	developer
+MASTER::(hd)	hdka hdkn hdkz
+MASTER::(he)	henka henkan henkann henkaq hennka hennkan hennkann hennkaq heqka heqkan heqkann heqkaq
+MASTER::(i;)	i;chi i;ci i;tyi
+MASTER::(i@)	i@chi i@ci i@tyi
+MASTER::(ic)	icchi icci
+MASTER::(in)	inngp innngp innnyou innnyowhu innnyp innyou innyowhu innyp inyou inyowhu inyp
+MASTER::(iq)	iqngp iqnyou iqnyowhu iqnyp iqyou iqyowhu iqyp
+MASTER::(it)	ittyi
+MASTER::(ka)	ka;ko ka@ko kakko kani kanni kaqi
+MASTER::(kn)	kni
+MASTER::(ko)	ko'hi' ko'hi- ko'hi: ko'hi^ ko-hi' ko-hi- ko-hi: ko-hi^ ko:hi' ko:hi- ko:hi: ko:hi^ ko;ka ko@ka ko^hi' ko^hi- ko^hi: ko^hi^ kokka
+MASTER::(ku)	kumikomi
+MASTER::(kz)	kzi
+MASTER::(sa)	sakf saki saku
+MASTER::(sh)	shizdgdgo shizdgdgorikq shizdgdgoshori shizdgdgosyori shizdgdgoxori shizengengo shizengengorikai shizengengoshori shizengengosyori shizengenngo shizengenngorikai shizengenngoshori shizengenngosyori shizengeqgo shizengeqgorikai shizengeqgoshori shizengeqgosyori shizenngengo shizenngengorikai shizenngengoshori shizenngengosyori shizenngenngo shizenngenngorikai shizenngenngoshori shizenngenngosyori shizenngeqgo shizenngeqgorikai shizenngeqgoshori shizenngeqgosyori shizeqgengo shizeqgengorikai shizeqgengoshori shizeqgengosyori shizeqgenngo shizeqgenngorikai shizeqgenngoshori shizeqgenngosyori shizeqgeqgo shizeqgeqgorikai shizeqgeqgoshori shizeqgeqgosyori shizfngengo shizfngengorikai shizfngengoshori shizfngengosyori shizfngenngo shizfngenngorikai shizfngenngoshori shizfngenngosyori shizfngeqgo shizfngeqgorikai shizfngeqgoshori shizfngeqgosyori shizfnngengo shizfnngengorikai shizfnngengoshori shizfnngengosyori shizfnngenngo shizfnngenngorikai shizfnngenngoshori shizfnngenngosyori shizfnngeqgo shizfnngeqgorikai shizfnngeqgoshori shizfnngeqgosyori shizfqgengo shizfqgengorikai shizfqgengoshori shizfqgengosyori shizfqgenngo shizfqgenngorikai shizfqgenngoshori shizfqgenngosyori shizfqgeqgo shizfqgeqgorikai shizfqgeqgoshori shizfqgeqgosyori
+MASTER::(si)	sizdgdgo sizdgdgorikq sizdgdgoshori sizdgdgosyori sizdgdgoxori sizengengo sizengengorikai sizengengoshori sizengengosyori sizengenngo sizengenngorikai sizengenngoshori sizengenngosyori sizengeqgo sizengeqgorikai sizengeqgoshori sizengeqgosyori sizenngengo sizenngengorikai sizenngengoshori sizenngengosyori sizenngenngo sizenngenngorikai sizenngenngoshori sizenngenngosyori sizenngeqgo sizenngeqgorikai sizenngeqgoshori sizenngeqgosyori sizeqgengo sizeqgengorikai sizeqgengoshori sizeqgengosyori sizeqgenngo sizeqgenngorikai sizeqgenngoshori sizeqgenngosyori sizeqgeqgo sizeqgeqgorikai sizeqgeqgoshori sizeqgeqgosyori sizfngengo sizfngengorikai sizfngengoshori sizfngengosyori sizfngenngo sizfngenngorikai sizfngenngoshori sizfngenngosyori sizfngeqgo sizfngeqgorikai sizfngeqgoshori sizfngeqgosyori sizfnngengo sizfnngengorikai sizfnngengoshori sizfnngengosyori sizfnngenngo sizfnngenngorikai sizfnngenngoshori sizfnngenngosyori sizfnngeqgo sizfnngeqgorikai sizfnngeqgoshori sizfnngeqgosyori sizfqgengo sizfqgengorikai sizfqgengoshori sizfqgengosyori sizfqgenngo sizfqgenngorikai sizfqgenngoshori sizfqgenngosyori sizfqgeqgo sizfqgeqgorikai sizfqgeqgoshori sizfqgeqgosyori
+MASTER::(wa)	wake
+MASTER::(wo)	wo
+MASTER::(xi)	xizdgdgo xizdgdgorikq xizdgdgoshori xizdgdgosyori xizdgdgoxori
+MASTER::*	/＊/※/×
+MASTER::.	/．/・/。/…;...
+MASTER::/	/／/÷
+MASTER::;#	
+MASTER::;+	
+MASTER::;;	
+MASTER::;>	
+MASTER::;@	
+MASTER::;A	
+MASTER::;B	
+MASTER::;C	
+MASTER::;D	
+MASTER::;E	
+MASTER::;F	
+MASTER::;G	
+MASTER::;H	
+MASTER::;I	
+MASTER::;J	
+MASTER::;K	
+MASTER::;L	
+MASTER::;M	
+MASTER::;N	
+MASTER::;O	
+MASTER::;P	
+MASTER::;Q	
+MASTER::;R	
+MASTER::;S	
+MASTER::;T	
+MASTER::;U	
+MASTER::;V	
+MASTER::;W	
+MASTER::;X	
+MASTER::;Y	
+MASTER::;Z	
+MASTER::;`	
+MASTER::;a	
+MASTER::;b	
+MASTER::;c	
+MASTER::;d	
+MASTER::;e	
+MASTER::;f	
+MASTER::;g	
+MASTER::;h	
+MASTER::;i	
+MASTER::;j	
+MASTER::;k	
+MASTER::;l	
+MASTER::;m	
+MASTER::;n	
+MASTER::;o	
+MASTER::;p	
+MASTER::;q	
+MASTER::;r	
+MASTER::;s	
+MASTER::;t	
+MASTER::;u	
+MASTER::;v	
+MASTER::;w	
+MASTER::;x	
+MASTER::;y	
+MASTER::;z	
+MASTER::=kumikomf	くみこむ
+MASTER::=kumikomu	くみこむ
+MASTER::=nn	んん
+MASTER::=nnn	んん
+MASTER::=nnnn	んん
+MASTER::=nnq	んん
+MASTER::=nq	んん
+MASTER::=qn	んん
+MASTER::=qnn	んん
+MASTER::=qq	んん
+MASTER::=shita	した
+MASTER::=sita	した
+MASTER::=st	した
+MASTER::>#	
+MASTER::>+	
+MASTER::>;	
+MASTER::>>	
+MASTER::>@	
+MASTER::>A	
+MASTER::>B	
+MASTER::>C	
+MASTER::>D	
+MASTER::>E	
+MASTER::>F	
+MASTER::>G	
+MASTER::>H	
+MASTER::>I	
+MASTER::>J	
+MASTER::>K	
+MASTER::>L	
+MASTER::>M	
+MASTER::>N	
+MASTER::>O	
+MASTER::>P	
+MASTER::>Q	
+MASTER::>R	
+MASTER::>S	
+MASTER::>T	
+MASTER::>U	
+MASTER::>V	
+MASTER::>W	
+MASTER::>X	
+MASTER::>Y	
+MASTER::>Z	
+MASTER::>`	
+MASTER::>a	
+MASTER::>an	C>あん
+MASTER::>ann	C>あん
+MASTER::>aq	C>あん
+MASTER::>b	
+MASTER::>c	
+MASTER::>d	
+MASTER::>e	
+MASTER::>f	
+MASTER::>g	
+MASTER::>h	
+MASTER::>i	
+MASTER::>j	
+MASTER::>k	
+MASTER::>l	
+MASTER::>m	
+MASTER::>n	
+MASTER::>o	
+MASTER::>p	
+MASTER::>q	
+MASTER::>r	
+MASTER::>s	
+MASTER::>t	
+MASTER::>u	
+MASTER::>v	
+MASTER::>w	
+MASTER::>x	
+MASTER::>y	
+MASTER::>z	
+MASTER::>あん	/案
+MASTER::?	/？
+MASTER::@#	
+MASTER::@+	
+MASTER::@;	
+MASTER::@>	
+MASTER::@@	
+MASTER::@A	
+MASTER::@B	
+MASTER::@C	
+MASTER::@D	
+MASTER::@E	
+MASTER::@F	
+MASTER::@G	
+MASTER::@H	
+MASTER::@I	
+MASTER::@J	
+MASTER::@K	
+MASTER::@L	
+MASTER::@M	
+MASTER::@N	
+MASTER::@O	
+MASTER::@P	
+MASTER::@Q	
+MASTER::@R	
+MASTER::@S	
+MASTER::@T	
+MASTER::@U	
+MASTER::@V	
+MASTER::@W	
+MASTER::@X	
+MASTER::@Y	
+MASTER::@Z	
+MASTER::@`	
+MASTER::@a	
+MASTER::@b	
+MASTER::@c	
+MASTER::@d	
+MASTER::@e	
+MASTER::@f	
+MASTER::@g	
+MASTER::@h	
+MASTER::@i	
+MASTER::@j	
+MASTER::@k	
+MASTER::@l	
+MASTER::@m	
+MASTER::@n	
+MASTER::@o	
+MASTER::@p	
+MASTER::@q	
+MASTER::@r	
+MASTER::@s	
+MASTER::@t	
+MASTER::@u	
+MASTER::@v	
+MASTER::@w	
+MASTER::@x	
+MASTER::@y	
+MASTER::@z	
+MASTER::a#	
+MASTER::a+	
+MASTER::a;	
+MASTER::a>	
+MASTER::a@	
+MASTER::aA	
+MASTER::aB	
+MASTER::aC	
+MASTER::aD	
+MASTER::aE	
+MASTER::aF	
+MASTER::aG	
+MASTER::aH	
+MASTER::aI	
+MASTER::aJ	
+MASTER::aK	
+MASTER::aL	
+MASTER::aM	
+MASTER::aN	
+MASTER::aO	
+MASTER::aP	
+MASTER::aQ	
+MASTER::aR	
+MASTER::aS	
+MASTER::aT	
+MASTER::aU	Cあu
+MASTER::aV	
+MASTER::aW	
+MASTER::aX	
+MASTER::aY	
+MASTER::aZ	
+MASTER::a`	
+MASTER::aa	
+MASTER::ab	
+MASTER::ac	
+MASTER::ad	
+MASTER::ae	
+MASTER::af	
+MASTER::ag	
+MASTER::ah	
+MASTER::ai	
+MASTER::aj	
+MASTER::ak	
+MASTER::al	
+MASTER::am	
+MASTER::an	
+MASTER::ao	
+MASTER::ap	
+MASTER::aq	
+MASTER::ar	
+MASTER::as	
+MASTER::at	
+MASTER::au	
+MASTER::av	
+MASTER::aw	
+MASTER::ax	
+MASTER::ay	
+MASTER::az	
+MASTER::b#	
+MASTER::b+	
+MASTER::b;	
+MASTER::b>	
+MASTER::b@	
+MASTER::bA	
+MASTER::bB	
+MASTER::bC	
+MASTER::bD	
+MASTER::bE	
+MASTER::bF	
+MASTER::bG	
+MASTER::bH	
+MASTER::bI	
+MASTER::bJ	
+MASTER::bK	
+MASTER::bL	
+MASTER::bM	
+MASTER::bN	
+MASTER::bO	
+MASTER::bP	
+MASTER::bQ	
+MASTER::bR	
+MASTER::bS	
+MASTER::bT	
+MASTER::bU	
+MASTER::bV	
+MASTER::bW	
+MASTER::bX	
+MASTER::bY	
+MASTER::bZ	
+MASTER::b`	
+MASTER::ba	
+MASTER::bb	
+MASTER::bc	
+MASTER::bd	
+MASTER::be	
+MASTER::bf	
+MASTER::bg	
+MASTER::bh	
+MASTER::bi	
+MASTER::bj	
+MASTER::bk	
+MASTER::bl	
+MASTER::bm	
+MASTER::bn	
+MASTER::bo	
+MASTER::bp	
+MASTER::bq	
+MASTER::br	
+MASTER::bs	
+MASTER::bt	
+MASTER::bu	
+MASTER::bv	
+MASTER::bw	
+MASTER::bx	
+MASTER::by	
+MASTER::bz	
+MASTER::c#	
+MASTER::c+	
+MASTER::c;	
+MASTER::c>	
+MASTER::c@	
+MASTER::cA	
+MASTER::cB	
+MASTER::cC	
+MASTER::cD	
+MASTER::cE	
+MASTER::cF	
+MASTER::cG	
+MASTER::cH	
+MASTER::cI	
+MASTER::cJ	
+MASTER::cK	
+MASTER::cL	
+MASTER::cM	
+MASTER::cN	
+MASTER::cO	
+MASTER::cP	
+MASTER::cQ	
+MASTER::cR	
+MASTER::cS	
+MASTER::cT	
+MASTER::cU	
+MASTER::cV	
+MASTER::cW	
+MASTER::cX	
+MASTER::cY	
+MASTER::cZ	
+MASTER::c`	
+MASTER::ca	
+MASTER::cb	
+MASTER::cc	
+MASTER::cd	
+MASTER::ce	
+MASTER::cf	
+MASTER::cg	
+MASTER::ch	
+MASTER::ci	
+MASTER::cj	
+MASTER::ck	
+MASTER::cl	
+MASTER::cm	
+MASTER::cn	
+MASTER::co	
+MASTER::cp	
+MASTER::cq	
+MASTER::cr	
+MASTER::cs	
+MASTER::ct	
+MASTER::cu	
+MASTER::cv	
+MASTER::cw	
+MASTER::cx	
+MASTER::cy	
+MASTER::cz	
+MASTER::d#	
+MASTER::d+	
+MASTER::d;	
+MASTER::d>	
+MASTER::d@	
+MASTER::dA	
+MASTER::dB	
+MASTER::dC	
+MASTER::dD	
+MASTER::dE	
+MASTER::dF	
+MASTER::dG	
+MASTER::dH	
+MASTER::dI	
+MASTER::dJ	
+MASTER::dK	
+MASTER::dL	
+MASTER::dM	
+MASTER::dN	
+MASTER::dO	
+MASTER::dP	
+MASTER::dQ	
+MASTER::dR	
+MASTER::dS	
+MASTER::dT	
+MASTER::dU	
+MASTER::dV	
+MASTER::dW	
+MASTER::dX	
+MASTER::dY	
+MASTER::dZ	
+MASTER::d`	
+MASTER::da	
+MASTER::db	
+MASTER::dc	
+MASTER::dd	
+MASTER::de	
+MASTER::developer	/デベロッパー/ディベロッパー/デベロッパ
+MASTER::df	
+MASTER::dg	
+MASTER::dh	
+MASTER::di	
+MASTER::dj	
+MASTER::dk	
+MASTER::dl	
+MASTER::dm	
+MASTER::dn	
+MASTER::do	
+MASTER::dp	
+MASTER::dq	
+MASTER::dr	
+MASTER::ds	
+MASTER::dt	
+MASTER::du	
+MASTER::dv	
+MASTER::dw	
+MASTER::dx	
+MASTER::dy	
+MASTER::dz	
+MASTER::e#	
+MASTER::e+	
+MASTER::e;	
+MASTER::e>	
+MASTER::e@	
+MASTER::eA	
+MASTER::eB	
+MASTER::eC	
+MASTER::eD	
+MASTER::eE	
+MASTER::eF	
+MASTER::eG	
+MASTER::eH	
+MASTER::eI	
+MASTER::eJ	
+MASTER::eK	
+MASTER::eL	
+MASTER::eM	
+MASTER::eN	
+MASTER::eO	
+MASTER::eP	
+MASTER::eQ	
+MASTER::eR	Cえr
+MASTER::eS	
+MASTER::eT	
+MASTER::eU	
+MASTER::eV	
+MASTER::eW	
+MASTER::eX	
+MASTER::eY	
+MASTER::eZ	
+MASTER::e`	
+MASTER::ea	
+MASTER::eb	
+MASTER::ec	
+MASTER::ed	
+MASTER::ee	
+MASTER::ef	
+MASTER::eg	
+MASTER::eh	
+MASTER::ei	
+MASTER::ej	
+MASTER::ek	
+MASTER::el	
+MASTER::em	
+MASTER::en	
+MASTER::eo	
+MASTER::ep	
+MASTER::eq	
+MASTER::er	
+MASTER::es	
+MASTER::et	
+MASTER::eu	
+MASTER::ev	
+MASTER::ew	
+MASTER::ex	
+MASTER::ey	
+MASTER::ez	
+MASTER::f#	
+MASTER::f+	
+MASTER::f;	
+MASTER::f>	
+MASTER::f@	
+MASTER::fA	
+MASTER::fB	
+MASTER::fC	
+MASTER::fD	
+MASTER::fE	
+MASTER::fF	
+MASTER::fG	
+MASTER::fH	
+MASTER::fI	
+MASTER::fJ	
+MASTER::fK	
+MASTER::fL	
+MASTER::fM	
+MASTER::fN	
+MASTER::fO	
+MASTER::fP	
+MASTER::fQ	
+MASTER::fR	
+MASTER::fS	
+MASTER::fT	
+MASTER::fU	
+MASTER::fV	
+MASTER::fW	
+MASTER::fX	
+MASTER::fY	
+MASTER::fZ	
+MASTER::f`	
+MASTER::fa	
+MASTER::fb	
+MASTER::fc	
+MASTER::fd	
+MASTER::fe	
+MASTER::ff	
+MASTER::fg	
+MASTER::fh	
+MASTER::fi	
+MASTER::fj	
+MASTER::fk	
+MASTER::fl	
+MASTER::fm	
+MASTER::fn	
+MASTER::fo	
+MASTER::fp	
+MASTER::fq	
+MASTER::fr	
+MASTER::fs	
+MASTER::ft	
+MASTER::fu	
+MASTER::fv	
+MASTER::fw	
+MASTER::fx	
+MASTER::fy	
+MASTER::fz	
+MASTER::g#	
+MASTER::g+	
+MASTER::g;	
+MASTER::g>	
+MASTER::g@	
+MASTER::gA	
+MASTER::gB	
+MASTER::gC	
+MASTER::gD	
+MASTER::gE	
+MASTER::gF	
+MASTER::gG	
+MASTER::gH	
+MASTER::gI	
+MASTER::gJ	
+MASTER::gK	
+MASTER::gL	
+MASTER::gM	
+MASTER::gN	
+MASTER::gO	
+MASTER::gP	
+MASTER::gQ	
+MASTER::gR	
+MASTER::gS	
+MASTER::gT	
+MASTER::gU	
+MASTER::gV	
+MASTER::gW	
+MASTER::gX	
+MASTER::gY	
+MASTER::gZ	
+MASTER::g`	
+MASTER::ga	
+MASTER::gb	
+MASTER::gc	
+MASTER::gd	
+MASTER::ge	
+MASTER::gf	
+MASTER::gg	
+MASTER::gh	
+MASTER::gi	
+MASTER::gj	
+MASTER::gk	
+MASTER::gl	
+MASTER::gm	
+MASTER::gn	
+MASTER::go	
+MASTER::gp	
+MASTER::gq	
+MASTER::gr	
+MASTER::gs	
+MASTER::gt	
+MASTER::gu	
+MASTER::gv	
+MASTER::gw	
+MASTER::gx	
+MASTER::gy	
+MASTER::gz	
+MASTER::h#	
+MASTER::h+	
+MASTER::h;	
+MASTER::h>	
+MASTER::h@	
+MASTER::hA	
+MASTER::hB	
+MASTER::hC	
+MASTER::hD	
+MASTER::hE	
+MASTER::hF	
+MASTER::hG	
+MASTER::hH	
+MASTER::hI	
+MASTER::hJ	
+MASTER::hK	
+MASTER::hL	
+MASTER::hM	
+MASTER::hN	
+MASTER::hO	
+MASTER::hP	
+MASTER::hQ	
+MASTER::hR	
+MASTER::hS	
+MASTER::hT	
+MASTER::hU	
+MASTER::hV	
+MASTER::hW	
+MASTER::hX	
+MASTER::hY	
+MASTER::hZ	
+MASTER::h`	
+MASTER::ha	
+MASTER::hb	
+MASTER::hc	
+MASTER::hd	
+MASTER::hdka	Cへんか
+MASTER::hdkaS	Cへんかs
+MASTER::hdkn	Cへんかん
+MASTER::hdkz	Cへんかん
+MASTER::he	
+MASTER::henka	Cへんか
+MASTER::henkaS	Cへんかs
+MASTER::henkan	Cへんかん
+MASTER::henkann	Cへんかん
+MASTER::henkaq	Cへんかん
+MASTER::hennka	Cへんか
+MASTER::hennkaS	Cへんかs
+MASTER::hennkan	Cへんかん
+MASTER::hennkann	Cへんかん
+MASTER::hennkaq	Cへんかん
+MASTER::heqka	Cへんか
+MASTER::heqkaS	Cへんかs
+MASTER::heqkan	Cへんかん
+MASTER::heqkann	Cへんかん
+MASTER::heqkaq	Cへんかん
+MASTER::hf	
+MASTER::hg	
+MASTER::hh	
+MASTER::hi	
+MASTER::hj	
+MASTER::hk	
+MASTER::hl	
+MASTER::hm	
+MASTER::hn	
+MASTER::ho	
+MASTER::hp	
+MASTER::hq	
+MASTER::hr	
+MASTER::hs	
+MASTER::ht	
+MASTER::hu	
+MASTER::hv	
+MASTER::hw	
+MASTER::hx	
+MASTER::hy	
+MASTER::hz	
+MASTER::i#	
+MASTER::i+	
+MASTER::i;	
+MASTER::i;chi	Cいっち
+MASTER::i;ci	Cいっち
+MASTER::i;tyi	Cいっち
+MASTER::i>	
+MASTER::i@	
+MASTER::i@chi	Cいっち
+MASTER::i@ci	Cいっち
+MASTER::i@tyi	Cいっち
+MASTER::iA	
+MASTER::iB	
+MASTER::iC	
+MASTER::iD	
+MASTER::iE	
+MASTER::iF	
+MASTER::iG	
+MASTER::iH	
+MASTER::iI	
+MASTER::iJ	
+MASTER::iK	
+MASTER::iL	
+MASTER::iM	
+MASTER::iN	
+MASTER::iO	
+MASTER::iP	
+MASTER::iQ	
+MASTER::iR	
+MASTER::iS	
+MASTER::iT	
+MASTER::iU	
+MASTER::iV	
+MASTER::iW	
+MASTER::iX	
+MASTER::iY	
+MASTER::iZ	
+MASTER::i`	
+MASTER::ia	
+MASTER::ib	
+MASTER::ic	
+MASTER::icchi	Cいっち
+MASTER::icci	Cいっち
+MASTER::id	
+MASTER::ie	
+MASTER::if	
+MASTER::ig	
+MASTER::ih	
+MASTER::ii	
+MASTER::ij	
+MASTER::ik	
+MASTER::il	
+MASTER::im	
+MASTER::in	
+MASTER::inngp	Cいんにょう
+MASTER::innngp	Cいんにょう
+MASTER::innnyou	Cいんにょう
+MASTER::innnyowhu	Cいんにょう
+MASTER::innnyp	Cいんにょう
+MASTER::innyou	Cいんにょう/いんよう
+MASTER::innyowhu	Cいんにょう/いんよう
+MASTER::innyp	Cいんにょう/いんよう
+MASTER::inyou	Cいんよう
+MASTER::inyowhu	Cいんよう
+MASTER::inyp	Cいんよう
+MASTER::io	
+MASTER::ip	
+MASTER::iq	
+MASTER::iqngp	Cいんにょう
+MASTER::iqnyou	Cいんにょう
+MASTER::iqnyowhu	Cいんにょう
+MASTER::iqnyp	Cいんにょう
+MASTER::iqyou	Cいんよう
+MASTER::iqyowhu	Cいんよう
+MASTER::iqyp	Cいんよう
+MASTER::ir	
+MASTER::is	
+MASTER::it	
+MASTER::ittyi	Cいっち
+MASTER::iu	
+MASTER::iv	
+MASTER::iw	
+MASTER::ix	
+MASTER::iy	
+MASTER::iz	
+MASTER::j#	
+MASTER::j+	
+MASTER::j;	
+MASTER::j>	
+MASTER::j@	
+MASTER::jA	
+MASTER::jB	
+MASTER::jC	
+MASTER::jD	
+MASTER::jE	
+MASTER::jF	
+MASTER::jG	
+MASTER::jH	
+MASTER::jI	
+MASTER::jJ	
+MASTER::jK	
+MASTER::jL	
+MASTER::jM	
+MASTER::jN	
+MASTER::jO	
+MASTER::jP	
+MASTER::jQ	
+MASTER::jR	
+MASTER::jS	
+MASTER::jT	
+MASTER::jU	
+MASTER::jV	
+MASTER::jW	
+MASTER::jX	
+MASTER::jY	
+MASTER::jZ	
+MASTER::j`	
+MASTER::ja	
+MASTER::jb	
+MASTER::jc	
+MASTER::jd	
+MASTER::je	
+MASTER::jf	
+MASTER::jg	
+MASTER::jh	
+MASTER::ji	
+MASTER::jj	
+MASTER::jk	
+MASTER::jl	
+MASTER::jm	
+MASTER::jn	
+MASTER::jo	
+MASTER::jp	
+MASTER::jq	
+MASTER::jr	
+MASTER::js	
+MASTER::jt	
+MASTER::ju	
+MASTER::jv	
+MASTER::jw	
+MASTER::jx	
+MASTER::jy	
+MASTER::jz	
+MASTER::k#	
+MASTER::k+	
+MASTER::k;	
+MASTER::k>	
+MASTER::k@	
+MASTER::kA	
+MASTER::kB	
+MASTER::kC	
+MASTER::kD	
+MASTER::kE	
+MASTER::kF	
+MASTER::kG	
+MASTER::kH	
+MASTER::kI	
+MASTER::kJ	
+MASTER::kK	
+MASTER::kL	
+MASTER::kM	
+MASTER::kN	
+MASTER::kO	
+MASTER::kP	
+MASTER::kQ	
+MASTER::kR	
+MASTER::kS	
+MASTER::kT	
+MASTER::kU	
+MASTER::kV	
+MASTER::kW	
+MASTER::kX	
+MASTER::kY	
+MASTER::kZ	
+MASTER::k`	
+MASTER::ka	
+MASTER::ka+	Cか+
+MASTER::ka;ko	Cかっこ
+MASTER::ka@ko	Cかっこ
+MASTER::kaT	Cかt
+MASTER::ka`	Cか`
+MASTER::kakko	Cかっこ
+MASTER::kani	Cかに/かんい
+MASTER::kanni	Cかんい
+MASTER::kaqi	Cかんい
+MASTER::kb	
+MASTER::kc	
+MASTER::kd	
+MASTER::ke	
+MASTER::kf	
+MASTER::kg	
+MASTER::kh	
+MASTER::ki	
+MASTER::kj	
+MASTER::kk	
+MASTER::kl	
+MASTER::km	
+MASTER::kn	
+MASTER::kni	Cかんい
+MASTER::ko	
+MASTER::ko'hi'	Cこーひー
+MASTER::ko'hi-	Cこーひー
+MASTER::ko'hi:	Cこーひー
+MASTER::ko'hi^	Cこーひー
+MASTER::ko-hi'	Cこーひー
+MASTER::ko-hi-	Cこーひー
+MASTER::ko-hi:	Cこーひー
+MASTER::ko-hi^	Cこーひー
+MASTER::ko:hi'	Cこーひー
+MASTER::ko:hi-	Cこーひー
+MASTER::ko:hi:	Cこーひー
+MASTER::ko:hi^	Cこーひー
+MASTER::ko;ka	Cこっか
+MASTER::ko@ka	Cこっか
+MASTER::ko^hi'	Cこーひー
+MASTER::ko^hi-	Cこーひー
+MASTER::ko^hi:	Cこーひー
+MASTER::ko^hi^	Cこーひー
+MASTER::kokka	Cこっか
+MASTER::kp	
+MASTER::kq	
+MASTER::kr	
+MASTER::ks	
+MASTER::kt	
+MASTER::ku	
+MASTER::kumikomi	Cくみこみ
+MASTER::kv	
+MASTER::kw	
+MASTER::kx	
+MASTER::ky	
+MASTER::kz	
+MASTER::kzi	Cかんい
+MASTER::l#	
+MASTER::l+	
+MASTER::l;	
+MASTER::l>	
+MASTER::l@	
+MASTER::lA	
+MASTER::lB	
+MASTER::lC	
+MASTER::lD	
+MASTER::lE	
+MASTER::lF	
+MASTER::lG	
+MASTER::lH	
+MASTER::lI	
+MASTER::lJ	
+MASTER::lK	
+MASTER::lL	
+MASTER::lM	
+MASTER::lN	
+MASTER::lO	
+MASTER::lP	
+MASTER::lQ	
+MASTER::lR	
+MASTER::lS	
+MASTER::lT	
+MASTER::lU	
+MASTER::lV	
+MASTER::lW	
+MASTER::lX	
+MASTER::lY	
+MASTER::lZ	
+MASTER::l`	
+MASTER::la	
+MASTER::lb	
+MASTER::lc	
+MASTER::ld	
+MASTER::le	
+MASTER::lf	
+MASTER::lg	
+MASTER::lh	
+MASTER::li	
+MASTER::lj	
+MASTER::lk	
+MASTER::ll	
+MASTER::lm	
+MASTER::ln	
+MASTER::lo	
+MASTER::lp	
+MASTER::lq	
+MASTER::lr	
+MASTER::ls	
+MASTER::lt	
+MASTER::lu	
+MASTER::lv	
+MASTER::lw	
+MASTER::lx	
+MASTER::ly	
+MASTER::lz	
+MASTER::m#	
+MASTER::m+	
+MASTER::m;	
+MASTER::m>	
+MASTER::m@	
+MASTER::mA	
+MASTER::mB	
+MASTER::mC	
+MASTER::mD	
+MASTER::mE	
+MASTER::mF	
+MASTER::mG	
+MASTER::mH	
+MASTER::mI	
+MASTER::mJ	
+MASTER::mK	
+MASTER::mL	
+MASTER::mM	
+MASTER::mN	
+MASTER::mO	
+MASTER::mP	
+MASTER::mQ	
+MASTER::mR	
+MASTER::mS	
+MASTER::mT	
+MASTER::mU	
+MASTER::mV	
+MASTER::mW	
+MASTER::mX	
+MASTER::mY	
+MASTER::mZ	
+MASTER::m`	
+MASTER::ma	
+MASTER::mb	
+MASTER::mc	
+MASTER::md	
+MASTER::me	
+MASTER::mf	
+MASTER::mg	
+MASTER::mh	
+MASTER::mi	
+MASTER::miR	Cみr
+MASTER::mj	
+MASTER::mk	
+MASTER::ml	
+MASTER::mm	
+MASTER::mn	
+MASTER::mo	
+MASTER::mp	
+MASTER::mq	
+MASTER::mr	
+MASTER::ms	
+MASTER::mt	
+MASTER::mu	
+MASTER::mv	
+MASTER::mw	
+MASTER::mx	
+MASTER::my	
+MASTER::mz	
+MASTER::n#	
+MASTER::n+	
+MASTER::n;	
+MASTER::n>	
+MASTER::n@	
+MASTER::nA	
+MASTER::nB	
+MASTER::nC	
+MASTER::nD	
+MASTER::nE	
+MASTER::nF	
+MASTER::nG	
+MASTER::nH	
+MASTER::nI	
+MASTER::nJ	
+MASTER::nK	
+MASTER::nL	
+MASTER::nM	
+MASTER::nN	
+MASTER::nO	
+MASTER::nP	
+MASTER::nQ	
+MASTER::nR	
+MASTER::nS	
+MASTER::nT	
+MASTER::nU	
+MASTER::nV	
+MASTER::nW	
+MASTER::nX	
+MASTER::nY	
+MASTER::nZ	
+MASTER::n`	
+MASTER::na	
+MASTER::nb	
+MASTER::nc	
+MASTER::nd	
+MASTER::ne	
+MASTER::nf	
+MASTER::ng	
+MASTER::nh	
+MASTER::ni	
+MASTER::nj	
+MASTER::nk	
+MASTER::nl	
+MASTER::nm	
+MASTER::nn	
+MASTER::no	
+MASTER::np	
+MASTER::nq	
+MASTER::nr	
+MASTER::ns	
+MASTER::nt	
+MASTER::nu	
+MASTER::nv	
+MASTER::nw	
+MASTER::nx	
+MASTER::ny	
+MASTER::nz	
+MASTER::o#	
+MASTER::o+	
+MASTER::o;	
+MASTER::o>	
+MASTER::o@	
+MASTER::oA	
+MASTER::oB	
+MASTER::oC	
+MASTER::oD	
+MASTER::oE	
+MASTER::oF	
+MASTER::oG	
+MASTER::oH	
+MASTER::oI	
+MASTER::oJ	
+MASTER::oK	
+MASTER::oL	
+MASTER::oM	
+MASTER::oN	
+MASTER::oO	
+MASTER::oP	
+MASTER::oQ	
+MASTER::oR	
+MASTER::oS	
+MASTER::oT	
+MASTER::oU	
+MASTER::oV	
+MASTER::oW	
+MASTER::oX	
+MASTER::oY	
+MASTER::oZ	
+MASTER::o`	
+MASTER::oa	
+MASTER::ob	
+MASTER::oc	
+MASTER::od	
+MASTER::oe	
+MASTER::of	
+MASTER::og	
+MASTER::oh	
+MASTER::oi	
+MASTER::oj	
+MASTER::ok	
+MASTER::okonaU	Cおこなu
+MASTER::ol	
+MASTER::om	
+MASTER::on	
+MASTER::oo	
+MASTER::op	
+MASTER::oq	
+MASTER::or	
+MASTER::os	
+MASTER::ot	
+MASTER::ou	
+MASTER::ov	
+MASTER::ow	
+MASTER::ox	
+MASTER::oy	
+MASTER::oz	
+MASTER::p#	
+MASTER::p+	
+MASTER::p;	
+MASTER::p>	
+MASTER::p@	
+MASTER::pA	
+MASTER::pB	
+MASTER::pC	
+MASTER::pD	
+MASTER::pE	
+MASTER::pF	
+MASTER::pG	
+MASTER::pH	
+MASTER::pI	
+MASTER::pJ	
+MASTER::pK	
+MASTER::pL	
+MASTER::pM	
+MASTER::pN	
+MASTER::pO	
+MASTER::pP	
+MASTER::pQ	
+MASTER::pR	
+MASTER::pS	
+MASTER::pT	
+MASTER::pU	
+MASTER::pV	
+MASTER::pW	
+MASTER::pX	
+MASTER::pY	
+MASTER::pZ	
+MASTER::p`	
+MASTER::pa	
+MASTER::pb	
+MASTER::pc	
+MASTER::pd	
+MASTER::pe	
+MASTER::pf	
+MASTER::pg	
+MASTER::ph	
+MASTER::pi	
+MASTER::pj	
+MASTER::pk	
+MASTER::pl	
+MASTER::pm	
+MASTER::pn	
+MASTER::po	
+MASTER::pp	
+MASTER::pq	
+MASTER::pr	
+MASTER::ps	
+MASTER::pt	
+MASTER::pu	
+MASTER::pv	
+MASTER::pw	
+MASTER::px	
+MASTER::py	
+MASTER::pz	
+MASTER::q#	
+MASTER::q+	
+MASTER::q;	
+MASTER::q>	
+MASTER::q@	
+MASTER::qA	
+MASTER::qB	
+MASTER::qC	
+MASTER::qD	
+MASTER::qE	
+MASTER::qF	
+MASTER::qG	
+MASTER::qH	
+MASTER::qI	
+MASTER::qJ	
+MASTER::qK	
+MASTER::qL	
+MASTER::qM	
+MASTER::qN	
+MASTER::qO	
+MASTER::qP	
+MASTER::qQ	
+MASTER::qR	
+MASTER::qS	
+MASTER::qT	
+MASTER::qU	
+MASTER::qV	
+MASTER::qW	
+MASTER::qX	
+MASTER::qY	
+MASTER::qZ	
+MASTER::q`	
+MASTER::qa	
+MASTER::qb	
+MASTER::qc	
+MASTER::qd	
+MASTER::qe	
+MASTER::qf	
+MASTER::qg	
+MASTER::qh	
+MASTER::qi	
+MASTER::qj	
+MASTER::qk	
+MASTER::ql	
+MASTER::qm	
+MASTER::qn	
+MASTER::qo	
+MASTER::qp	
+MASTER::qq	
+MASTER::qr	
+MASTER::qs	
+MASTER::qt	
+MASTER::qu	
+MASTER::qv	
+MASTER::qw	
+MASTER::qx	
+MASTER::qy	
+MASTER::qz	
+MASTER::r#	
+MASTER::r+	
+MASTER::r;	
+MASTER::r>	
+MASTER::r@	
+MASTER::rA	
+MASTER::rB	
+MASTER::rC	
+MASTER::rD	
+MASTER::rE	
+MASTER::rF	
+MASTER::rG	
+MASTER::rH	
+MASTER::rI	
+MASTER::rJ	
+MASTER::rK	
+MASTER::rL	
+MASTER::rM	
+MASTER::rN	
+MASTER::rO	
+MASTER::rP	
+MASTER::rQ	
+MASTER::rR	
+MASTER::rS	
+MASTER::rT	
+MASTER::rU	
+MASTER::rV	
+MASTER::rW	
+MASTER::rX	
+MASTER::rY	
+MASTER::rZ	
+MASTER::r`	
+MASTER::ra	
+MASTER::rb	
+MASTER::rc	
+MASTER::rd	
+MASTER::re	
+MASTER::rf	
+MASTER::rg	
+MASTER::rh	
+MASTER::ri	
+MASTER::rj	
+MASTER::rk	
+MASTER::rl	
+MASTER::rm	
+MASTER::rn	
+MASTER::ro	
+MASTER::rp	
+MASTER::rq	
+MASTER::rr	
+MASTER::rs	
+MASTER::rt	
+MASTER::ru	
+MASTER::rv	
+MASTER::rw	
+MASTER::rx	
+MASTER::ry	
+MASTER::rz	
+MASTER::s#	
+MASTER::s+	
+MASTER::s;	
+MASTER::s>	
+MASTER::s@	
+MASTER::sA	
+MASTER::sB	
+MASTER::sC	
+MASTER::sD	
+MASTER::sE	
+MASTER::sF	
+MASTER::sG	
+MASTER::sH	
+MASTER::sI	
+MASTER::sJ	
+MASTER::sK	
+MASTER::sL	
+MASTER::sM	
+MASTER::sN	
+MASTER::sO	
+MASTER::sP	
+MASTER::sQ	
+MASTER::sR	
+MASTER::sS	
+MASTER::sT	
+MASTER::sU	
+MASTER::sV	
+MASTER::sW	
+MASTER::sX	
+MASTER::sY	
+MASTER::sZ	
+MASTER::s`	
+MASTER::sa	
+MASTER::sakf	Cさき
+MASTER::saki	Cさき
+MASTER::saku	Cさく
+MASTER::sb	
+MASTER::sc	
+MASTER::sd	
+MASTER::se	
+MASTER::sf	
+MASTER::sg	
+MASTER::sh	
+MASTER::shizdgdgo	Cしぜんげんご
+MASTER::shizdgdgorikq	Cしぜんげんごりかい
+MASTER::shizdgdgoshori	Cしぜんげんごしょり
+MASTER::shizdgdgosyori	Cしぜんげんごしょり
+MASTER::shizdgdgoxori	Cしぜんげんごしょり
+MASTER::shizengengo	Cしぜんげんご
+MASTER::shizengengorikai	Cしぜんげんごりかい
+MASTER::shizengengoshori	Cしぜんげんごしょり
+MASTER::shizengengosyori	Cしぜんげんごしょり
+MASTER::shizengenngo	Cしぜんげんご
+MASTER::shizengenngorikai	Cしぜんげんごりかい
+MASTER::shizengenngoshori	Cしぜんげんごしょり
+MASTER::shizengenngosyori	Cしぜんげんごしょり
+MASTER::shizengeqgo	Cしぜんげんご
+MASTER::shizengeqgorikai	Cしぜんげんごりかい
+MASTER::shizengeqgoshori	Cしぜんげんごしょり
+MASTER::shizengeqgosyori	Cしぜんげんごしょり
+MASTER::shizenngengo	Cしぜんげんご
+MASTER::shizenngengorikai	Cしぜんげんごりかい
+MASTER::shizenngengoshori	Cしぜんげんごしょり
+MASTER::shizenngengosyori	Cしぜんげんごしょり
+MASTER::shizenngenngo	Cしぜんげんご
+MASTER::shizenngenngorikai	Cしぜんげんごりかい
+MASTER::shizenngenngoshori	Cしぜんげんごしょり
+MASTER::shizenngenngosyori	Cしぜんげんごしょり
+MASTER::shizenngeqgo	Cしぜんげんご
+MASTER::shizenngeqgorikai	Cしぜんげんごりかい
+MASTER::shizenngeqgoshori	Cしぜんげんごしょり
+MASTER::shizenngeqgosyori	Cしぜんげんごしょり
+MASTER::shizeqgengo	Cしぜんげんご
+MASTER::shizeqgengorikai	Cしぜんげんごりかい
+MASTER::shizeqgengoshori	Cしぜんげんごしょり
+MASTER::shizeqgengosyori	Cしぜんげんごしょり
+MASTER::shizeqgenngo	Cしぜんげんご
+MASTER::shizeqgenngorikai	Cしぜんげんごりかい
+MASTER::shizeqgenngoshori	Cしぜんげんごしょり
+MASTER::shizeqgenngosyori	Cしぜんげんごしょり
+MASTER::shizeqgeqgo	Cしぜんげんご
+MASTER::shizeqgeqgorikai	Cしぜんげんごりかい
+MASTER::shizeqgeqgoshori	Cしぜんげんごしょり
+MASTER::shizeqgeqgosyori	Cしぜんげんごしょり
+MASTER::shizfngengo	Cしぜんげんご
+MASTER::shizfngengorikai	Cしぜんげんごりかい
+MASTER::shizfngengoshori	Cしぜんげんごしょり
+MASTER::shizfngengosyori	Cしぜんげんごしょり
+MASTER::shizfngenngo	Cしぜんげんご
+MASTER::shizfngenngorikai	Cしぜんげんごりかい
+MASTER::shizfngenngoshori	Cしぜんげんごしょり
+MASTER::shizfngenngosyori	Cしぜんげんごしょり
+MASTER::shizfngeqgo	Cしぜんげんご
+MASTER::shizfngeqgorikai	Cしぜんげんごりかい
+MASTER::shizfngeqgoshori	Cしぜんげんごしょり
+MASTER::shizfngeqgosyori	Cしぜんげんごしょり
+MASTER::shizfnngengo	Cしぜんげんご
+MASTER::shizfnngengorikai	Cしぜんげんごりかい
+MASTER::shizfnngengoshori	Cしぜんげんごしょり
+MASTER::shizfnngengosyori	Cしぜんげんごしょり
+MASTER::shizfnngenngo	Cしぜんげんご
+MASTER::shizfnngenngorikai	Cしぜんげんごりかい
+MASTER::shizfnngenngoshori	Cしぜんげんごしょり
+MASTER::shizfnngenngosyori	Cしぜんげんごしょり
+MASTER::shizfnngeqgo	Cしぜんげんご
+MASTER::shizfnngeqgorikai	Cしぜんげんごりかい
+MASTER::shizfnngeqgoshori	Cしぜんげんごしょり
+MASTER::shizfnngeqgosyori	Cしぜんげんごしょり
+MASTER::shizfqgengo	Cしぜんげんご
+MASTER::shizfqgengorikai	Cしぜんげんごりかい
+MASTER::shizfqgengoshori	Cしぜんげんごしょり
+MASTER::shizfqgengosyori	Cしぜんげんごしょり
+MASTER::shizfqgenngo	Cしぜんげんご
+MASTER::shizfqgenngorikai	Cしぜんげんごりかい
+MASTER::shizfqgenngoshori	Cしぜんげんごしょり
+MASTER::shizfqgenngosyori	Cしぜんげんごしょり
+MASTER::shizfqgeqgo	Cしぜんげんご
+MASTER::shizfqgeqgorikai	Cしぜんげんごりかい
+MASTER::shizfqgeqgoshori	Cしぜんげんごしょり
+MASTER::shizfqgeqgosyori	Cしぜんげんごしょり
+MASTER::si	
+MASTER::sizdgdgo	Cしぜんげんご
+MASTER::sizdgdgorikq	Cしぜんげんごりかい
+MASTER::sizdgdgoshori	Cしぜんげんごしょり
+MASTER::sizdgdgosyori	Cしぜんげんごしょり
+MASTER::sizdgdgoxori	Cしぜんげんごしょり
+MASTER::sizengengo	Cしぜんげんご
+MASTER::sizengengorikai	Cしぜんげんごりかい
+MASTER::sizengengoshori	Cしぜんげんごしょり
+MASTER::sizengengosyori	Cしぜんげんごしょり
+MASTER::sizengenngo	Cしぜんげんご
+MASTER::sizengenngorikai	Cしぜんげんごりかい
+MASTER::sizengenngoshori	Cしぜんげんごしょり
+MASTER::sizengenngosyori	Cしぜんげんごしょり
+MASTER::sizengeqgo	Cしぜんげんご
+MASTER::sizengeqgorikai	Cしぜんげんごりかい
+MASTER::sizengeqgoshori	Cしぜんげんごしょり
+MASTER::sizengeqgosyori	Cしぜんげんごしょり
+MASTER::sizenngengo	Cしぜんげんご
+MASTER::sizenngengorikai	Cしぜんげんごりかい
+MASTER::sizenngengoshori	Cしぜんげんごしょり
+MASTER::sizenngengosyori	Cしぜんげんごしょり
+MASTER::sizenngenngo	Cしぜんげんご
+MASTER::sizenngenngorikai	Cしぜんげんごりかい
+MASTER::sizenngenngoshori	Cしぜんげんごしょり
+MASTER::sizenngenngosyori	Cしぜんげんごしょり
+MASTER::sizenngeqgo	Cしぜんげんご
+MASTER::sizenngeqgorikai	Cしぜんげんごりかい
+MASTER::sizenngeqgoshori	Cしぜんげんごしょり
+MASTER::sizenngeqgosyori	Cしぜんげんごしょり
+MASTER::sizeqgengo	Cしぜんげんご
+MASTER::sizeqgengorikai	Cしぜんげんごりかい
+MASTER::sizeqgengoshori	Cしぜんげんごしょり
+MASTER::sizeqgengosyori	Cしぜんげんごしょり
+MASTER::sizeqgenngo	Cしぜんげんご
+MASTER::sizeqgenngorikai	Cしぜんげんごりかい
+MASTER::sizeqgenngoshori	Cしぜんげんごしょり
+MASTER::sizeqgenngosyori	Cしぜんげんごしょり
+MASTER::sizeqgeqgo	Cしぜんげんご
+MASTER::sizeqgeqgorikai	Cしぜんげんごりかい
+MASTER::sizeqgeqgoshori	Cしぜんげんごしょり
+MASTER::sizeqgeqgosyori	Cしぜんげんごしょり
+MASTER::sizfngengo	Cしぜんげんご
+MASTER::sizfngengorikai	Cしぜんげんごりかい
+MASTER::sizfngengoshori	Cしぜんげんごしょり
+MASTER::sizfngengosyori	Cしぜんげんごしょり
+MASTER::sizfngenngo	Cしぜんげんご
+MASTER::sizfngenngorikai	Cしぜんげんごりかい
+MASTER::sizfngenngoshori	Cしぜんげんごしょり
+MASTER::sizfngenngosyori	Cしぜんげんごしょり
+MASTER::sizfngeqgo	Cしぜんげんご
+MASTER::sizfngeqgorikai	Cしぜんげんごりかい
+MASTER::sizfngeqgoshori	Cしぜんげんごしょり
+MASTER::sizfngeqgosyori	Cしぜんげんごしょり
+MASTER::sizfnngengo	Cしぜんげんご
+MASTER::sizfnngengorikai	Cしぜんげんごりかい
+MASTER::sizfnngengoshori	Cしぜんげんごしょり
+MASTER::sizfnngengosyori	Cしぜんげんごしょり
+MASTER::sizfnngenngo	Cしぜんげんご
+MASTER::sizfnngenngorikai	Cしぜんげんごりかい
+MASTER::sizfnngenngoshori	Cしぜんげんごしょり
+MASTER::sizfnngenngosyori	Cしぜんげんごしょり
+MASTER::sizfnngeqgo	Cしぜんげんご
+MASTER::sizfnngeqgorikai	Cしぜんげんごりかい
+MASTER::sizfnngeqgoshori	Cしぜんげんごしょり
+MASTER::sizfnngeqgosyori	Cしぜんげんごしょり
+MASTER::sizfqgengo	Cしぜんげんご
+MASTER::sizfqgengorikai	Cしぜんげんごりかい
+MASTER::sizfqgengoshori	Cしぜんげんごしょり
+MASTER::sizfqgengosyori	Cしぜんげんごしょり
+MASTER::sizfqgenngo	Cしぜんげんご
+MASTER::sizfqgenngorikai	Cしぜんげんごりかい
+MASTER::sizfqgenngoshori	Cしぜんげんごしょり
+MASTER::sizfqgenngosyori	Cしぜんげんごしょり
+MASTER::sizfqgeqgo	Cしぜんげんご
+MASTER::sizfqgeqgorikai	Cしぜんげんごりかい
+MASTER::sizfqgeqgoshori	Cしぜんげんごしょり
+MASTER::sizfqgeqgosyori	Cしぜんげんごしょり
+MASTER::sj	
+MASTER::sk	
+MASTER::sl	
+MASTER::sm	
+MASTER::sn	
+MASTER::so	
+MASTER::sp	
+MASTER::sq	
+MASTER::sr	
+MASTER::ss	
+MASTER::st	
+MASTER::su	
+MASTER::sv	
+MASTER::sw	
+MASTER::sx	
+MASTER::sy	
+MASTER::sz	
+MASTER::t#	
+MASTER::t+	
+MASTER::t;	
+MASTER::t>	
+MASTER::t@	
+MASTER::tA	
+MASTER::tB	
+MASTER::tC	
+MASTER::tD	
+MASTER::tE	
+MASTER::tF	
+MASTER::tG	
+MASTER::tH	
+MASTER::tI	
+MASTER::tJ	
+MASTER::tK	
+MASTER::tL	
+MASTER::tM	
+MASTER::tN	
+MASTER::tO	
+MASTER::tP	
+MASTER::tQ	
+MASTER::tR	
+MASTER::tS	
+MASTER::tT	
+MASTER::tU	
+MASTER::tV	
+MASTER::tW	
+MASTER::tX	
+MASTER::tY	
+MASTER::tZ	
+MASTER::t`	
+MASTER::ta	
+MASTER::tb	
+MASTER::tc	
+MASTER::td	
+MASTER::te	
+MASTER::tf	
+MASTER::tg	
+MASTER::th	
+MASTER::ti	
+MASTER::tj	
+MASTER::tk	
+MASTER::tl	
+MASTER::tm	
+MASTER::tn	
+MASTER::to	
+MASTER::tp	
+MASTER::tq	
+MASTER::tr	
+MASTER::ts	
+MASTER::tt	
+MASTER::tu	
+MASTER::tv	
+MASTER::tw	
+MASTER::tx	
+MASTER::ty	
+MASTER::tz	
+MASTER::u#	
+MASTER::u+	
+MASTER::u;	
+MASTER::u>	
+MASTER::u@	
+MASTER::uA	
+MASTER::uB	
+MASTER::uC	
+MASTER::uD	
+MASTER::uE	
+MASTER::uF	
+MASTER::uG	
+MASTER::uH	
+MASTER::uI	
+MASTER::uJ	
+MASTER::uK	
+MASTER::uL	
+MASTER::uM	
+MASTER::uN	
+MASTER::uO	
+MASTER::uP	
+MASTER::uQ	
+MASTER::uR	
+MASTER::uS	
+MASTER::uT	
+MASTER::uU	
+MASTER::uV	
+MASTER::uW	
+MASTER::uX	
+MASTER::uY	
+MASTER::uZ	
+MASTER::u`	
+MASTER::ua	
+MASTER::ub	
+MASTER::uc	
+MASTER::ud	
+MASTER::ue	
+MASTER::uf	
+MASTER::ug	
+MASTER::uh	
+MASTER::ui	
+MASTER::uj	
+MASTER::uk	
+MASTER::ul	
+MASTER::um	
+MASTER::un	
+MASTER::uo	
+MASTER::up	
+MASTER::uq	
+MASTER::ur	
+MASTER::us	
+MASTER::ut	
+MASTER::uu	
+MASTER::uv	
+MASTER::uw	
+MASTER::ux	
+MASTER::uy	
+MASTER::uz	
+MASTER::v#	
+MASTER::v+	
+MASTER::v;	
+MASTER::v>	
+MASTER::v@	
+MASTER::vA	
+MASTER::vB	
+MASTER::vC	
+MASTER::vD	
+MASTER::vE	
+MASTER::vF	
+MASTER::vG	
+MASTER::vH	
+MASTER::vI	
+MASTER::vJ	
+MASTER::vK	
+MASTER::vL	
+MASTER::vM	
+MASTER::vN	
+MASTER::vO	
+MASTER::vP	
+MASTER::vQ	
+MASTER::vR	
+MASTER::vS	
+MASTER::vT	
+MASTER::vU	
+MASTER::vV	
+MASTER::vW	
+MASTER::vX	
+MASTER::vY	
+MASTER::vZ	
+MASTER::v`	
+MASTER::va	
+MASTER::vb	
+MASTER::vc	
+MASTER::vd	
+MASTER::ve	
+MASTER::vf	
+MASTER::vg	
+MASTER::vh	
+MASTER::vi	
+MASTER::vj	
+MASTER::vk	
+MASTER::vl	
+MASTER::vm	
+MASTER::vn	
+MASTER::vo	
+MASTER::vp	
+MASTER::vq	
+MASTER::vr	
+MASTER::vs	
+MASTER::vt	
+MASTER::vu	
+MASTER::vv	
+MASTER::vw	
+MASTER::vx	
+MASTER::vy	
+MASTER::vz	
+MASTER::w#	
+MASTER::w+	
+MASTER::w;	
+MASTER::w>	
+MASTER::w@	
+MASTER::wA	
+MASTER::wB	
+MASTER::wC	
+MASTER::wD	
+MASTER::wE	
+MASTER::wF	
+MASTER::wG	
+MASTER::wH	
+MASTER::wI	
+MASTER::wJ	
+MASTER::wK	
+MASTER::wL	
+MASTER::wM	
+MASTER::wN	
+MASTER::wO	
+MASTER::wP	
+MASTER::wQ	
+MASTER::wR	
+MASTER::wS	
+MASTER::wT	
+MASTER::wU	
+MASTER::wV	
+MASTER::wW	
+MASTER::wX	
+MASTER::wY	
+MASTER::wZ	
+MASTER::w`	
+MASTER::wa	
+MASTER::wake	Cわけ
+MASTER::watashiH	Cわたしh
+MASTER::watasiH	Cわたしh
+MASTER::wb	
+MASTER::wc	
+MASTER::wd	
+MASTER::we	
+MASTER::wf	
+MASTER::wg	
+MASTER::wh	
+MASTER::wi	
+MASTER::wj	
+MASTER::wk	
+MASTER::wl	
+MASTER::wm	
+MASTER::wn	
+MASTER::wo	Cを
+MASTER::wp	
+MASTER::wq	
+MASTER::wr	
+MASTER::ws	
+MASTER::wt	
+MASTER::wtshiH	Cわたしh
+MASTER::wtsiH	Cわたしh
+MASTER::wtxiH	Cわたしh
+MASTER::wu	
+MASTER::wv	
+MASTER::ww	
+MASTER::wx	
+MASTER::wy	
+MASTER::wz	
+MASTER::x#	
+MASTER::x+	
+MASTER::x;	
+MASTER::x>	
+MASTER::x@	
+MASTER::xA	
+MASTER::xB	
+MASTER::xC	
+MASTER::xD	
+MASTER::xE	
+MASTER::xF	
+MASTER::xG	
+MASTER::xH	
+MASTER::xI	
+MASTER::xJ	
+MASTER::xK	
+MASTER::xL	
+MASTER::xM	
+MASTER::xN	
+MASTER::xO	
+MASTER::xP	
+MASTER::xQ	
+MASTER::xR	
+MASTER::xS	
+MASTER::xT	
+MASTER::xU	
+MASTER::xV	
+MASTER::xW	
+MASTER::xX	
+MASTER::xY	
+MASTER::xZ	
+MASTER::x`	
+MASTER::xa	
+MASTER::xb	
+MASTER::xc	
+MASTER::xd	
+MASTER::xe	
+MASTER::xf	
+MASTER::xg	
+MASTER::xh	
+MASTER::xi	
+MASTER::xizdgdgo	Cしぜんげんご
+MASTER::xizdgdgorikq	Cしぜんげんごりかい
+MASTER::xizdgdgoshori	Cしぜんげんごしょり
+MASTER::xizdgdgosyori	Cしぜんげんごしょり
+MASTER::xizdgdgoxori	Cしぜんげんごしょり
+MASTER::xj	
+MASTER::xk	
+MASTER::xl	
+MASTER::xm	
+MASTER::xn	
+MASTER::xo	
+MASTER::xp	
+MASTER::xq	
+MASTER::xr	
+MASTER::xs	
+MASTER::xt	
+MASTER::xu	
+MASTER::xv	
+MASTER::xw	
+MASTER::xx	
+MASTER::xy	
+MASTER::xz	
+MASTER::y#	
+MASTER::y+	
+MASTER::y;	
+MASTER::y>	
+MASTER::y@	
+MASTER::yA	
+MASTER::yB	
+MASTER::yC	
+MASTER::yD	
+MASTER::yE	
+MASTER::yF	
+MASTER::yG	
+MASTER::yH	
+MASTER::yI	
+MASTER::yJ	
+MASTER::yK	
+MASTER::yL	
+MASTER::yM	
+MASTER::yN	
+MASTER::yO	
+MASTER::yP	
+MASTER::yQ	
+MASTER::yR	
+MASTER::yS	
+MASTER::yT	
+MASTER::yU	
+MASTER::yV	
+MASTER::yW	
+MASTER::yX	
+MASTER::yY	
+MASTER::yZ	
+MASTER::y`	
+MASTER::ya	
+MASTER::yb	
+MASTER::yc	
+MASTER::yd	
+MASTER::ye	
+MASTER::yf	
+MASTER::yg	
+MASTER::yh	
+MASTER::yi	
+MASTER::yj	
+MASTER::yk	
+MASTER::yl	
+MASTER::ym	
+MASTER::yn	
+MASTER::yo	
+MASTER::yp	
+MASTER::yq	
+MASTER::yr	
+MASTER::ys	
+MASTER::yt	
+MASTER::yu	
+MASTER::yv	
+MASTER::yw	
+MASTER::yx	
+MASTER::yy	
+MASTER::yz	
+MASTER::z#	
+MASTER::z+	
+MASTER::z;	
+MASTER::z>	
+MASTER::z@	
+MASTER::zA	
+MASTER::zB	
+MASTER::zC	
+MASTER::zD	
+MASTER::zE	
+MASTER::zF	
+MASTER::zG	
+MASTER::zH	
+MASTER::zI	
+MASTER::zJ	
+MASTER::zK	
+MASTER::zL	
+MASTER::zM	
+MASTER::zN	
+MASTER::zO	
+MASTER::zP	
+MASTER::zQ	
+MASTER::zR	
+MASTER::zS	
+MASTER::zT	
+MASTER::zU	
+MASTER::zV	
+MASTER::zW	
+MASTER::zX	
+MASTER::zY	
+MASTER::zZ	
+MASTER::z`	
+MASTER::za	
+MASTER::zb	
+MASTER::zc	
+MASTER::zd	
+MASTER::ze	
+MASTER::zf	
+MASTER::zg	
+MASTER::zh	
+MASTER::zi	
+MASTER::zj	
+MASTER::zk	
+MASTER::zl	
+MASTER::zm	
+MASTER::zn	
+MASTER::zo	
+MASTER::zp	
+MASTER::zq	
+MASTER::zr	
+MASTER::zs	
+MASTER::zt	
+MASTER::zu	
+MASTER::zv	
+MASTER::zw	
+MASTER::zx	
+MASTER::zy	
+MASTER::zz	
+MASTER::{	/｛
+MASTER::{ku}	=kumikomf =kumikomu
+MASTER::{nn}	=nn =nnn =nnnn =nnq
+MASTER::{nq}	=nq
+MASTER::{qn}	=qn =qnn
+MASTER::{qq}	=qq
+MASTER::{sh}	=shita
+MASTER::{si}	=sita
+MASTER::{st}	=st
+MASTER::あu	/合;(一致) 話が合う/会;人と会う/遭;(偶然、特によくないことにあう) 事故に遭う/逢;(人と|運命的にあう) 巡り逢う/遇;≒遭う/會;「会」の旧字
+MASTER::いっち	/一致/イッチ
+MASTER::いんにょう	/飲尿/廴繞;[部首]
+MASTER::いんよう	/引用/飲用/陰陽
+MASTER::えr	/得/獲;NB:「とr」と同形/選;NB:「よr」「すぐr」と同形
+MASTER::おこなu	/行/行な;※送り位置補正
+MASTER::か+	/勝/買/飼/刈;(crop)草を刈る
+MASTER::か`	/勝/買/飼/刈;(crop)草を刈る
+MASTER::かt	/勝/買/飼/刈;(crop)草を刈る
+MASTER::かっこ	/確固/括弧/各個/各戸/確乎/羯鼓;雅楽の打楽器/格好/『』/【】/［］/〔〕/〈〉/《》/｛｝/「」/（）/‘’/“”
+MASTER::かに	/蟹/可児/蠏
+MASTER::かんい	/簡易/官位/冠位;-十二階/漢医;漢方医/敢為/官医/寛衣/換位/簡意
+MASTER::くみこみ	/組み込み/組込
+MASTER::こっか	/国家;state/国歌;anthem.「-斉唱」/国花/骨化/國家;「国」旧字/黒化/刻下/】/）/］/』
+MASTER::こーひー	/コーヒー
+MASTER::さき	/先/崎/左記/前/早紀/沙樹/早岐/沙貴/咲/埼/尖/嵜/碕/早記
+MASTER::さく	/策/柵/作/佐久;地名/朔;朔日 ⇔晦/槊;ほこ/搾;搾取/昨;昨夜/咋;(くう)/窄;狭窄/酢;酢酸/柞;いすのき/炸;炸裂/筰;山田耕筰/削;削除/索;検索/錯;錯誤/筴/縒;より/鑿/做;「作」の異体字/簀;す/嘖;さいな・む/捉;(漢音) とら・える/齪;齷齪/冊;(慣用音)竹冊/册;「冊」の旧字/辟;?/乍;?
+MASTER::しぜんげんご	/自然言語
+MASTER::しぜんげんごしょり	/自然言語処理
+MASTER::しぜんげんごりかい	/自然言語理解
+MASTER::へんか	/変化/返歌
+MASTER::へんかs	/変化
+MASTER::へんかん	/変換/返還
+MASTER::みr	/見/観;(字義:みわたす)/視;(字義:じっとみる)/診;(diagnose) 患者を診る/看;(nurse) 病母を看る/觀;「観」の旧字
+MASTER::わけ	/訳/和気;地名/理由;当て字/分け/分/譯;「訳」の旧字/戯奴
+MASTER::わたしh	/私
+MASTER::を	/小/緒/雄/男/牡/尾/悪/汚/惡;「悪」の旧字(人名用漢字)

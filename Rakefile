@@ -143,7 +143,7 @@ task :bench do
   sh "time ruby -I ./lib /usr/local/bin/nendo ./test/henkan-bench.nnd"
 end
 
-task :alljisyo => [ :jisyoS, :jisyoL, :loadS, :loadL ]
+task :alljisyo => [ :jisyoS, :jisyoL, :load, :dump  ]
 
 task :jisyoS do
   sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.L.201008           >  ./data/SEKKA-JISYO.SMALL"
@@ -162,17 +162,14 @@ task :jisyoL do
   sh "time ./bin/sekka-jisyo convert ./data/SKK-JISYO.hiragana-phrase2   >> ./data/SEKKA-JISYO.LARGE"
 end
 
-task :loadS do
+task :load do
   sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.SMALL  ./data/SEKKA-JISYO.SMALL.tch"
-end
-
-task :loadL do
   sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.LARGE  ./data/SEKKA-JISYO.LARGE.tch"
 end
 
 task :dump do
-  sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.SMALL.tch > ./data/SEKKA-JISYO.SMALL.dump"
-  sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.LARGE.tch > ./data/SEKKA-JISYO.LARGE.dump"
+  sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.SMALL.tch > ./data/SEKKA-JISYO.SMALL.tsv"
+  sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.LARGE.tch > ./data/SEKKA-JISYO.LARGE.tsv"
 end
 
 

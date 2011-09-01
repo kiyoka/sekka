@@ -185,7 +185,7 @@
     (kvs.open filename)
     (for-each
      (lambda (key)
-       (f.puts (+ key " " (kvs.get key))))
+       (f.puts (+ key "\t" (kvs.get key))))
      (kvs.keys.sort))
     (kvs.close)))
 
