@@ -16,8 +16,9 @@ DICTURL = "http://sumibi.org/sekka/dict/" + SekkaVersion.version
 PIDFILE = DICTDIR + "/pid"
 
 TC_FILE = DICTDIR + "/SEKKA-JISYO.SMALL.tch"
+TSVFILE = DICTDIR + "/SEKKA-JISYO.SMALL.tsv"
 SUMFILE = DICTDIR + "/SEKKA-JISYO.SMALL.md5"
-TC_URL  = DICTURL + "/SEKKA-JISYO.SMALL.tch"
+TSVURL  = DICTURL + "/SEKKA-JISYO.SMALL.tsv"
 SUMURL  = DICTURL + "/SEKKA-JISYO.SMALL.md5"
 
 TC_FILE_LIST = [ DICTDIR + "/SEKKA-JISYO.CUSTOM.tch",
@@ -50,7 +51,7 @@ def main
   if not File.exist?( TC_FILE )
     STDERR.printf( "Info: Downloading SEKKA-JISYO\n" )
     # 辞書をダウンロードする
-    cmd = sprintf( "curl -o %s %s",    TC_FILE, TC_URL )
+    cmd = sprintf( "curl -o %s %s",    TSVFILE, TSVURL )
     STDERR.printf( "Command : %s\n", cmd )
     system( cmd )
     cmd = sprintf( "curl -o %s %s",    SUMFILE, SUMURL )
@@ -59,7 +60,7 @@ def main
 
     # チェックサムを確認する
     downloadSum = ""
-    open( TC_FILE ) { |f|
+    open( TSVFILE ) { |f|
       dataBody = f.read
       downloadSum = Digest::MD5.hexdigest( dataBody )
     }
@@ -68,13 +69,26 @@ def main
       STDERR.printf( "   downloaded file's MD5 : %s\n", downloadSum )
       STDERR.printf( "             correct MD5 : %s\n", correctSum   )
       if downloadSum == correctSum
-        STDERR.printf( "Info:  downloaded file [%s] verify OK.\n", TC_FILE )
+        STDERR.printf( "Info:  downloaded file [%s] verify OK.\n", TSVFILE )
       else
-        STDERR.printf( "Error: downloaded file [%s] verify NG.\n", TC_FILE )
-        File.unlink( TC_FILE )
+        STDERR.printf( "Error: downloaded file [%s] verify NG.\n", TSVFILE )
+        File.unlink( TSVFILE )
         exit( 1 )
       end
     }
+
+    # tsvファイルをTokyo CabinetのHashDB化する
+    STDERR.printf( "Info: Converting TSV file to Tokyo Cabinet *.tch\n" )
+    cmd = sprintf( "tchmgr importtsv %s %s", TC_FILE, TSVFILE )
+    STDERR.printf( "Command : %s\n", cmd )
+    system( cmd )
+
+    # 中身を確認する(tchmgrで読めるものができている)
+    STDERR.printf( "Info: inform *.tch\n" )
+    cmd = sprintf( "tchmgr inform %s", TC_FILE )
+    STDERR.printf( "Command : %s\n", cmd )
+    system( cmd )
+
   end
 
   # 辞書ディレクトリに存在している辞書ファイルリストを作る
