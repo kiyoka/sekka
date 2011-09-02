@@ -201,12 +201,6 @@ task :rackup do
   sh "ruby -I ./lib ./bin/sekka-server"
 end
 
-task :rackup_nohup do
-  sh "nohup ruby -I ./lib ./bin/sekka-server > ./rackup.log &"
-  sh "sleep 3"
-  sh "tail -f ./rackup.log"
-end
-
 task :katakanago do
   sh "nkf --euc ./data/SKK-JISYO.L.201008 > tmpfile.euc"
   sh "/usr/share/skktools/filters/abbrev-convert.rb -k tmpfile.euc | skkdic-expr2 | iconv -f=EUC-JP -t=UTF-8 > ./data/SKK-JISYO.L.hira-kata"
