@@ -123,11 +123,14 @@ task :test do
     files << "./test/henkan-main.nnd  dbm"
   when 'tokyocabinet'
     files << "./test/henkan-main.nnd  tokyocabinet"
+  when 'redis'
+    files << "./test/henkan-main.nnd  redis"
   when 'pure'
     files << "./test/henkan-main.nnd  pure"
   else
     files << "./test/henkan-main.nnd  dbm"
     files << "./test/henkan-main.nnd  tokyocabinet"
+    files << "./test/henkan-main.nnd  redis"
     files << "./test/henkan-main.nnd  pure"
   end
   files << "./test/memcache.nnd"

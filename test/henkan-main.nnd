@@ -51,6 +51,8 @@
 (cond
  ((eq? dbtype 'tokyocabinet)
   (set! target "./test.tch"))
+ ((eq? dbtype 'redis)
+  (set! target ""))
  ((eq? dbtype 'dbm)
   (set! target "./test"))
  ((eq? dbtype 'pure)
@@ -112,6 +114,9 @@
  ((eq? dbtype 'tokyocabinet)
   (kvs.open target)
   (require "tokyocabinet"))
+ ((eq? dbtype 'redis)
+  (kvs.open target)
+  (require "redis"))
  ((eq? dbtype 'dbm)
   (kvs.open target)
   (require "dbm"))
@@ -121,8 +126,6 @@
   (error "memcached interface is obsolute."))
  (else
   (errorf "Unsupported db type [%s]" (symbol->string dbtype))))
-
-(define db (kvs._db))
 
 
 ;;-------------------------------------------------------------------
@@ -171,63 +174,63 @@
 (test-section "simple db fetch")
 (test* "db fetch 1"
        "Cへんかん"
-       (. (hash-table-get db "MASTER::henkan" #f) force_encoding "UTF-8"))
+       (kvs.get "MASTER::henkan"))
 
 (test* "db fetch 2"
        "Cかに/かんい"
-       (. (hash-table-get db "MASTER::kani" #f) force_encoding "UTF-8"))
+       (kvs.get "MASTER::kani"))
 
 (test* "db fetch 3"
        "Cかんい"
-       (. (hash-table-get db "MASTER::kanni" #f) force_encoding "UTF-8"))
+       (kvs.get "MASTER::kanni"))
 
 (test* "db fetch 4"
        #f
-       (hash-table-get db "MASTER::aaaa" #f))
+       (kvs.get "MASTER::aaaa"))
 
 (test* "db fetch 5"
        "Cへんかんえんじん"
-       (. (hash-table-get db "dummy::henkanenjin" #f) force_encoding "UTF-8"))
+       (kvs.get "dummy::henkanenjin"))
 
 (test* "db fetch 6"
        "ka;ko ka@ko kakko kani kanni kaqi"
-       (. (hash-table-get db "MASTER::(ka)" #f) force_encoding "UTF-8"))
+       (kvs.get "MASTER::(ka)"))
 
 (test* "db fetch 7"
        "ka+ kaT ka`"
-       (. (hash-table-get db "MASTER::(KA)" #f) force_encoding "UTF-8"))
+       (kvs.get "MASTER::(KA)"))
 
 (test* "db fetch 8"
        "#kaime #kara# #kqme #kr#"
-       (. (hash-table-get db "MASTER::(#k)" #f) force_encoding "UTF-8"))
+       (kvs.get "MASTER::(#k)"))
 
 (test* "db fetch 9"
        "burogu+ buroguR buroguT burogu`"
-       (. (hash-table-get db "dummy::(BU)" #f) force_encoding "UTF-8"))
+       (kvs.get "dummy::(BU)"))
 
 (test* "db fetch 10"
        "/ユーザー辞書"
-       (. (hash-table-get db "dummy::ゆーざーじしょ" #f) force_encoding "UTF-8"))
+       (kvs.get "dummy::ゆーざーじしょ"))
 
 (test* "db fetch 11"
        "yu'za'jisho yu'za'jisyo yu'za'jixo yu'za'zisho yu'za'zisyo yu'za'zixo yu'za-jisho yu'za-jisyo yu'za-jixo yu'za-zisho yu'za-zisyo yu'za-zixo yu'za:jisho yu'za:jisyo yu'za:jixo yu'za:zisho yu'za:zisyo yu'za:zixo yu'za^jisho yu'za^jisyo yu'za^jixo yu'za^zisho yu'za^zisyo yu'za^zixo yu'zc'jisho yu'zc'jisyo yu'zc'jixo yu'zc'zisho yu'zc'zisyo yu'zc'zixo yu'zc-jisho yu'zc-jisyo yu'zc-jixo yu'zc-zisho yu'zc-zisyo yu'zc-zixo yu'zc:jisho yu'zc:jisyo yu'zc:jixo yu'zc:zisho yu'zc:zisyo yu'zc:zixo yu'zc^jisho yu'zc^jisyo yu'zc^jixo yu'zc^zisho yu'zc^zisyo yu'zc^zixo yu-za'jisho yu-za'jisyo yu-za'jixo yu-za'zisho yu-za'zisyo yu-za'zixo yu-za-jisho yu-za-jisyo yu-za-jixo yu-za-zisho yu-za-zisyo yu-za-zixo yu-za:jisho yu-za:jisyo yu-za:jixo yu-za:zisho yu-za:zisyo yu-za:zixo yu-za^jisho yu-za^jisyo yu-za^jixo yu-za^zisho yu-za^zisyo yu-za^zixo yu-zc'jisho yu-zc'jisyo yu-zc'jixo yu-zc'zisho yu-zc'zisyo yu-zc'zixo yu-zc-jisho yu-zc-jisyo yu-zc-jixo yu-zc-zisho yu-zc-zisyo yu-zc-zixo yu-zc:jisho yu-zc:jisyo yu-zc:jixo yu-zc:zisho yu-zc:zisyo yu-zc:zixo yu-zc^jisho yu-zc^jisyo yu-zc^jixo yu-zc^zisho yu-zc^zisyo yu-zc^zixo yu:za'jisho yu:za'jisyo yu:za'jixo yu:za'zisho yu:za'zisyo yu:za'zixo yu:za-jisho yu:za-jisyo yu:za-jixo yu:za-zisho yu:za-zisyo yu:za-zixo yu:za:jisho yu:za:jisyo yu:za:jixo yu:za:zisho yu:za:zisyo yu:za:zixo yu:za^jisho yu:za^jisyo yu:za^jixo yu:za^zisho yu:za^zisyo yu:za^zixo yu:zc'jisho yu:zc'jisyo yu:zc'jixo yu:zc'zisho yu:zc'zisyo yu:zc'zixo yu:zc-jisho yu:zc-jisyo yu:zc-jixo yu:zc-zisho yu:zc-zisyo yu:zc-zixo yu:zc:jisho yu:zc:jisyo yu:zc:jixo yu:zc:zisho yu:zc:zisyo yu:zc:zixo yu:zc^jisho yu:zc^jisyo yu:zc^jixo yu:zc^zisho yu:zc^zisyo yu:zc^zixo yu^za'jisho yu^za'jisyo yu^za'jixo yu^za'zisho yu^za'zisyo yu^za'zixo yu^za-jisho yu^za-jisyo yu^za-jixo yu^za-zisho yu^za-zisyo yu^za-zixo yu^za:jisho yu^za:jisyo yu^za:jixo yu^za:zisho yu^za:zisyo yu^za:zixo yu^za^jisho yu^za^jisyo yu^za^jixo yu^za^zisho yu^za^zisyo yu^za^zixo yu^zc'jisho yu^zc'jisyo yu^zc'jixo yu^zc'zisho yu^zc'zisyo yu^zc'zixo yu^zc-jisho yu^zc-jisyo yu^zc-jixo yu^zc-zisho yu^zc-zisyo yu^zc-zixo yu^zc:jisho yu^zc:jisyo yu^zc:jixo yu^zc:zisho yu^zc:zisyo yu^zc:zixo yu^zc^jisho yu^zc^jisyo yu^zc^jixo yu^zc^zisho yu^zc^zisyo yu^zc^zixo"
-       (. (hash-table-get db "dummy::(yu)" #f) force_encoding "UTF-8"))
+       (kvs.get "dummy::(yu)"))
 
 (test* "db fetch 12"
        "する"
-       (. (hash-table-get db "dummy::=sr" #f) force_encoding "UTF-8"))
+       (kvs.get "dummy::=sr"))
 
 (test* "db fetch 13"
        "=suru"
-       (. (hash-table-get db "dummy::{su}" #f) force_encoding "UTF-8"))
+       (kvs.get "dummy::{su}"))
 
 (test* "db fetch 14"
        "したい"
-       (. (hash-table-get db "dummy::=shitai" #f) force_encoding "UTF-8"))
+       (kvs.get "dummy::=shitai"))
 
 (test* "db fetch 15"
        "=shita =shitai"
-       (. (hash-table-get db "dummy::{sh}" #f) force_encoding "UTF-8"))
+       (kvs.get "dummy::{sh}"))
 
 
 
@@ -241,11 +244,11 @@
 
 (test* "check user dict 1"
        "/エントリA/エントリB/エントリC"
-       (. (hash-table-get db "dummy2::てすとようえんとり" #f) force_encoding "UTF-8"))
+       (kvs.get "dummy2::てすとようえんとり"))
 
 (test* "check user dict 2"
        "tesutoyouenntori tesutoyouentori tesutoyoueqtori tesutoyowhuenntori tesutoyowhuentori tesutoyowhueqtori tesutoypenntori tesutoypentori tesutoypeqtori"
-       (. (hash-table-get db "dummy2::(te)" #f) force_encoding "UTF-8"))
+       (kvs.get "dummy2::(te)"))
 
 (test* "flush user dict"
        12
@@ -254,11 +257,11 @@
 ;; getに失敗しないといけない。
 (test* "check user dict 3"
        :no-entry
-       (hash-table-get db "dummy2::てすとようえんとり" :no-entry))
+       (kvs.get "dummy2::てすとようえんとり" :no-entry))
 
 (test* "check user dict 4"
        :no-entry
-       (hash-table-get db "dummy2::(te)" :no-entry))
+       (kvs.get "dummy2::(te)" :no-entry))
 
 (test*  "register user dict 2"
         #t
@@ -268,11 +271,11 @@
 ;; "エントリB" という単語が消えないといけない。
 (test* "check user dict 5"
        "/エントリA/エントリC"
-       (. (hash-table-get db "dummy2::てすとようえんとり" #f) force_encoding "UTF-8"))
+       (kvs.get "dummy2::てすとようえんとり"))
 
 (test* "check user dict 6"
        "tesutoyouenntori tesutoyouentori tesutoyoueqtori tesutoyowhuenntori tesutoyowhuentori tesutoyowhueqtori tesutoypenntori tesutoypentori tesutoypeqtori"
-       (. (hash-table-get db "dummy2::(te)" #f) force_encoding "UTF-8"))
+       (kvs.get "dummy2::(te)"))
 
 
 ;;-------------------------------------------------------------------
@@ -1132,7 +1135,7 @@
 
 (test* "DB check after henkan kakutei 1"
        "/返還/変換"
-       (. (hash-table-get db (+ userid "::へんかん") #f) force_encoding "UTF-8"))
+       (kvs.get (+ userid "::へんかん")))
 
 (test* "henkan kakutei(for Elisp) 2"
        '(("変換" nil "へんかん" j 0) ("返還" nil "へんかん" j 1) ("変化" nil "へんか" j 2) ("返歌" nil "へんか" j 3) ("へんかん" nil "henkan" h 4) ("ヘンカン" nil "henkan" k 5) ("へにんあん" nil "henkan" h 6) ("ヘニンアン" nil "henkan" k 7) ("Ｈｅｎｋａｎ" nil "Henkan" z 8) ("Henkan" nil "Henkan" l 9))
@@ -1142,7 +1145,7 @@
 
 (test* "DB check after henkan kakutei 2"
        "/変換/返還"
-       (. (hash-table-get db (+ userid "::へんかん") #f) force_encoding "UTF-8"))
+       (kvs.get (+ userid "::へんかん")))
 
 (test* "henkan kakutei(for Elisp) 3"
        '(("デベロッパ" nil "developer" j 0) ("デベロッパー" nil "developer" j 1) ("ディベロッパー" nil "developer" j 2) ("ｄｅｖｅｌｏｐｅｒ" nil "developer" z 3) ("developer" nil "developer" l 4))
