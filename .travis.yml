@@ -3,8 +3,5 @@ rvm:
  - 1.9.3
  - ruby-head
 
-branches:
-  only:
-    - master
 env:
  - DB=pure
