@@ -52,7 +52,7 @@
  ((eq? dbtype 'tokyocabinet)
   (set! target "./test.tch"))
  ((eq? dbtype 'redis)
-  (set! target ""))
+  (set! target "localhost"))
  ((eq? dbtype 'dbm)
   (set! target "./test"))
  ((eq? dbtype 'pure)
