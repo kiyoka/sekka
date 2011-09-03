@@ -42,6 +42,13 @@ class Kvs
       @tcFlag = false
     end
 
+    @redisFlag = true
+    begin
+      require 'redis'
+    rescue LoadError
+      @redisFlag = false
+    end
+
     @dbmFlag = true
     begin
       require 'dbm'
@@ -58,6 +65,13 @@ class Kvs
         raise RuntimeError, "Kvs.new() missed require( 'tokyocabinet' )."
       end
 
+    when :redis
+      if @redisFlag
+        @db = Redis.new( )
+      else
+        raise RuntimeError, "Kvs.new() missed require( 'redis' )."
+      end
+
     when :memcache
       # do nothing
 
@@ -67,7 +81,7 @@ class Kvs
       else
         raise RuntimeError, "Kvs.new() missed require( 'dbm' )."
       end
-      
+
       # do nothing
 
     when :pure
@@ -83,6 +97,8 @@ class Kvs
       if not @db.open( name, TokyoCabinet::HDB::OWRITER | TokyoCabinet::HDB::OCREAT )
         raise RuntimeError, sprintf( "TokyoCabinet::HDB.open error: file=%s", name )
       end
+    when :redis
+      # nothing to do
     when :memcache
       @db = MemCache.new( name )
     when :dbm
@@ -103,8 +119,11 @@ class Kvs
   end
 
   def fixdb( )
-    if not @db.optimize( )
-      raise RuntimeError, sprintf( "TokyoCabinet::HDB.optimize error: file=%s", name )
+    case @dbtype
+    when :tokyocabinet
+      if not @db.optimize( )
+        raise RuntimeError, sprintf( "TokyoCabinet::HDB.optimize error: file=%s", name )
+      end
     end
     true
   end
@@ -119,7 +138,7 @@ class Kvs
   def pure_put!( key, value, timeout = 0 )
     if 0 < key.size
       case @dbtype
-      when :tokyocabinet, :dbm
+      when :tokyocabinet, :dbm, :redis
         @db[ key.force_encoding("ASCII-8BIT") ] = value.force_encoding("ASCII-8BIT")
       when :memcache
         @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"), timeout )
@@ -146,13 +165,21 @@ class Kvs
   end
 
   def delete( key )
-    @db.delete( key )
+    case @dbtype
+    when :redis
+      @db.del( key )
+    else
+      @db.delete( key )
+    end
+    true
   end
 
   def clear()
     case @dbtype
     when :tokyocabinet, :dbm, :pure
       @db.clear
+    when :redis
+      @db.flushall
     when :memcache
       # do nothing
     else
@@ -163,7 +190,7 @@ class Kvs
   # return array of key string
   def keys()
     case @dbtype
-    when :tokyocabinet, :dbm
+    when :tokyocabinet, :dbm, :redis
       @db.keys.map { |k|
         k.force_encoding("UTF-8")
       }
@@ -182,6 +209,10 @@ class Kvs
       @db.fwmkeys( prefix ).each { |k|
         k.force_encoding("UTF-8")
       }
+    when :redis
+      @db.keys( prefix + "*" ).each { |k|
+        k.force_encoding("UTF-8")
+      }
     when :memcache
       raise RuntimeError, "Kvs#forward_match_keys method was not implemented for memcache."
     when :dbm, :pure
@@ -197,7 +228,7 @@ class Kvs
     case @dbtype
     when :tokyocabinet, :dbm
       @db.close
-    when :memcache
+    when :memcache, :redis
       # do nothign
     when :pure
       File.open( @name, "w" ) { |f|
