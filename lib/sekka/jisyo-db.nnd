@@ -190,6 +190,27 @@
     (kvs.close)))
 
 
+(define (restore-sekka-jisyo-f f filename)
+  (define (restore f kvs)
+    (let loop ([line (f.readline.chomp)])
+      (let* (
+             [key-value
+              (to-list (line.split #/[\t]+/))]
+             [key    (first key-value)]
+             [value  (if (> 2 (length key-value))
+                         ""
+                         (second key-value))])
+        (kvs.put! key value))
+      (when (not (f.eof))
+        (loop (f.readline.chomp)))))
+    
+  (let1 kvs (Kvs.new (get-kvs-type))
+    (kvs.open filename)
+    (kvs.clear)
+    (restore f kvs)
+    (kvs.close)))
+
+
 (define (openSekkaJisyo dictSource cacheSource)
   (when (not (rxmatch #/tch$/ dictSource))
     (set-kvs-type 'memcache))

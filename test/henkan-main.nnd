@@ -91,20 +91,39 @@
 (with-open "./test/sekka-dump-out-1.txt"
            (lambda (f)
              (let ((_input (f.read))
-                   (_output (StringIO.new)))
-               (_output.set_encoding "utf-8")
+                   (_output1 (StringIO.new))
+                   (_output2 (StringIO.new)))
+               (_output1.set_encoding "utf-8")
+               (_output2.set_encoding "utf-8")
                (when (or (eq? dbtype 'tokyocabinet)
+                         (eq? dbtype 'redis)
                          (eq? dbtype 'dbm)
                          (eq? dbtype 'pure))
                  (test-section "dump db")
+
                  (test* "dump DB to SEKKA jisyo file. (1)"
                         _input
                         (begin
-                          (dump-sekka-jisyo-f _output target)
+                          (dump-sekka-jisyo-f _output1 target)
                           (with-open "./test/sekka-dump-out-1.tmp"
-                                     (lambda (f) (f.write (_output.string)))
+                                     (lambda (f) (f.write (_output1.string)))
                                      "w")
-                          (_output.string)))))))
+                          (_output1.string)))
+                 
+                 (test* "dump/restore DB to SEKKA jisyo file. (1)"
+                        _input
+                        (begin
+                          ;; ---- RESTORE ----
+                          (f.rewind)
+                          (restore-sekka-jisyo-f f target)
+                          
+                          ;; ---- DUMP    ----
+                          (dump-sekka-jisyo-f _output2 target)
+                          (with-open "./test/sekka-dump-out-2.tmp"
+                                     (lambda (f) (f.write (_output2.string)))
+                                     "w")
+                          (_output2.string)))))))
+                 
   
 
 (test-section "Open the test-suite DB")
