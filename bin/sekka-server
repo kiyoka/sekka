@@ -92,10 +92,26 @@ def main
   end
 
   # 辞書ディレクトリに存在している辞書ファイルリストを作る
+  dictType = :tokyocabinet
   list = TC_FILE_LIST.select { |name| File.exist?( name ) }
+  if ENV.has_key?( 'SEKKA_DB' )
+    m = ENV['SEKKA_DB'].match( /^redis:(.*)$/ )
+    if m
+      dictType = :redis
+      if 0 == m[1].size
+        list.unshift( "localhost" )
+      else
+        list.unshift( m[1] )
+      end
+    elsif m = ENV['SEKKA_DB'].match( /^tokyo[a-z]+$/ )
+      dictType = :tokyocabinet
+    else
+      STDERR.printf( "Error: env var SEKKA_DB requires [redis:hostname] or [redis:] or [tokyocabinet]" )
+    end
+  end
 
   # 設定項目をConfigオブジェクトに代入
-  SekkaServer::Config.setup( list[0], MEMCACHED, 12929, proxyHost, proxyPort )
+  SekkaServer::Config.setup( dictType, list[0], MEMCACHED, 12929, proxyHost, proxyPort )
 
   # サーバースクリプトのrootディレクトリへ移動
   FileUtils.cd(File.dirname(__FILE__) + "/../")

@@ -211,9 +211,8 @@
     (kvs.close)))
 
 
-(define (openSekkaJisyo dictSource cacheSource)
-  (when (not (rxmatch #/tch$/ dictSource))
-    (set-kvs-type 'memcache))
+(define (openSekkaJisyo dictType dictSource cacheSource)
+  (set-kvs-type dictType)
   (let1 kvs   (Kvs.new (get-kvs-type))
     (kvs.open     #?=dictSource)
     (let1 cachesv (if cacheSource
