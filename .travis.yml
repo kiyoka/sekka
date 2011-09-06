@@ -5,5 +5,5 @@ rvm:
 
 env:
  - DB=pure
- - DB=redis
+# - DB=redis
 
