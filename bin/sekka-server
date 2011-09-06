@@ -125,12 +125,14 @@ def main
     open( sprintf( "|redis-cli -h %s  get %s", dictSource, key )) { |f|
       result = f.readline.chomp
       unless key == result
-        # TODO: tsvファイルをuploadする。
-        #        STDERR.printf( "Info: Uploading...\n" )
-        #        cmd = sprintf( " inform %s", TC_FILE )
-        #        STDERR.printf( "Command : %s\n", cmd )
-        #        system( cmd )
-        STDERR.printf( "Info: [NG]\n" )
+        # tsvファイルをuploadする。
+        STDERR.printf( "Info: Uploading...\n" )
+        cmd = sprintf( "cat %s | sekka-jisyo restore %s:%s", TSVFILE, dictType, dictSource )
+        STDERR.printf( "Command : %s\n", cmd )
+        system( cmd )
+        cmd = sprintf( "redis-cli -h %s  set %s %s", dictSource, key, key )
+        STDERR.printf( "Command : %s\n", cmd )
+        system( cmd )
       end
       STDERR.printf( "Info: [OK]\n" )
     }
