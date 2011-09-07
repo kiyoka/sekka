@@ -35,10 +35,12 @@
 ;;;
 (use srfi-1)
 (require "sekka/kvs")
+(require "sekka/sekkaversion")
 (use sekka.util)
 
-(define masterid "MASTER")
-(define workid   "WORK")
+(define masterid  "MASTER")
+(define workid    "WORK")
+(define versionid "SEKKA::VERSION")
 
 (define alphabet-string "abcdefghijklmnopqrstuvwxyz>@;#")
 (define alphabet-lower-list (to-list (alphabet-string.split "")))
@@ -177,6 +179,7 @@
     (kvs.clear)
     (create-keylist kvs f)
     (setup-ready-made-keylist kvs keylist)
+    (kvs.put! versionid SekkaVersion.version)
     (kvs.close)))
 
 
