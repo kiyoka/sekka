@@ -103,39 +103,48 @@ def main
 
   case dictType
   when :tokyocabinet
-    # tsvファイルをTokyo CabinetのHashDB化する
-    STDERR.printf( "Info: Converting TSV file to Tokyo Cabinet *.tch\n" )
-    cmd = sprintf( "tchmgr importtsv %s %s", TC_FILE, TSVFILE )
-    STDERR.printf( "Command : %s\n", cmd )
-    system( cmd )
+    # .tchファイルが存在すうるか調べる
+    list = TC_FILE_LIST.select { |name| File.exist?( name ) }
 
-    # 中身を確認する(tchmgrで読めるものができている)
-    STDERR.printf( "Info: inform *.tch\n" )
-    cmd = sprintf( "tchmgr inform %s", TC_FILE )
-    STDERR.printf( "Command : %s\n", cmd )
-    system( cmd )
+    if 0 == list.size
+      # tsvファイルをTokyo CabinetのHashDB化する
+      STDERR.printf( "Info: Converting TSV file to Tokyo Cabinet *.tch\n" )
+      cmd = sprintf( "tchmgr importtsv %s %s", TC_FILE, TSVFILE )
+      STDERR.printf( "Command : %s\n", cmd )
+      system( cmd )
+
+      # 中身を確認する(tchmgrで読めるものができている)
+      STDERR.printf( "Info: inform *.tch\n" )
+      cmd = sprintf( "tchmgr inform %s", TC_FILE )
+      STDERR.printf( "Command : %s\n", cmd )
+      system( cmd )
+    end
 
     # 存在する.tchファイルの中で一番最初のファイルを使う。
     list = TC_FILE_LIST.select { |name| File.exist?( name ) }
-    dictSrouce = list[0]
+    dictSource = list[0]
   when :redis
     key = "SEKKA::dict_version"
     # redisサーバーに辞書が投入済みか確認する
-    STDERR.printf( "Info: Checking uploaded SEKKA jisyo on redis server...\n" )
-    open( sprintf( "|redis-cli -h %s  get %s", dictSource, key )) { |f|
-      result = f.readline.chomp
-      unless key == result
-        # tsvファイルをuploadする。
-        STDERR.printf( "Info: Uploading...\n" )
-        cmd = sprintf( "cat %s | sekka-jisyo restore %s:%s", TSVFILE, dictType, dictSource )
-        STDERR.printf( "Command : %s\n", cmd )
-        system( cmd )
-        cmd = sprintf( "redis-cli -h %s  set %s %s", dictSource, key, key )
-        STDERR.printf( "Command : %s\n", cmd )
-        system( cmd )
-      end
-      STDERR.printf( "Info: [OK]\n" )
-    }
+    STDERR.printf( "Info: Checking SEKKA jisyo on redis server...\n" )
+    require 'redis'
+    require 'sekka/kvs'
+    redis = Kvs.new( :redis )
+    begin
+      redis.open( dictSource )
+      result = redis.get( key )
+    rescue => e
+      STDERR.printf( "Error: sekka-server can't connect to redis(port=%s)...\n", dictSource )
+      raise e
+    end
+    unless result
+      # tsvファイルをuploadする。
+      STDERR.printf( "Info: Uploading...\n" )
+      cmd = sprintf( "cat %s | sekka-jisyo restore %s:%s", TSVFILE, dictType, dictSource )
+      STDERR.printf( "Command : %s\n", cmd )
+      system( cmd )
+    end
+    STDERR.printf( "Info: [OK]\n" )
   else
     raise RuntimeError, sprintf( "Error: unknown dictType [%s]", dictType )
   end
