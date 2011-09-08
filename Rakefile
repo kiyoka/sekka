@@ -68,7 +68,6 @@ task :compile do
   vh = Jeweler::VersionHelper.new "."
   open( "./lib/sekka/sekkaversion.rb", "w" ) {|f|
     f.puts(   "class SekkaVersion" )
-    f.puts(   "  include Singleton" )
     f.puts(   "  def self.version" )
     f.printf( "    \"%s\"\n", vh )
     f.puts(   "  end" )
