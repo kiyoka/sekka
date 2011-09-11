@@ -196,27 +196,27 @@
 
 
 (define (restore-sekka-jisyo-f f filename)
-  (define (restore f kvs progress)
-    (let loop ([line (f.readline.chomp)])
-      (let* (
-             [key-value
-              (to-list (line.split #/[\t]+/))]
-             [key    (first key-value)]
-             [value  (if (> 2 (length key-value))
-                         ""
-                         (second key-value))])
-        (kvs.put! key value)
-        (progress.inc))
-      (when (not (f.eof))
-        (loop (f.readline.chomp)))))
-    
-  (let1 total (f.readlines.size)
-    (f.rewind)
+  (define (restore arr kvs progress)
+    (for-each
+     (lambda (line)
+       (let1 line (line.chomp)
+         (let* (
+                [key-value
+                 (to-list (line.split #/[\t]+/))]
+                [key    (first key-value)]
+                [value  (if (> 2 (length key-value))
+                            ""
+                            (second key-value))])
+           (kvs.put! key value)
+           (progress.inc))))
+     arr))
+
+  (let1 arr (f.readlines)
     (let ([kvs (Kvs.new (get-kvs-type))]
-          [progress (ProgressBar.new "Restore" total STDERR)])
+          [progress (ProgressBar.new "Restore" (arr.size) STDERR)])
       (kvs.open filename)
       (kvs.clear)
-      (restore f kvs progress)
+      (restore arr kvs progress)
       (kvs.close))))
 
 
