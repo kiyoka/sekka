@@ -53,7 +53,7 @@ begin
     gemspec.add_dependency( "memcache-client" )
     gemspec.add_dependency( "nendo", "= 0.5.3" )
     gemspec.add_dependency( "rack" )
-    gemspec.add_dependency( "tokyocabinet" )
+    gemspec.add_dependency( "ruby-progressbar" )
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install jeweler"

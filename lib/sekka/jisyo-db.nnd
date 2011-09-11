@@ -34,6 +34,7 @@
 ;;;  $Id: 
 ;;;
 (use srfi-1)
+(require "progressbar")
 (require "sekka/kvs")
 (require "sekka/sekkaversion")
 (use sekka.util)
@@ -193,8 +194,9 @@
     (kvs.close)))
 
 
+
 (define (restore-sekka-jisyo-f f filename)
-  (define (restore f kvs)
+  (define (restore f kvs progress)
     (let loop ([line (f.readline.chomp)])
       (let* (
              [key-value
@@ -203,15 +205,19 @@
              [value  (if (> 2 (length key-value))
                          ""
                          (second key-value))])
-        (kvs.put! key value))
+        (kvs.put! key value)
+        (progress.inc))
       (when (not (f.eof))
         (loop (f.readline.chomp)))))
     
-  (let1 kvs (Kvs.new (get-kvs-type))
-    (kvs.open filename)
-    (kvs.clear)
-    (restore f kvs)
-    (kvs.close)))
+  (let1 total (f.readlines.size)
+    (f.rewind)
+    (let ([kvs (Kvs.new (get-kvs-type))]
+          [progress (ProgressBar.new "Restore" total STDERR)])
+      (kvs.open filename)
+      (kvs.clear)
+      (restore f kvs progress)
+      (kvs.close))))
 
 
 (define (openSekkaJisyo dictType dictSource cacheSource)
