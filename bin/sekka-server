@@ -140,7 +140,7 @@ def main
     unless result
       # tsvファイルをuploadする。
       STDERR.printf( "Info: Uploading...\n" )
-      cmd = sprintf( "sekka-jisyo restore %s %s:%s", TSVFILE, TSVFILE, dictType, dictSource )
+      cmd = sprintf( "sekka-jisyo restore %s %s:%s", TSVFILE, dictType, dictSource )
       STDERR.printf( "Command : %s\n", cmd )
       system( cmd )
     end
