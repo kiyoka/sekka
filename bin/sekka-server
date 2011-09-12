@@ -135,7 +135,7 @@ def main
       result = redis.get( key )
     rescue => e
       STDERR.printf( "Error: sekka-server can't connect to redis(port=%s)...\n", dictSource )
-      raise e
+      exit 1
     end
     unless result
       # tsvファイルをuploadする。
