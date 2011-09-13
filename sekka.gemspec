@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{sekka}
-  s.version = "0.9.1"
+  s.version = "0.9.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kiyoka Nishiyama"]
-  s.date = %q{2011-09-02}
+  s.date = %q{2011-09-11}
   s.description = %q{Sekka is a SKK like input method. Sekka server provides REST Based API. If you are SKK user, let's try it.}
   s.email = %q{kiyoka@sumibi.org}
   s.executables = ["sekka-jisyo", "sekka-server", "sekka-benchmark", "sekka-path"]
@@ -74,6 +74,8 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<nendo>, [">= 0"])
       s.add_runtime_dependency(%q<json>, [">= 0"])
       s.add_runtime_dependency(%q<rake>, [">= 0"])
+      s.add_runtime_dependency(%q<redis>, [">= 0"])
+      s.add_runtime_dependency(%q<ruby-progressbar>, [">= 0"])
       s.add_development_dependency(%q<rubyforge>, [">= 0"])
       s.add_runtime_dependency(%q<eventmachine>, [">= 0"])
       s.add_runtime_dependency(%q<fuzzy-string-match>, [">= 0"])
@@ -81,7 +83,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<memcache-client>, [">= 0"])
       s.add_runtime_dependency(%q<nendo>, ["= 0.5.3"])
       s.add_runtime_dependency(%q<rack>, [">= 0"])
-      s.add_runtime_dependency(%q<tokyocabinet>, [">= 0"])
+      s.add_runtime_dependency(%q<ruby-progressbar>, [">= 0"])
     else
       s.add_dependency(%q<rspec>, [">= 0"])
       s.add_dependency(%q<fuzzy-string-match>, [">= 0"])
@@ -90,6 +92,8 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<nendo>, [">= 0"])
       s.add_dependency(%q<json>, [">= 0"])
       s.add_dependency(%q<rake>, [">= 0"])
+      s.add_dependency(%q<redis>, [">= 0"])
+      s.add_dependency(%q<ruby-progressbar>, [">= 0"])
       s.add_dependency(%q<rubyforge>, [">= 0"])
       s.add_dependency(%q<eventmachine>, [">= 0"])
       s.add_dependency(%q<fuzzy-string-match>, [">= 0"])
@@ -97,7 +101,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<memcache-client>, [">= 0"])
       s.add_dependency(%q<nendo>, ["= 0.5.3"])
       s.add_dependency(%q<rack>, [">= 0"])
-      s.add_dependency(%q<tokyocabinet>, [">= 0"])
+      s.add_dependency(%q<ruby-progressbar>, [">= 0"])
     end
   else
     s.add_dependency(%q<rspec>, [">= 0"])
@@ -107,6 +111,8 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<nendo>, [">= 0"])
     s.add_dependency(%q<json>, [">= 0"])
     s.add_dependency(%q<rake>, [">= 0"])
+    s.add_dependency(%q<redis>, [">= 0"])
+    s.add_dependency(%q<ruby-progressbar>, [">= 0"])
     s.add_dependency(%q<rubyforge>, [">= 0"])
     s.add_dependency(%q<eventmachine>, [">= 0"])
     s.add_dependency(%q<fuzzy-string-match>, [">= 0"])
@@ -114,7 +120,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<memcache-client>, [">= 0"])
     s.add_dependency(%q<nendo>, ["= 0.5.3"])
     s.add_dependency(%q<rack>, [">= 0"])
-    s.add_dependency(%q<tokyocabinet>, [">= 0"])
+    s.add_dependency(%q<ruby-progressbar>, [">= 0"])
   end
 end
 

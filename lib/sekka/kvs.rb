@@ -66,9 +66,7 @@ class Kvs
       end
 
     when :redis
-      if @redisFlag
-        @db = Redis.new( )
-      else
+      if not @redisFlag
         raise RuntimeError, "Kvs.new() missed require( 'redis' )."
       end
 
@@ -98,7 +96,7 @@ class Kvs
         raise RuntimeError, sprintf( "TokyoCabinet::HDB.open error: file=%s", name )
       end
     when :redis
-      # nothing to do
+      @db = Redis.new( :host => name )
     when :memcache
       @db = MemCache.new( name )
     when :dbm

@@ -34,11 +34,14 @@
 ;;;  $Id: 
 ;;;
 (use srfi-1)
+(require "progressbar")
 (require "sekka/kvs")
+(require "sekka/sekkaversion")
 (use sekka.util)
 
-(define masterid "MASTER")
-(define workid   "WORK")
+(define masterid  "MASTER")
+(define workid    "WORK")
+(define versionid "SEKKA::VERSION")
 
 (define alphabet-string "abcdefghijklmnopqrstuvwxyz>@;#")
 (define alphabet-lower-list (to-list (alphabet-string.split "")))
@@ -177,6 +180,7 @@
     (kvs.clear)
     (create-keylist kvs f)
     (setup-ready-made-keylist kvs keylist)
+    (kvs.put! versionid SekkaVersion.version)
     (kvs.close)))
 
 
@@ -190,9 +194,43 @@
     (kvs.close)))
 
 
-(define (openSekkaJisyo dictSource cacheSource)
-  (when (not (rxmatch #/tch$/ dictSource))
-    (set-kvs-type 'memcache))
+
+(define (restore-sekka-jisyo-f f filename-or-hostname)
+  (define (file-length f)
+    (let1 total 0
+      (for-each
+       (lambda (x)
+         (set! total (+ 1 total)))
+       f)
+      (f.rewind)
+      total))
+    
+  (define (restore f kvs progress)
+    (let loop ([line (f.readline.chomp)])
+      (let* (
+             [key-value
+              (to-list (line.split #/[\t]+/))]
+             [key    (first key-value)]
+             [value  (if (> 2 (length key-value))
+                         ""
+                         (second key-value))])
+        (kvs.put! key value)
+        (progress.inc))
+      (when (not (f.eof))
+        (loop (f.readline.chomp)))))
+
+
+  (let1 total (file-length f)
+    (let ([kvs (Kvs.new (get-kvs-type))]
+          [progress (ProgressBar.new "Restore" total STDERR)])
+      (kvs.open filename-or-hostname)
+      (kvs.clear)
+      (restore f kvs progress)
+      (kvs.close))))
+
+
+(define (openSekkaJisyo dictType dictSource cacheSource)
+  (set-kvs-type dictType)
   (let1 kvs   (Kvs.new (get-kvs-type))
     (kvs.open     #?=dictSource)
     (let1 cachesv (if cacheSource

@@ -6,4 +6,5 @@ gem "memcache-client"
 gem "nendo"
 gem "json"
 gem "rake"
-
+gem "redis"
+gem "ruby-progressbar"

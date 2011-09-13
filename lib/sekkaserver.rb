@@ -54,7 +54,8 @@ module SekkaServer
       @core.evalStr( "(use sekka.henkan)" )
       @core.evalStr( '(define (writeToString sexp) (write-to-string sexp))' )
       @core.evalStr( '(export-to-ruby writeToString)' )
-      (@kvs,@cachesv) = @core.openSekkaJisyo( SekkaServer::Config.dictSource,
+      (@kvs,@cachesv) = @core.openSekkaJisyo( SekkaServer::Config.dictType,
+                                              SekkaServer::Config.dictSource,
                                               SekkaServer::Config.cacheSource )
       @queue = EM::Queue.new
       @mutex = Mutex.new
@@ -62,6 +63,7 @@ module SekkaServer
       STDERR.puts(   "----- Sekka Server Started -----" )
       STDERR.printf( "  Sekka version  : %s\n", SekkaVersion.version            )
       STDERR.printf( "  Nendo version  : %s\n", Nendo::Core.version             )
+      STDERR.printf( "  dict-type      : %s\n", SekkaServer::Config.dictType    )
       STDERR.printf( "  dict-db        : %s\n", SekkaServer::Config.dictSource  )
       STDERR.printf( "  memcached      : %s\n", SekkaServer::Config.cacheSource )
       STDERR.printf( "  listenPort     : %s\n", SekkaServer::Config.listenPort  )

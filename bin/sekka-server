@@ -27,6 +27,26 @@ TC_FILE_LIST = [ DICTDIR + "/SEKKA-JISYO.CUSTOM.tch",
 
 MEMCACHED = "localhost:11211"                # memcahced
 
+def getSekkaDbInfo( env )
+  if env.has_key?( 'SEKKA_DB' )
+    m = env['SEKKA_DB'].match( /^redis:(.*)$/ )
+    if m
+      dictSource = if 0 == m[1].size
+                    dictSource = "localhost"
+                  else
+                    dictSource = m[1]
+                  end
+      [ :redis, dictSource ]
+    elsif m = ENV['SEKKA_DB'].match( /^tokyo[a-z]+$/ )
+      [ :tokyocabinet, nil ]
+    else
+      raise RuntimeError, "Error: env var SEKKA_DB requires [redis:hostname] or [redis:] or [tokyocabinet]"
+    end
+  else
+    [ :tokyocabinet, nil ]
+  end
+end
+
 
 def main
   if not File.directory?( DICTDIR )
@@ -48,7 +68,7 @@ def main
     proxyHost = uri.host
   end
 
-  if not File.exist?( TC_FILE )
+  if not File.exist?( TSVFILE )
     STDERR.printf( "Info: Downloading SEKKA-JISYO\n" )
     # 辞書をダウンロードする
     cmd = sprintf( "curl -o %s %s",    TSVFILE, TSVURL )
@@ -76,26 +96,61 @@ def main
         exit( 1 )
       end
     }
-
-    # tsvファイルをTokyo CabinetのHashDB化する
-    STDERR.printf( "Info: Converting TSV file to Tokyo Cabinet *.tch\n" )
-    cmd = sprintf( "tchmgr importtsv %s %s", TC_FILE, TSVFILE )
-    STDERR.printf( "Command : %s\n", cmd )
-    system( cmd )
-
-    # 中身を確認する(tchmgrで読めるものができている)
-    STDERR.printf( "Info: inform *.tch\n" )
-    cmd = sprintf( "tchmgr inform %s", TC_FILE )
-    STDERR.printf( "Command : %s\n", cmd )
-    system( cmd )
-
   end
 
-  # 辞書ディレクトリに存在している辞書ファイルリストを作る
-  list = TC_FILE_LIST.select { |name| File.exist?( name ) }
+  # 環境変数から、DBの接続先情報を取得する。
+  ( dictType, dictSource ) = getSekkaDbInfo( ENV )
+
+  case dictType
+  when :tokyocabinet
+    # .tchファイルが存在すうるか調べる
+    list = TC_FILE_LIST.select { |name| File.exist?( name ) }
+
+    if 0 == list.size
+      # tsvファイルをTokyo CabinetのHashDB化する
+      STDERR.printf( "Info: Converting TSV file to Tokyo Cabinet *.tch\n" )
+      cmd = sprintf( "tchmgr importtsv %s %s", TC_FILE, TSVFILE )
+      STDERR.printf( "Command : %s\n", cmd )
+      system( cmd )
+
+      # 中身を確認する(tchmgrで読めるものができている)
+      STDERR.printf( "Info: inform *.tch\n" )
+      cmd = sprintf( "tchmgr inform %s", TC_FILE )
+      STDERR.printf( "Command : %s\n", cmd )
+      system( cmd )
+    end
+
+    # 存在する.tchファイルの中で一番最初のファイルを使う。
+    list = TC_FILE_LIST.select { |name| File.exist?( name ) }
+    dictSource = list[0]
+  when :redis
+    key = "SEKKA::dict_version"
+    # redisサーバーに辞書が投入済みか確認する
+    STDERR.printf( "Info: Checking SEKKA jisyo on redis server...\n" )
+    require 'redis'
+    require 'sekka/kvs'
+    redis = Kvs.new( :redis )
+    begin
+      redis.open( dictSource )
+      result = redis.get( key )
+    rescue => e
+      STDERR.printf( "Error: sekka-server can't connect to redis(port=%s)...\n", dictSource )
+      exit 1
+    end
+    unless result
+      # tsvファイルをuploadする。
+      STDERR.printf( "Info: Uploading...\n" )
+      cmd = sprintf( "sekka-jisyo restore %s %s:%s", TSVFILE, dictType, dictSource )
+      STDERR.printf( "Command : %s\n", cmd )
+      system( cmd )
+    end
+    STDERR.printf( "Info: [OK]\n" )
+  else
+    raise RuntimeError, sprintf( "Error: unknown dictType [%s]", dictType )
+  end
 
   # 設定項目をConfigオブジェクトに代入
-  SekkaServer::Config.setup( list[0], MEMCACHED, 12929, proxyHost, proxyPort )
+  SekkaServer::Config.setup( dictType, dictSource, MEMCACHED, 12929, proxyHost, proxyPort )
 
   # サーバースクリプトのrootディレクトリへ移動
   FileUtils.cd(File.dirname(__FILE__) + "/../")
