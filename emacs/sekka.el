@@ -1371,8 +1371,8 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	   ;; qキーで無変換+スペースを入力する
 	   (cond
 	    ((string= " " (char-to-string (preceding-char)))	 
-	     ;; 直前の文字がスペースなら、なにもしない
-	     )
+	     ;; 2回目のキー入力で本来のsekka-muhenkan-keyで定義された文字を挿入する
+	     (insert sekka-muhenkan-key))
 	    (t
 	     ;; 無変換で進むために、スペースを開ける。
 	     (sekka-insert-space 1)))
