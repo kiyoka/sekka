@@ -109,6 +109,11 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   :type  'boolean
   :group 'sekka)
 
+(defcustom sekka-muhenkan-key "q"
+  "*Non-nil であれば、リアルタイムガイド表示中はqキーで無変換のままスペースを挿入する。q以外のキーも設定可能。
+但し、アルファベットのようにバッファにinsert可能な文字のみ設定可能。"
+  :type  'string
+  :group 'sekka)
 
 
 (defface sekka-guide-face
@@ -1359,6 +1364,21 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	      (sekka-insert-space arg))))))
 
 
+(defun sekka-muhenkan-key-init-function ()
+  (define-key global-map sekka-muhenkan-key
+    '(lambda (&optional arg)(interactive "P")
+       (if (< 0 sekka-timer-rest)
+	   ;; qキーで無変換+スペースを入力する
+	   (cond
+	    ((string= " " (char-to-string (preceding-char)))	 
+	     ;; 直前の文字がスペースなら、なにもしない
+	     )
+	    (t
+	     ;; 無変換で進むために、スペースを開ける。
+	     (sekka-insert-space 1)))
+	 (insert sekka-muhenkan-key)))))
+
+
 (defun sekka-realtime-guide ()
   "リアルタイムで変換中のガイドを出す
 sekka-modeがONの間中呼び出される可能性がある。"
@@ -1484,6 +1504,8 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
     (add-hook 'sekka-mode-hook 'sekka-sticky-shift-init-function))
 
   (add-hook 'sekka-mode-hook 'sekka-spacekey-init-function)
+  (when sekka-muhenkan-key
+    (add-hook 'sekka-mode-hook 'sekka-muhenkan-key-init-function))
 
   (when sekka-mode (run-hooks 'sekka-mode-hook))
 
