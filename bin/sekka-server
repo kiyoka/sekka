@@ -124,7 +124,7 @@ def main
     list = TC_FILE_LIST.select { |name| File.exist?( name ) }
     dictSource = list[0]
   when :redis
-    key = "SEKKA::dict_version"
+    key = "SEKKA::VERSION"
     # redisサーバーに辞書が投入済みか確認する
     STDERR.printf( "Info: Checking SEKKA jisyo on redis server...\n" )
     require 'redis'
