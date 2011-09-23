@@ -302,15 +302,24 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 ;; 接続先を次候補のsekka-serverに切りかえる
 ;;
 (defun sekka-next-sekka-server ()
+  (defun sekka-next-sekka-server-message(str varname)
+    (message (format "If you have %s sekka-server, please set the `%s' variable." str varname))
+    (sit-for 5))
+
   (cond
    ((string-equal current-sekka-server-url
 		  sekka-server-url)
-    (setq current-sekka-server-url sekka-server-url-2))
+    (if (< 0 (length sekka-server-url-2))
+	(setq current-sekka-server-url sekka-server-url-2)
+      (sekka-next-sekka-server-message "second" "sekka-server-url-2")))
    ((string-equal current-sekka-server-url
 		  sekka-server-url-2)
-    (setq current-sekka-server-url sekka-server-url-3))
+    (if (< 0 (length sekka-server-url-3))
+	(setq current-sekka-server-url sekka-server-url-3)
+      (sekka-next-sekka-server-message "third"  "sekka-server-url-3")))
    (t
-    (setq current-sekka-server-url sekka-server-url))))
+    (when (< 0 (length sekka-server-url))
+      (setq current-sekka-server-url sekka-server-url)))))
 
 
 ;;
@@ -324,12 +333,27 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 ;;     ("method" .  "normal")
 ;;    )
 (defun sekka-rest-request (func-name arg-alist)
-  (let ((result (sekka-rest-request-sub func-name arg-alist)))
-    (if (string-match-p "^curl: [(]7[)] " result)
-	(progn
-	  (sekka-next-sekka-server)
-	  (sekka-rest-request-sub func-name arg-alist))
-      result)))
+  (defun one-request (func-name arg-alist)
+    (let ((result (sekka-rest-request-sub func-name arg-alist)))
+      (if (or
+	   (string-match-p "^curl: [(]6[)] " result) ;; Couldn't resolve host 'aaa.example.com' 
+	   (string-match-p "^curl: [(]7[)] " result) ;; Couldn't connect to host 'localhost'
+	   )
+	  (progn
+	    (sekka-next-sekka-server)
+	    nil)
+	result)))
+
+  (or
+   (one-request func-name arg-alist)
+   (one-request func-name arg-alist)
+   (one-request func-name arg-alist)
+   (concat
+    "Error: All sekka-server are down. "
+    " " sekka-server-url
+    " " sekka-server-url-2
+    " " sekka-server-url-3)))
+
 	
 
 (defun sekka-rest-request-sub (func-name arg-alist)
