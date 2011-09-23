@@ -188,7 +188,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 
 
 ;;; 現在のsekka-serverの接続先
-(defvar current-sekka-server-url sekka-server-url) ; 第一候補で初期化しておく。
+(defvar current-sekka-server-url     "") ; 第一候補で初期化しておく。
 
 ;;; 候補選択モード用
 (defvar sekka-history-stack '())        ; 過去に変換した、場所と変換候補の状態を保存しておくスタック
@@ -271,6 +271,9 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 ;;
 (defun sekka-init ()
   (when (not sekka-init)
+    ;; 現在のsekka-serverの接続先
+    (defvar current-sekka-server-url  sekka-server-url) ;; 第一候補で初期化しておく。
+
     ;; ユーザー語彙のロード + サーバーへの登録
     (sekka-register-userdict-internal)
     
