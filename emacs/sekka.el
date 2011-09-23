@@ -41,6 +41,16 @@
   :type  'string
   :group 'sekka)
 
+(defcustom sekka-server-url-2 ""
+  "SekkaサーバーのURLを指定する。"
+  :type  'string
+  :group 'sekka)
+
+(defcustom sekka-server-url-3 ""
+  "SekkaサーバーのURLを指定する。"
+  :type  'string
+  :group 'sekka)
+
 (defcustom sekka-server-timeout 10
   "Sekkaサーバーと通信する時のタイムアウトを指定する。(秒数)"
   :type  'integer
@@ -125,9 +135,9 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 (defvar sekka-sticky-shift nil     "*Non-nil であれば、Sticky-Shiftを有効にする")
 (defvar sekka-mode nil             "漢字変換トグル変数")
 (defun sekka-modeline-string ()
-  ;; 残り時間を秒数で表示する。
-  (format " Sekka(%d)" (* sekka-timer-rest
-			  sekka-realtime-guide-interval)))
+  ;; 接続先sekka-serverのホスト名を表示する。
+  (format " Sekka[%s]" (url-host
+			(url-generic-parse-url current-sekka-server-url))))
 (defvar sekka-select-mode nil      "候補選択モード変数")
 (or (assq 'sekka-mode minor-mode-alist)
     (setq minor-mode-alist (cons
@@ -146,6 +156,8 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	  (append (list (cons 'sekka-mode         sekka-mode-map)
 			(cons 'sekka-select-mode  sekka-select-mode-map))
 		  minor-mode-map-alist)))
+
+
 
 ;;;
 ;;; hooks
@@ -174,6 +186,9 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	  (goto-char (point-max))
 	  (insert string)))))
 
+
+;;; 現在のsekka-serverの接続先
+(defvar current-sekka-server-url sekka-server-url) ; 第一候補で初期化しておく。
 
 ;;; 候補選択モード用
 (defvar sekka-history-stack '())        ; 過去に変換した、場所と変換候補の状態を保存しておくスタック
@@ -282,6 +297,22 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
      ("method" .  "normal")
      )))
 
+
+;;
+;; 接続先を次候補のsekka-serverに切りかえる
+;;
+(defun sekka-next-sekka-server ()
+  (cond
+   ((string-equal current-sekka-server-url
+		  sekka-server-url)
+    (setq current-sekka-server-url sekka-server-url-2))
+   ((string-equal current-sekka-server-url
+		  sekka-server-url-2)
+    (setq current-sekka-server-url sekka-server-url-3))
+   (t
+    (setq current-sekka-server-url sekka-server-url))))
+
+
 ;;
 ;; ローマ字で書かれた文章をSekkaサーバーを使って変換する
 ;;
@@ -293,6 +324,15 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 ;;     ("method" .  "normal")
 ;;    )
 (defun sekka-rest-request (func-name arg-alist)
+  (let ((result (sekka-rest-request-sub func-name arg-alist)))
+    (if (string-match-p "^curl: [(]7[)] " result)
+	(progn
+	  (sekka-next-sekka-server)
+	  (sekka-rest-request-sub func-name arg-alist))
+      result)))
+	
+
+(defun sekka-rest-request-sub (func-name arg-alist)
   (if sekka-psudo-server
       (cond
        ((string-equal func-name "henkan")
@@ -317,7 +357,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	    (format " --max-time %d " sekka-server-timeout)
 	    " --insecure "
 	    " --header 'Content-Type: application/x-www-form-urlencoded' "
-	    (format "%s%s " sekka-server-url func-name)
+	    (format "%s%s " current-sekka-server-url func-name)
 	    (sekka-construct-curl-argstr (cons
 					  '("format" . "sexp")
 					  arg-alist))
