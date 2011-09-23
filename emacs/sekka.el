@@ -124,11 +124,14 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 
 (defvar sekka-sticky-shift nil     "*Non-nil であれば、Sticky-Shiftを有効にする")
 (defvar sekka-mode nil             "漢字変換トグル変数")
-(defvar sekka-mode-line-string     " Sekka")
+(defun sekka-modeline-string ()
+  ;; 残り時間を秒数で表示する。
+  (format " Sekka(%d)" (* sekka-timer-rest
+			  sekka-realtime-guide-interval)))
 (defvar sekka-select-mode nil      "候補選択モード変数")
 (or (assq 'sekka-mode minor-mode-alist)
     (setq minor-mode-alist (cons
-			    '(sekka-mode        sekka-mode-line-string)
+			    '(sekka-mode (:eval (sekka-modeline-string)))
 			    minor-mode-alist)))
 
 
