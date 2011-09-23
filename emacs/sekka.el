@@ -136,8 +136,10 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 (defvar sekka-mode nil             "漢字変換トグル変数")
 (defun sekka-modeline-string ()
   ;; 接続先sekka-serverのホスト名を表示する。
-  (format " Sekka[%s]" (url-host
-			(url-generic-parse-url current-sekka-server-url))))
+  (format " Sekka[%s]" (if current-sekka-server-url
+			   (url-host
+			    (url-generic-parse-url current-sekka-server-url))
+			 "")))
 (defvar sekka-select-mode nil      "候補選択モード変数")
 (or (assq 'sekka-mode minor-mode-alist)
     (setq minor-mode-alist (cons
@@ -188,7 +190,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 
 
 ;;; 現在のsekka-serverの接続先
-(defvar current-sekka-server-url     "") ; 第一候補で初期化しておく。
+(defvar current-sekka-server-url     nil)
 
 ;;; 候補選択モード用
 (defvar sekka-history-stack '())        ; 過去に変換した、場所と変換候補の状態を保存しておくスタック
