@@ -274,7 +274,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 (defun sekka-init ()
   (when (not sekka-init)
     ;; 現在のsekka-serverの接続先
-    (defvar current-sekka-server-url  sekka-server-url) ;; 第一候補で初期化しておく。
+    (setq current-sekka-server-url  sekka-server-url) ;; 第一候補で初期化しておく。
 
     ;; ユーザー語彙のロード + サーバーへの登録
     (sekka-register-userdict-internal)
@@ -1624,7 +1624,7 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
 (setq default-input-method "japanese-sekka")
 
 (defconst sekka-version
-  "0.9.3" ;;SEKKA-VERSION
+  "0.9.4" ;;SEKKA-VERSION
   )
 (defun sekka-version (&optional arg)
   "入力モード変更"
