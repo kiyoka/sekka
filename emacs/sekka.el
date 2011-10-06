@@ -26,6 +26,7 @@
 (require 'cl)
 (require 'http-get)
 (require 'popup)
+(require 'url-parse)
 
 ;;; 
 ;;;
