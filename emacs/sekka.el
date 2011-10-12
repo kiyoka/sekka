@@ -115,15 +115,9 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   :type  'boolean
   :group 'sekka)
 
-(defcustom sekka-kakutei-with-spacekey t
+(defcustom sekka-kakutei-with-spacekey nil
   "*Non-nil であれば、リアルタイムガイド表示中のSPACEキーでの確定動作を有効にする"
   :type  'boolean
-  :group 'sekka)
-
-(defcustom sekka-muhenkan-key "q"
-  "*Non-nil であれば、リアルタイムガイド表示中はqキーで無変換のままスペースを挿入する。q以外のキーも設定可能。
-但し、アルファベットのようにバッファにinsert可能な文字のみ設定可能。"
-  :type  'string
   :group 'sekka)
 
 
@@ -133,6 +127,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   :group 'sekka)
 
 
+(defvar sekka-muhenkan-key nil     "*Non-nil であれば、リアルタイムガイド表示中は指定したキーで無変換のままスペースを挿入する。アルファベット文字１文字を指定すること")
 (defvar sekka-sticky-shift nil     "*Non-nil であれば、Sticky-Shiftを有効にする")
 (defvar sekka-mode nil             "漢字変換トグル変数")
 (defun sekka-modeline-string ()
