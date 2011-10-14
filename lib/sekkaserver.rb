@@ -91,7 +91,7 @@ module SekkaServer
                         else
                           ";; comment"
                         end
-                      STDERR.puts "Info: processing [register(" + dictline + ")] batch command..."
+                      STDERR.print "Info: processing  [register(" + dictline + ") on " + userid + "] batch command... "
                       begin
                         registered = @core.registerUserJisyo(userid, @kvs, dictline)
                       rescue RuntimeError
@@ -99,16 +99,16 @@ module SekkaServer
                       end
                       if registered
                         str = d.strftime( "%D %X" )
-                        STDERR.puts "Info: [" + str + "]added to dict                      userid[" + userid + "] dictline[" + dictline + "]"
+                        STDERR.puts "ADDED " + str
                         @core.flushCacheServer( @cachesv )
                       else
-                        STDERR.puts "Info: ignored (already added or comment) userid[" + userid + "] dictline[" + dictline + "]"
+                        STDERR.puts "ignored"
                       end
                     when 'k' # kakutei
                       arr = word.split( /[ ]+/ )
                       _key   = arr[2]
                       _tango = arr[3]
-                      STDERR.puts "Info: processing [kakutei(" + _tango + ")] batch command..."
+                      STDERR.puts "Info: processing  [kakutei(" + _tango + ")] batch command..."
                       begin
                         @core.sekkaKakutei( userid, @kvs, @cachesv, _key, _tango )
                       rescue RuntimeError
