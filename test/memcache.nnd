@@ -40,13 +40,24 @@
 (define dbtype   'memcache)
 (define userid   "temp")
 (define cachesv (Kvs.new dbtype))
-(cachesv.open "localhost:11211")
 
 (test-start "memcached I/F")
 ;;===================================================================
 
 ;;-------------------------------------------------------------------
 (test-section "memcached access")
+
+(test* "db connect NG and Exception"
+       (test-error MemCache::MemCacheError)
+       (let1 sv (Kvs.new dbtype)
+         (sv.open "localhost:11111")
+         (sv.put! "temp::1" "one")))
+
+(test* "db connect OK"
+       "one"
+       (begin
+         (cachesv.open "localhost:11211")
+         (cachesv.put! "temp::1" "one")))
 
 (test* "db store 1"
        "one"
