@@ -108,6 +108,7 @@ task :test do
 
   sh "/bin/rm -f test.record test.tch"
   files = []
+  files << "./test/memcache.nnd"
   files << "./test/util.nnd"
   files << "./test/alphabet-lib.nnd"
   files << "./test/sharp-number.nnd"
@@ -122,6 +123,7 @@ task :test do
   when 'tokyocabinet'
     files << "./test/henkan-main.nnd  tokyocabinet"
   when 'redis'
+    files << "./test/redis.nnd"
     files << "./test/henkan-main.nnd  redis"
   when 'pure'
     files << "./test/henkan-main.nnd  pure"
@@ -131,7 +133,6 @@ task :test do
     files << "./test/henkan-main.nnd  redis"
     files << "./test/henkan-main.nnd  pure"
   end
-  files << "./test/memcache.nnd"
   files.each {|filename|
     nendopath = `which nendo`.chomp
     sh  sprintf( "time ruby -I ./lib %s %s", nendopath, filename )
