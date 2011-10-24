@@ -146,14 +146,21 @@ module SekkaServer
                format = URI.decode( req.params['format'].force_encoding("UTF-8") )
                case req.path
                when "/henkan"
-                 _yomi   = URI.decode( req.params[  'yomi'].force_encoding("UTF-8") )
-                 _limit  = URI.decode( req.params[ 'limit'].force_encoding("UTF-8") )
-                 _method = URI.decode( req.params['method'].force_encoding("UTF-8") )
+                 _yomi    = URI.decode( req.params[  'yomi'].force_encoding("UTF-8") )
+                 _limit   = URI.decode( req.params[ 'limit'].force_encoding("UTF-8") )
+                 _method  = URI.decode( req.params['method'].force_encoding("UTF-8") )
+                 _orRedis = if :redis == SekkaServer::Config.dictType then "or Redis-server" else "" end
                  @mutex.synchronize {
                     begin
                       @core.writeToString( @core.sekkaHenkan( userid, @kvs, @cachesv, _yomi, _limit.to_i, _method ))
                     rescue MemCache::MemCacheError
                       "sekka-server: memcached server is down (or may be offline)"
+                    rescue Timeout
+                      result = "sekka-server: Timeout to request memcached server #{_orRedis} (may be offline)"
+                    rescue SocketError
+                      result = "sekka-server: SocketError to request memcached server #{_orRedis} (may be offline)"
+                    rescue Errno::ECONNREFUSED
+                      result = "sekka-server: ConnectionRefused to request memcached server #{_orRedis} (may be offline)"
                     end
                  }
                when "/kakutei"
@@ -182,7 +189,7 @@ module SekkaServer
                  rescue SocketError
                    result = "sekka-server: SocketError to request google-ime (may be offline)"
                  rescue Errno::ECONNREFUSED
-                   result = "sekka-server: http proxy server is down (or may be offline)"
+                   result = "sekka-server: ConnectionRefused to request google-ime (or may be offline)"
                  end
                  @core.writeToString( result )
                else
