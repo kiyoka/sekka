@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "sekka"
-  s.version = "0.9.5"
+  s.version = "0.9.6"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kiyoka Nishiyama"]
-  s.date = "2011-10-14"
+  s.date = "2011-10-24"
   s.description = "Sekka is a SKK like input method. Sekka server provides REST Based API. If you are SKK user, let's try it."
   s.email = "kiyoka@sumibi.org"
   s.executables = ["sekka-jisyo", "sekka-server", "sekka-benchmark", "sekka-path"]
@@ -52,6 +52,7 @@ Gem::Specification.new do |s|
     "test/henkan-main.nnd",
     "test/jisyo.nnd",
     "test/memcache.nnd",
+    "test/redis.nnd",
     "test/roman-lib.nnd",
     "test/sharp-number.nnd",
     "test/skk-azik-table.nnd",
@@ -81,7 +82,7 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<fuzzy-string-match>, [">= 0"])
       s.add_runtime_dependency(%q<jeweler>, [">= 0"])
       s.add_runtime_dependency(%q<memcache-client>, [">= 0"])
-      s.add_runtime_dependency(%q<nendo>, ["= 0.5.3"])
+      s.add_runtime_dependency(%q<nendo>, ["= 0.5.4"])
       s.add_runtime_dependency(%q<rack>, [">= 0"])
       s.add_runtime_dependency(%q<ruby-progressbar>, [">= 0"])
     else
@@ -99,7 +100,7 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<fuzzy-string-match>, [">= 0"])
       s.add_dependency(%q<jeweler>, [">= 0"])
       s.add_dependency(%q<memcache-client>, [">= 0"])
-      s.add_dependency(%q<nendo>, ["= 0.5.3"])
+      s.add_dependency(%q<nendo>, ["= 0.5.4"])
       s.add_dependency(%q<rack>, [">= 0"])
       s.add_dependency(%q<ruby-progressbar>, [">= 0"])
     end
@@ -118,7 +119,7 @@ Gem::Specification.new do |s|
     s.add_dependency(%q<fuzzy-string-match>, [">= 0"])
     s.add_dependency(%q<jeweler>, [">= 0"])
     s.add_dependency(%q<memcache-client>, [">= 0"])
-    s.add_dependency(%q<nendo>, ["= 0.5.3"])
+    s.add_dependency(%q<nendo>, ["= 0.5.4"])
     s.add_dependency(%q<rack>, [">= 0"])
     s.add_dependency(%q<ruby-progressbar>, [">= 0"])
   end
