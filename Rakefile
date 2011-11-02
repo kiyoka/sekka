@@ -50,7 +50,7 @@ begin
     gemspec.add_dependency( "fuzzy-string-match" )
     gemspec.add_dependency( "jeweler" )
     gemspec.add_dependency( "memcache-client" )
-    gemspec.add_dependency( "nendo", "= 0.6.0" )
+    gemspec.add_dependency( "nendo", "= 0.6.1" )
     gemspec.add_dependency( "rack" )
     gemspec.add_dependency( "ruby-progressbar" )
   end
