@@ -11,14 +11,15 @@ require File.expand_path(File.dirname(__FILE__) + "/../lib/sekka/sekkaversion")
 
 
 DICTDIR = File.expand_path( "~/.sekka-server" )
-DICTURL = "http://sumibi.org/sekka/dict/" + SekkaVersion.dictVersion
+DICTURL = "https://raw.github.com/kiyoka/sekka/public_dict_from_github/public_dict/" + SekkaVersion.dictVersion
 
 PIDFILE = DICTDIR + "/pid"
 
 TC_FILE = DICTDIR + "/SEKKA-JISYO.SMALL.tch"
 TSVFILE = DICTDIR + "/SEKKA-JISYO.SMALL.tsv"
 SUMFILE = DICTDIR + "/SEKKA-JISYO.SMALL.md5"
-TSVURL  = DICTURL + "/SEKKA-JISYO.SMALL.tsv"
+
+URLURL  = DICTURL + "/SEKKA-JISYO.SMALL.url"
 SUMURL  = DICTURL + "/SEKKA-JISYO.SMALL.md5"
 
 TC_FILE_LIST = [ DICTDIR + "/SEKKA-JISYO.CUSTOM.tch",
@@ -71,7 +72,13 @@ def main
   if not File.exist?( TSVFILE )
     STDERR.printf( "Info: Downloading SEKKA-JISYO\n" )
     # 辞書をダウンロードする
-    cmd = sprintf( "curl -o %s %s",    TSVFILE, TSVURL )
+    cmd = sprintf( "curl %s",          URLURL )
+    STDERR.printf( "Command : %s\n", cmd )
+    tsvurl = open( "|" + cmd ) { |f|
+      f.read
+    }
+    STDERR.printf( "   download   URL of tsv file : %s\n", tsvurl );
+    cmd = sprintf( "curl -o %s %s",    TSVFILE, tsvurl )
     STDERR.printf( "Command : %s\n", cmd )
     system( cmd )
     cmd = sprintf( "curl -o %s %s",    SUMFILE, SUMURL )
