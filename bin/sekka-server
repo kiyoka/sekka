@@ -11,7 +11,7 @@ require File.expand_path(File.dirname(__FILE__) + "/../lib/sekka/sekkaversion")
 
 
 DICTDIR = File.expand_path( "~/.sekka-server" )
-DICTURL = "http://sumibi.org/sekka/dict/" + SekkaVersion.version
+DICTURL = "http://sumibi.org/sekka/dict/" + SekkaVersion.dictVersion
 
 PIDFILE = DICTDIR + "/pid"
 
