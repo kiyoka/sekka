@@ -11,7 +11,8 @@ require File.expand_path(File.dirname(__FILE__) + "/../lib/sekka/sekkaversion")
 
 
 DICTDIR = File.expand_path( "~/.sekka-server" )
-DICTURL = "https://raw.github.com/kiyoka/sekka/public_dict_from_github/public_dict/" + SekkaVersion.dictVersion
+DICTURL = "https://raw.github.com/kiyoka/sekka/master/public_dict/" + SekkaVersion.dictVersion
+
 
 PIDFILE = DICTDIR + "/pid"
 
