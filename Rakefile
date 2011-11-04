@@ -64,12 +64,12 @@ end
 
 task :compile do
   # generate version.rb
+  dictVersion = "0.9.2"
   vh = Jeweler::VersionHelper.new "."
   open( "./lib/sekka/sekkaversion.rb", "w" ) {|f|
     f.puts(   "class SekkaVersion" )
-    f.puts(   "  def self.version" )
-    f.printf( "    \"%s\"\n", vh )
-    f.puts(   "  end" )
+    f.printf( "  def  self.version()     \"%s\"  end\n", vh )
+    f.printf( "  def  self.dictVersion() \"%s\"  end\n", dictVersion )
     f.puts(   "end" )
   }
 
