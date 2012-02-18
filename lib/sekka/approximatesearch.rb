@@ -37,7 +37,7 @@ require 'sekka/kvs'
 class ApproximateSearch
   def initialize( jarow_shikii )
     @jarow_shikii = jarow_shikii
-    @jarow        = FuzzyStringMatch::JaroWinkler.new.create( :native )
+    @jarow        = FuzzyStringMatch::JaroWinkler.create( :native )
   end
 
   def filtering( keyword, arr )
