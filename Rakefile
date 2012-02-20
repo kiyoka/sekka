@@ -13,7 +13,9 @@
 #   Please select from
 #     DB=dbm
 #     DB=tokyocabinet
-#     DB=all             (default)
+#     DB=redis
+#     DB=                (default)
+#     DB=all             dbm/tokyocabinet/redis
 #
 
 require 'rake'
@@ -28,6 +30,7 @@ begin
     gemspec.authors = ["Kiyoka Nishiyama"]
     gemspec.files = FileList['README',
                              'COPYING',
+                             '.gemtest',
                              'lib/*.rb',
                              'lib/*.ru',
                              'lib/sekka/*.rb',
@@ -126,10 +129,13 @@ task :test do
     files << "./test/henkan-main.nnd  redis"
   when 'pure'
     files << "./test/henkan-main.nnd  pure"
-  else
+  when 'all'
     files << "./test/henkan-main.nnd  dbm"
     files << "./test/henkan-main.nnd  tokyocabinet"
     files << "./test/henkan-main.nnd  redis"
+    files << "./test/henkan-main.nnd  pure"
+  else # default
+    files << "./test/henkan-main.nnd  tokyocabinet"
     files << "./test/henkan-main.nnd  pure"
   end
   files.each {|filename|

@@ -90,7 +90,7 @@
 ;;-------------------------------------------------------------------
 (with-open "./test/sekka-dump-out-1.txt"
            (lambda (f)
-             (let ((_input (f.read))
+             (let ((_answer (Digest::MD5.hexdigest (f.read)))
                    (_output1 (StringIO.new))
                    (_output2 (StringIO.new)))
                (_output1.set_encoding "utf-8")
@@ -99,30 +99,33 @@
                          (eq? dbtype 'redis)
                          (eq? dbtype 'dbm)
                          (eq? dbtype 'pure))
-                 (test-section "dump db")
-
-                 (test* "dump DB to SEKKA jisyo file. (1)"
-                        _input
-                        (begin
-                          (dump-sekka-jisyo-f _output1 target)
-                          (with-open "./test/sekka-dump-out-1.tmp"
-                                     (lambda (f) (f.write (_output1.string)))
-                                     "w")
-                          (_output1.string)))
-                 
-                 (test* "dump/restore DB to SEKKA jisyo file. (1)"
-                        _input
-                        (begin
-                          ;; ---- RESTORE ----
-                          (f.rewind)
-                          (restore-sekka-jisyo-f f target)
-                          
-                          ;; ---- DUMP    ----
-                          (dump-sekka-jisyo-f _output2 target)
-                          (with-open "./test/sekka-dump-out-2.tmp"
-                                     (lambda (f) (f.write (_output2.string)))
-                                     "w")
-                          (_output2.string)))))))
+                 (begin
+                   (test-section "dump db")
+                   
+                   (test* "dump DB to SEKKA jisyo file. (1)"
+                          _answer
+                          (begin
+                            (dump-sekka-jisyo-f _output1 target)
+                            (with-open "./test/sekka-dump-out-1.tmp"
+                                       (lambda (f) (f.write (_output1.string)))
+                                       "w")
+                            (Digest::MD5.hexdigest
+                             (_output1.string))))
+                   
+                   (test* "dump/restore DB to SEKKA jisyo file. (1)"
+                          _answer
+                          (begin
+                            ;; ---- RESTORE ----
+                            (f.rewind)
+                            (restore-sekka-jisyo-f f target)
+                            
+                            ;; ---- DUMP    ----
+                            (dump-sekka-jisyo-f _output2 target)
+                            (with-open "./test/sekka-dump-out-2.tmp"
+                                       (lambda (f) (f.write (_output2.string)))
+                                       "w")
+                            (Digest::MD5.hexdigest
+                             (_output2.string)))))))))
                  
   
 
@@ -1252,6 +1255,6 @@
 ;; ---後処理---
 (kvs.close)
 ;; 最終的な辞書の状態を目視するためのダンプ
-(dump-sekka-jisyo-f STDOUT target)
+;;(dump-sekka-jisyo-f STDOUT target)
 
 (test-end)
