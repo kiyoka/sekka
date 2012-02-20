@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kiyoka Nishiyama"]
-  s.date = "2012-02-18"
+  s.date = "2012-02-20"
   s.description = "Sekka is a SKK like input method. Sekka server provides REST Based API. If you are SKK user, let's try it."
   s.email = "kiyoka@sumibi.org"
   s.executables = ["sekka-jisyo", "sekka-server", "sekka-benchmark", "sekka-path"]
@@ -61,22 +61,13 @@ Gem::Specification.new do |s|
   s.homepage = "http://github.com/kiyoka/sekka"
   s.require_paths = ["lib"]
   s.required_ruby_version = Gem::Requirement.new(">= 1.9.1")
-  s.rubygems_version = "1.8.11"
+  s.rubygems_version = "1.8.17"
   s.summary = "Sekka is a SKK like input method."
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<rspec>, [">= 0"])
-      s.add_runtime_dependency(%q<fuzzy-string-match>, [">= 0"])
-      s.add_runtime_dependency(%q<jeweler>, [">= 0"])
-      s.add_runtime_dependency(%q<memcache-client>, [">= 0"])
-      s.add_runtime_dependency(%q<nendo>, [">= 0"])
-      s.add_runtime_dependency(%q<json>, [">= 0"])
-      s.add_runtime_dependency(%q<rake>, [">= 0"])
-      s.add_runtime_dependency(%q<redis>, [">= 0"])
-      s.add_runtime_dependency(%q<ruby-progressbar>, [">= 0"])
       s.add_development_dependency(%q<rubyforge>, [">= 0"])
       s.add_runtime_dependency(%q<eventmachine>, [">= 0"])
       s.add_runtime_dependency(%q<fuzzy-string-match>, [">= 0.9.2"])
@@ -85,15 +76,6 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<rack>, [">= 0"])
       s.add_runtime_dependency(%q<ruby-progressbar>, [">= 0"])
     else
-      s.add_dependency(%q<rspec>, [">= 0"])
-      s.add_dependency(%q<fuzzy-string-match>, [">= 0"])
-      s.add_dependency(%q<jeweler>, [">= 0"])
-      s.add_dependency(%q<memcache-client>, [">= 0"])
-      s.add_dependency(%q<nendo>, [">= 0"])
-      s.add_dependency(%q<json>, [">= 0"])
-      s.add_dependency(%q<rake>, [">= 0"])
-      s.add_dependency(%q<redis>, [">= 0"])
-      s.add_dependency(%q<ruby-progressbar>, [">= 0"])
       s.add_dependency(%q<rubyforge>, [">= 0"])
       s.add_dependency(%q<eventmachine>, [">= 0"])
       s.add_dependency(%q<fuzzy-string-match>, [">= 0.9.2"])
@@ -103,15 +85,6 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<ruby-progressbar>, [">= 0"])
     end
   else
-    s.add_dependency(%q<rspec>, [">= 0"])
-    s.add_dependency(%q<fuzzy-string-match>, [">= 0"])
-    s.add_dependency(%q<jeweler>, [">= 0"])
-    s.add_dependency(%q<memcache-client>, [">= 0"])
-    s.add_dependency(%q<nendo>, [">= 0"])
-    s.add_dependency(%q<json>, [">= 0"])
-    s.add_dependency(%q<rake>, [">= 0"])
-    s.add_dependency(%q<redis>, [">= 0"])
-    s.add_dependency(%q<ruby-progressbar>, [">= 0"])
     s.add_dependency(%q<rubyforge>, [">= 0"])
     s.add_dependency(%q<eventmachine>, [">= 0"])
     s.add_dependency(%q<fuzzy-string-match>, [">= 0.9.2"])
