@@ -17,8 +17,11 @@ Gem::Specification.new do |s|
     "README"
   ]
   s.files = [
+    ".gemtest",
     "COPYING",
     "README",
+    "Rakefile",
+    "VERSION.yml",
     "bin/sekka-benchmark",
     "bin/sekka-jisyo",
     "bin/sekka-path",
@@ -54,8 +57,11 @@ Gem::Specification.new do |s|
     "test/memcache.nnd",
     "test/redis.nnd",
     "test/roman-lib.nnd",
+    "test/sekka-dump-out-1.txt",
+    "test/sekka-jisyo-out-1.txt",
     "test/sharp-number.nnd",
     "test/skk-azik-table.nnd",
+    "test/skk-jisyo-in-1.txt",
     "test/util.nnd"
   ]
   s.homepage = "http://github.com/kiyoka/sekka"
@@ -68,7 +74,6 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_development_dependency(%q<rubyforge>, [">= 0"])
       s.add_runtime_dependency(%q<eventmachine>, [">= 0"])
       s.add_runtime_dependency(%q<fuzzy-string-match>, [">= 0.9.2"])
       s.add_runtime_dependency(%q<memcache-client>, [">= 0"])
@@ -76,7 +81,6 @@ Gem::Specification.new do |s|
       s.add_runtime_dependency(%q<rack>, [">= 0"])
       s.add_runtime_dependency(%q<ruby-progressbar>, [">= 0"])
     else
-      s.add_dependency(%q<rubyforge>, [">= 0"])
       s.add_dependency(%q<eventmachine>, [">= 0"])
       s.add_dependency(%q<fuzzy-string-match>, [">= 0.9.2"])
       s.add_dependency(%q<memcache-client>, [">= 0"])
@@ -85,7 +89,6 @@ Gem::Specification.new do |s|
       s.add_dependency(%q<ruby-progressbar>, [">= 0"])
     end
   else
-    s.add_dependency(%q<rubyforge>, [">= 0"])
     s.add_dependency(%q<eventmachine>, [">= 0"])
     s.add_dependency(%q<fuzzy-string-match>, [">= 0.9.2"])
     s.add_dependency(%q<memcache-client>, [">= 0"])

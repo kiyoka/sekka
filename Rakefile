@@ -28,9 +28,11 @@ begin
     gemspec.email = "kiyoka@sumibi.org"
     gemspec.homepage = "http://github.com/kiyoka/sekka"
     gemspec.authors = ["Kiyoka Nishiyama"]
-    gemspec.files = FileList['README',
-                             'COPYING',
+    gemspec.files = FileList['Rakefile',
                              '.gemtest',
+                             'VERSION.yml',
+                             'README',
+                             'COPYING',
                              'lib/*.rb',
                              'lib/*.ru',
                              'lib/sekka/*.rb',
@@ -41,13 +43,13 @@ begin
                              'bin/sekka-path',
                              'test/*.nnd',
                              'test/*.rb',
+                             'test/*.txt',
                              'script/sekkaserver.*',
                              'emacs/*.el'].to_a
     gemspec.executables = ["sekka-jisyo",
                            "sekka-server",
                            "sekka-benchmark",
                            "sekka-path"]
-    gemspec.add_development_dependency "rubyforge"
     gemspec.required_ruby_version = '>= 1.9.1'
     gemspec.add_dependency( "eventmachine" )
     gemspec.add_dependency( "fuzzy-string-match", ">= 0.9.2" )
