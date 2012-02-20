@@ -1,3 +1,5 @@
+language: ruby
+
 rvm:
  - 1.9.2
  - 1.9.3
@@ -7,3 +9,5 @@ env:
  - DB=pure
 # - DB=redis
 
+gemfile:
+ - gemfiles/Gemfile
