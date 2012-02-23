@@ -34,6 +34,7 @@
 ;;;  $Id: 
 ;;;
 (use nendo.test)
+(use debug.null)
 (use sekka.convert-jisyo)
 
 (define debug-print-length 10000)

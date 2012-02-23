@@ -242,12 +242,12 @@
       (let ([d (. (Date.new 0) to_s)])
         (if (and (kvs.pure_put! "key_for_ping" d)
                  (string=? (kvs.get  "key_for_ping") d))
-            (STDERR.puts "Info: database file is clean")
+            #?="Info: database file is clean"
             ;; 正常に読み書きできないようであれば、データベースを修復する
             (begin
-              (STDERR.puts "Info: database file is NOT clean. try to fix...")
+              #?="Info: database file is NOT clean. try to fix..."
               (kvs.fixdb)
-              (STDERR.puts "Info: done."))))
+              #?="Info: done.")))
       (to-arr (list kvs cachesv)))))
 ;; Export to Ruby world
 (export-to-ruby openSekkaJisyo)

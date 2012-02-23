@@ -35,6 +35,7 @@
 ;;;
 (require "sekka/kvs")
 (use nendo.test)
+(use debug.null)
 (use sekka.convert-jisyo)
 (use sekka.henkan)
 (load "./test/common.nnd")

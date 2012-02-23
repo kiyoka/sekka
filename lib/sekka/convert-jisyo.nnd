@@ -42,7 +42,7 @@
   (let1 roman-list (gen-hiragana->roman-list key)
     (if (< 1000 (length roman-list))
         (begin
-          (STDERR.printf " Warning: ignored entry [%s] (hiragana phrase), because too many pattens.\n" key)
+          #?=(sprintf " Warning: ignored entry [%s] (hiragana phrase), because too many pattens.\n" key)
           #f) ;; パターン数が爆発した単語は無視する
         (map
          (lambda (x)
@@ -53,7 +53,7 @@
   (let1 roman-list (gen-hiragana->roman-list key)
     (if (< 1000 (length roman-list))
         (begin
-          (STDERR.printf " Warning: ignored entry [%s %s] , because too many pattens.\n" key value)
+          #?=(sprintf " Warning: ignored entry [%s %s] , because too many pattens.\n" key value)
           #f) ;; パターン数が爆発した単語は無視する
         (append
          (map
