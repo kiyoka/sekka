@@ -40,9 +40,17 @@ require 'eventmachine'
 require 'syslog'
 require 'uri'
 require 'date'
-require './lib/sekkaconfig'
-require './lib/sekka/sekkaversion'
 require 'memcache'
+
+SEKKA_VENDORDIR = File.expand_path(File.dirname(__FILE__) + "/../lib")
+if RbConfig::CONFIG[ 'vendordir' ]
+  if File.exists? RbConfig::CONFIG[ 'vendordir' ] + "/sekkaconfig.rb"
+    SEKKA_VENDORDIR = RbConfig::CONFIG[ 'vendordir' ]
+  end
+end
+require SEKKA_VENDORDIR + "/sekkaconfig"
+require SEKKA_VENDORDIR + "/sekka/sekkaversion"
+
 
 module SekkaServer
   class Server

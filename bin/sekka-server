@@ -5,9 +5,16 @@ require 'digest/md5'
 require 'fileutils'
 require 'rack'
 require 'uri'
-require File.expand_path(File.dirname(__FILE__) + "/../lib/sekkaconfig")
-require File.expand_path(File.dirname(__FILE__) + "/../lib/sekka/sekkaversion")
+require 'rbconfig'
 
+SEKKA_VENDORDIR = File.expand_path(File.dirname(__FILE__) + "/../lib")
+if RbConfig::CONFIG[ 'vendordir' ]
+  if File.exists? RbConfig::CONFIG[ 'vendordir' ] + "/sekkaconfig.rb"
+    SEKKA_VENDORDIR = RbConfig::CONFIG[ 'vendordir' ]
+  end
+end
+require SEKKA_VENDORDIR + "/sekkaconfig"
+require SEKKA_VENDORDIR + "/sekka/sekkaversion"
 
 
 DICTDIR = File.expand_path( "~/.sekka-server" )
@@ -170,7 +177,7 @@ def main
                      :Port        => SekkaServer::Config.listenPort,
                      :Host        => "0.0.0.0",
                      :AccessLog   => [],
-                     :config      => "./lib/sekka.ru"
+                     :config      => SEKKA_VENDORDIR + "/sekka.ru"
                      )
 end
 
