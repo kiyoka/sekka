@@ -160,6 +160,15 @@ def main
   # 設定項目をConfigオブジェクトに代入
   SekkaServer::Config.setup( dictType, dictSource, MEMCACHED, 12929, proxyHost, proxyPort )
 
+  # rackに渡すための sekka.ru のインストールパスを求める。
+  vendordir = File.expand_path(File.dirname(__FILE__) + "/../lib")
+  if RbConfig::CONFIG[ 'vendordir' ]
+    if File.exists? RbConfig::CONFIG[ 'vendordir' ] + "/sekka.ru"
+      vendordir = RbConfig::CONFIG[ 'vendordir' ]
+    end
+  end
+  # print "vendordir = " + vendordir + "\n"
+
   # サーバー起動
   Rack::Server.start(
                      :environment => "development",
@@ -167,7 +176,7 @@ def main
                      :Port        => SekkaServer::Config.listenPort,
                      :Host        => "0.0.0.0",
                      :AccessLog   => [],
-                     :config      => "./lib/sekka.ru"
+                     :config      => vendordir + "/sekka.ru"
                      )
 end
 
