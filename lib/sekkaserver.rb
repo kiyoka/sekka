@@ -40,8 +40,8 @@ require 'eventmachine'
 require 'syslog'
 require 'uri'
 require 'date'
-require './lib/sekkaconfig'
-require './lib/sekka/sekkaversion'
+require 'sekkaconfig'
+require 'sekka/sekkaversion'
 require 'memcache'
 
 module SekkaServer

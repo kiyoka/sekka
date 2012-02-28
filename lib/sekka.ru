@@ -32,5 +32,5 @@
 #  
 #  $Id: 
 #
-require './lib/sekkaserver'
+require 'sekkaserver'
 run SekkaServer::Server.new

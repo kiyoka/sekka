@@ -5,8 +5,8 @@ require 'digest/md5'
 require 'fileutils'
 require 'rack'
 require 'uri'
-require File.expand_path(File.dirname(__FILE__) + "/../lib/sekkaconfig")
-require File.expand_path(File.dirname(__FILE__) + "/../lib/sekka/sekkaversion")
+require 'sekkaconfig'
+require 'sekka/sekkaversion'
 
 
 
@@ -159,9 +159,6 @@ def main
 
   # 設定項目をConfigオブジェクトに代入
   SekkaServer::Config.setup( dictType, dictSource, MEMCACHED, 12929, proxyHost, proxyPort )
-
-  # サーバースクリプトのrootディレクトリへ移動
-  FileUtils.cd(File.dirname(__FILE__) + "/../")
 
   # サーバー起動
   Rack::Server.start(
