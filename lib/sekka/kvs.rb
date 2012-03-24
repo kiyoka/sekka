@@ -98,7 +98,9 @@ class Kvs
     when :redis
       @db = Redis.new( :host => name )
     when :memcache
-      @db = MemCache.new( name )
+      @db = MemCache.new( name,
+                          :connect_timeout => 1000.0,
+                          :timeout => 1000.0 )
     when :dbm
       @db = DBM.new( name )
     when :pure
