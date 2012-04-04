@@ -229,7 +229,7 @@ class Kvs
     when :tokyocabinet, :dbm
       @db.close
     when :memcache, :redis
-      # do nothign
+      # do nothing
     when :pure
       File.open( @name, "w" ) { |f|
         f.print( @db )
