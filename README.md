@@ -1,4 +1,4 @@
-# Sekka (石火)
+# Sekka (石火) SKK like Japanese input method
 
  [![Build Status](https://secure.travis-ci.org/kiyoka/sekka.png)](http://travis-ci.org/kiyoka/sekka)
 
