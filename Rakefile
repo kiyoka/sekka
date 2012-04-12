@@ -20,8 +20,10 @@
 
 require 'rake'
 begin
-  require 'jeweler'
+  require 'jeweler2'
   Jeweler::Tasks.new do |gemspec|
+    vh = Jeweler::VersionHelper.new "."
+    gemspec.version = vh.to_s + ".pre"
     gemspec.name = "sekka"
     gemspec.summary = "Sekka is a SKK like input method."
     gemspec.description = "Sekka is a SKK like input method. Sekka server provides REST Based API. If you are SKK user, let's try it."
@@ -59,7 +61,7 @@ begin
     gemspec.add_dependency( "ruby-progressbar" )
   end
 rescue LoadError
-  puts "Jeweler not available. Install it with: sudo gem install jeweler"
+  puts "Jeweler2 not available. Install it with: sudo gem install jeweler2"
 end
 
 
