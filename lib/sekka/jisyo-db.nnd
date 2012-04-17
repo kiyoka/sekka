@@ -37,21 +37,14 @@
 (require "progressbar")
 (require "sekka/kvs")
 (require "sekka/sekkaversion")
+(require "distributedtrie")
 (use sekka.util)
 
 (define master-prefix  "MASTER")
+(define master-okuri-ari-prefix       "IK::MASTER::")
+(define master-okuri-nashi-prefix     "Ik::MASTER::")
+(define master-hiragana-phrase-prefix "Ih::MASTER::")
 (define version-prefix "SEKKA::VERSION")
-
-(define alphabet-string "abcdefghijklmnopqrstuvwxyz>@;#")
-(define alphabet-lower-list (to-list (alphabet-string.split "")))
-(define alphabet-upper-list (to-list (. (sekka-upcase alphabet-string) split "")))
-(define alphabet-pairs (append-map
-                        (lambda (a)
-                          (map
-                           (lambda (b)
-                             (+ a b))
-                           (append alphabet-upper-list alphabet-lower-list)))
-                        alphabet-lower-list))
 
 ;; KVS type setting
 (define *kvs-type* 'tokyocabinet)  ;; default
@@ -73,64 +66,42 @@
     (let1 opt (get-optional fallback #f)
       opt)))
 
-(define (create-2char-hash keylist)
-  (define okuri-ari-hash         (make-hash-table))
-  (define okuri-nashi-hash       (make-hash-table))
-  (define hiragana-phrase-hash   (make-hash-table))
-  (define (create-hash keylist)
+(define (grouping-keylist keylist)
+  (let ([okuri-ari-list         '()]
+        [okuri-nashi-list       '()]
+        [hiragana-phrase-list   '()])
     (for-each
      (lambda (k)
        (when (rxmatch #/^[=a-zA-Z#^>-@`\;+:'\-]+$/ k)
          (if (rxmatch #/^=/ k)
              ;; HIRAGANA-PHRASE
-             (let1 sliced (sekka-downcase (k.slice 1 2))
-               (when (= 2 sliced.size)
-                 (hash-table-push! hiragana-phrase-hash   sliced k)))
+             (push! hiragana-phrase-list k)
              ;; OKURI-ARI and OKURI-NASHI
-             (let1 sliced (sekka-downcase (k.slice 0 2))
-               (when (= 2 sliced.size)
-                 (if (rxmatch #/[A-Z`+]$/ k)
-                     (hash-table-push! okuri-ari-hash   sliced k)
-                     (hash-table-push! okuri-nashi-hash sliced k)))))))
-     keylist))
-  (create-hash keylist)
-  (values okuri-ari-hash
-          okuri-nashi-hash
-          hiragana-phrase-hash))
+             (if (rxmatch #/[A-Z`+]$/ k)
+                 (push! okuri-ari-list   k)
+                 (push! okuri-nashi-list k)))))
+     keylist)
+    (values okuri-ari-list
+            okuri-nashi-list
+            hiragana-phrase-list)))
 
-(define (setup-ready-made-keylist kvs keylist)
-  (for-each
-   (lambda (key)
-     (let1 key (+ master-prefix "::" key)
-       (unless (kvs.get key #f)
-         (kvs.put! key ""))))
-   alphabet-pairs)
-  
-  (receive (okuri-ari-hash
-            okuri-nashi-hash
-            hiragana-phrase-hash)
-      (create-2char-hash keylist)
+(define (setup-trie-index kvs keylist)
+  (receive (okuri-ari-list
+            okuri-nashi-list
+            hiragana-phrase-list)
+      (grouping-keylist keylist)
 
-    ;; OKURI-ARI
-    (for-each
-     (lambda (key)
-       (kvs.put! (+ master-prefix "::" "(" (sekka-upcase key) ")")
-                 (string-join (uniq (sort (hash-table-get okuri-ari-hash key))) " ")))
-     (hash-table-keys okuri-ari-hash))
+    (let1 trie (DistributedTrie::Trie.new kvs master-okuri-ari-prefix)
+      (for-each (lambda (k) (trie.addKey! k)) okuri-ari-list)
+      (trie.commit!))
 
-    ;; OKURI-NASHI
-    (for-each
-     (lambda (key)
-       (kvs.put! (+ master-prefix "::" "(" (sekka-downcase key) ")")
-                 (string-join (uniq (sort (hash-table-get okuri-nashi-hash key))) " ")))
-     (hash-table-keys okuri-nashi-hash))
+    (let1 trie (DistributedTrie::Trie.new kvs master-okuri-nashi-prefix)
+      (for-each (lambda (k) (trie.addKey! k)) okuri-nashi-list)
+      (trie.commit!))
 
-    ;; HIRAGANA-PHRASE
-    (for-each
-     (lambda (key)
-       (kvs.put! (+ master-prefix "::" "{" (sekka-downcase key) "}")
-                 (string-join (uniq (sort (hash-table-get hiragana-phrase-hash key))) " ")))
-     (hash-table-keys hiragana-phrase-hash))))
+    (let1 trie (DistributedTrie::Trie.new kvs master-hiragana-phrase-prefix)
+      (for-each (lambda (k) (trie.addKey! k)) hiragana-phrase-list)
+      (trie.commit!))))
 
 
 (define (append-entry userid kvs _key value)
@@ -178,7 +149,7 @@
     (kvs.open filename)
     (kvs.clear)
     (create-keylist kvs f)
-    (setup-ready-made-keylist kvs keylist)
+    (setup-trie-index kvs keylist)
     (kvs.put! version-prefix SekkaVersion.version)
     (kvs.close)))
 
