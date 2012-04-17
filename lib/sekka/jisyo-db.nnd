@@ -39,9 +39,8 @@
 (require "sekka/sekkaversion")
 (use sekka.util)
 
-(define masterid  "MASTER")
-(define workid    "WORK")
-(define versionid "SEKKA::VERSION")
+(define master-prefix  "MASTER")
+(define version-prefix "SEKKA::VERSION")
 
 (define alphabet-string "abcdefghijklmnopqrstuvwxyz>@;#")
 (define alphabet-lower-list (to-list (alphabet-string.split "")))
@@ -69,7 +68,7 @@
 (define (dict-get userid kvs key . fallback)
   (if-let1 value
       (or (kvs.get (+ userid "::" key) #f)
-          (kvs.get (+ masterid "::" key) #f))
+          (kvs.get (+ master-prefix "::" key) #f))
     value
     (let1 opt (get-optional fallback #f)
       opt)))
@@ -102,7 +101,7 @@
 (define (setup-ready-made-keylist kvs keylist)
   (for-each
    (lambda (key)
-     (let1 key (+ masterid "::" key)
+     (let1 key (+ master-prefix "::" key)
        (unless (kvs.get key #f)
          (kvs.put! key ""))))
    alphabet-pairs)
@@ -115,21 +114,21 @@
     ;; OKURI-ARI
     (for-each
      (lambda (key)
-       (kvs.put! (+ masterid "::" "(" (sekka-upcase key) ")")
+       (kvs.put! (+ master-prefix "::" "(" (sekka-upcase key) ")")
                  (string-join (uniq (sort (hash-table-get okuri-ari-hash key))) " ")))
      (hash-table-keys okuri-ari-hash))
 
     ;; OKURI-NASHI
     (for-each
      (lambda (key)
-       (kvs.put! (+ masterid "::" "(" (sekka-downcase key) ")")
+       (kvs.put! (+ master-prefix "::" "(" (sekka-downcase key) ")")
                  (string-join (uniq (sort (hash-table-get okuri-nashi-hash key))) " ")))
      (hash-table-keys okuri-nashi-hash))
 
     ;; HIRAGANA-PHRASE
     (for-each
      (lambda (key)
-       (kvs.put! (+ masterid "::" "{" (sekka-downcase key) "}")
+       (kvs.put! (+ master-prefix "::" "{" (sekka-downcase key) "}")
                  (string-join (uniq (sort (hash-table-get hiragana-phrase-hash key))) " ")))
      (hash-table-keys hiragana-phrase-hash))))
 
@@ -173,14 +172,14 @@
      (lambda (line)
        (let1 fields (split-dict-line line)
          (set! keylist (cons (first fields) keylist))
-         (append-entry masterid kvs (first fields) (second fields))))
+         (append-entry master-prefix kvs (first fields) (second fields))))
      (f.readlines)))
   (let1 kvs (Kvs.new (get-kvs-type))
     (kvs.open filename)
     (kvs.clear)
     (create-keylist kvs f)
     (setup-ready-made-keylist kvs keylist)
-    (kvs.put! versionid SekkaVersion.version)
+    (kvs.put! version-prefix SekkaVersion.version)
     (kvs.close)))
 
 

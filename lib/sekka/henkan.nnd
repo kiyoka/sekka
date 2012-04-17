@@ -507,7 +507,7 @@
       (for-each
        (lambda (key)
          (let1 fetched (kvs.get  (+ userid "::" "(" (sekka-upcase key) ")")
-                                 (kvs.get  (+ masterid "::" "(" (sekka-upcase key) ")") ""))
+                                 (kvs.get  (+ master-prefix "::" "(" (sekka-upcase key) ")") ""))
            (kvs.put! (+ userid "::" "(" (sekka-upcase key) ")")
                      (string-join (uniq (sort (append (to-list (fetched.split #/[ ]+/))
                                                       (hash-table-get okuri-ari-hash key))))
@@ -518,7 +518,7 @@
       (for-each
        (lambda (key)
          (let1 fetched (kvs.get  (+ userid "::" "(" (sekka-downcase key) ")")
-                                 (kvs.get  (+ masterid "::" "(" (sekka-downcase key) ")") ""))
+                                 (kvs.get  (+ master-prefix "::" "(" (sekka-downcase key) ")") ""))
            (kvs.put! (+ userid "::" "(" (sekka-downcase key) ")")
                      (string-join (uniq (sort (append (to-list (fetched.split #/[ ]+/))
                                                       (hash-table-get okuri-nashi-hash key))))
@@ -529,7 +529,7 @@
       (for-each
        (lambda (key)
          (let1 fetched (kvs.get  (+ userid "::" "{" (sekka-downcase key) "}")
-                                 (kvs.get  (+ masterid "::" "{" (sekka-downcase key) "}") ""))
+                                 (kvs.get  (+ master-prefix "::" "{" (sekka-downcase key) "}") ""))
            (kvs.put! (+ userid "::" "{" (sekka-downcase key) "}")
                      (string-join (uniq (sort (append (to-list (fetched.split #/[ ]+/))
                                                       (hash-table-get hiragana-phrase-hash key))))
