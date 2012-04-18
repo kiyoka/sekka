@@ -216,44 +216,46 @@
        (kvs.get "dummy::henkanenjin"))
 
 (test* "db fetch 6"
-       "ka;ko ka@ko kakko kani kanni kaqi"
-       (kvs.get "MASTER::(ka)"))
+       "i$ n"
+       (kvs.get "Ik::MASTER::kan"))
 
 (test* "db fetch 7"
-       "ka+ kaT ka`"
-       (kvs.get "MASTER::(KA)"))
+       "n$ q$"
+       (kvs.get "Ik::MASTER::henka"))
 
 (test* "db fetch 8"
-       "#kaime #kara# #kqme #kr#"
-       (kvs.get "MASTER::(#k)"))
+       "c t"
+       (kvs.get "Ik::MASTER::#neq#gatsu#ni"))
 
 (test* "db fetch 9"
-       "burogu+ buroguR buroguT burogu`"
-       (kvs.get "dummy::(BU)"))
+       "f u"
+       (kvs.get "Ik::dummy::y"))
 
 (test* "db fetch 10"
-       "/ユーザー辞書"
-       (kvs.get "dummy::ゆーざーじしょ"))
+       "' - : ^"
+       (kvs.get "Ik::dummy::yu"))
 
 (test* "db fetch 11"
-       "yu'za'jisho yu'za'jisyo yu'za'jixo yu'za'zisho yu'za'zisyo yu'za'zixo yu'za-jisho yu'za-jisyo yu'za-jixo yu'za-zisho yu'za-zisyo yu'za-zixo yu'za:jisho yu'za:jisyo yu'za:jixo yu'za:zisho yu'za:zisyo yu'za:zixo yu'za^jisho yu'za^jisyo yu'za^jixo yu'za^zisho yu'za^zisyo yu'za^zixo yu'zc'jisho yu'zc'jisyo yu'zc'jixo yu'zc'zisho yu'zc'zisyo yu'zc'zixo yu'zc-jisho yu'zc-jisyo yu'zc-jixo yu'zc-zisho yu'zc-zisyo yu'zc-zixo yu'zc:jisho yu'zc:jisyo yu'zc:jixo yu'zc:zisho yu'zc:zisyo yu'zc:zixo yu'zc^jisho yu'zc^jisyo yu'zc^jixo yu'zc^zisho yu'zc^zisyo yu'zc^zixo yu-za'jisho yu-za'jisyo yu-za'jixo yu-za'zisho yu-za'zisyo yu-za'zixo yu-za-jisho yu-za-jisyo yu-za-jixo yu-za-zisho yu-za-zisyo yu-za-zixo yu-za:jisho yu-za:jisyo yu-za:jixo yu-za:zisho yu-za:zisyo yu-za:zixo yu-za^jisho yu-za^jisyo yu-za^jixo yu-za^zisho yu-za^zisyo yu-za^zixo yu-zc'jisho yu-zc'jisyo yu-zc'jixo yu-zc'zisho yu-zc'zisyo yu-zc'zixo yu-zc-jisho yu-zc-jisyo yu-zc-jixo yu-zc-zisho yu-zc-zisyo yu-zc-zixo yu-zc:jisho yu-zc:jisyo yu-zc:jixo yu-zc:zisho yu-zc:zisyo yu-zc:zixo yu-zc^jisho yu-zc^jisyo yu-zc^jixo yu-zc^zisho yu-zc^zisyo yu-zc^zixo yu:za'jisho yu:za'jisyo yu:za'jixo yu:za'zisho yu:za'zisyo yu:za'zixo yu:za-jisho yu:za-jisyo yu:za-jixo yu:za-zisho yu:za-zisyo yu:za-zixo yu:za:jisho yu:za:jisyo yu:za:jixo yu:za:zisho yu:za:zisyo yu:za:zixo yu:za^jisho yu:za^jisyo yu:za^jixo yu:za^zisho yu:za^zisyo yu:za^zixo yu:zc'jisho yu:zc'jisyo yu:zc'jixo yu:zc'zisho yu:zc'zisyo yu:zc'zixo yu:zc-jisho yu:zc-jisyo yu:zc-jixo yu:zc-zisho yu:zc-zisyo yu:zc-zixo yu:zc:jisho yu:zc:jisyo yu:zc:jixo yu:zc:zisho yu:zc:zisyo yu:zc:zixo yu:zc^jisho yu:zc^jisyo yu:zc^jixo yu:zc^zisho yu:zc^zisyo yu:zc^zixo yu^za'jisho yu^za'jisyo yu^za'jixo yu^za'zisho yu^za'zisyo yu^za'zixo yu^za-jisho yu^za-jisyo yu^za-jixo yu^za-zisho yu^za-zisyo yu^za-zixo yu^za:jisho yu^za:jisyo yu^za:jixo yu^za:zisho yu^za:zisyo yu^za:zixo yu^za^jisho yu^za^jisyo yu^za^jixo yu^za^zisho yu^za^zisyo yu^za^zixo yu^zc'jisho yu^zc'jisyo yu^zc'jixo yu^zc'zisho yu^zc'zisyo yu^zc'zixo yu^zc-jisho yu^zc-jisyo yu^zc-jixo yu^zc-zisho yu^zc-zisyo yu^zc-zixo yu^zc:jisho yu^zc:jisyo yu^zc:jixo yu^zc:zisho yu^zc:zisyo yu^zc:zixo yu^zc^jisho yu^zc^jisyo yu^zc^jixo yu^zc^zisho yu^zc^zisyo yu^zc^zixo"
-       (kvs.get "dummy::(yu)"))
+       "/ユーザー辞書"
+       (kvs.get "dummy::ゆーざーじしょ"))
 
 (test* "db fetch 12"
        "する"
        (kvs.get "dummy::=sr"))
 
 (test* "db fetch 13"
-       "=suru"
-       (kvs.get "dummy::{su}"))
+       '("r" "u$")
+       (list (kvs.get "Ih::dummy::=su")
+             (kvs.get "Ih::dummy::=sur")))
 
 (test* "db fetch 14"
        "したい"
        (kvs.get "dummy::=shitai"))
 
 (test* "db fetch 15"
-       "=shita =shitai"
-       (kvs.get "dummy::{sh}"))
+       '("i" "t")       
+       (list (kvs.get "Ih::dummy::=sh")
+             (kvs.get "Ih::dummy::=shi")))
 
 
 
@@ -270,14 +272,14 @@
        (kvs.get "dummy2::てすとようえんとり"))
 
 (test* "check user dict 2"
-       "tesutoyouenntori tesutoyouentori tesutoyoueqtori tesutoyowhuenntori tesutoyowhuentori tesutoyowhueqtori tesutoypenntori tesutoypentori tesutoypeqtori"
-       (kvs.get "dummy2::(te)"))
+       "i$"
+       (kvs.get "Ik::dummy2::tesutoyouentor"))
 
 (test* "flush user dict"
-       12
+       11
        (flushUserJisyo userid2 kvs))
 
-;; getに失敗しないといけない。
+;; 直前にflushしているのでgetに失敗しないといけない。
 (test* "check user dict 3"
        :no-entry
        (kvs.get "dummy2::てすとようえんとり" :no-entry))
@@ -297,8 +299,11 @@
        (kvs.get "dummy2::てすとようえんとり"))
 
 (test* "check user dict 6"
-       "tesutoyouenntori tesutoyouentori tesutoyoueqtori tesutoyowhuenntori tesutoyowhuentori tesutoyowhueqtori tesutoypenntori tesutoypentori tesutoypeqtori"
-       (kvs.get "dummy2::(te)"))
+       '("n t" "t" "t")
+       (list
+        (kvs.get "Ik::dummy2::tesutoyouen")
+        (kvs.get "Ik::dummy2::tesutoyouenn")
+        (kvs.get "Ik::dummy2::tesutoyoueq")))
 
 
 ;;-------------------------------------------------------------------

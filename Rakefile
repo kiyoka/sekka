@@ -70,7 +70,7 @@ end
 
 task :compile do
   # generate version.rb
-  dictVersion = "0.9.2"
+  dictVersion = "1.1.0"
   vh = Jeweler::VersionHelper.new "."
   open( "./lib/sekka/sekkaversion.rb", "w" ) {|f|
     f.puts(   "class SekkaVersion" )

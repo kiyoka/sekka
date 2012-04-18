@@ -496,45 +496,6 @@
          (set! user-keylist (cons k user-keylist))
          (append-entry userid kvs k v)))
      sekka-jisyo-data))
-    
-  (define (_create-ready-made-keylist keylist)
-    (receive (okuri-ari-hash
-              okuri-nashi-hash
-              hiragana-phrase-hash)
-        (create-2char-hash keylist)
-      
-      ;; OKURI-ARI
-      (for-each
-       (lambda (key)
-         (let1 fetched (kvs.get  (+ userid "::" "(" (sekka-upcase key) ")")
-                                 (kvs.get  (+ master-prefix "::" "(" (sekka-upcase key) ")") ""))
-           (kvs.put! (+ userid "::" "(" (sekka-upcase key) ")")
-                     (string-join (uniq (sort (append (to-list (fetched.split #/[ ]+/))
-                                                      (hash-table-get okuri-ari-hash key))))
-                                  " "))))
-       (hash-table-keys okuri-ari-hash))
-      
-      ;; OKURI-NASHI
-      (for-each
-       (lambda (key)
-         (let1 fetched (kvs.get  (+ userid "::" "(" (sekka-downcase key) ")")
-                                 (kvs.get  (+ master-prefix "::" "(" (sekka-downcase key) ")") ""))
-           (kvs.put! (+ userid "::" "(" (sekka-downcase key) ")")
-                     (string-join (uniq (sort (append (to-list (fetched.split #/[ ]+/))
-                                                      (hash-table-get okuri-nashi-hash key))))
-                                  " "))))
-       (hash-table-keys okuri-nashi-hash))
-
-      ;; HIRAGANA-PHRASE
-      (for-each
-       (lambda (key)
-         (let1 fetched (kvs.get  (+ userid "::" "{" (sekka-downcase key) "}")
-                                 (kvs.get  (+ master-prefix "::" "{" (sekka-downcase key) "}") ""))
-           (kvs.put! (+ userid "::" "{" (sekka-downcase key) "}")
-                     (string-join (uniq (sort (append (to-list (fetched.split #/[ ]+/))
-                                                      (hash-table-get hiragana-phrase-hash key))))
-                                  " "))))
-       (hash-table-keys hiragana-phrase-hash))))
 
   ;; "ユーザー語彙を"(stored)"にpush!する"
   (define (kvs-push! userid kvs entry-str)
@@ -557,7 +518,7 @@
               #f)
             (begin
               (insert-to-db lst)
-              (_create-ready-made-keylist user-keylist)
+              (setup-trie-index userid kvs user-keylist)
               (kvs-push! userid kvs dict-line)
               #?=(+ "user dict stored userid=[" userid "] tango=[" dict-line "]")
               #t))))

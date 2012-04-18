@@ -41,10 +41,10 @@
 (use sekka.util)
 
 (define master-prefix  "MASTER")
-(define master-okuri-ari-prefix       "IK::MASTER::")
-(define master-okuri-nashi-prefix     "Ik::MASTER::")
-(define master-hiragana-phrase-prefix "Ih::MASTER::")
 (define version-prefix "SEKKA::VERSION")
+(define okuri-ari-prefix       "IK")
+(define okuri-nashi-prefix     "Ik")
+(define hiragana-phrase-prefix "Ih")
 
 ;; KVS type setting
 (define *kvs-type* 'tokyocabinet)  ;; default
@@ -66,40 +66,42 @@
     (let1 opt (get-optional fallback #f)
       opt)))
 
-(define (grouping-keylist keylist)
-  (let ([okuri-ari-list         '()]
-        [okuri-nashi-list       '()]
-        [hiragana-phrase-list   '()])
-    (for-each
-     (lambda (k)
-       (when (rxmatch #/^[=a-zA-Z#^>-@`\;+:'\-]+$/ k)
-         (if (rxmatch #/^=/ k)
-             ;; HIRAGANA-PHRASE
-             (push! hiragana-phrase-list k)
-             ;; OKURI-ARI and OKURI-NASHI
-             (if (rxmatch #/[A-Z`+]$/ k)
+
+(define (setup-trie-index userid kvs keylist)
+
+  (define (grouping-keylist keylist)
+    (let ([okuri-ari-list         '()]
+          [okuri-nashi-list       '()]
+          [hiragana-phrase-list   '()])
+      (for-each
+       (lambda (k)
+         (when (rxmatch #/^[=a-zA-Z#^>-@`\;+:'\-]+$/ k)
+           (if (rxmatch #/^=/ k)
+               ;; HIRAGANA-PHRASE
+               (push! hiragana-phrase-list k)
+               ;; OKURI-ARI and OKURI-NASHI
+               (if (rxmatch #/[A-Z`+]$/ k)
                  (push! okuri-ari-list   k)
                  (push! okuri-nashi-list k)))))
-     keylist)
-    (values okuri-ari-list
-            okuri-nashi-list
-            hiragana-phrase-list)))
+       keylist)
+      (values okuri-ari-list
+              okuri-nashi-list
+              hiragana-phrase-list)))
 
-(define (setup-trie-index kvs keylist)
   (receive (okuri-ari-list
             okuri-nashi-list
             hiragana-phrase-list)
       (grouping-keylist keylist)
 
-    (let1 trie (DistributedTrie::Trie.new kvs master-okuri-ari-prefix)
+    (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-ari-prefix "::" userid "::"))
       (for-each (lambda (k) (trie.addKey! k)) okuri-ari-list)
       (trie.commit!))
 
-    (let1 trie (DistributedTrie::Trie.new kvs master-okuri-nashi-prefix)
+    (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-nashi-prefix "::" userid "::"))
       (for-each (lambda (k) (trie.addKey! k)) okuri-nashi-list)
       (trie.commit!))
 
-    (let1 trie (DistributedTrie::Trie.new kvs master-hiragana-phrase-prefix)
+    (let1 trie (DistributedTrie::Trie.new kvs (+ hiragana-phrase-prefix "::" userid "::"))
       (for-each (lambda (k) (trie.addKey! k)) hiragana-phrase-list)
       (trie.commit!))))
 
@@ -149,7 +151,7 @@
     (kvs.open filename)
     (kvs.clear)
     (create-keylist kvs f)
-    (setup-trie-index kvs keylist)
+    (setup-trie-index master-prefix kvs keylist)
     (kvs.put! version-prefix SekkaVersion.version)
     (kvs.close)))
 
