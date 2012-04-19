@@ -31,46 +31,42 @@
 #  
 #  $Id: 
 #
-require 'fuzzystringmatch'
+require 'distributedtrie'
 require 'sekka/kvs'
 
 class ApproximateSearch
   def initialize( jarow_shikii )
     @jarow_shikii = jarow_shikii
-    @jarow        = FuzzyStringMatch::JaroWinkler.create( :native )
-  end
-
-  def filtering( keyword, arr )
-    keyword = keyword.downcase
-    arr.map { |str|
-      val = @jarow.getDistance( keyword, str.downcase )
-      #printf( "   [%s] vs [%s] => %f\n", keyword, str.downcase, val )
-      (val > @jarow_shikii) ? [ val, str ] : false
-    }.select { |v| v }.sort_by {|item| 1.0 - item[0]}
   end
 
   def search( userid, kvs, keyword, type )
-    readymade_key = case type
-                    when 'k' # okuri nashi kanji entry
-                      "(" + keyword.slice( 0, 2 ).downcase + ")"
-                    when 'K' # okuri ari   kanji entry
-                      "(" + keyword.slice( 0, 2 ).upcase   + ")"
-                    when 'h' # hiragana phrase entry
-                      "{" + keyword.slice( 1, 2 ).downcase + "}"
-                    else
-                      raise sprintf( "Error: ApproximateSearch#search unknown type %s ", type )
-                    end
-
-    str = kvs.get( userid + "::" + readymade_key, false )
-    if not str
-      str = kvs.get( "MASTER::" + readymade_key )
-    end
-
-    #printf( "#readymade_key %s : %s\n", readymade_key, str )
-    if str
-      filtering( keyword, str.split( /[ ]+/ ))
+    arr = []
+    case userid
+    when "MASTER"
+      arr  = searchByUser( "MASTER", kvs, keyword, type )
     else
-      [ ]
+      h = {}
+      searchByUser( "MASTER", kvs, keyword, type ).each { |item| h[ item[1] ] = item[0] }
+      searchByUser(  userid,  kvs, keyword, type ).each { |item| h[ item[1] ] = item[0] }
+      h.keys.each { |k|  arr << [ h[k], k ] }
     end
+    arr.sort_by {|item| [1.0 - item[0], item[1]]}
+  end
+
+  def searchByUser( userid, kvs, keyword, type )
+    pair = case type
+           when 'k' # okuri nashi kanji entry
+             ["Ik::" + userid + "::", keyword.downcase]
+           when 'K' # okuri ari   kanji entry
+             ["IK::" + userid + "::", keyword]
+           when 'h' # hiragana phrase entry
+             ["Ih::" + userid + "::", keyword.downcase]
+           else
+             raise sprintf( "Error: ApproximateSearch#search unknown type %s ", type )
+           end
+    prefix   = pair[0]
+    _keyword = pair[1]
+    trie = DistributedTrie::Trie.new( kvs, prefix )
+    trie.fuzzySearch( _keyword, @jarow_shikii )
   end
 end
