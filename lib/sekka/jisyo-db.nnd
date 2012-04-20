@@ -69,10 +69,24 @@
 
 (define (setup-trie-index userid kvs keylist)
 
+  (define (trie-add-autocommit trie keylist tag)
+    (let ([i 0]
+          [progress (ProgressBar.new tag (length keylist) STDERR)])
+      (for-each
+       (lambda (k)
+         (trie.addKey! k)
+         (set! i (+ i 1))
+         (when (= 0 (% i 100))
+           (trie.commit!))
+         (progress.inc))
+       keylist))
+    trie.commit!)
+
   (define (grouping-keylist keylist)
     (let ([okuri-ari-list         '()]
           [okuri-nashi-list       '()]
-          [hiragana-phrase-list   '()])
+          [hiragana-phrase-list   '()]
+          [progress (ProgressBar.new "grouping   "  (length keylist) STDERR)])
       (for-each
        (lambda (k)
          (when (rxmatch #/^[=a-zA-Z#^>-@`\;+:'\-]+$/ k)
@@ -82,7 +96,8 @@
                ;; OKURI-ARI and OKURI-NASHI
                (if (rxmatch #/[A-Z`+]$/ k)
                  (push! okuri-ari-list   k)
-                 (push! okuri-nashi-list k)))))
+                 (push! okuri-nashi-list k))))
+         (progress.inc))
        keylist)
       (values okuri-ari-list
               okuri-nashi-list
@@ -94,16 +109,13 @@
       (grouping-keylist keylist)
 
     (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-ari-prefix "::" userid "::"))
-      (for-each (lambda (k) (trie.addKey! k)) okuri-ari-list)
-      (trie.commit!))
+      (trie-add-autocommit trie   okuri-ari-list       "okuri-ari  "))
 
     (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-nashi-prefix "::" userid "::"))
-      (for-each (lambda (k) (trie.addKey! k)) okuri-nashi-list)
-      (trie.commit!))
+      (trie-add-autocommit trie   okuri-nashi-list     "okuri-nashi"))
 
     (let1 trie (DistributedTrie::Trie.new kvs (+ hiragana-phrase-prefix "::" userid "::"))
-      (for-each (lambda (k) (trie.addKey! k)) hiragana-phrase-list)
-      (trie.commit!))))
+      (trie-add-autocommit trie   hiragana-phrase-list "hiragana   " ))))
 
 
 (define (append-entry userid kvs _key value)
@@ -138,15 +150,28 @@
         (kvs.put! key value))))))
 
 
+(define (file-length f)
+  (let1 total 0
+    (for-each
+     (lambda (x)
+       (set! total (+ 1 total)))
+     f)
+    (f.rewind)
+    total))
+
 (define (load-sekka-jisyo-f f filename)
   (define keylist '())
   (define (create-keylist kvs f)
-    (for-each
-     (lambda (line)
-       (let1 fields (split-dict-line line)
-         (set! keylist (cons (first fields) keylist))
-         (append-entry master-prefix kvs (first fields) (second fields))))
-     (f.readlines)))
+    (let1 progress (ProgressBar.new "data-body  " (file-length f) STDERR)
+      (for-each
+       (lambda (line)
+         (let* (
+                [line (line.chomp)]
+                [fields (split-dict-line line)])
+           (push! keylist (first fields))
+           (append-entry master-prefix kvs (first fields) (second fields)))
+         (progress.inc))
+       f)))
   (let1 kvs (Kvs.new (get-kvs-type))
     (kvs.open filename)
     (kvs.clear)
@@ -168,15 +193,6 @@
 
 
 (define (restore-sekka-jisyo-f f filename-or-hostname)
-  (define (file-length f)
-    (let1 total 0
-      (for-each
-       (lambda (x)
-         (set! total (+ 1 total)))
-       f)
-      (f.rewind)
-      total))
-    
   (define (restore f kvs progress)
     (let loop ([line (f.readline.chomp)])
       (let* (
