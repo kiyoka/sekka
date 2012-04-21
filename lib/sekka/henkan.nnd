@@ -518,7 +518,7 @@
               #f)
             (begin
               (insert-to-db lst)
-              (setup-trie-index userid kvs user-keylist)
+              (setup-trie-index userid kvs user-keylist #f)
               (kvs-push! userid kvs dict-line)
               #?=(+ "user dict stored userid=[" userid "] tango=[" dict-line "]")
               #t))))

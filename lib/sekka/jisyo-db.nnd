@@ -67,26 +67,25 @@
       opt)))
 
 
-(define (setup-trie-index userid kvs keylist)
+(define (setup-trie-index userid kvs keylist displayProgress)
 
-  (define (trie-add-autocommit trie keylist tag)
-    (let ([i 0]
-          [progress (ProgressBar.new tag (length keylist) STDERR)])
+  (define (trie-add-autocommit trie keylist progress)
+    (let ([i 0])
       (for-each
        (lambda (k)
          (trie.addKey! k)
          (set! i (+ i 1))
          (when (= 0 (% i 100))
            (trie.commit!))
-         (progress.inc))
+         (when progress
+           (progress.inc)))
        keylist))
     trie.commit!)
 
-  (define (grouping-keylist keylist)
+  (define (grouping-keylist keylist progress)
     (let ([okuri-ari-list         '()]
           [okuri-nashi-list       '()]
-          [hiragana-phrase-list   '()]
-          [progress (ProgressBar.new "grouping   "  (length keylist) STDERR)])
+          [hiragana-phrase-list   '()])
       (for-each
        (lambda (k)
          (when (rxmatch #/^[=a-zA-Z#^>-@`\;+:'\-]+$/ k)
@@ -97,25 +96,29 @@
                (if (rxmatch #/[A-Z`+]$/ k)
                  (push! okuri-ari-list   k)
                  (push! okuri-nashi-list k))))
-         (progress.inc))
+         (when progress
+           (progress.inc)))
        keylist)
       (values okuri-ari-list
               okuri-nashi-list
               hiragana-phrase-list)))
 
-  (receive (okuri-ari-list
-            okuri-nashi-list
-            hiragana-phrase-list)
-      (grouping-keylist keylist)
-
-    (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-ari-prefix "::" userid "::"))
-      (trie-add-autocommit trie   okuri-ari-list       "okuri-ari  "))
-
-    (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-nashi-prefix "::" userid "::"))
-      (trie-add-autocommit trie   okuri-nashi-list     "okuri-nashi"))
-
-    (let1 trie (DistributedTrie::Trie.new kvs (+ hiragana-phrase-prefix "::" userid "::"))
-      (trie-add-autocommit trie   hiragana-phrase-list "hiragana   " ))))
+  (let1 progress (if displayProgress
+                     (ProgressBar.new "trie-tree  "  (* 2 (length keylist)) STDERR)
+                     #f)
+    (receive (okuri-ari-list
+              okuri-nashi-list
+              hiragana-phrase-list)
+        (grouping-keylist keylist progress)
+    
+      (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-ari-prefix "::" userid "::"))
+        (trie-add-autocommit trie   okuri-ari-list       progress))
+      
+      (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-nashi-prefix "::" userid "::"))
+        (trie-add-autocommit trie   okuri-nashi-list     progress))
+      
+      (let1 trie (DistributedTrie::Trie.new kvs (+ hiragana-phrase-prefix "::" userid "::"))
+        (trie-add-autocommit trie   hiragana-phrase-list progress)))))
 
 
 (define (append-entry userid kvs _key value)
@@ -176,7 +179,7 @@
     (kvs.open filename)
     (kvs.clear)
     (create-keylist kvs f)
-    (setup-trie-index master-prefix kvs keylist)
+    (setup-trie-index master-prefix kvs keylist #t)
     (kvs.put! version-prefix SekkaVersion.version)
     (kvs.close)))
 
