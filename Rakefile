@@ -54,7 +54,6 @@ begin
                            "sekka-path"]
     gemspec.required_ruby_version = '>= 1.9.1'
     gemspec.add_dependency( "eventmachine" )
-    gemspec.add_dependency( "fuzzy-string-match", ">= 0.9.2" )
     gemspec.add_dependency( "memcache-client" )
     gemspec.add_dependency( "nendo", "= 0.6.4" )
     gemspec.add_dependency( "rack" )
