@@ -317,25 +317,25 @@
 (test-section "approximate-search core")
 
 (test* "search keyword list 1"
-       '((1.0 "henkan") (0.981 "henkann") (0.9722 "henka") (0.9611 "hennka") (0.9444 "henkaq"))
+       '((1.0 "henkan") (0.981 "henkann") (0.9722 "henka") (0.9444 "henkaq"))
        (my-round-map
         (arr->list
          (a-search.search userid kvs "henkan" "k"))))
 
 (test* "search keyword list 2"
-       '((1.0 "hennkan") (0.9875 "hennkann") (0.981 "hennka") (0.9667 "henkann") (0.9619 "hennkaq") (0.9421 "hennkanenjin") (0.9421 "hennkanenjiq") (0.9421 "hennkanenzin") (0.9421 "hennkanenziq") (0.9421 "hennkaneqjin") (0.9421 "hennkaneqjiq") (0.9421 "hennkaneqzin") (0.9421 "hennkaneqziq"))
+       '((1.0 "hennkan") (0.9875 "hennkann") (0.981 "hennka") (0.9619 "hennkaq") (0.9421 "hennkanenjin") (0.9421 "hennkanenjiq") (0.9421 "hennkanenzin") (0.9421 "hennkanenziq") (0.9421 "hennkaneqjin") (0.9421 "hennkaneqjiq") (0.9421 "hennkaneqzin") (0.9421 "hennkaneqziq"))
        (my-round-map
         (arr->list
          (a-search.search userid kvs "hennkan" "k"))))
 
 (test* "search keyword list 3"
-       '((1.0 "henkann") (0.981 "henkan") (0.9667 "hennkan") (0.9524 "henka") (0.9449 "henkanenjin") (0.9449 "henkanenjiq") (0.9449 "henkanenzin") (0.9449 "henkanenziq") (0.9449 "henkaneqjin") (0.9449 "henkaneqzin") (0.9421 "henkannenjin") (0.9421 "henkannenjiq") (0.9421 "henkannenzin") (0.9421 "henkannenziq") (0.9421 "henkanneqjin") (0.9421 "henkanneqjiq") (0.9421 "henkanneqzin") (0.9421 "henkanneqziq"))
+       '((1.0 "henkann") (0.981 "henkan") (0.9524 "henka") (0.9449 "henkanenjin") (0.9449 "henkanenjiq") (0.9449 "henkanenzin") (0.9449 "henkanenziq") (0.9421 "henkannenjin") (0.9421 "henkannenjiq") (0.9421 "henkannenzin") (0.9421 "henkannenziq") (0.9421 "henkanneqjin") (0.9421 "henkanneqjiq") (0.9421 "henkanneqzin") (0.9421 "henkanneqziq"))
        (my-round-map
         (arr->list
          (a-search.search userid kvs "henkann" "k"))))
 
 (test* "search keyword list 4"
-       '((1.0 "hennkann") (0.9875 "hennkan") (0.9667 "hennka") (0.9537 "hennkanenjin") (0.9537 "hennkanenjiq") (0.9537 "hennkanenzin") (0.9537 "hennkanenziq") (0.9537 "hennkaneqjin") (0.9537 "hennkaneqzin") (0.9507 "hennkannenjin") (0.9507 "hennkannenjiq") (0.9507 "hennkannenzin") (0.9507 "hennkannenziq") (0.9507 "hennkanneqjin") (0.9507 "hennkanneqjiq") (0.9507 "hennkanneqzin") (0.9507 "hennkanneqziq") (0.9476 "hennkaq") (0.9444 "hennkaqenjin") (0.9444 "hennkaqenzin") (0.9408 "hennkanenjinn") (0.9408 "hennkanennjin") (0.9408 "hennkanennjiq") (0.9408 "hennkanennzin") (0.9408 "hennkanennziq") (0.9408 "hennkanenzinn") (0.9408 "hennkaneqjinn") (0.9408 "hennkaneqzinn"))
+       '((1.0 "hennkann") (0.9875 "hennkan") (0.9667 "hennka") (0.9537 "hennkanenjin") (0.9537 "hennkanenjiq") (0.9537 "hennkanenzin") (0.9537 "hennkanenziq") (0.9537 "hennkaneqjin") (0.9537 "hennkaneqzin") (0.9507 "hennkannenjin") (0.9507 "hennkannenjiq") (0.9507 "hennkannenzin") (0.9507 "hennkannenziq") (0.9507 "hennkanneqjin") (0.9507 "hennkanneqjiq") (0.9507 "hennkanneqzin") (0.9507 "hennkanneqziq") (0.9476 "hennkaq") (0.9408 "hennkanenjinn") (0.9408 "hennkanennjin") (0.9408 "hennkanennjiq") (0.9408 "hennkanennzin") (0.9408 "hennkanennziq") (0.9408 "hennkanenzinn") (0.9408 "hennkaneqjinn") (0.9408 "hennkaneqzinn"))
        (my-round-map
         (arr->list
          (a-search.search userid kvs "hennkann" "k"))))
@@ -347,7 +347,7 @@
          (a-search.search userid kvs "heqkaq" "k"))))
 
 (test* "search keyword list 6"
-       '((0.9762 "henkaS") (0.9667 "hennkaS"))       
+       '((0.9762 "henkaS"))
        (my-round-map
         (arr->list
          (a-search.search userid kvs "henkanS" "K"))))
@@ -359,12 +359,12 @@
          (a-search.search userid kvs "hennkanS" "K"))))
 
 (test* "approximate search 1"
-       '((1.0 "henka" "Cへんか") (0.9722 "henkan" "Cへんかん") (0.9722 "henkaq" "Cへんかん") (0.9611 "hennka" "Cへんか") (0.9524 "henkann" "Cへんかん"))
+       '((1.0 "henka" "Cへんか") (0.9722 "henkan" "Cへんかん") (0.9722 "henkaq" "Cへんかん") (0.9524 "henkann" "Cへんかん"))
        (my-round-map
         (approximate-search userid kvs "henka"  "k" 0)))
 
 (test* "approximate search 2"
-       '((1.1 "hennka" "Cへんか") (1.079 "hennkan" "Cへんかん") (1.079 "hennkaq" "Cへんかん") (1.0633 "hennkann" "Cへんかん") (0.9611 "henka" "Cへんか") (0.9611 "henkan" "Cへんかん"))
+       '((1.1 "hennka" "Cへんか") (1.079 "hennkan" "Cへんかん") (1.079 "hennkaq" "Cへんかん") (1.0633 "hennkann" "Cへんかん"))
        (my-round-map
         (approximate-search userid kvs "hennka"  "k" 0)))
 
@@ -404,7 +404,7 @@
         (approximate-search userid kvs "inyou"  "k" 0)))
 
 (test* "approximate search 10"
-       '((1.1 "innyou" "Cいんよう") (1.0542 "innyowhu" "Cいんよう") (1.0 "innyou" "Cいんにょう") (0.9667 "innnyou" "Cいんにょう") (0.9583 "innyowhu" "Cいんにょう") (0.9556 "inyou" "Cいんよう"))
+       '((1.1 "innyou" "Cいんよう") (1.0 "innyou" "Cいんにょう"))
        (my-round-map
         (approximate-search userid kvs "innyou"  "k" 0)))
 
@@ -469,7 +469,7 @@
         (approximate-search userid kvs "=natteiru"  "h" 0)))
 
 (test* "approximate search 23"
-       '((0.9778 "=natteiru" "なっている"))
+       '()
        (my-round-map
         (approximate-search userid kvs "=nateiru"  "h" 0)))
 
@@ -663,12 +663,12 @@
 (test-section "henkan (okuri ari)")
 
 (test* "approximate search 1"
-       '((1.0 "henkaS" "Cへんかs") (0.9667 "hennkaS" "Cへんかs"))
+       '((1.0 "henkaS" "Cへんかs"))
        (my-round-map
         (approximate-search userid kvs "henkaS" "K" 0)))
 
 (test* "approximate search 2"
-       '((0.9762 "henkaS" "Cへんかs") (0.9667 "hennkaS" "Cへんかs"))
+       '((0.9762 "henkaS" "Cへんかs"))
        (my-round-map
         (approximate-search userid kvs "henkanS" "K" 0)))
 
@@ -678,7 +678,7 @@
         (approximate-search userid kvs "okonaU" "K" 0)))
 
 (test* "approximate search 4"
-       '((0.9667 "okonaU" "Cおこなu"))
+       '()
        (my-round-map
         (approximate-search userid kvs "okonU" "K" 0)))
 
@@ -693,7 +693,7 @@
         (approximate-search userid kvs "henkaS" "K" 1)))
 
 (test* "approximate search 7"
-       '((1.0 "henkaS" "Cへんかs") (0.9667 "hennkaS" "Cへんかs"))
+       '((1.0 "henkaS" "Cへんかs"))
        (my-round-map
         (approximate-search userid kvs "henkaS" "K" 2)))
 
@@ -727,7 +727,7 @@
        (henkan-okuri-ari userid kvs "OkonaU" 0 :normal))
 
 (test* "okuri ari 8"
-       '(("行う" #f "おこなu" j) ("行なう" "※送り位置補正" "おこなu" j))
+       '()
        (henkan-okuri-ari userid kvs "okonU" 0 :normal))
 
 (test* "okuri ari 9"
@@ -902,7 +902,7 @@
         '("a" "ai" "aiu" "aiue" "aiueo" "aiueoka" "aiueokaki" "aiueokakiku" "aiueokakikuke" "aiueokakikukeko")))
 
 (test* "hiragana-phrase 13"
-       '(("なっている" #f "nateiru" h) ("なている" #f "nateiru" h) ("ナテイル" #f "nateiru" k))
+       '(("なている" #f "nateiru" h) ("ナテイル" #f "nateiru" k))
        (henkan-hiragana userid kvs "nateiru" :normal))
 
 
