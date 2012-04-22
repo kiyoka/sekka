@@ -88,14 +88,14 @@
           [hiragana-phrase-list   '()])
       (for-each
        (lambda (k)
-         (when (rxmatch #/^[=a-zA-Z#^>-@`\;+:'\-]+$/ k)
-           (if (rxmatch #/^=/ k)
-               ;; HIRAGANA-PHRASE
-               (push! hiragana-phrase-list k)
-               ;; OKURI-ARI and OKURI-NASHI
-               (if (rxmatch #/[A-Z`+]$/ k)
-                 (push! okuri-ari-list   k)
-                 (push! okuri-nashi-list k))))
+         (if (rxmatch #/^[=a-zA-Z#^>-@`\;+:'\-]+$/ k)
+             (if (rxmatch #/^=/ k)
+                 ;; HIRAGANA-PHRASE
+                 (push! hiragana-phrase-list k)
+                 ;; OKURI-ARI and OKURI-NASHI
+                 (if (rxmatch #/[A-Z`+]$/ k)
+                     (push! okuri-ari-list   k)
+                     (push! okuri-nashi-list k))))
          (when progress
            (progress.inc)))
        keylist)
@@ -110,7 +110,15 @@
               okuri-nashi-list
               hiragana-phrase-list)
         (grouping-keylist keylist progress)
-    
+
+      (when progress 
+        (progress.set (+ (length keylist)
+                         (- (length keylist)
+                            (+
+                             (length okuri-ari-list)
+                             (length okuri-nashi-list)
+                             (length hiragana-phrase-list))))))
+
       (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-ari-prefix "::" userid "::"))
         (trie-add-autocommit trie   okuri-ari-list       progress))
       
