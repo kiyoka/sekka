@@ -16,16 +16,17 @@ DICTURL = "https://raw.github.com/kiyoka/sekka/master/public_dict/" + SekkaVersi
 
 PIDFILE = DICTDIR + "/pid"
 
-TC_FILE = DICTDIR + "/SEKKA-JISYO.SMALL.tch"
+TC_OPTS = "#xmsiz=256m"
+TC_FILE = DICTDIR + "/SEKKA-JISYO.SMALL.tch" + TC_OPTS
 TSVFILE = DICTDIR + "/SEKKA-JISYO.SMALL.tsv"
 SUMFILE = DICTDIR + "/SEKKA-JISYO.SMALL.md5"
 
 URLURL  = DICTURL + "/SEKKA-JISYO.SMALL.url"
 SUMURL  = DICTURL + "/SEKKA-JISYO.SMALL.md5"
 
-TC_FILE_LIST = [ DICTDIR + "/SEKKA-JISYO.CUSTOM.tch",
-                 DICTDIR + "/SEKKA-JISYO.LARGE.tch",
-                 DICTDIR + "/SEKKA-JISYO.SMALL.tch" ]
+TC_FILE_LIST = [ DICTDIR + "/SEKKA-JISYO.CUSTOM.tch" + TC_OPTS,
+                 DICTDIR + "/SEKKA-JISYO.LARGE.tch"  + TC_OPTS,
+                 DICTDIR + "/SEKKA-JISYO.SMALL.tch"  + TC_OPTS ]
 
 MEMCACHED = "localhost:11211"                # memcahced
 
@@ -111,7 +112,7 @@ def main
 
   case dictType
   when :tokyocabinet
-    # .tchファイルが存在すうるか調べる
+    # .tchファイルが存在するか調べる
     list = TC_FILE_LIST.select { |name| File.exist?( name ) }
 
     if 0 == list.size
