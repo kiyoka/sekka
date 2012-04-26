@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kiyoka Nishiyama"]
-  s.date = "2012-04-22"
+  s.date = "2012-04-26"
   s.description = "Sekka is a SKK like input method. Sekka server provides REST Based API. If you are SKK user, let's try it."
   s.email = "kiyoka@sumibi.org"
   s.executables = ["sekka-jisyo", "sekka-server", "sekka-benchmark", "sekka-path"]
