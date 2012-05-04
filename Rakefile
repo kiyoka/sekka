@@ -20,8 +20,10 @@
 
 require 'rake'
 begin
-  require 'jeweler'
+  require 'jeweler2'
   Jeweler::Tasks.new do |gemspec|
+    vh = Jeweler::VersionHelper.new "."
+    gemspec.version = vh.to_s + ".pre"
     gemspec.name = "sekka"
     gemspec.summary = "Sekka is a SKK like input method."
     gemspec.description = "Sekka is a SKK like input method. Sekka server provides REST Based API. If you are SKK user, let's try it."
@@ -52,14 +54,14 @@ begin
                            "sekka-path"]
     gemspec.required_ruby_version = '>= 1.9.1'
     gemspec.add_dependency( "eventmachine" )
-    gemspec.add_dependency( "fuzzy-string-match", ">= 0.9.2" )
     gemspec.add_dependency( "memcache-client" )
     gemspec.add_dependency( "nendo", "= 0.6.4" )
+    gemspec.add_dependency( "distributed-trie" )
     gemspec.add_dependency( "rack" )
     gemspec.add_dependency( "ruby-progressbar" )
   end
 rescue LoadError
-  puts "Jeweler not available. Install it with: sudo gem install jeweler"
+  puts "Jeweler2 not available. Install it with: sudo gem install jeweler2"
 end
 
 
@@ -68,7 +70,7 @@ end
 
 task :compile do
   # generate version.rb
-  dictVersion = "0.9.2"
+  dictVersion = "1.2.0"
   vh = Jeweler::VersionHelper.new "."
   open( "./lib/sekka/sekkaversion.rb", "w" ) {|f|
     f.puts(   "class SekkaVersion" )

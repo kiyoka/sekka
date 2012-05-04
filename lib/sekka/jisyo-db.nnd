@@ -37,22 +37,14 @@
 (require "progressbar")
 (require "sekka/kvs")
 (require "sekka/sekkaversion")
+(require "distributedtrie")
 (use sekka.util)
 
-(define masterid  "MASTER")
-(define workid    "WORK")
-(define versionid "SEKKA::VERSION")
-
-(define alphabet-string "abcdefghijklmnopqrstuvwxyz>@;#")
-(define alphabet-lower-list (to-list (alphabet-string.split "")))
-(define alphabet-upper-list (to-list (. (sekka-upcase alphabet-string) split "")))
-(define alphabet-pairs (append-map
-                        (lambda (a)
-                          (map
-                           (lambda (b)
-                             (+ a b))
-                           (append alphabet-upper-list alphabet-lower-list)))
-                        alphabet-lower-list))
+(define master-prefix  "MASTER")
+(define version-prefix "SEKKA::VERSION")
+(define okuri-ari-prefix       "IK")
+(define okuri-nashi-prefix     "Ik")
+(define hiragana-phrase-prefix "Ih")
 
 ;; KVS type setting
 (define *kvs-type* 'tokyocabinet)  ;; default
@@ -69,69 +61,72 @@
 (define (dict-get userid kvs key . fallback)
   (if-let1 value
       (or (kvs.get (+ userid "::" key) #f)
-          (kvs.get (+ masterid "::" key) #f))
+          (kvs.get (+ master-prefix "::" key) #f))
     value
     (let1 opt (get-optional fallback #f)
       opt)))
 
-(define (create-2char-hash keylist)
-  (define okuri-ari-hash         (make-hash-table))
-  (define okuri-nashi-hash       (make-hash-table))
-  (define hiragana-phrase-hash   (make-hash-table))
-  (define (create-hash keylist)
-    (for-each
-     (lambda (k)
-       (when (rxmatch #/^[=a-zA-Z#^>-@`\;+:'\-]+$/ k)
-         (if (rxmatch #/^=/ k)
-             ;; HIRAGANA-PHRASE
-             (let1 sliced (sekka-downcase (k.slice 1 2))
-               (when (= 2 sliced.size)
-                 (hash-table-push! hiragana-phrase-hash   sliced k)))
-             ;; OKURI-ARI and OKURI-NASHI
-             (let1 sliced (sekka-downcase (k.slice 0 2))
-               (when (= 2 sliced.size)
+
+(define (setup-trie-index userid kvs keylist displayProgress)
+
+  (define (trie-add-autocommit trie keylist progress)
+    (let ([i 0])
+      (for-each
+       (lambda (k)
+         (trie.addKey! k)
+         (set! i (+ i 1))
+         (when (= 0 (% i 100))
+           (trie.commit!))
+         (when progress
+           (progress.inc)))
+       keylist))
+    trie.commit!)
+
+  (define (grouping-keylist keylist progress)
+    (let ([okuri-ari-list         '()]
+          [okuri-nashi-list       '()]
+          [hiragana-phrase-list   '()])
+      (for-each
+       (lambda (k)
+         (if (rxmatch #/^[=a-zA-Z#^>-@`\;+:'\-]+$/ k)
+             (if (rxmatch #/^=/ k)
+                 ;; HIRAGANA-PHRASE
+                 (push! hiragana-phrase-list k)
+                 ;; OKURI-ARI and OKURI-NASHI
                  (if (rxmatch #/[A-Z`+]$/ k)
-                     (hash-table-push! okuri-ari-hash   sliced k)
-                     (hash-table-push! okuri-nashi-hash sliced k)))))))
-     keylist))
-  (create-hash keylist)
-  (values okuri-ari-hash
-          okuri-nashi-hash
-          hiragana-phrase-hash))
+                     (push! okuri-ari-list   k)
+                     (push! okuri-nashi-list k))))
+         (when progress
+           (progress.inc)))
+       keylist)
+      (values okuri-ari-list
+              okuri-nashi-list
+              hiragana-phrase-list)))
 
-(define (setup-ready-made-keylist kvs keylist)
-  (for-each
-   (lambda (key)
-     (let1 key (+ masterid "::" key)
-       (unless (kvs.get key #f)
-         (kvs.put! key ""))))
-   alphabet-pairs)
-  
-  (receive (okuri-ari-hash
-            okuri-nashi-hash
-            hiragana-phrase-hash)
-      (create-2char-hash keylist)
+  (let1 progress (if displayProgress
+                     (ProgressBar.new "trie-tree  "  (* 2 (length keylist)) STDERR)
+                     #f)
+    (receive (okuri-ari-list
+              okuri-nashi-list
+              hiragana-phrase-list)
+        (grouping-keylist keylist progress)
 
-    ;; OKURI-ARI
-    (for-each
-     (lambda (key)
-       (kvs.put! (+ masterid "::" "(" (sekka-upcase key) ")")
-                 (string-join (uniq (sort (hash-table-get okuri-ari-hash key))) " ")))
-     (hash-table-keys okuri-ari-hash))
+      (when progress 
+        (progress.set (+ (length keylist)
+                         (- (length keylist)
+                            (+
+                             (length okuri-ari-list)
+                             (length okuri-nashi-list)
+                             (length hiragana-phrase-list))))))
 
-    ;; OKURI-NASHI
-    (for-each
-     (lambda (key)
-       (kvs.put! (+ masterid "::" "(" (sekka-downcase key) ")")
-                 (string-join (uniq (sort (hash-table-get okuri-nashi-hash key))) " ")))
-     (hash-table-keys okuri-nashi-hash))
-
-    ;; HIRAGANA-PHRASE
-    (for-each
-     (lambda (key)
-       (kvs.put! (+ masterid "::" "{" (sekka-downcase key) "}")
-                 (string-join (uniq (sort (hash-table-get hiragana-phrase-hash key))) " ")))
-     (hash-table-keys hiragana-phrase-hash))))
+      (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-ari-prefix "::" userid "::"))
+        (trie-add-autocommit trie   okuri-ari-list       progress))
+      
+      (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-nashi-prefix "::" userid "::"))
+        (trie-add-autocommit trie   okuri-nashi-list     progress))
+      
+      (let1 trie (DistributedTrie::Trie.new kvs (+ hiragana-phrase-prefix "::" userid "::"))
+        (trie-add-autocommit trie   hiragana-phrase-list progress)))))
 
 
 (define (append-entry userid kvs _key value)
@@ -166,21 +161,34 @@
         (kvs.put! key value))))))
 
 
+(define (file-length f)
+  (let1 total 0
+    (for-each
+     (lambda (x)
+       (set! total (+ 1 total)))
+     f)
+    (f.rewind)
+    total))
+
 (define (load-sekka-jisyo-f f filename)
   (define keylist '())
   (define (create-keylist kvs f)
-    (for-each
-     (lambda (line)
-       (let1 fields (split-dict-line line)
-         (set! keylist (cons (first fields) keylist))
-         (append-entry masterid kvs (first fields) (second fields))))
-     (f.readlines)))
+    (let1 progress (ProgressBar.new "data-body  " (file-length f) STDERR)
+      (for-each
+       (lambda (line)
+         (let* (
+                [line (line.chomp)]
+                [fields (split-dict-line line)])
+           (push! keylist (first fields))
+           (append-entry master-prefix kvs (first fields) (second fields)))
+         (progress.inc))
+       f)))
   (let1 kvs (Kvs.new (get-kvs-type))
     (kvs.open filename)
     (kvs.clear)
     (create-keylist kvs f)
-    (setup-ready-made-keylist kvs keylist)
-    (kvs.put! versionid SekkaVersion.version)
+    (setup-trie-index master-prefix kvs keylist #t)
+    (kvs.put! version-prefix SekkaVersion.version)
     (kvs.close)))
 
 
@@ -196,15 +204,6 @@
 
 
 (define (restore-sekka-jisyo-f f filename-or-hostname)
-  (define (file-length f)
-    (let1 total 0
-      (for-each
-       (lambda (x)
-         (set! total (+ 1 total)))
-       f)
-      (f.rewind)
-      total))
-    
   (define (restore f kvs progress)
     (let loop ([line (f.readline.chomp)])
       (let* (

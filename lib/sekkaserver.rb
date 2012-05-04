@@ -57,12 +57,20 @@ module SekkaServer
       (@kvs,@cachesv) = @core.openSekkaJisyo( SekkaServer::Config.dictType,
                                               SekkaServer::Config.dictSource,
                                               SekkaServer::Config.cacheSource )
+
+      version = @kvs.get( "SEKKA::VERSION" )
+      if not SekkaVersion.dictVersion == version
+        STDERR.printf(   "Sekka Error: require dict version [%s] but got [%s].\n", SekkaVersion.dictVersion, version )
+        exit( 1 )
+      end
+
       @queue = EM::Queue.new
       @mutex = Mutex.new
 
       STDERR.puts(   "----- Sekka Server Started -----" )
       STDERR.printf( "  Sekka version  : %s\n", SekkaVersion.version            )
       STDERR.printf( "  Nendo version  : %s\n", Nendo::Core.version             )
+      STDERR.printf( "  dict  version  : %s\n", SekkaVersion.dictVersion        )
       STDERR.printf( "  dict-type      : %s\n", SekkaServer::Config.dictType    )
       STDERR.printf( "  dict-db        : %s\n", SekkaServer::Config.dictSource  )
       STDERR.printf( "  memcached      : %s\n", SekkaServer::Config.cacheSource )

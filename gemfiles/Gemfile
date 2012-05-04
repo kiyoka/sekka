@@ -1,6 +1,6 @@
 source "http://rubygems.org"
 gem "rspec"
-gem "fuzzy-string-match"
+gem "distributed-trie"
 gem "memcache-client"
 gem "nendo"
 gem "json"
