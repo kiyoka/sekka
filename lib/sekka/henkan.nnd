@@ -509,10 +509,8 @@
     #?=(+ "already stored userid=[" userid "] tango=[" dict-line "]")
     #f)
    (else
-    (cond
-     ((rxmatch #/[ ]+[\/]/ dict-line)
-      (let1 lst (convert-skk-jisyo-f (StringIO.new (+ dict-line "\n")))
-        (if (null? lst)
+    (let1 lst (convert-skk-jisyo-f (StringIO.new (+ dict-line "\n")))
+      (if (null? lst)
             (begin
               #?=(+ "Error user dict format error userid=[" userid "] tango=[" dict-line "]")
               #f)
@@ -521,10 +519,7 @@
               (setup-trie-index userid kvs user-keylist #f)
               (kvs-push! userid kvs dict-line)
               #?=(+ "user dict stored userid=[" userid "] tango=[" dict-line "]")
-              #t))))
-     (else
-      #?=(+ "Error user dict format error userid=[" userid "] tango=[" dict-line "]")
-      #f)))))
+              #t))))))
 ;; Export to Ruby world
 (export-to-ruby registerUserJisyo)
 

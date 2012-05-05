@@ -190,6 +190,7 @@
    (#t  ,userid "あいうえおか       //")   ;; 平仮名フレーズ
    (#t  ,userid "あいうえおかき      //")  ;; 平仮名フレーズ
    (#t  ,userid "なっている          //")  ;; 平仮名フレーズ
+   (#t  ,userid "しています")              ;; 平仮名フレーズ
    ))
 
 
@@ -265,7 +266,9 @@
        "n$ q$"
        (kvs.get "Ik::MASTER::henka"))
 
-
+(test* "db fetch 18"
+       "しています"
+       (kvs.get "dummy::=siteimasu"))
 
 ;;-------------------------------------------------------------------
 (test-section "Replace user dict entry")
