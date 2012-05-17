@@ -109,6 +109,10 @@
         ;; フォーマットエラー
         #f)
        ((and (is-hiragana (first fields))
+             (= 1 (length fields)))
+        ;; 平仮名フレーズ
+        (expand-hiragana-phrase-entry (first fields)))
+       ((and (is-hiragana (first fields))
              (rxmatch #/^\/$/ (second fields)))
         ;; 平仮名フレーズ
         (expand-hiragana-phrase-entry (first fields)))
@@ -127,6 +131,12 @@
         #f)
        ((rxmatch #/[#]+/ (first fields))
         ;; # が1文字でも含まれている
+        #f)
+       ((rxmatch #/^[ ]*$/ (first fields) )
+        ;; 空文字列
+        #f)
+       ((= 1 (length fields))
+        ;; フィールドが1件しかない。
         #f)
        (else
         (list (cons (first fields) (second fields)))))))

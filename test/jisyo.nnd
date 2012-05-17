@@ -102,10 +102,11 @@
                  "? /？/"
                  "こーひー /コーヒー/"
                  "しました //"
+                 "しています"
                  )
                "\n"))
   (test* "convert SKK file to SEKKA jisyo file. (1)"
-         '("shiroI Cしろi" "siroI Cしろi" "xiroI Cしろi" "しろi /白" "ai Cあい" "あい /愛/哀/相/挨" "Greek /Α/Β/Γ/Δ/Ε/Ζ/Η/Θ/Ι/Κ/Λ/Μ/Ν/Ξ/Ο/Π/Ρ/Σ/Τ/Υ/Φ/Χ/Ψ/Ω" ">an C>あん" ">ann C>あん" ">aq C>あん" ">あん /案" ">yasuI C>やすi" ">やすi /易" "! /！/感嘆符" "? /？" "ko'hi' Cこーひー" "ko'hi- Cこーひー" "ko'hi: Cこーひー" "ko'hi^ Cこーひー" "ko-hi' Cこーひー" "ko-hi- Cこーひー" "ko-hi: Cこーひー" "ko-hi^ Cこーひー" "ko:hi' Cこーひー" "ko:hi- Cこーひー" "ko:hi: Cこーひー" "ko:hi^ Cこーひー" "ko^hi' Cこーひー" "ko^hi- Cこーひー" "ko^hi: Cこーひー" "ko^hi^ Cこーひー" "こーひー /コーヒー" "=shimashita しました" "=shimasita しました" "=shimast しました" "=simashita しました" "=simasita しました" "=simast しました" "=ximast しました")
+         '("shiroI Cしろi" "siroI Cしろi" "xiroI Cしろi" "しろi /白" "ai Cあい" "あい /愛/哀/相/挨" "Greek /Α/Β/Γ/Δ/Ε/Ζ/Η/Θ/Ι/Κ/Λ/Μ/Ν/Ξ/Ο/Π/Ρ/Σ/Τ/Υ/Φ/Χ/Ψ/Ω" ">an C>あん" ">ann C>あん" ">aq C>あん" ">あん /案" ">yasuI C>やすi" ">やすi /易" "! /！/感嘆符" "? /？" "ko'hi' Cこーひー" "ko'hi- Cこーひー" "ko'hi: Cこーひー" "ko'hi^ Cこーひー" "ko-hi' Cこーひー" "ko-hi- Cこーひー" "ko-hi: Cこーひー" "ko-hi^ Cこーひー" "ko:hi' Cこーひー" "ko:hi- Cこーひー" "ko:hi: Cこーひー" "ko:hi^ Cこーひー" "ko^hi' Cこーひー" "ko^hi- Cこーひー" "ko^hi: Cこーひー" "ko^hi^ Cこーひー" "こーひー /コーヒー" "=shimashita しました" "=shimasita しました" "=shimast しました" "=simashita しました" "=simasita しました" "=simast しました" "=ximast しました" "=shiteimasu しています" "=shitwms しています" "=siteimasu しています" "=sitwms しています" "=xitwms しています")
          (convert-skk-jisyo-f _input)))
 
 ;;===================================================================

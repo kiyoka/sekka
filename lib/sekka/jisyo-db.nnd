@@ -188,7 +188,7 @@
     (kvs.clear)
     (create-keylist kvs f)
     (setup-trie-index master-prefix kvs keylist #t)
-    (kvs.put! version-prefix SekkaVersion.version)
+    (kvs.put! version-prefix SekkaVersion.dictVersion)
     (kvs.close)))
 
 
