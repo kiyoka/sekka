@@ -42,11 +42,11 @@ class ApproximateSearch
   def search( userid, kvs, keyword, type )
     arr = []
     case userid
-    when "MASTER"
-      arr  = searchByUser( "MASTER", kvs, keyword, type )
+    when "M"
+      arr  = searchByUser( "M", kvs, keyword, type )
     else
       h = {}
-      searchByUser( "MASTER", kvs, keyword, type ).each { |item| h[ item[1] ] = item[0] }
+      searchByUser( "M", kvs, keyword, type ).each { |item| h[ item[1] ] = item[0] }
       searchByUser(  userid,  kvs, keyword, type ).each { |item| h[ item[1] ] = item[0] }
       h.keys.each { |k|  arr << [ h[k], k ] }
     end
@@ -56,11 +56,11 @@ class ApproximateSearch
   def searchByUser( userid, kvs, keyword, type )
     pair = case type
            when 'k' # okuri nashi kanji entry
-             ["Ik::" + userid + "::", keyword.downcase]
+             ["Ik:" + userid + ":", keyword.downcase]
            when 'K' # okuri ari   kanji entry
-             ["IK::" + userid + "::", keyword]
+             ["IK:" + userid + ":", keyword]
            when 'h' # hiragana phrase entry
-             ["Ih::" + userid + "::", keyword.downcase]
+             ["Ih:" + userid + ":", keyword.downcase]
            else
              raise sprintf( "Error: ApproximateSearch#search unknown type %s ", type )
            end

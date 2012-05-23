@@ -198,77 +198,77 @@
 (test-section "simple db fetch")
 (test* "db fetch 1"
        "Cへんかん"
-       (kvs.get "MASTER::henkan"))
+       (kvs.get "M:henkan"))
 
 (test* "db fetch 2"
        "Cかに/かんい"
-       (kvs.get "MASTER::kani"))
+       (kvs.get "M:kani"))
 
 (test* "db fetch 3"
        "Cかんい"
-       (kvs.get "MASTER::kanni"))
+       (kvs.get "M:kanni"))
 
 (test* "db fetch 4"
        #f
-       (kvs.get "MASTER::aaaa"))
+       (kvs.get "M:aaaa"))
 
 (test* "db fetch 5"
        "Cへんかんえんじん"
-       (kvs.get "dummy::henkanenjin"))
+       (kvs.get "dummy:henkanenjin"))
 
 (test* "db fetch 6"
        "i$ n"
-       (kvs.get "Ik::MASTER::kan"))
+       (kvs.get "Ik:M:kan"))
 
 (test* "db fetch 7"
        "n$ q$"
-       (kvs.get "Ik::MASTER::henka"))
+       (kvs.get "Ik:M:henka"))
 
 (test* "db fetch 8"
        "c t"
-       (kvs.get "Ik::MASTER::#neq#gatsu#ni"))
+       (kvs.get "Ik:M:#neq#gatsu#ni"))
 
 (test* "db fetch 9"
        "f u"
-       (kvs.get "Ik::dummy::y"))
+       (kvs.get "Ik:dummy:y"))
 
 (test* "db fetch 10"
        "' - : ^"
-       (kvs.get "Ik::dummy::yu"))
+       (kvs.get "Ik:dummy:yu"))
 
 (test* "db fetch 11"
        "/ユーザー辞書"
-       (kvs.get "dummy::ゆーざーじしょ"))
+       (kvs.get "dummy:ゆーざーじしょ"))
 
 (test* "db fetch 12"
        "する"
-       (kvs.get "dummy::=sr"))
+       (kvs.get "dummy:=sr"))
 
 (test* "db fetch 13"
        '("r" "u$")
-       (list (kvs.get "Ih::dummy::=su")
-             (kvs.get "Ih::dummy::=sur")))
+       (list (kvs.get "Ih:dummy:=su")
+             (kvs.get "Ih:dummy:=sur")))
 
 (test* "db fetch 14"
        "したい"
-       (kvs.get "dummy::=shitai"))
+       (kvs.get "dummy:=shitai"))
 
 (test* "db fetch 15"
        '("i" "t")       
-       (list (kvs.get "Ih::dummy::=sh")
-             (kvs.get "Ih::dummy::=shi")))
+       (list (kvs.get "Ih:dummy:=sh")
+             (kvs.get "Ih:dummy:=shi")))
 
 (test* "db fetch 16"
        "Cへんかん"
-       (kvs.get "MASTER::henkaq"))
+       (kvs.get "M:henkaq"))
 
 (test* "db fetch 17"
        "n$ q$"
-       (kvs.get "Ik::MASTER::henka"))
+       (kvs.get "Ik:M:henka"))
 
 (test* "db fetch 18"
        "しています"
-       (kvs.get "dummy::=siteimasu"))
+       (kvs.get "dummy:=siteimasu"))
 
 ;;-------------------------------------------------------------------
 (test-section "Replace user dict entry")
@@ -279,11 +279,11 @@
 
 (test* "check user dict 1"
        "/エントリA/エントリB/エントリC"
-       (kvs.get "dummy2::てすとようえんとり"))
+       (kvs.get "dummy2:てすとようえんとり"))
 
 (test* "check user dict 2"
        "i$"
-       (kvs.get "Ik::dummy2::tesutoyouentor"))
+       (kvs.get "Ik:dummy2:tesutoyouentor"))
 
 (test* "flush user dict"
        11
@@ -292,11 +292,11 @@
 ;; 直前にflushしているのでgetに失敗しないといけない。
 (test* "check user dict 3"
        :no-entry
-       (kvs.get "dummy2::てすとようえんとり" :no-entry))
+       (kvs.get "dummy2:てすとようえんとり" :no-entry))
 
 (test* "check user dict 4"
        :no-entry
-       (kvs.get "dummy2::(te)" :no-entry))
+       (kvs.get "dummy2:(te)" :no-entry))
 
 (test*  "register user dict 2"
         #t
@@ -306,14 +306,14 @@
 ;; "エントリB" という単語が消えないといけない。
 (test* "check user dict 5"
        "/エントリA/エントリC"
-       (kvs.get "dummy2::てすとようえんとり"))
+       (kvs.get "dummy2:てすとようえんとり"))
 
 (test* "check user dict 6"
        '("n t" "t" "t")
        (list
-        (kvs.get "Ik::dummy2::tesutoyouen")
-        (kvs.get "Ik::dummy2::tesutoyouenn")
-        (kvs.get "Ik::dummy2::tesutoyoueq")))
+        (kvs.get "Ik:dummy2:tesutoyouen")
+        (kvs.get "Ik:dummy2:tesutoyouenn")
+        (kvs.get "Ik:dummy2:tesutoyoueq")))
 
 
 ;;-------------------------------------------------------------------
@@ -1173,7 +1173,7 @@
 
 (test* "DB check after henkan kakutei 1"
        "/返還/変換"
-       (kvs.get (+ userid "::へんかん")))
+       (kvs.get (+ userid ":へんかん")))
 
 (test* "henkan kakutei(for Elisp) 2"
        '(("変換" nil "へんかん" j 0) ("返還" nil "へんかん" j 1) ("変化" nil "へんか" j 2) ("返歌" nil "へんか" j 3) ("へんかん" nil "henkan" h 4) ("ヘンカン" nil "henkan" k 5) ("へにんあん" nil "henkan" h 6) ("ヘニンアン" nil "henkan" k 7) ("Ｈｅｎｋａｎ" nil "Henkan" z 8) ("Henkan" nil "Henkan" l 9))
@@ -1183,7 +1183,7 @@
 
 (test* "DB check after henkan kakutei 2"
        "/変換/返還"
-       (kvs.get (+ userid "::へんかん")))
+       (kvs.get (+ userid ":へんかん")))
 
 (test* "henkan kakutei(for Elisp) 3"
        '(("デベロッパ" nil "developer" j 0) ("デベロッパー" nil "developer" j 1) ("ディベロッパー" nil "developer" j 2) ("ｄｅｖｅｌｏｐｅｒ" nil "developer" z 3) ("developer" nil "developer" l 4))

@@ -58,7 +58,7 @@ module SekkaServer
                                               SekkaServer::Config.dictSource,
                                               SekkaServer::Config.cacheSource )
 
-      version = @kvs.get( "SEKKA::VERSION" )
+      version = @kvs.get( "SEKKA:VERSION" )
       if not SekkaVersion.dictVersion == version
         STDERR.printf(   "Sekka Error: require dict version [%s] but got [%s].\n", SekkaVersion.dictVersion, version )
         exit( 1 )

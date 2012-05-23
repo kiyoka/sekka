@@ -377,7 +377,7 @@
 (define (sekkaHenkan userid kvs cachesv keyword limit roman-method)
   (define cache-exp-second (* 60 60))
   (let* ((keyword (keyword.strip))
-         (sekka-keyword (+ "sekka::" roman-method "::" (limit.to_s) "::" keyword)))
+         (sekka-keyword (+ "sekka:" roman-method ":" (limit.to_s) ":" keyword)))
     (if-let1 fetched (and cachesv
                           (cachesv.get sekka-keyword #f))
       (begin
@@ -389,13 +389,13 @@
                            (sekka-henkan userid kvs keyword limit (make-keyword roman-method)))
         (and cachesv
              (not (null? henkan-result))
-             (let1 fetched2 (cachesv.get  "sekka::(keys)" #f)
+             (let1 fetched2 (cachesv.get  "sekka:(keys)" #f)
                (cachesv.put! sekka-keyword (write-to-string henkan-result) cache-exp-second)
-               (cachesv.put! "sekka::(keys)" (if fetched2
+               (cachesv.put! "sekka:(keys)" (if fetched2
                                                  (+ fetched2 " " sekka-keyword)
                                                  sekka-keyword)
                              cache-exp-second)
-               (if-let1 v (cachesv.get  "sekka::(keys)" #f)
+               (if-let1 v (cachesv.get  "sekka:(keys)" #f)
                  (begin
                    #?=(v.size)
                    #?=v)
@@ -408,13 +408,13 @@
 ;; Flush henkan-result cache data on cachesv(memcached)
 (define (flushCacheServer cachesv)
   #?="--- do (flushCacheServer) ---"
-  (if-let1 fetched (cachesv.get  "sekka::(keys)" #f)
+  (if-let1 fetched (cachesv.get  "sekka:(keys)" #f)
     (begin
       (for-each
        (lambda (x)
          (cachesv.delete  #?=x))
        (to-list (fetched.split #/[ ]+/)))
-      (cachesv.delete "sekka::(keys)"))
+      (cachesv.delete "sekka:(keys)"))
     #f))
 ;; Export to Ruby world
 (export-to-ruby flushCacheServer)
@@ -429,7 +429,7 @@
     (dict-get userid kvs key #f))
 
   (define (write-user-entry userid kvs key value)
-    (kvs.put! (+ userid "::" key) value))
+    (kvs.put! (+ userid ":" key) value))
 
   (define (join-henkan-kouho lst)
     (+ "/"
@@ -474,7 +474,7 @@
 ;; ユーザー辞書の全削除 (useridで指定したユーザーの辞書)
 ;; 削除した件数を返す。
 (define (flushUserJisyo userid kvs)
-  (let1 lst (to-list (kvs.forward_match_keys (+ userid "::")))
+  (let1 lst (to-list (kvs.forward_match_keys (+ userid ":")))
     (for-each
      (lambda (k)
        (kvs.delete k))
@@ -499,13 +499,13 @@
 
   ;; "ユーザー語彙を"(stored)"にpush!する"
   (define (kvs-push! userid kvs entry-str)
-    (let* ((orig (kvs.get (+ userid "::(stored)") "()"))
+    (let* ((orig (kvs.get (+ userid ":(stored)") "()"))
            (orig (read-from-string orig)))
-      (kvs.put! (+ userid "::(stored)") (write-to-string (append orig (list entry-str))))
+      (kvs.put! (+ userid ":(stored)") (write-to-string (append orig (list entry-str))))
       entry-str))
 
   (cond
-   ((memv dict-line (read-from-string (kvs.get (+ userid "::(stored)") "()")))
+   ((memv dict-line (read-from-string (kvs.get (+ userid ":(stored)") "()")))
     #?=(+ "already stored userid=[" userid "] tango=[" dict-line "]")
     #f)
    (else

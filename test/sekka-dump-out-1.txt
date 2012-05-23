@@ -1,1338 +1,1338 @@
-IK::MASTER::	w o h e m a k
-IK::MASTER::a	U$
-IK::MASTER::e	R$
-IK::MASTER::h	d e
-IK::MASTER::hd	k
-IK::MASTER::hdk	a
-IK::MASTER::hdka	S$
-IK::MASTER::he	n q
-IK::MASTER::hen	k n
-IK::MASTER::henk	a
-IK::MASTER::henka	S$
-IK::MASTER::henn	k
-IK::MASTER::hennk	a
-IK::MASTER::hennka	S$
-IK::MASTER::heq	k
-IK::MASTER::heqk	a
-IK::MASTER::heqka	S$
-IK::MASTER::k	a
-IK::MASTER::ka	T$ `$ +$
-IK::MASTER::m	i
-IK::MASTER::mi	R$
-IK::MASTER::o	k
-IK::MASTER::ok	o
-IK::MASTER::oko	n
-IK::MASTER::okon	a
-IK::MASTER::okona	U$
-IK::MASTER::w	a t
-IK::MASTER::wa	t
-IK::MASTER::wat	a
-IK::MASTER::wata	s
-IK::MASTER::watas	h i
-IK::MASTER::watash	i
-IK::MASTER::watashi	H$
-IK::MASTER::watasi	H$
-IK::MASTER::wt	s x
-IK::MASTER::wts	h i
-IK::MASTER::wtsh	i
-IK::MASTER::wtshi	H$
-IK::MASTER::wtsi	H$
-IK::MASTER::wtx	i
-IK::MASTER::wtxi	H$
-Ih::MASTER::	=
-Ih::MASTER::=	s n q k
-Ih::MASTER::=k	u
-Ih::MASTER::=ku	m
-Ih::MASTER::=kum	i
-Ih::MASTER::=kumi	k
-Ih::MASTER::=kumik	o
-Ih::MASTER::=kumiko	m
-Ih::MASTER::=kumikom	f$ u$
-Ih::MASTER::=n	n$ q$
-Ih::MASTER::=nn	n$ q$
-Ih::MASTER::=nnn	n$
-Ih::MASTER::=q	n$ q$
-Ih::MASTER::=qn	n$
-Ih::MASTER::=s	t$ h i
-Ih::MASTER::=sh	i
-Ih::MASTER::=shi	t
-Ih::MASTER::=shit	a$
-Ih::MASTER::=si	t
-Ih::MASTER::=sit	a$
-Ik::MASTER::	?$ h s x d > k i w #
-Ik::MASTER::#	g k c t n
-Ik::MASTER::#c	h i
-Ik::MASTER::#ch	i
-Ik::MASTER::#chi	' - : ^
-Ik::MASTER::#chi'	m
-Ik::MASTER::#chi'm	f$ u$
-Ik::MASTER::#chi-	m
-Ik::MASTER::#chi-m	f$ u$
-Ik::MASTER::#chi:	m
-Ik::MASTER::#chi:m	f$ u$
-Ik::MASTER::#chi^	m
-Ik::MASTER::#chi^m	f$ u$
-Ik::MASTER::#ci	' - : ^
-Ik::MASTER::#ci'	m
-Ik::MASTER::#ci'm	f$ u$
-Ik::MASTER::#ci-	m
-Ik::MASTER::#ci-m	f$ u$
-Ik::MASTER::#ci:	m
-Ik::MASTER::#ci:m	f$ u$
-Ik::MASTER::#ci^	m
-Ik::MASTER::#ci^m	f$ u$
-Ik::MASTER::#g	y a
-Ik::MASTER::#ga	t
-Ik::MASTER::#gat	s u
-Ik::MASTER::#gats	u
-Ik::MASTER::#gatsu	#
-Ik::MASTER::#gatsu#	n k
-Ik::MASTER::#gatsu#k	a$
-Ik::MASTER::#gatsu#n	t$ i
-Ik::MASTER::#gatsu#ni	c t
-Ik::MASTER::#gatsu#nic	i$ h
-Ik::MASTER::#gatsu#nich	i$
-Ik::MASTER::#gatsu#nit	i$ y
-Ik::MASTER::#gatsu#nity	i$
-Ik::MASTER::#gatu	#
-Ik::MASTER::#gatu#	n k
-Ik::MASTER::#gatu#k	a$
-Ik::MASTER::#gatu#n	t$ i
-Ik::MASTER::#gatu#ni	c t
-Ik::MASTER::#gatu#nic	i$ h
-Ik::MASTER::#gatu#nich	i$
-Ik::MASTER::#gatu#nit	i$ y
-Ik::MASTER::#gatu#nity	i$
-Ik::MASTER::#gy	o p
-Ik::MASTER::#gyo	u w
-Ik::MASTER::#gyou	m
-Ik::MASTER::#gyoum	e$
-Ik::MASTER::#gyow	h
-Ik::MASTER::#gyowh	u
-Ik::MASTER::#gyowhu	m
-Ik::MASTER::#gyowhum	e$
-Ik::MASTER::#gyp	m
-Ik::MASTER::#gypm	e$
-Ik::MASTER::#k	a q r
-Ik::MASTER::#ka	i r
-Ik::MASTER::#kai	m
-Ik::MASTER::#kaim	e$
-Ik::MASTER::#kar	a
-Ik::MASTER::#kara	#$
-Ik::MASTER::#kq	m
-Ik::MASTER::#kqm	e$
-Ik::MASTER::#kr	#$
-Ik::MASTER::#n	d$ e
-Ik::MASTER::#nd	#
-Ik::MASTER::#nd#	g
-Ik::MASTER::#nd#g	a
-Ik::MASTER::#nd#ga	t
-Ik::MASTER::#nd#gat	s u
-Ik::MASTER::#nd#gats	u
-Ik::MASTER::#nd#gatsu	#
-Ik::MASTER::#nd#gatsu#	n
-Ik::MASTER::#nd#gatsu#n	t$
-Ik::MASTER::#nd#gatu	#
-Ik::MASTER::#nd#gatu#	n
-Ik::MASTER::#nd#gatu#n	t$
-Ik::MASTER::#ne	n$ q$
-Ik::MASTER::#nen	n$ #
-Ik::MASTER::#nen#	g
-Ik::MASTER::#nen#g	a
-Ik::MASTER::#nen#ga	t
-Ik::MASTER::#nen#gat	s u
-Ik::MASTER::#nen#gats	u
-Ik::MASTER::#nen#gatsu	#
-Ik::MASTER::#nen#gatsu#	n
-Ik::MASTER::#nen#gatsu#n	i
-Ik::MASTER::#nen#gatsu#ni	c t
-Ik::MASTER::#nen#gatsu#nic	i$ h
-Ik::MASTER::#nen#gatsu#nich	i$
-Ik::MASTER::#nen#gatsu#nit	i$ y
-Ik::MASTER::#nen#gatsu#nity	i$
-Ik::MASTER::#nen#gatu	#
-Ik::MASTER::#nen#gatu#	n
-Ik::MASTER::#nen#gatu#n	i
-Ik::MASTER::#nen#gatu#ni	c t
-Ik::MASTER::#nen#gatu#nic	i$ h
-Ik::MASTER::#nen#gatu#nich	i$
-Ik::MASTER::#nen#gatu#nit	i$ y
-Ik::MASTER::#nen#gatu#nity	i$
-Ik::MASTER::#nenn	#
-Ik::MASTER::#nenn#	g
-Ik::MASTER::#nenn#g	a
-Ik::MASTER::#nenn#ga	t
-Ik::MASTER::#nenn#gat	s u
-Ik::MASTER::#nenn#gats	u
-Ik::MASTER::#nenn#gatsu	#
-Ik::MASTER::#nenn#gatsu#	n
-Ik::MASTER::#nenn#gatsu#n	i
-Ik::MASTER::#nenn#gatsu#ni	c t
-Ik::MASTER::#nenn#gatsu#nic	i$ h
-Ik::MASTER::#nenn#gatsu#nich	i$
-Ik::MASTER::#nenn#gatsu#nit	i$ y
-Ik::MASTER::#nenn#gatsu#nity	i$
-Ik::MASTER::#nenn#gatu	#
-Ik::MASTER::#nenn#gatu#	n
-Ik::MASTER::#nenn#gatu#n	i
-Ik::MASTER::#nenn#gatu#ni	c t
-Ik::MASTER::#nenn#gatu#nic	i$ h
-Ik::MASTER::#nenn#gatu#nich	i$
-Ik::MASTER::#nenn#gatu#nit	i$ y
-Ik::MASTER::#nenn#gatu#nity	i$
-Ik::MASTER::#neq	#
-Ik::MASTER::#neq#	g
-Ik::MASTER::#neq#g	a
-Ik::MASTER::#neq#ga	t
-Ik::MASTER::#neq#gat	s u
-Ik::MASTER::#neq#gats	u
-Ik::MASTER::#neq#gatsu	#
-Ik::MASTER::#neq#gatsu#	n
-Ik::MASTER::#neq#gatsu#n	i
-Ik::MASTER::#neq#gatsu#ni	c t
-Ik::MASTER::#neq#gatsu#nic	i$ h
-Ik::MASTER::#neq#gatsu#nich	i$
-Ik::MASTER::#neq#gatsu#nit	i$ y
-Ik::MASTER::#neq#gatsu#nity	i$
-Ik::MASTER::#neq#gatu	#
-Ik::MASTER::#neq#gatu#	n
-Ik::MASTER::#neq#gatu#n	i
-Ik::MASTER::#neq#gatu#ni	c t
-Ik::MASTER::#neq#gatu#nic	i$ h
-Ik::MASTER::#neq#gatu#nich	i$
-Ik::MASTER::#neq#gatu#nit	i$ y
-Ik::MASTER::#neq#gatu#nity	i$
-Ik::MASTER::#t	i y
-Ik::MASTER::#ti	' - : ^
-Ik::MASTER::#ti'	m
-Ik::MASTER::#ti'm	f$ u$
-Ik::MASTER::#ti-	m
-Ik::MASTER::#ti-m	f$ u$
-Ik::MASTER::#ti:	m
-Ik::MASTER::#ti:m	f$ u$
-Ik::MASTER::#ti^	m
-Ik::MASTER::#ti^m	f$ u$
-Ik::MASTER::#ty	i
-Ik::MASTER::#tyi	' - : ^
-Ik::MASTER::#tyi'	m
-Ik::MASTER::#tyi'm	f$ u$
-Ik::MASTER::#tyi-	m
-Ik::MASTER::#tyi-m	f$ u$
-Ik::MASTER::#tyi:	m
-Ik::MASTER::#tyi:m	f$ u$
-Ik::MASTER::#tyi^	m
-Ik::MASTER::#tyi^m	f$ u$
-Ik::MASTER::>	a
-Ik::MASTER::>a	n$ q$
-Ik::MASTER::>an	n$
-Ik::MASTER::d	e
-Ik::MASTER::de	v
-Ik::MASTER::dev	e
-Ik::MASTER::deve	l
-Ik::MASTER::devel	o
-Ik::MASTER::develo	p
-Ik::MASTER::develop	e
-Ik::MASTER::develope	r$
-Ik::MASTER::h	d e
-Ik::MASTER::hd	k
-Ik::MASTER::hdk	n$ z$ a$
-Ik::MASTER::he	n q
-Ik::MASTER::hen	k n
-Ik::MASTER::henk	a$
-Ik::MASTER::henka	n$ q$
-Ik::MASTER::henkan	n$
-Ik::MASTER::henn	k
-Ik::MASTER::hennk	a$
-Ik::MASTER::hennka	n$ q$
-Ik::MASTER::hennkan	n$
-Ik::MASTER::heq	k
-Ik::MASTER::heqk	a$
-Ik::MASTER::heqka	n$ q$
-Ik::MASTER::heqkan	n$
-Ik::MASTER::i	; @ c t n q
-Ik::MASTER::i;	c t
-Ik::MASTER::i;c	i$ h
-Ik::MASTER::i;ch	i$
-Ik::MASTER::i;t	y
-Ik::MASTER::i;ty	i$
-Ik::MASTER::i@	c t
-Ik::MASTER::i@c	i$ h
-Ik::MASTER::i@ch	i$
-Ik::MASTER::i@t	y
-Ik::MASTER::i@ty	i$
-Ik::MASTER::ic	c
-Ik::MASTER::icc	i$ h
-Ik::MASTER::icch	i$
-Ik::MASTER::in	n y
-Ik::MASTER::inn	g n y
-Ik::MASTER::inng	p$
-Ik::MASTER::innn	g y
-Ik::MASTER::innng	p$
-Ik::MASTER::innny	p$ o
-Ik::MASTER::innnyo	u$ w
-Ik::MASTER::innnyow	h
-Ik::MASTER::innnyowh	u$
-Ik::MASTER::inny	p$ o
-Ik::MASTER::innyo	u$ w
-Ik::MASTER::innyow	h
-Ik::MASTER::innyowh	u$
-Ik::MASTER::iny	p$ o
-Ik::MASTER::inyo	u$ w
-Ik::MASTER::inyow	h
-Ik::MASTER::inyowh	u$
-Ik::MASTER::iq	n y
-Ik::MASTER::iqn	g y
-Ik::MASTER::iqng	p$
-Ik::MASTER::iqny	p$ o
-Ik::MASTER::iqnyo	u$ w
-Ik::MASTER::iqnyow	h
-Ik::MASTER::iqnyowh	u$
-Ik::MASTER::iqy	p$ o
-Ik::MASTER::iqyo	u$ w
-Ik::MASTER::iqyow	h
-Ik::MASTER::iqyowh	u$
-Ik::MASTER::it	t
-Ik::MASTER::itt	y
-Ik::MASTER::itty	i$
-Ik::MASTER::k	a o n z u
-Ik::MASTER::ka	; @ k n q
-Ik::MASTER::ka;	k
-Ik::MASTER::ka;k	o$
-Ik::MASTER::ka@	k
-Ik::MASTER::ka@k	o$
-Ik::MASTER::kak	k
-Ik::MASTER::kakk	o$
-Ik::MASTER::kan	i$ n
-Ik::MASTER::kann	i$
-Ik::MASTER::kaq	i$
-Ik::MASTER::kn	i$
-Ik::MASTER::ko	; @ k ' - : ^
-Ik::MASTER::ko'	h
-Ik::MASTER::ko'h	i
-Ik::MASTER::ko'hi	'$ -$ :$ ^$
-Ik::MASTER::ko-	h
-Ik::MASTER::ko-h	i
-Ik::MASTER::ko-hi	'$ -$ :$ ^$
-Ik::MASTER::ko:	h
-Ik::MASTER::ko:h	i
-Ik::MASTER::ko:hi	'$ -$ :$ ^$
-Ik::MASTER::ko;	k
-Ik::MASTER::ko;k	a$
-Ik::MASTER::ko@	k
-Ik::MASTER::ko@k	a$
-Ik::MASTER::ko^	h
-Ik::MASTER::ko^h	i
-Ik::MASTER::ko^hi	'$ -$ :$ ^$
-Ik::MASTER::kok	k
-Ik::MASTER::kokk	a$
-Ik::MASTER::ku	m
-Ik::MASTER::kum	i
-Ik::MASTER::kumi	k
-Ik::MASTER::kumik	o
-Ik::MASTER::kumiko	m
-Ik::MASTER::kumikom	i$
-Ik::MASTER::kz	i$
-Ik::MASTER::s	h i a
-Ik::MASTER::sa	k
-Ik::MASTER::sak	u$ f$ i$
-Ik::MASTER::sh	i
-Ik::MASTER::shi	z
-Ik::MASTER::shiz	d e f
-Ik::MASTER::shizd	g
-Ik::MASTER::shizdg	d
-Ik::MASTER::shizdgd	g
-Ik::MASTER::shizdgdg	o$
-Ik::MASTER::shizdgdgo	s x r
-Ik::MASTER::shizdgdgor	i
-Ik::MASTER::shizdgdgori	k
-Ik::MASTER::shizdgdgorik	q$
-Ik::MASTER::shizdgdgos	h y
-Ik::MASTER::shizdgdgosh	o
-Ik::MASTER::shizdgdgosho	r
-Ik::MASTER::shizdgdgoshor	i$
-Ik::MASTER::shizdgdgosy	o
-Ik::MASTER::shizdgdgosyo	r
-Ik::MASTER::shizdgdgosyor	i$
-Ik::MASTER::shizdgdgox	o
-Ik::MASTER::shizdgdgoxo	r
-Ik::MASTER::shizdgdgoxor	i$
-Ik::MASTER::shize	n q
-Ik::MASTER::shizen	g n
-Ik::MASTER::shizeng	e
-Ik::MASTER::shizenge	n q
-Ik::MASTER::shizengen	g n
-Ik::MASTER::shizengeng	o$
-Ik::MASTER::shizengengo	s r
-Ik::MASTER::shizengengor	i
-Ik::MASTER::shizengengori	k
-Ik::MASTER::shizengengorik	a
-Ik::MASTER::shizengengorika	i$
-Ik::MASTER::shizengengos	h y
-Ik::MASTER::shizengengosh	o
-Ik::MASTER::shizengengosho	r
-Ik::MASTER::shizengengoshor	i$
-Ik::MASTER::shizengengosy	o
-Ik::MASTER::shizengengosyo	r
-Ik::MASTER::shizengengosyor	i$
-Ik::MASTER::shizengenn	g
-Ik::MASTER::shizengenng	o$
-Ik::MASTER::shizengenngo	s r
-Ik::MASTER::shizengenngor	i
-Ik::MASTER::shizengenngori	k
-Ik::MASTER::shizengenngorik	a
-Ik::MASTER::shizengenngorika	i$
-Ik::MASTER::shizengenngos	h y
-Ik::MASTER::shizengenngosh	o
-Ik::MASTER::shizengenngosho	r
-Ik::MASTER::shizengenngoshor	i$
-Ik::MASTER::shizengenngosy	o
-Ik::MASTER::shizengenngosyo	r
-Ik::MASTER::shizengenngosyor	i$
-Ik::MASTER::shizengeq	g
-Ik::MASTER::shizengeqg	o$
-Ik::MASTER::shizengeqgo	s r
-Ik::MASTER::shizengeqgor	i
-Ik::MASTER::shizengeqgori	k
-Ik::MASTER::shizengeqgorik	a
-Ik::MASTER::shizengeqgorika	i$
-Ik::MASTER::shizengeqgos	h y
-Ik::MASTER::shizengeqgosh	o
-Ik::MASTER::shizengeqgosho	r
-Ik::MASTER::shizengeqgoshor	i$
-Ik::MASTER::shizengeqgosy	o
-Ik::MASTER::shizengeqgosyo	r
-Ik::MASTER::shizengeqgosyor	i$
-Ik::MASTER::shizenn	g
-Ik::MASTER::shizenng	e
-Ik::MASTER::shizennge	n q
-Ik::MASTER::shizenngen	g n
-Ik::MASTER::shizenngeng	o$
-Ik::MASTER::shizenngengo	s r
-Ik::MASTER::shizenngengor	i
-Ik::MASTER::shizenngengori	k
-Ik::MASTER::shizenngengorik	a
-Ik::MASTER::shizenngengorika	i$
-Ik::MASTER::shizenngengos	h y
-Ik::MASTER::shizenngengosh	o
-Ik::MASTER::shizenngengosho	r
-Ik::MASTER::shizenngengoshor	i$
-Ik::MASTER::shizenngengosy	o
-Ik::MASTER::shizenngengosyo	r
-Ik::MASTER::shizenngengosyor	i$
-Ik::MASTER::shizenngenn	g
-Ik::MASTER::shizenngenng	o$
-Ik::MASTER::shizenngenngo	s r
-Ik::MASTER::shizenngenngor	i
-Ik::MASTER::shizenngenngori	k
-Ik::MASTER::shizenngenngorik	a
-Ik::MASTER::shizenngenngorika	i$
-Ik::MASTER::shizenngenngos	h y
-Ik::MASTER::shizenngenngosh	o
-Ik::MASTER::shizenngenngosho	r
-Ik::MASTER::shizenngenngoshor	i$
-Ik::MASTER::shizenngenngosy	o
-Ik::MASTER::shizenngenngosyo	r
-Ik::MASTER::shizenngenngosyor	i$
-Ik::MASTER::shizenngeq	g
-Ik::MASTER::shizenngeqg	o$
-Ik::MASTER::shizenngeqgo	s r
-Ik::MASTER::shizenngeqgor	i
-Ik::MASTER::shizenngeqgori	k
-Ik::MASTER::shizenngeqgorik	a
-Ik::MASTER::shizenngeqgorika	i$
-Ik::MASTER::shizenngeqgos	h y
-Ik::MASTER::shizenngeqgosh	o
-Ik::MASTER::shizenngeqgosho	r
-Ik::MASTER::shizenngeqgoshor	i$
-Ik::MASTER::shizenngeqgosy	o
-Ik::MASTER::shizenngeqgosyo	r
-Ik::MASTER::shizenngeqgosyor	i$
-Ik::MASTER::shizeq	g
-Ik::MASTER::shizeqg	e
-Ik::MASTER::shizeqge	n q
-Ik::MASTER::shizeqgen	g n
-Ik::MASTER::shizeqgeng	o$
-Ik::MASTER::shizeqgengo	s r
-Ik::MASTER::shizeqgengor	i
-Ik::MASTER::shizeqgengori	k
-Ik::MASTER::shizeqgengorik	a
-Ik::MASTER::shizeqgengorika	i$
-Ik::MASTER::shizeqgengos	h y
-Ik::MASTER::shizeqgengosh	o
-Ik::MASTER::shizeqgengosho	r
-Ik::MASTER::shizeqgengoshor	i$
-Ik::MASTER::shizeqgengosy	o
-Ik::MASTER::shizeqgengosyo	r
-Ik::MASTER::shizeqgengosyor	i$
-Ik::MASTER::shizeqgenn	g
-Ik::MASTER::shizeqgenng	o$
-Ik::MASTER::shizeqgenngo	s r
-Ik::MASTER::shizeqgenngor	i
-Ik::MASTER::shizeqgenngori	k
-Ik::MASTER::shizeqgenngorik	a
-Ik::MASTER::shizeqgenngorika	i$
-Ik::MASTER::shizeqgenngos	h y
-Ik::MASTER::shizeqgenngosh	o
-Ik::MASTER::shizeqgenngosho	r
-Ik::MASTER::shizeqgenngoshor	i$
-Ik::MASTER::shizeqgenngosy	o
-Ik::MASTER::shizeqgenngosyo	r
-Ik::MASTER::shizeqgenngosyor	i$
-Ik::MASTER::shizeqgeq	g
-Ik::MASTER::shizeqgeqg	o$
-Ik::MASTER::shizeqgeqgo	s r
-Ik::MASTER::shizeqgeqgor	i
-Ik::MASTER::shizeqgeqgori	k
-Ik::MASTER::shizeqgeqgorik	a
-Ik::MASTER::shizeqgeqgorika	i$
-Ik::MASTER::shizeqgeqgos	h y
-Ik::MASTER::shizeqgeqgosh	o
-Ik::MASTER::shizeqgeqgosho	r
-Ik::MASTER::shizeqgeqgoshor	i$
-Ik::MASTER::shizeqgeqgosy	o
-Ik::MASTER::shizeqgeqgosyo	r
-Ik::MASTER::shizeqgeqgosyor	i$
-Ik::MASTER::shizf	n q
-Ik::MASTER::shizfn	g n
-Ik::MASTER::shizfng	e
-Ik::MASTER::shizfnge	n q
-Ik::MASTER::shizfngen	g n
-Ik::MASTER::shizfngeng	o$
-Ik::MASTER::shizfngengo	s r
-Ik::MASTER::shizfngengor	i
-Ik::MASTER::shizfngengori	k
-Ik::MASTER::shizfngengorik	a
-Ik::MASTER::shizfngengorika	i$
-Ik::MASTER::shizfngengos	h y
-Ik::MASTER::shizfngengosh	o
-Ik::MASTER::shizfngengosho	r
-Ik::MASTER::shizfngengoshor	i$
-Ik::MASTER::shizfngengosy	o
-Ik::MASTER::shizfngengosyo	r
-Ik::MASTER::shizfngengosyor	i$
-Ik::MASTER::shizfngenn	g
-Ik::MASTER::shizfngenng	o$
-Ik::MASTER::shizfngenngo	s r
-Ik::MASTER::shizfngenngor	i
-Ik::MASTER::shizfngenngori	k
-Ik::MASTER::shizfngenngorik	a
-Ik::MASTER::shizfngenngorika	i$
-Ik::MASTER::shizfngenngos	h y
-Ik::MASTER::shizfngenngosh	o
-Ik::MASTER::shizfngenngosho	r
-Ik::MASTER::shizfngenngoshor	i$
-Ik::MASTER::shizfngenngosy	o
-Ik::MASTER::shizfngenngosyo	r
-Ik::MASTER::shizfngenngosyor	i$
-Ik::MASTER::shizfngeq	g
-Ik::MASTER::shizfngeqg	o$
-Ik::MASTER::shizfngeqgo	s r
-Ik::MASTER::shizfngeqgor	i
-Ik::MASTER::shizfngeqgori	k
-Ik::MASTER::shizfngeqgorik	a
-Ik::MASTER::shizfngeqgorika	i$
-Ik::MASTER::shizfngeqgos	h y
-Ik::MASTER::shizfngeqgosh	o
-Ik::MASTER::shizfngeqgosho	r
-Ik::MASTER::shizfngeqgoshor	i$
-Ik::MASTER::shizfngeqgosy	o
-Ik::MASTER::shizfngeqgosyo	r
-Ik::MASTER::shizfngeqgosyor	i$
-Ik::MASTER::shizfnn	g
-Ik::MASTER::shizfnng	e
-Ik::MASTER::shizfnnge	n q
-Ik::MASTER::shizfnngen	g n
-Ik::MASTER::shizfnngeng	o$
-Ik::MASTER::shizfnngengo	s r
-Ik::MASTER::shizfnngengor	i
-Ik::MASTER::shizfnngengori	k
-Ik::MASTER::shizfnngengorik	a
-Ik::MASTER::shizfnngengorika	i$
-Ik::MASTER::shizfnngengos	h y
-Ik::MASTER::shizfnngengosh	o
-Ik::MASTER::shizfnngengosho	r
-Ik::MASTER::shizfnngengoshor	i$
-Ik::MASTER::shizfnngengosy	o
-Ik::MASTER::shizfnngengosyo	r
-Ik::MASTER::shizfnngengosyor	i$
-Ik::MASTER::shizfnngenn	g
-Ik::MASTER::shizfnngenng	o$
-Ik::MASTER::shizfnngenngo	s r
-Ik::MASTER::shizfnngenngor	i
-Ik::MASTER::shizfnngenngori	k
-Ik::MASTER::shizfnngenngorik	a
-Ik::MASTER::shizfnngenngorika	i$
-Ik::MASTER::shizfnngenngos	h y
-Ik::MASTER::shizfnngenngosh	o
-Ik::MASTER::shizfnngenngosho	r
-Ik::MASTER::shizfnngenngoshor	i$
-Ik::MASTER::shizfnngenngosy	o
-Ik::MASTER::shizfnngenngosyo	r
-Ik::MASTER::shizfnngenngosyor	i$
-Ik::MASTER::shizfnngeq	g
-Ik::MASTER::shizfnngeqg	o$
-Ik::MASTER::shizfnngeqgo	s r
-Ik::MASTER::shizfnngeqgor	i
-Ik::MASTER::shizfnngeqgori	k
-Ik::MASTER::shizfnngeqgorik	a
-Ik::MASTER::shizfnngeqgorika	i$
-Ik::MASTER::shizfnngeqgos	h y
-Ik::MASTER::shizfnngeqgosh	o
-Ik::MASTER::shizfnngeqgosho	r
-Ik::MASTER::shizfnngeqgoshor	i$
-Ik::MASTER::shizfnngeqgosy	o
-Ik::MASTER::shizfnngeqgosyo	r
-Ik::MASTER::shizfnngeqgosyor	i$
-Ik::MASTER::shizfq	g
-Ik::MASTER::shizfqg	e
-Ik::MASTER::shizfqge	n q
-Ik::MASTER::shizfqgen	g n
-Ik::MASTER::shizfqgeng	o$
-Ik::MASTER::shizfqgengo	s r
-Ik::MASTER::shizfqgengor	i
-Ik::MASTER::shizfqgengori	k
-Ik::MASTER::shizfqgengorik	a
-Ik::MASTER::shizfqgengorika	i$
-Ik::MASTER::shizfqgengos	h y
-Ik::MASTER::shizfqgengosh	o
-Ik::MASTER::shizfqgengosho	r
-Ik::MASTER::shizfqgengoshor	i$
-Ik::MASTER::shizfqgengosy	o
-Ik::MASTER::shizfqgengosyo	r
-Ik::MASTER::shizfqgengosyor	i$
-Ik::MASTER::shizfqgenn	g
-Ik::MASTER::shizfqgenng	o$
-Ik::MASTER::shizfqgenngo	s r
-Ik::MASTER::shizfqgenngor	i
-Ik::MASTER::shizfqgenngori	k
-Ik::MASTER::shizfqgenngorik	a
-Ik::MASTER::shizfqgenngorika	i$
-Ik::MASTER::shizfqgenngos	h y
-Ik::MASTER::shizfqgenngosh	o
-Ik::MASTER::shizfqgenngosho	r
-Ik::MASTER::shizfqgenngoshor	i$
-Ik::MASTER::shizfqgenngosy	o
-Ik::MASTER::shizfqgenngosyo	r
-Ik::MASTER::shizfqgenngosyor	i$
-Ik::MASTER::shizfqgeq	g
-Ik::MASTER::shizfqgeqg	o$
-Ik::MASTER::shizfqgeqgo	s r
-Ik::MASTER::shizfqgeqgor	i
-Ik::MASTER::shizfqgeqgori	k
-Ik::MASTER::shizfqgeqgorik	a
-Ik::MASTER::shizfqgeqgorika	i$
-Ik::MASTER::shizfqgeqgos	h y
-Ik::MASTER::shizfqgeqgosh	o
-Ik::MASTER::shizfqgeqgosho	r
-Ik::MASTER::shizfqgeqgoshor	i$
-Ik::MASTER::shizfqgeqgosy	o
-Ik::MASTER::shizfqgeqgosyo	r
-Ik::MASTER::shizfqgeqgosyor	i$
-Ik::MASTER::si	z
-Ik::MASTER::siz	d e f
-Ik::MASTER::sizd	g
-Ik::MASTER::sizdg	d
-Ik::MASTER::sizdgd	g
-Ik::MASTER::sizdgdg	o$
-Ik::MASTER::sizdgdgo	s x r
-Ik::MASTER::sizdgdgor	i
-Ik::MASTER::sizdgdgori	k
-Ik::MASTER::sizdgdgorik	q$
-Ik::MASTER::sizdgdgos	h y
-Ik::MASTER::sizdgdgosh	o
-Ik::MASTER::sizdgdgosho	r
-Ik::MASTER::sizdgdgoshor	i$
-Ik::MASTER::sizdgdgosy	o
-Ik::MASTER::sizdgdgosyo	r
-Ik::MASTER::sizdgdgosyor	i$
-Ik::MASTER::sizdgdgox	o
-Ik::MASTER::sizdgdgoxo	r
-Ik::MASTER::sizdgdgoxor	i$
-Ik::MASTER::size	n q
-Ik::MASTER::sizen	g n
-Ik::MASTER::sizeng	e
-Ik::MASTER::sizenge	n q
-Ik::MASTER::sizengen	g n
-Ik::MASTER::sizengeng	o$
-Ik::MASTER::sizengengo	s r
-Ik::MASTER::sizengengor	i
-Ik::MASTER::sizengengori	k
-Ik::MASTER::sizengengorik	a
-Ik::MASTER::sizengengorika	i$
-Ik::MASTER::sizengengos	h y
-Ik::MASTER::sizengengosh	o
-Ik::MASTER::sizengengosho	r
-Ik::MASTER::sizengengoshor	i$
-Ik::MASTER::sizengengosy	o
-Ik::MASTER::sizengengosyo	r
-Ik::MASTER::sizengengosyor	i$
-Ik::MASTER::sizengenn	g
-Ik::MASTER::sizengenng	o$
-Ik::MASTER::sizengenngo	s r
-Ik::MASTER::sizengenngor	i
-Ik::MASTER::sizengenngori	k
-Ik::MASTER::sizengenngorik	a
-Ik::MASTER::sizengenngorika	i$
-Ik::MASTER::sizengenngos	h y
-Ik::MASTER::sizengenngosh	o
-Ik::MASTER::sizengenngosho	r
-Ik::MASTER::sizengenngoshor	i$
-Ik::MASTER::sizengenngosy	o
-Ik::MASTER::sizengenngosyo	r
-Ik::MASTER::sizengenngosyor	i$
-Ik::MASTER::sizengeq	g
-Ik::MASTER::sizengeqg	o$
-Ik::MASTER::sizengeqgo	s r
-Ik::MASTER::sizengeqgor	i
-Ik::MASTER::sizengeqgori	k
-Ik::MASTER::sizengeqgorik	a
-Ik::MASTER::sizengeqgorika	i$
-Ik::MASTER::sizengeqgos	h y
-Ik::MASTER::sizengeqgosh	o
-Ik::MASTER::sizengeqgosho	r
-Ik::MASTER::sizengeqgoshor	i$
-Ik::MASTER::sizengeqgosy	o
-Ik::MASTER::sizengeqgosyo	r
-Ik::MASTER::sizengeqgosyor	i$
-Ik::MASTER::sizenn	g
-Ik::MASTER::sizenng	e
-Ik::MASTER::sizennge	n q
-Ik::MASTER::sizenngen	g n
-Ik::MASTER::sizenngeng	o$
-Ik::MASTER::sizenngengo	s r
-Ik::MASTER::sizenngengor	i
-Ik::MASTER::sizenngengori	k
-Ik::MASTER::sizenngengorik	a
-Ik::MASTER::sizenngengorika	i$
-Ik::MASTER::sizenngengos	h y
-Ik::MASTER::sizenngengosh	o
-Ik::MASTER::sizenngengosho	r
-Ik::MASTER::sizenngengoshor	i$
-Ik::MASTER::sizenngengosy	o
-Ik::MASTER::sizenngengosyo	r
-Ik::MASTER::sizenngengosyor	i$
-Ik::MASTER::sizenngenn	g
-Ik::MASTER::sizenngenng	o$
-Ik::MASTER::sizenngenngo	s r
-Ik::MASTER::sizenngenngor	i
-Ik::MASTER::sizenngenngori	k
-Ik::MASTER::sizenngenngorik	a
-Ik::MASTER::sizenngenngorika	i$
-Ik::MASTER::sizenngenngos	h y
-Ik::MASTER::sizenngenngosh	o
-Ik::MASTER::sizenngenngosho	r
-Ik::MASTER::sizenngenngoshor	i$
-Ik::MASTER::sizenngenngosy	o
-Ik::MASTER::sizenngenngosyo	r
-Ik::MASTER::sizenngenngosyor	i$
-Ik::MASTER::sizenngeq	g
-Ik::MASTER::sizenngeqg	o$
-Ik::MASTER::sizenngeqgo	s r
-Ik::MASTER::sizenngeqgor	i
-Ik::MASTER::sizenngeqgori	k
-Ik::MASTER::sizenngeqgorik	a
-Ik::MASTER::sizenngeqgorika	i$
-Ik::MASTER::sizenngeqgos	h y
-Ik::MASTER::sizenngeqgosh	o
-Ik::MASTER::sizenngeqgosho	r
-Ik::MASTER::sizenngeqgoshor	i$
-Ik::MASTER::sizenngeqgosy	o
-Ik::MASTER::sizenngeqgosyo	r
-Ik::MASTER::sizenngeqgosyor	i$
-Ik::MASTER::sizeq	g
-Ik::MASTER::sizeqg	e
-Ik::MASTER::sizeqge	n q
-Ik::MASTER::sizeqgen	g n
-Ik::MASTER::sizeqgeng	o$
-Ik::MASTER::sizeqgengo	s r
-Ik::MASTER::sizeqgengor	i
-Ik::MASTER::sizeqgengori	k
-Ik::MASTER::sizeqgengorik	a
-Ik::MASTER::sizeqgengorika	i$
-Ik::MASTER::sizeqgengos	h y
-Ik::MASTER::sizeqgengosh	o
-Ik::MASTER::sizeqgengosho	r
-Ik::MASTER::sizeqgengoshor	i$
-Ik::MASTER::sizeqgengosy	o
-Ik::MASTER::sizeqgengosyo	r
-Ik::MASTER::sizeqgengosyor	i$
-Ik::MASTER::sizeqgenn	g
-Ik::MASTER::sizeqgenng	o$
-Ik::MASTER::sizeqgenngo	s r
-Ik::MASTER::sizeqgenngor	i
-Ik::MASTER::sizeqgenngori	k
-Ik::MASTER::sizeqgenngorik	a
-Ik::MASTER::sizeqgenngorika	i$
-Ik::MASTER::sizeqgenngos	h y
-Ik::MASTER::sizeqgenngosh	o
-Ik::MASTER::sizeqgenngosho	r
-Ik::MASTER::sizeqgenngoshor	i$
-Ik::MASTER::sizeqgenngosy	o
-Ik::MASTER::sizeqgenngosyo	r
-Ik::MASTER::sizeqgenngosyor	i$
-Ik::MASTER::sizeqgeq	g
-Ik::MASTER::sizeqgeqg	o$
-Ik::MASTER::sizeqgeqgo	s r
-Ik::MASTER::sizeqgeqgor	i
-Ik::MASTER::sizeqgeqgori	k
-Ik::MASTER::sizeqgeqgorik	a
-Ik::MASTER::sizeqgeqgorika	i$
-Ik::MASTER::sizeqgeqgos	h y
-Ik::MASTER::sizeqgeqgosh	o
-Ik::MASTER::sizeqgeqgosho	r
-Ik::MASTER::sizeqgeqgoshor	i$
-Ik::MASTER::sizeqgeqgosy	o
-Ik::MASTER::sizeqgeqgosyo	r
-Ik::MASTER::sizeqgeqgosyor	i$
-Ik::MASTER::sizf	n q
-Ik::MASTER::sizfn	g n
-Ik::MASTER::sizfng	e
-Ik::MASTER::sizfnge	n q
-Ik::MASTER::sizfngen	g n
-Ik::MASTER::sizfngeng	o$
-Ik::MASTER::sizfngengo	s r
-Ik::MASTER::sizfngengor	i
-Ik::MASTER::sizfngengori	k
-Ik::MASTER::sizfngengorik	a
-Ik::MASTER::sizfngengorika	i$
-Ik::MASTER::sizfngengos	h y
-Ik::MASTER::sizfngengosh	o
-Ik::MASTER::sizfngengosho	r
-Ik::MASTER::sizfngengoshor	i$
-Ik::MASTER::sizfngengosy	o
-Ik::MASTER::sizfngengosyo	r
-Ik::MASTER::sizfngengosyor	i$
-Ik::MASTER::sizfngenn	g
-Ik::MASTER::sizfngenng	o$
-Ik::MASTER::sizfngenngo	s r
-Ik::MASTER::sizfngenngor	i
-Ik::MASTER::sizfngenngori	k
-Ik::MASTER::sizfngenngorik	a
-Ik::MASTER::sizfngenngorika	i$
-Ik::MASTER::sizfngenngos	h y
-Ik::MASTER::sizfngenngosh	o
-Ik::MASTER::sizfngenngosho	r
-Ik::MASTER::sizfngenngoshor	i$
-Ik::MASTER::sizfngenngosy	o
-Ik::MASTER::sizfngenngosyo	r
-Ik::MASTER::sizfngenngosyor	i$
-Ik::MASTER::sizfngeq	g
-Ik::MASTER::sizfngeqg	o$
-Ik::MASTER::sizfngeqgo	s r
-Ik::MASTER::sizfngeqgor	i
-Ik::MASTER::sizfngeqgori	k
-Ik::MASTER::sizfngeqgorik	a
-Ik::MASTER::sizfngeqgorika	i$
-Ik::MASTER::sizfngeqgos	h y
-Ik::MASTER::sizfngeqgosh	o
-Ik::MASTER::sizfngeqgosho	r
-Ik::MASTER::sizfngeqgoshor	i$
-Ik::MASTER::sizfngeqgosy	o
-Ik::MASTER::sizfngeqgosyo	r
-Ik::MASTER::sizfngeqgosyor	i$
-Ik::MASTER::sizfnn	g
-Ik::MASTER::sizfnng	e
-Ik::MASTER::sizfnnge	n q
-Ik::MASTER::sizfnngen	g n
-Ik::MASTER::sizfnngeng	o$
-Ik::MASTER::sizfnngengo	s r
-Ik::MASTER::sizfnngengor	i
-Ik::MASTER::sizfnngengori	k
-Ik::MASTER::sizfnngengorik	a
-Ik::MASTER::sizfnngengorika	i$
-Ik::MASTER::sizfnngengos	h y
-Ik::MASTER::sizfnngengosh	o
-Ik::MASTER::sizfnngengosho	r
-Ik::MASTER::sizfnngengoshor	i$
-Ik::MASTER::sizfnngengosy	o
-Ik::MASTER::sizfnngengosyo	r
-Ik::MASTER::sizfnngengosyor	i$
-Ik::MASTER::sizfnngenn	g
-Ik::MASTER::sizfnngenng	o$
-Ik::MASTER::sizfnngenngo	s r
-Ik::MASTER::sizfnngenngor	i
-Ik::MASTER::sizfnngenngori	k
-Ik::MASTER::sizfnngenngorik	a
-Ik::MASTER::sizfnngenngorika	i$
-Ik::MASTER::sizfnngenngos	h y
-Ik::MASTER::sizfnngenngosh	o
-Ik::MASTER::sizfnngenngosho	r
-Ik::MASTER::sizfnngenngoshor	i$
-Ik::MASTER::sizfnngenngosy	o
-Ik::MASTER::sizfnngenngosyo	r
-Ik::MASTER::sizfnngenngosyor	i$
-Ik::MASTER::sizfnngeq	g
-Ik::MASTER::sizfnngeqg	o$
-Ik::MASTER::sizfnngeqgo	s r
-Ik::MASTER::sizfnngeqgor	i
-Ik::MASTER::sizfnngeqgori	k
-Ik::MASTER::sizfnngeqgorik	a
-Ik::MASTER::sizfnngeqgorika	i$
-Ik::MASTER::sizfnngeqgos	h y
-Ik::MASTER::sizfnngeqgosh	o
-Ik::MASTER::sizfnngeqgosho	r
-Ik::MASTER::sizfnngeqgoshor	i$
-Ik::MASTER::sizfnngeqgosy	o
-Ik::MASTER::sizfnngeqgosyo	r
-Ik::MASTER::sizfnngeqgosyor	i$
-Ik::MASTER::sizfq	g
-Ik::MASTER::sizfqg	e
-Ik::MASTER::sizfqge	n q
-Ik::MASTER::sizfqgen	g n
-Ik::MASTER::sizfqgeng	o$
-Ik::MASTER::sizfqgengo	s r
-Ik::MASTER::sizfqgengor	i
-Ik::MASTER::sizfqgengori	k
-Ik::MASTER::sizfqgengorik	a
-Ik::MASTER::sizfqgengorika	i$
-Ik::MASTER::sizfqgengos	h y
-Ik::MASTER::sizfqgengosh	o
-Ik::MASTER::sizfqgengosho	r
-Ik::MASTER::sizfqgengoshor	i$
-Ik::MASTER::sizfqgengosy	o
-Ik::MASTER::sizfqgengosyo	r
-Ik::MASTER::sizfqgengosyor	i$
-Ik::MASTER::sizfqgenn	g
-Ik::MASTER::sizfqgenng	o$
-Ik::MASTER::sizfqgenngo	s r
-Ik::MASTER::sizfqgenngor	i
-Ik::MASTER::sizfqgenngori	k
-Ik::MASTER::sizfqgenngorik	a
-Ik::MASTER::sizfqgenngorika	i$
-Ik::MASTER::sizfqgenngos	h y
-Ik::MASTER::sizfqgenngosh	o
-Ik::MASTER::sizfqgenngosho	r
-Ik::MASTER::sizfqgenngoshor	i$
-Ik::MASTER::sizfqgenngosy	o
-Ik::MASTER::sizfqgenngosyo	r
-Ik::MASTER::sizfqgenngosyor	i$
-Ik::MASTER::sizfqgeq	g
-Ik::MASTER::sizfqgeqg	o$
-Ik::MASTER::sizfqgeqgo	s r
-Ik::MASTER::sizfqgeqgor	i
-Ik::MASTER::sizfqgeqgori	k
-Ik::MASTER::sizfqgeqgorik	a
-Ik::MASTER::sizfqgeqgorika	i$
-Ik::MASTER::sizfqgeqgos	h y
-Ik::MASTER::sizfqgeqgosh	o
-Ik::MASTER::sizfqgeqgosho	r
-Ik::MASTER::sizfqgeqgoshor	i$
-Ik::MASTER::sizfqgeqgosy	o
-Ik::MASTER::sizfqgeqgosyo	r
-Ik::MASTER::sizfqgeqgosyor	i$
-Ik::MASTER::w	o$ a
-Ik::MASTER::wa	k
-Ik::MASTER::wak	e$
-Ik::MASTER::x	i
-Ik::MASTER::xi	z
-Ik::MASTER::xiz	d
-Ik::MASTER::xizd	g
-Ik::MASTER::xizdg	d
-Ik::MASTER::xizdgd	g
-Ik::MASTER::xizdgdg	o$
-Ik::MASTER::xizdgdgo	s x r
-Ik::MASTER::xizdgdgor	i
-Ik::MASTER::xizdgdgori	k
-Ik::MASTER::xizdgdgorik	q$
-Ik::MASTER::xizdgdgos	h y
-Ik::MASTER::xizdgdgosh	o
-Ik::MASTER::xizdgdgosho	r
-Ik::MASTER::xizdgdgoshor	i$
-Ik::MASTER::xizdgdgosy	o
-Ik::MASTER::xizdgdgosyo	r
-Ik::MASTER::xizdgdgosyor	i$
-Ik::MASTER::xizdgdgox	o
-Ik::MASTER::xizdgdgoxo	r
-Ik::MASTER::xizdgdgoxor	i$
-MASTER::!	/！/感嘆符
-MASTER::!=	/≠
-MASTER::#chi'mf	C#ちーむ
-MASTER::#chi'mu	C#ちーむ
-MASTER::#chi-mf	C#ちーむ
-MASTER::#chi-mu	C#ちーむ
-MASTER::#chi:mf	C#ちーむ
-MASTER::#chi:mu	C#ちーむ
-MASTER::#chi^mf	C#ちーむ
-MASTER::#chi^mu	C#ちーむ
-MASTER::#ci'mf	C#ちーむ
-MASTER::#ci'mu	C#ちーむ
-MASTER::#ci-mf	C#ちーむ
-MASTER::#ci-mu	C#ちーむ
-MASTER::#ci:mf	C#ちーむ
-MASTER::#ci:mu	C#ちーむ
-MASTER::#ci^mf	C#ちーむ
-MASTER::#ci^mu	C#ちーむ
-MASTER::#gatsu#ka	C#がつ#か
-MASTER::#gatsu#nichi	C#がつ#にち
-MASTER::#gatsu#nici	C#がつ#にち
-MASTER::#gatsu#niti	C#がつ#にち
-MASTER::#gatsu#nityi	C#がつ#にち
-MASTER::#gatsu#nt	C#がつ#にち
-MASTER::#gatu#ka	C#がつ#か
-MASTER::#gatu#nichi	C#がつ#にち
-MASTER::#gatu#nici	C#がつ#にち
-MASTER::#gatu#niti	C#がつ#にち
-MASTER::#gatu#nityi	C#がつ#にち
-MASTER::#gatu#nt	C#がつ#にち
-MASTER::#gyoume	C#ぎょうめ
-MASTER::#gyowhume	C#ぎょうめ
-MASTER::#gypme	C#ぎょうめ
-MASTER::#kaime	C#かいめ
-MASTER::#kara#	C#から#
-MASTER::#kqme	C#かいめ
-MASTER::#kr#	C#から#
-MASTER::#nd	C#ねん
-MASTER::#nd#gatsu#nt	C#ねん#がつ#にち
-MASTER::#nd#gatu#nt	C#ねん#がつ#にち
-MASTER::#nen	C#ねん
-MASTER::#nen#gatsu#nichi	C#ねん#がつ#にち
-MASTER::#nen#gatsu#nici	C#ねん#がつ#にち
-MASTER::#nen#gatsu#niti	C#ねん#がつ#にち
-MASTER::#nen#gatsu#nityi	C#ねん#がつ#にち
-MASTER::#nen#gatu#nichi	C#ねん#がつ#にち
-MASTER::#nen#gatu#nici	C#ねん#がつ#にち
-MASTER::#nen#gatu#niti	C#ねん#がつ#にち
-MASTER::#nen#gatu#nityi	C#ねん#がつ#にち
-MASTER::#nenn	C#ねん
-MASTER::#nenn#gatsu#nichi	C#ねん#がつ#にち
-MASTER::#nenn#gatsu#nici	C#ねん#がつ#にち
-MASTER::#nenn#gatsu#niti	C#ねん#がつ#にち
-MASTER::#nenn#gatsu#nityi	C#ねん#がつ#にち
-MASTER::#nenn#gatu#nichi	C#ねん#がつ#にち
-MASTER::#nenn#gatu#nici	C#ねん#がつ#にち
-MASTER::#nenn#gatu#niti	C#ねん#がつ#にち
-MASTER::#nenn#gatu#nityi	C#ねん#がつ#にち
-MASTER::#neq	C#ねん
-MASTER::#neq#gatsu#nichi	C#ねん#がつ#にち
-MASTER::#neq#gatsu#nici	C#ねん#がつ#にち
-MASTER::#neq#gatsu#niti	C#ねん#がつ#にち
-MASTER::#neq#gatsu#nityi	C#ねん#がつ#にち
-MASTER::#neq#gatu#nichi	C#ねん#がつ#にち
-MASTER::#neq#gatu#nici	C#ねん#がつ#にち
-MASTER::#neq#gatu#niti	C#ねん#がつ#にち
-MASTER::#neq#gatu#nityi	C#ねん#がつ#にち
-MASTER::#ti'mf	C#ちーむ
-MASTER::#ti'mu	C#ちーむ
-MASTER::#ti-mf	C#ちーむ
-MASTER::#ti-mu	C#ちーむ
-MASTER::#ti:mf	C#ちーむ
-MASTER::#ti:mu	C#ちーむ
-MASTER::#ti^mf	C#ちーむ
-MASTER::#ti^mu	C#ちーむ
-MASTER::#tyi'mf	C#ちーむ
-MASTER::#tyi'mu	C#ちーむ
-MASTER::#tyi-mf	C#ちーむ
-MASTER::#tyi-mu	C#ちーむ
-MASTER::#tyi:mf	C#ちーむ
-MASTER::#tyi:mu	C#ちーむ
-MASTER::#tyi^mf	C#ちーむ
-MASTER::#tyi^mu	C#ちーむ
-MASTER::#かいめ	/#0回目/#3回目
-MASTER::#から#	/#1〜#1
-MASTER::#がつ#か	/#1月#1日/#0月#0日/#2月#2日/#2月#1日
-MASTER::#がつ#にち	/#1月#1日/#0月#0日/#2月#2日/#2月#1日
-MASTER::#ぎょうめ	/#0行目/#1行目
-MASTER::#ちーむ	/#0チーム
-MASTER::#ねん	/#1年/#0年/#3年/#2年
-MASTER::#ねん#がつ#にち	/#0年#0月#0日/#1年#1月#1日
-MASTER::*	/＊/※/×
-MASTER::.	/．/・/。/…;...
-MASTER::/	/／/÷
-MASTER::=kumikomf	くみこむ
-MASTER::=kumikomu	くみこむ
-MASTER::=nn	んん
-MASTER::=nnn	んん
-MASTER::=nnnn	んん
-MASTER::=nnq	んん
-MASTER::=nq	んん
-MASTER::=qn	んん
-MASTER::=qnn	んん
-MASTER::=qq	んん
-MASTER::=shita	した
-MASTER::=sita	した
-MASTER::=st	した
-MASTER::>an	C>あん
-MASTER::>ann	C>あん
-MASTER::>aq	C>あん
-MASTER::>あん	/案
-MASTER::?	/？
-MASTER::aU	Cあu
-MASTER::developer	/デベロッパー/ディベロッパー/デベロッパ
-MASTER::eR	Cえr
-MASTER::hdka	Cへんか
-MASTER::hdkaS	Cへんかs
-MASTER::hdkn	Cへんかん
-MASTER::hdkz	Cへんかん
-MASTER::henka	Cへんか
-MASTER::henkaS	Cへんかs
-MASTER::henkan	Cへんかん
-MASTER::henkann	Cへんかん
-MASTER::henkaq	Cへんかん
-MASTER::hennka	Cへんか
-MASTER::hennkaS	Cへんかs
-MASTER::hennkan	Cへんかん
-MASTER::hennkann	Cへんかん
-MASTER::hennkaq	Cへんかん
-MASTER::heqka	Cへんか
-MASTER::heqkaS	Cへんかs
-MASTER::heqkan	Cへんかん
-MASTER::heqkann	Cへんかん
-MASTER::heqkaq	Cへんかん
-MASTER::i;chi	Cいっち
-MASTER::i;ci	Cいっち
-MASTER::i;tyi	Cいっち
-MASTER::i@chi	Cいっち
-MASTER::i@ci	Cいっち
-MASTER::i@tyi	Cいっち
-MASTER::icchi	Cいっち
-MASTER::icci	Cいっち
-MASTER::inngp	Cいんにょう
-MASTER::innngp	Cいんにょう
-MASTER::innnyou	Cいんにょう
-MASTER::innnyowhu	Cいんにょう
-MASTER::innnyp	Cいんにょう
-MASTER::innyou	Cいんにょう/いんよう
-MASTER::innyowhu	Cいんにょう/いんよう
-MASTER::innyp	Cいんにょう/いんよう
-MASTER::inyou	Cいんよう
-MASTER::inyowhu	Cいんよう
-MASTER::inyp	Cいんよう
-MASTER::iqngp	Cいんにょう
-MASTER::iqnyou	Cいんにょう
-MASTER::iqnyowhu	Cいんにょう
-MASTER::iqnyp	Cいんにょう
-MASTER::iqyou	Cいんよう
-MASTER::iqyowhu	Cいんよう
-MASTER::iqyp	Cいんよう
-MASTER::ittyi	Cいっち
-MASTER::ka+	Cか+
-MASTER::ka;ko	Cかっこ
-MASTER::ka@ko	Cかっこ
-MASTER::kaT	Cかt
-MASTER::ka`	Cか`
-MASTER::kakko	Cかっこ
-MASTER::kani	Cかに/かんい
-MASTER::kanni	Cかんい
-MASTER::kaqi	Cかんい
-MASTER::kni	Cかんい
-MASTER::ko'hi'	Cこーひー
-MASTER::ko'hi-	Cこーひー
-MASTER::ko'hi:	Cこーひー
-MASTER::ko'hi^	Cこーひー
-MASTER::ko-hi'	Cこーひー
-MASTER::ko-hi-	Cこーひー
-MASTER::ko-hi:	Cこーひー
-MASTER::ko-hi^	Cこーひー
-MASTER::ko:hi'	Cこーひー
-MASTER::ko:hi-	Cこーひー
-MASTER::ko:hi:	Cこーひー
-MASTER::ko:hi^	Cこーひー
-MASTER::ko;ka	Cこっか
-MASTER::ko@ka	Cこっか
-MASTER::ko^hi'	Cこーひー
-MASTER::ko^hi-	Cこーひー
-MASTER::ko^hi:	Cこーひー
-MASTER::ko^hi^	Cこーひー
-MASTER::kokka	Cこっか
-MASTER::kumikomi	Cくみこみ
-MASTER::kzi	Cかんい
-MASTER::miR	Cみr
-MASTER::okonaU	Cおこなu
-MASTER::sakf	Cさき
-MASTER::saki	Cさき
-MASTER::saku	Cさく
-MASTER::shizdgdgo	Cしぜんげんご
-MASTER::shizdgdgorikq	Cしぜんげんごりかい
-MASTER::shizdgdgoshori	Cしぜんげんごしょり
-MASTER::shizdgdgosyori	Cしぜんげんごしょり
-MASTER::shizdgdgoxori	Cしぜんげんごしょり
-MASTER::shizengengo	Cしぜんげんご
-MASTER::shizengengorikai	Cしぜんげんごりかい
-MASTER::shizengengoshori	Cしぜんげんごしょり
-MASTER::shizengengosyori	Cしぜんげんごしょり
-MASTER::shizengenngo	Cしぜんげんご
-MASTER::shizengenngorikai	Cしぜんげんごりかい
-MASTER::shizengenngoshori	Cしぜんげんごしょり
-MASTER::shizengenngosyori	Cしぜんげんごしょり
-MASTER::shizengeqgo	Cしぜんげんご
-MASTER::shizengeqgorikai	Cしぜんげんごりかい
-MASTER::shizengeqgoshori	Cしぜんげんごしょり
-MASTER::shizengeqgosyori	Cしぜんげんごしょり
-MASTER::shizenngengo	Cしぜんげんご
-MASTER::shizenngengorikai	Cしぜんげんごりかい
-MASTER::shizenngengoshori	Cしぜんげんごしょり
-MASTER::shizenngengosyori	Cしぜんげんごしょり
-MASTER::shizenngenngo	Cしぜんげんご
-MASTER::shizenngenngorikai	Cしぜんげんごりかい
-MASTER::shizenngenngoshori	Cしぜんげんごしょり
-MASTER::shizenngenngosyori	Cしぜんげんごしょり
-MASTER::shizenngeqgo	Cしぜんげんご
-MASTER::shizenngeqgorikai	Cしぜんげんごりかい
-MASTER::shizenngeqgoshori	Cしぜんげんごしょり
-MASTER::shizenngeqgosyori	Cしぜんげんごしょり
-MASTER::shizeqgengo	Cしぜんげんご
-MASTER::shizeqgengorikai	Cしぜんげんごりかい
-MASTER::shizeqgengoshori	Cしぜんげんごしょり
-MASTER::shizeqgengosyori	Cしぜんげんごしょり
-MASTER::shizeqgenngo	Cしぜんげんご
-MASTER::shizeqgenngorikai	Cしぜんげんごりかい
-MASTER::shizeqgenngoshori	Cしぜんげんごしょり
-MASTER::shizeqgenngosyori	Cしぜんげんごしょり
-MASTER::shizeqgeqgo	Cしぜんげんご
-MASTER::shizeqgeqgorikai	Cしぜんげんごりかい
-MASTER::shizeqgeqgoshori	Cしぜんげんごしょり
-MASTER::shizeqgeqgosyori	Cしぜんげんごしょり
-MASTER::shizfngengo	Cしぜんげんご
-MASTER::shizfngengorikai	Cしぜんげんごりかい
-MASTER::shizfngengoshori	Cしぜんげんごしょり
-MASTER::shizfngengosyori	Cしぜんげんごしょり
-MASTER::shizfngenngo	Cしぜんげんご
-MASTER::shizfngenngorikai	Cしぜんげんごりかい
-MASTER::shizfngenngoshori	Cしぜんげんごしょり
-MASTER::shizfngenngosyori	Cしぜんげんごしょり
-MASTER::shizfngeqgo	Cしぜんげんご
-MASTER::shizfngeqgorikai	Cしぜんげんごりかい
-MASTER::shizfngeqgoshori	Cしぜんげんごしょり
-MASTER::shizfngeqgosyori	Cしぜんげんごしょり
-MASTER::shizfnngengo	Cしぜんげんご
-MASTER::shizfnngengorikai	Cしぜんげんごりかい
-MASTER::shizfnngengoshori	Cしぜんげんごしょり
-MASTER::shizfnngengosyori	Cしぜんげんごしょり
-MASTER::shizfnngenngo	Cしぜんげんご
-MASTER::shizfnngenngorikai	Cしぜんげんごりかい
-MASTER::shizfnngenngoshori	Cしぜんげんごしょり
-MASTER::shizfnngenngosyori	Cしぜんげんごしょり
-MASTER::shizfnngeqgo	Cしぜんげんご
-MASTER::shizfnngeqgorikai	Cしぜんげんごりかい
-MASTER::shizfnngeqgoshori	Cしぜんげんごしょり
-MASTER::shizfnngeqgosyori	Cしぜんげんごしょり
-MASTER::shizfqgengo	Cしぜんげんご
-MASTER::shizfqgengorikai	Cしぜんげんごりかい
-MASTER::shizfqgengoshori	Cしぜんげんごしょり
-MASTER::shizfqgengosyori	Cしぜんげんごしょり
-MASTER::shizfqgenngo	Cしぜんげんご
-MASTER::shizfqgenngorikai	Cしぜんげんごりかい
-MASTER::shizfqgenngoshori	Cしぜんげんごしょり
-MASTER::shizfqgenngosyori	Cしぜんげんごしょり
-MASTER::shizfqgeqgo	Cしぜんげんご
-MASTER::shizfqgeqgorikai	Cしぜんげんごりかい
-MASTER::shizfqgeqgoshori	Cしぜんげんごしょり
-MASTER::shizfqgeqgosyori	Cしぜんげんごしょり
-MASTER::sizdgdgo	Cしぜんげんご
-MASTER::sizdgdgorikq	Cしぜんげんごりかい
-MASTER::sizdgdgoshori	Cしぜんげんごしょり
-MASTER::sizdgdgosyori	Cしぜんげんごしょり
-MASTER::sizdgdgoxori	Cしぜんげんごしょり
-MASTER::sizengengo	Cしぜんげんご
-MASTER::sizengengorikai	Cしぜんげんごりかい
-MASTER::sizengengoshori	Cしぜんげんごしょり
-MASTER::sizengengosyori	Cしぜんげんごしょり
-MASTER::sizengenngo	Cしぜんげんご
-MASTER::sizengenngorikai	Cしぜんげんごりかい
-MASTER::sizengenngoshori	Cしぜんげんごしょり
-MASTER::sizengenngosyori	Cしぜんげんごしょり
-MASTER::sizengeqgo	Cしぜんげんご
-MASTER::sizengeqgorikai	Cしぜんげんごりかい
-MASTER::sizengeqgoshori	Cしぜんげんごしょり
-MASTER::sizengeqgosyori	Cしぜんげんごしょり
-MASTER::sizenngengo	Cしぜんげんご
-MASTER::sizenngengorikai	Cしぜんげんごりかい
-MASTER::sizenngengoshori	Cしぜんげんごしょり
-MASTER::sizenngengosyori	Cしぜんげんごしょり
-MASTER::sizenngenngo	Cしぜんげんご
-MASTER::sizenngenngorikai	Cしぜんげんごりかい
-MASTER::sizenngenngoshori	Cしぜんげんごしょり
-MASTER::sizenngenngosyori	Cしぜんげんごしょり
-MASTER::sizenngeqgo	Cしぜんげんご
-MASTER::sizenngeqgorikai	Cしぜんげんごりかい
-MASTER::sizenngeqgoshori	Cしぜんげんごしょり
-MASTER::sizenngeqgosyori	Cしぜんげんごしょり
-MASTER::sizeqgengo	Cしぜんげんご
-MASTER::sizeqgengorikai	Cしぜんげんごりかい
-MASTER::sizeqgengoshori	Cしぜんげんごしょり
-MASTER::sizeqgengosyori	Cしぜんげんごしょり
-MASTER::sizeqgenngo	Cしぜんげんご
-MASTER::sizeqgenngorikai	Cしぜんげんごりかい
-MASTER::sizeqgenngoshori	Cしぜんげんごしょり
-MASTER::sizeqgenngosyori	Cしぜんげんごしょり
-MASTER::sizeqgeqgo	Cしぜんげんご
-MASTER::sizeqgeqgorikai	Cしぜんげんごりかい
-MASTER::sizeqgeqgoshori	Cしぜんげんごしょり
-MASTER::sizeqgeqgosyori	Cしぜんげんごしょり
-MASTER::sizfngengo	Cしぜんげんご
-MASTER::sizfngengorikai	Cしぜんげんごりかい
-MASTER::sizfngengoshori	Cしぜんげんごしょり
-MASTER::sizfngengosyori	Cしぜんげんごしょり
-MASTER::sizfngenngo	Cしぜんげんご
-MASTER::sizfngenngorikai	Cしぜんげんごりかい
-MASTER::sizfngenngoshori	Cしぜんげんごしょり
-MASTER::sizfngenngosyori	Cしぜんげんごしょり
-MASTER::sizfngeqgo	Cしぜんげんご
-MASTER::sizfngeqgorikai	Cしぜんげんごりかい
-MASTER::sizfngeqgoshori	Cしぜんげんごしょり
-MASTER::sizfngeqgosyori	Cしぜんげんごしょり
-MASTER::sizfnngengo	Cしぜんげんご
-MASTER::sizfnngengorikai	Cしぜんげんごりかい
-MASTER::sizfnngengoshori	Cしぜんげんごしょり
-MASTER::sizfnngengosyori	Cしぜんげんごしょり
-MASTER::sizfnngenngo	Cしぜんげんご
-MASTER::sizfnngenngorikai	Cしぜんげんごりかい
-MASTER::sizfnngenngoshori	Cしぜんげんごしょり
-MASTER::sizfnngenngosyori	Cしぜんげんごしょり
-MASTER::sizfnngeqgo	Cしぜんげんご
-MASTER::sizfnngeqgorikai	Cしぜんげんごりかい
-MASTER::sizfnngeqgoshori	Cしぜんげんごしょり
-MASTER::sizfnngeqgosyori	Cしぜんげんごしょり
-MASTER::sizfqgengo	Cしぜんげんご
-MASTER::sizfqgengorikai	Cしぜんげんごりかい
-MASTER::sizfqgengoshori	Cしぜんげんごしょり
-MASTER::sizfqgengosyori	Cしぜんげんごしょり
-MASTER::sizfqgenngo	Cしぜんげんご
-MASTER::sizfqgenngorikai	Cしぜんげんごりかい
-MASTER::sizfqgenngoshori	Cしぜんげんごしょり
-MASTER::sizfqgenngosyori	Cしぜんげんごしょり
-MASTER::sizfqgeqgo	Cしぜんげんご
-MASTER::sizfqgeqgorikai	Cしぜんげんごりかい
-MASTER::sizfqgeqgoshori	Cしぜんげんごしょり
-MASTER::sizfqgeqgosyori	Cしぜんげんごしょり
-MASTER::wake	Cわけ
-MASTER::watashiH	Cわたしh
-MASTER::watasiH	Cわたしh
-MASTER::wo	Cを
-MASTER::wtshiH	Cわたしh
-MASTER::wtsiH	Cわたしh
-MASTER::wtxiH	Cわたしh
-MASTER::xizdgdgo	Cしぜんげんご
-MASTER::xizdgdgorikq	Cしぜんげんごりかい
-MASTER::xizdgdgoshori	Cしぜんげんごしょり
-MASTER::xizdgdgosyori	Cしぜんげんごしょり
-MASTER::xizdgdgoxori	Cしぜんげんごしょり
-MASTER::{	/｛
-MASTER::あu	/合;(一致) 話が合う/会;人と会う/遭;(偶然、特によくないことにあう) 事故に遭う/逢;(人と|運命的にあう) 巡り逢う/遇;≒遭う/會;「会」の旧字
-MASTER::いっち	/一致/イッチ
-MASTER::いんにょう	/飲尿/廴繞;[部首]
-MASTER::いんよう	/引用/飲用/陰陽
-MASTER::えr	/得/獲;NB:「とr」と同形/選;NB:「よr」「すぐr」と同形
-MASTER::おこなu	/行/行な;※送り位置補正
-MASTER::か+	/勝/買/飼/刈;(crop)草を刈る
-MASTER::か`	/勝/買/飼/刈;(crop)草を刈る
-MASTER::かt	/勝/買/飼/刈;(crop)草を刈る
-MASTER::かっこ	/確固/括弧/各個/各戸/確乎/羯鼓;雅楽の打楽器/格好/『』/【】/［］/〔〕/〈〉/《》/｛｝/「」/（）/‘’/“”
-MASTER::かに	/蟹/可児/蠏
-MASTER::かんい	/簡易/官位/冠位;-十二階/漢医;漢方医/敢為/官医/寛衣/換位/簡意
-MASTER::くみこみ	/組み込み/組込
-MASTER::こっか	/国家;state/国歌;anthem.「-斉唱」/国花/骨化/國家;「国」旧字/黒化/刻下/】/）/］/』
-MASTER::こーひー	/コーヒー
-MASTER::さき	/先/崎/左記/前/早紀/沙樹/早岐/沙貴/咲/埼/尖/嵜/碕/早記
-MASTER::さく	/策/柵/作/佐久;地名/朔;朔日 ⇔晦/槊;ほこ/搾;搾取/昨;昨夜/咋;(くう)/窄;狭窄/酢;酢酸/柞;いすのき/炸;炸裂/筰;山田耕筰/削;削除/索;検索/錯;錯誤/筴/縒;より/鑿/做;「作」の異体字/簀;す/嘖;さいな・む/捉;(漢音) とら・える/齪;齷齪/冊;(慣用音)竹冊/册;「冊」の旧字/辟;?/乍;?
-MASTER::しぜんげんご	/自然言語
-MASTER::しぜんげんごしょり	/自然言語処理
-MASTER::しぜんげんごりかい	/自然言語理解
-MASTER::へんか	/変化/返歌
-MASTER::へんかs	/変化
-MASTER::へんかん	/変換/返還
-MASTER::みr	/見/観;(字義:みわたす)/視;(字義:じっとみる)/診;(diagnose) 患者を診る/看;(nurse) 病母を看る/觀;「観」の旧字
-MASTER::わけ	/訳/和気;地名/理由;当て字/分け/分/譯;「訳」の旧字/戯奴
-MASTER::わたしh	/私
-MASTER::を	/小/緒/雄/男/牡/尾/悪/汚/惡;「悪」の旧字(人名用漢字)
-SEKKA::VERSION	1.2.0
+IK:M:	w o h e m a k
+IK:M:a	U$
+IK:M:e	R$
+IK:M:h	d e
+IK:M:hd	k
+IK:M:hdk	a
+IK:M:hdka	S$
+IK:M:he	n q
+IK:M:hen	k n
+IK:M:henk	a
+IK:M:henka	S$
+IK:M:henn	k
+IK:M:hennk	a
+IK:M:hennka	S$
+IK:M:heq	k
+IK:M:heqk	a
+IK:M:heqka	S$
+IK:M:k	a
+IK:M:ka	T$ `$ +$
+IK:M:m	i
+IK:M:mi	R$
+IK:M:o	k
+IK:M:ok	o
+IK:M:oko	n
+IK:M:okon	a
+IK:M:okona	U$
+IK:M:w	a t
+IK:M:wa	t
+IK:M:wat	a
+IK:M:wata	s
+IK:M:watas	h i
+IK:M:watash	i
+IK:M:watashi	H$
+IK:M:watasi	H$
+IK:M:wt	s x
+IK:M:wts	h i
+IK:M:wtsh	i
+IK:M:wtshi	H$
+IK:M:wtsi	H$
+IK:M:wtx	i
+IK:M:wtxi	H$
+Ih:M:	=
+Ih:M:=	s n q k
+Ih:M:=k	u
+Ih:M:=ku	m
+Ih:M:=kum	i
+Ih:M:=kumi	k
+Ih:M:=kumik	o
+Ih:M:=kumiko	m
+Ih:M:=kumikom	f$ u$
+Ih:M:=n	n$ q$
+Ih:M:=nn	n$ q$
+Ih:M:=nnn	n$
+Ih:M:=q	n$ q$
+Ih:M:=qn	n$
+Ih:M:=s	t$ h i
+Ih:M:=sh	i
+Ih:M:=shi	t
+Ih:M:=shit	a$
+Ih:M:=si	t
+Ih:M:=sit	a$
+Ik:M:	?$ h s x d > k i w #
+Ik:M:#	g k c t n
+Ik:M:#c	h i
+Ik:M:#ch	i
+Ik:M:#chi	' - : ^
+Ik:M:#chi'	m
+Ik:M:#chi'm	f$ u$
+Ik:M:#chi-	m
+Ik:M:#chi-m	f$ u$
+Ik:M:#chi:	m
+Ik:M:#chi:m	f$ u$
+Ik:M:#chi^	m
+Ik:M:#chi^m	f$ u$
+Ik:M:#ci	' - : ^
+Ik:M:#ci'	m
+Ik:M:#ci'm	f$ u$
+Ik:M:#ci-	m
+Ik:M:#ci-m	f$ u$
+Ik:M:#ci:	m
+Ik:M:#ci:m	f$ u$
+Ik:M:#ci^	m
+Ik:M:#ci^m	f$ u$
+Ik:M:#g	y a
+Ik:M:#ga	t
+Ik:M:#gat	s u
+Ik:M:#gats	u
+Ik:M:#gatsu	#
+Ik:M:#gatsu#	n k
+Ik:M:#gatsu#k	a$
+Ik:M:#gatsu#n	t$ i
+Ik:M:#gatsu#ni	c t
+Ik:M:#gatsu#nic	i$ h
+Ik:M:#gatsu#nich	i$
+Ik:M:#gatsu#nit	i$ y
+Ik:M:#gatsu#nity	i$
+Ik:M:#gatu	#
+Ik:M:#gatu#	n k
+Ik:M:#gatu#k	a$
+Ik:M:#gatu#n	t$ i
+Ik:M:#gatu#ni	c t
+Ik:M:#gatu#nic	i$ h
+Ik:M:#gatu#nich	i$
+Ik:M:#gatu#nit	i$ y
+Ik:M:#gatu#nity	i$
+Ik:M:#gy	o p
+Ik:M:#gyo	u w
+Ik:M:#gyou	m
+Ik:M:#gyoum	e$
+Ik:M:#gyow	h
+Ik:M:#gyowh	u
+Ik:M:#gyowhu	m
+Ik:M:#gyowhum	e$
+Ik:M:#gyp	m
+Ik:M:#gypm	e$
+Ik:M:#k	a q r
+Ik:M:#ka	i r
+Ik:M:#kai	m
+Ik:M:#kaim	e$
+Ik:M:#kar	a
+Ik:M:#kara	#$
+Ik:M:#kq	m
+Ik:M:#kqm	e$
+Ik:M:#kr	#$
+Ik:M:#n	d$ e
+Ik:M:#nd	#
+Ik:M:#nd#	g
+Ik:M:#nd#g	a
+Ik:M:#nd#ga	t
+Ik:M:#nd#gat	s u
+Ik:M:#nd#gats	u
+Ik:M:#nd#gatsu	#
+Ik:M:#nd#gatsu#	n
+Ik:M:#nd#gatsu#n	t$
+Ik:M:#nd#gatu	#
+Ik:M:#nd#gatu#	n
+Ik:M:#nd#gatu#n	t$
+Ik:M:#ne	n$ q$
+Ik:M:#nen	n$ #
+Ik:M:#nen#	g
+Ik:M:#nen#g	a
+Ik:M:#nen#ga	t
+Ik:M:#nen#gat	s u
+Ik:M:#nen#gats	u
+Ik:M:#nen#gatsu	#
+Ik:M:#nen#gatsu#	n
+Ik:M:#nen#gatsu#n	i
+Ik:M:#nen#gatsu#ni	c t
+Ik:M:#nen#gatsu#nic	i$ h
+Ik:M:#nen#gatsu#nich	i$
+Ik:M:#nen#gatsu#nit	i$ y
+Ik:M:#nen#gatsu#nity	i$
+Ik:M:#nen#gatu	#
+Ik:M:#nen#gatu#	n
+Ik:M:#nen#gatu#n	i
+Ik:M:#nen#gatu#ni	c t
+Ik:M:#nen#gatu#nic	i$ h
+Ik:M:#nen#gatu#nich	i$
+Ik:M:#nen#gatu#nit	i$ y
+Ik:M:#nen#gatu#nity	i$
+Ik:M:#nenn	#
+Ik:M:#nenn#	g
+Ik:M:#nenn#g	a
+Ik:M:#nenn#ga	t
+Ik:M:#nenn#gat	s u
+Ik:M:#nenn#gats	u
+Ik:M:#nenn#gatsu	#
+Ik:M:#nenn#gatsu#	n
+Ik:M:#nenn#gatsu#n	i
+Ik:M:#nenn#gatsu#ni	c t
+Ik:M:#nenn#gatsu#nic	i$ h
+Ik:M:#nenn#gatsu#nich	i$
+Ik:M:#nenn#gatsu#nit	i$ y
+Ik:M:#nenn#gatsu#nity	i$
+Ik:M:#nenn#gatu	#
+Ik:M:#nenn#gatu#	n
+Ik:M:#nenn#gatu#n	i
+Ik:M:#nenn#gatu#ni	c t
+Ik:M:#nenn#gatu#nic	i$ h
+Ik:M:#nenn#gatu#nich	i$
+Ik:M:#nenn#gatu#nit	i$ y
+Ik:M:#nenn#gatu#nity	i$
+Ik:M:#neq	#
+Ik:M:#neq#	g
+Ik:M:#neq#g	a
+Ik:M:#neq#ga	t
+Ik:M:#neq#gat	s u
+Ik:M:#neq#gats	u
+Ik:M:#neq#gatsu	#
+Ik:M:#neq#gatsu#	n
+Ik:M:#neq#gatsu#n	i
+Ik:M:#neq#gatsu#ni	c t
+Ik:M:#neq#gatsu#nic	i$ h
+Ik:M:#neq#gatsu#nich	i$
+Ik:M:#neq#gatsu#nit	i$ y
+Ik:M:#neq#gatsu#nity	i$
+Ik:M:#neq#gatu	#
+Ik:M:#neq#gatu#	n
+Ik:M:#neq#gatu#n	i
+Ik:M:#neq#gatu#ni	c t
+Ik:M:#neq#gatu#nic	i$ h
+Ik:M:#neq#gatu#nich	i$
+Ik:M:#neq#gatu#nit	i$ y
+Ik:M:#neq#gatu#nity	i$
+Ik:M:#t	i y
+Ik:M:#ti	' - : ^
+Ik:M:#ti'	m
+Ik:M:#ti'm	f$ u$
+Ik:M:#ti-	m
+Ik:M:#ti-m	f$ u$
+Ik:M:#ti:	m
+Ik:M:#ti:m	f$ u$
+Ik:M:#ti^	m
+Ik:M:#ti^m	f$ u$
+Ik:M:#ty	i
+Ik:M:#tyi	' - : ^
+Ik:M:#tyi'	m
+Ik:M:#tyi'm	f$ u$
+Ik:M:#tyi-	m
+Ik:M:#tyi-m	f$ u$
+Ik:M:#tyi:	m
+Ik:M:#tyi:m	f$ u$
+Ik:M:#tyi^	m
+Ik:M:#tyi^m	f$ u$
+Ik:M:>	a
+Ik:M:>a	n$ q$
+Ik:M:>an	n$
+Ik:M:d	e
+Ik:M:de	v
+Ik:M:dev	e
+Ik:M:deve	l
+Ik:M:devel	o
+Ik:M:develo	p
+Ik:M:develop	e
+Ik:M:develope	r$
+Ik:M:h	d e
+Ik:M:hd	k
+Ik:M:hdk	n$ z$ a$
+Ik:M:he	n q
+Ik:M:hen	k n
+Ik:M:henk	a$
+Ik:M:henka	n$ q$
+Ik:M:henkan	n$
+Ik:M:henn	k
+Ik:M:hennk	a$
+Ik:M:hennka	n$ q$
+Ik:M:hennkan	n$
+Ik:M:heq	k
+Ik:M:heqk	a$
+Ik:M:heqka	n$ q$
+Ik:M:heqkan	n$
+Ik:M:i	; @ c t n q
+Ik:M:i;	c t
+Ik:M:i;c	i$ h
+Ik:M:i;ch	i$
+Ik:M:i;t	y
+Ik:M:i;ty	i$
+Ik:M:i@	c t
+Ik:M:i@c	i$ h
+Ik:M:i@ch	i$
+Ik:M:i@t	y
+Ik:M:i@ty	i$
+Ik:M:ic	c
+Ik:M:icc	i$ h
+Ik:M:icch	i$
+Ik:M:in	n y
+Ik:M:inn	g n y
+Ik:M:inng	p$
+Ik:M:innn	g y
+Ik:M:innng	p$
+Ik:M:innny	p$ o
+Ik:M:innnyo	u$ w
+Ik:M:innnyow	h
+Ik:M:innnyowh	u$
+Ik:M:inny	p$ o
+Ik:M:innyo	u$ w
+Ik:M:innyow	h
+Ik:M:innyowh	u$
+Ik:M:iny	p$ o
+Ik:M:inyo	u$ w
+Ik:M:inyow	h
+Ik:M:inyowh	u$
+Ik:M:iq	n y
+Ik:M:iqn	g y
+Ik:M:iqng	p$
+Ik:M:iqny	p$ o
+Ik:M:iqnyo	u$ w
+Ik:M:iqnyow	h
+Ik:M:iqnyowh	u$
+Ik:M:iqy	p$ o
+Ik:M:iqyo	u$ w
+Ik:M:iqyow	h
+Ik:M:iqyowh	u$
+Ik:M:it	t
+Ik:M:itt	y
+Ik:M:itty	i$
+Ik:M:k	a o n z u
+Ik:M:ka	; @ k n q
+Ik:M:ka;	k
+Ik:M:ka;k	o$
+Ik:M:ka@	k
+Ik:M:ka@k	o$
+Ik:M:kak	k
+Ik:M:kakk	o$
+Ik:M:kan	i$ n
+Ik:M:kann	i$
+Ik:M:kaq	i$
+Ik:M:kn	i$
+Ik:M:ko	; @ k ' - : ^
+Ik:M:ko'	h
+Ik:M:ko'h	i
+Ik:M:ko'hi	'$ -$ :$ ^$
+Ik:M:ko-	h
+Ik:M:ko-h	i
+Ik:M:ko-hi	'$ -$ :$ ^$
+Ik:M:ko:	h
+Ik:M:ko:h	i
+Ik:M:ko:hi	'$ -$ :$ ^$
+Ik:M:ko;	k
+Ik:M:ko;k	a$
+Ik:M:ko@	k
+Ik:M:ko@k	a$
+Ik:M:ko^	h
+Ik:M:ko^h	i
+Ik:M:ko^hi	'$ -$ :$ ^$
+Ik:M:kok	k
+Ik:M:kokk	a$
+Ik:M:ku	m
+Ik:M:kum	i
+Ik:M:kumi	k
+Ik:M:kumik	o
+Ik:M:kumiko	m
+Ik:M:kumikom	i$
+Ik:M:kz	i$
+Ik:M:s	h i a
+Ik:M:sa	k
+Ik:M:sak	u$ f$ i$
+Ik:M:sh	i
+Ik:M:shi	z
+Ik:M:shiz	d e f
+Ik:M:shizd	g
+Ik:M:shizdg	d
+Ik:M:shizdgd	g
+Ik:M:shizdgdg	o$
+Ik:M:shizdgdgo	s x r
+Ik:M:shizdgdgor	i
+Ik:M:shizdgdgori	k
+Ik:M:shizdgdgorik	q$
+Ik:M:shizdgdgos	h y
+Ik:M:shizdgdgosh	o
+Ik:M:shizdgdgosho	r
+Ik:M:shizdgdgoshor	i$
+Ik:M:shizdgdgosy	o
+Ik:M:shizdgdgosyo	r
+Ik:M:shizdgdgosyor	i$
+Ik:M:shizdgdgox	o
+Ik:M:shizdgdgoxo	r
+Ik:M:shizdgdgoxor	i$
+Ik:M:shize	n q
+Ik:M:shizen	g n
+Ik:M:shizeng	e
+Ik:M:shizenge	n q
+Ik:M:shizengen	g n
+Ik:M:shizengeng	o$
+Ik:M:shizengengo	s r
+Ik:M:shizengengor	i
+Ik:M:shizengengori	k
+Ik:M:shizengengorik	a
+Ik:M:shizengengorika	i$
+Ik:M:shizengengos	h y
+Ik:M:shizengengosh	o
+Ik:M:shizengengosho	r
+Ik:M:shizengengoshor	i$
+Ik:M:shizengengosy	o
+Ik:M:shizengengosyo	r
+Ik:M:shizengengosyor	i$
+Ik:M:shizengenn	g
+Ik:M:shizengenng	o$
+Ik:M:shizengenngo	s r
+Ik:M:shizengenngor	i
+Ik:M:shizengenngori	k
+Ik:M:shizengenngorik	a
+Ik:M:shizengenngorika	i$
+Ik:M:shizengenngos	h y
+Ik:M:shizengenngosh	o
+Ik:M:shizengenngosho	r
+Ik:M:shizengenngoshor	i$
+Ik:M:shizengenngosy	o
+Ik:M:shizengenngosyo	r
+Ik:M:shizengenngosyor	i$
+Ik:M:shizengeq	g
+Ik:M:shizengeqg	o$
+Ik:M:shizengeqgo	s r
+Ik:M:shizengeqgor	i
+Ik:M:shizengeqgori	k
+Ik:M:shizengeqgorik	a
+Ik:M:shizengeqgorika	i$
+Ik:M:shizengeqgos	h y
+Ik:M:shizengeqgosh	o
+Ik:M:shizengeqgosho	r
+Ik:M:shizengeqgoshor	i$
+Ik:M:shizengeqgosy	o
+Ik:M:shizengeqgosyo	r
+Ik:M:shizengeqgosyor	i$
+Ik:M:shizenn	g
+Ik:M:shizenng	e
+Ik:M:shizennge	n q
+Ik:M:shizenngen	g n
+Ik:M:shizenngeng	o$
+Ik:M:shizenngengo	s r
+Ik:M:shizenngengor	i
+Ik:M:shizenngengori	k
+Ik:M:shizenngengorik	a
+Ik:M:shizenngengorika	i$
+Ik:M:shizenngengos	h y
+Ik:M:shizenngengosh	o
+Ik:M:shizenngengosho	r
+Ik:M:shizenngengoshor	i$
+Ik:M:shizenngengosy	o
+Ik:M:shizenngengosyo	r
+Ik:M:shizenngengosyor	i$
+Ik:M:shizenngenn	g
+Ik:M:shizenngenng	o$
+Ik:M:shizenngenngo	s r
+Ik:M:shizenngenngor	i
+Ik:M:shizenngenngori	k
+Ik:M:shizenngenngorik	a
+Ik:M:shizenngenngorika	i$
+Ik:M:shizenngenngos	h y
+Ik:M:shizenngenngosh	o
+Ik:M:shizenngenngosho	r
+Ik:M:shizenngenngoshor	i$
+Ik:M:shizenngenngosy	o
+Ik:M:shizenngenngosyo	r
+Ik:M:shizenngenngosyor	i$
+Ik:M:shizenngeq	g
+Ik:M:shizenngeqg	o$
+Ik:M:shizenngeqgo	s r
+Ik:M:shizenngeqgor	i
+Ik:M:shizenngeqgori	k
+Ik:M:shizenngeqgorik	a
+Ik:M:shizenngeqgorika	i$
+Ik:M:shizenngeqgos	h y
+Ik:M:shizenngeqgosh	o
+Ik:M:shizenngeqgosho	r
+Ik:M:shizenngeqgoshor	i$
+Ik:M:shizenngeqgosy	o
+Ik:M:shizenngeqgosyo	r
+Ik:M:shizenngeqgosyor	i$
+Ik:M:shizeq	g
+Ik:M:shizeqg	e
+Ik:M:shizeqge	n q
+Ik:M:shizeqgen	g n
+Ik:M:shizeqgeng	o$
+Ik:M:shizeqgengo	s r
+Ik:M:shizeqgengor	i
+Ik:M:shizeqgengori	k
+Ik:M:shizeqgengorik	a
+Ik:M:shizeqgengorika	i$
+Ik:M:shizeqgengos	h y
+Ik:M:shizeqgengosh	o
+Ik:M:shizeqgengosho	r
+Ik:M:shizeqgengoshor	i$
+Ik:M:shizeqgengosy	o
+Ik:M:shizeqgengosyo	r
+Ik:M:shizeqgengosyor	i$
+Ik:M:shizeqgenn	g
+Ik:M:shizeqgenng	o$
+Ik:M:shizeqgenngo	s r
+Ik:M:shizeqgenngor	i
+Ik:M:shizeqgenngori	k
+Ik:M:shizeqgenngorik	a
+Ik:M:shizeqgenngorika	i$
+Ik:M:shizeqgenngos	h y
+Ik:M:shizeqgenngosh	o
+Ik:M:shizeqgenngosho	r
+Ik:M:shizeqgenngoshor	i$
+Ik:M:shizeqgenngosy	o
+Ik:M:shizeqgenngosyo	r
+Ik:M:shizeqgenngosyor	i$
+Ik:M:shizeqgeq	g
+Ik:M:shizeqgeqg	o$
+Ik:M:shizeqgeqgo	s r
+Ik:M:shizeqgeqgor	i
+Ik:M:shizeqgeqgori	k
+Ik:M:shizeqgeqgorik	a
+Ik:M:shizeqgeqgorika	i$
+Ik:M:shizeqgeqgos	h y
+Ik:M:shizeqgeqgosh	o
+Ik:M:shizeqgeqgosho	r
+Ik:M:shizeqgeqgoshor	i$
+Ik:M:shizeqgeqgosy	o
+Ik:M:shizeqgeqgosyo	r
+Ik:M:shizeqgeqgosyor	i$
+Ik:M:shizf	n q
+Ik:M:shizfn	g n
+Ik:M:shizfng	e
+Ik:M:shizfnge	n q
+Ik:M:shizfngen	g n
+Ik:M:shizfngeng	o$
+Ik:M:shizfngengo	s r
+Ik:M:shizfngengor	i
+Ik:M:shizfngengori	k
+Ik:M:shizfngengorik	a
+Ik:M:shizfngengorika	i$
+Ik:M:shizfngengos	h y
+Ik:M:shizfngengosh	o
+Ik:M:shizfngengosho	r
+Ik:M:shizfngengoshor	i$
+Ik:M:shizfngengosy	o
+Ik:M:shizfngengosyo	r
+Ik:M:shizfngengosyor	i$
+Ik:M:shizfngenn	g
+Ik:M:shizfngenng	o$
+Ik:M:shizfngenngo	s r
+Ik:M:shizfngenngor	i
+Ik:M:shizfngenngori	k
+Ik:M:shizfngenngorik	a
+Ik:M:shizfngenngorika	i$
+Ik:M:shizfngenngos	h y
+Ik:M:shizfngenngosh	o
+Ik:M:shizfngenngosho	r
+Ik:M:shizfngenngoshor	i$
+Ik:M:shizfngenngosy	o
+Ik:M:shizfngenngosyo	r
+Ik:M:shizfngenngosyor	i$
+Ik:M:shizfngeq	g
+Ik:M:shizfngeqg	o$
+Ik:M:shizfngeqgo	s r
+Ik:M:shizfngeqgor	i
+Ik:M:shizfngeqgori	k
+Ik:M:shizfngeqgorik	a
+Ik:M:shizfngeqgorika	i$
+Ik:M:shizfngeqgos	h y
+Ik:M:shizfngeqgosh	o
+Ik:M:shizfngeqgosho	r
+Ik:M:shizfngeqgoshor	i$
+Ik:M:shizfngeqgosy	o
+Ik:M:shizfngeqgosyo	r
+Ik:M:shizfngeqgosyor	i$
+Ik:M:shizfnn	g
+Ik:M:shizfnng	e
+Ik:M:shizfnnge	n q
+Ik:M:shizfnngen	g n
+Ik:M:shizfnngeng	o$
+Ik:M:shizfnngengo	s r
+Ik:M:shizfnngengor	i
+Ik:M:shizfnngengori	k
+Ik:M:shizfnngengorik	a
+Ik:M:shizfnngengorika	i$
+Ik:M:shizfnngengos	h y
+Ik:M:shizfnngengosh	o
+Ik:M:shizfnngengosho	r
+Ik:M:shizfnngengoshor	i$
+Ik:M:shizfnngengosy	o
+Ik:M:shizfnngengosyo	r
+Ik:M:shizfnngengosyor	i$
+Ik:M:shizfnngenn	g
+Ik:M:shizfnngenng	o$
+Ik:M:shizfnngenngo	s r
+Ik:M:shizfnngenngor	i
+Ik:M:shizfnngenngori	k
+Ik:M:shizfnngenngorik	a
+Ik:M:shizfnngenngorika	i$
+Ik:M:shizfnngenngos	h y
+Ik:M:shizfnngenngosh	o
+Ik:M:shizfnngenngosho	r
+Ik:M:shizfnngenngoshor	i$
+Ik:M:shizfnngenngosy	o
+Ik:M:shizfnngenngosyo	r
+Ik:M:shizfnngenngosyor	i$
+Ik:M:shizfnngeq	g
+Ik:M:shizfnngeqg	o$
+Ik:M:shizfnngeqgo	s r
+Ik:M:shizfnngeqgor	i
+Ik:M:shizfnngeqgori	k
+Ik:M:shizfnngeqgorik	a
+Ik:M:shizfnngeqgorika	i$
+Ik:M:shizfnngeqgos	h y
+Ik:M:shizfnngeqgosh	o
+Ik:M:shizfnngeqgosho	r
+Ik:M:shizfnngeqgoshor	i$
+Ik:M:shizfnngeqgosy	o
+Ik:M:shizfnngeqgosyo	r
+Ik:M:shizfnngeqgosyor	i$
+Ik:M:shizfq	g
+Ik:M:shizfqg	e
+Ik:M:shizfqge	n q
+Ik:M:shizfqgen	g n
+Ik:M:shizfqgeng	o$
+Ik:M:shizfqgengo	s r
+Ik:M:shizfqgengor	i
+Ik:M:shizfqgengori	k
+Ik:M:shizfqgengorik	a
+Ik:M:shizfqgengorika	i$
+Ik:M:shizfqgengos	h y
+Ik:M:shizfqgengosh	o
+Ik:M:shizfqgengosho	r
+Ik:M:shizfqgengoshor	i$
+Ik:M:shizfqgengosy	o
+Ik:M:shizfqgengosyo	r
+Ik:M:shizfqgengosyor	i$
+Ik:M:shizfqgenn	g
+Ik:M:shizfqgenng	o$
+Ik:M:shizfqgenngo	s r
+Ik:M:shizfqgenngor	i
+Ik:M:shizfqgenngori	k
+Ik:M:shizfqgenngorik	a
+Ik:M:shizfqgenngorika	i$
+Ik:M:shizfqgenngos	h y
+Ik:M:shizfqgenngosh	o
+Ik:M:shizfqgenngosho	r
+Ik:M:shizfqgenngoshor	i$
+Ik:M:shizfqgenngosy	o
+Ik:M:shizfqgenngosyo	r
+Ik:M:shizfqgenngosyor	i$
+Ik:M:shizfqgeq	g
+Ik:M:shizfqgeqg	o$
+Ik:M:shizfqgeqgo	s r
+Ik:M:shizfqgeqgor	i
+Ik:M:shizfqgeqgori	k
+Ik:M:shizfqgeqgorik	a
+Ik:M:shizfqgeqgorika	i$
+Ik:M:shizfqgeqgos	h y
+Ik:M:shizfqgeqgosh	o
+Ik:M:shizfqgeqgosho	r
+Ik:M:shizfqgeqgoshor	i$
+Ik:M:shizfqgeqgosy	o
+Ik:M:shizfqgeqgosyo	r
+Ik:M:shizfqgeqgosyor	i$
+Ik:M:si	z
+Ik:M:siz	d e f
+Ik:M:sizd	g
+Ik:M:sizdg	d
+Ik:M:sizdgd	g
+Ik:M:sizdgdg	o$
+Ik:M:sizdgdgo	s x r
+Ik:M:sizdgdgor	i
+Ik:M:sizdgdgori	k
+Ik:M:sizdgdgorik	q$
+Ik:M:sizdgdgos	h y
+Ik:M:sizdgdgosh	o
+Ik:M:sizdgdgosho	r
+Ik:M:sizdgdgoshor	i$
+Ik:M:sizdgdgosy	o
+Ik:M:sizdgdgosyo	r
+Ik:M:sizdgdgosyor	i$
+Ik:M:sizdgdgox	o
+Ik:M:sizdgdgoxo	r
+Ik:M:sizdgdgoxor	i$
+Ik:M:size	n q
+Ik:M:sizen	g n
+Ik:M:sizeng	e
+Ik:M:sizenge	n q
+Ik:M:sizengen	g n
+Ik:M:sizengeng	o$
+Ik:M:sizengengo	s r
+Ik:M:sizengengor	i
+Ik:M:sizengengori	k
+Ik:M:sizengengorik	a
+Ik:M:sizengengorika	i$
+Ik:M:sizengengos	h y
+Ik:M:sizengengosh	o
+Ik:M:sizengengosho	r
+Ik:M:sizengengoshor	i$
+Ik:M:sizengengosy	o
+Ik:M:sizengengosyo	r
+Ik:M:sizengengosyor	i$
+Ik:M:sizengenn	g
+Ik:M:sizengenng	o$
+Ik:M:sizengenngo	s r
+Ik:M:sizengenngor	i
+Ik:M:sizengenngori	k
+Ik:M:sizengenngorik	a
+Ik:M:sizengenngorika	i$
+Ik:M:sizengenngos	h y
+Ik:M:sizengenngosh	o
+Ik:M:sizengenngosho	r
+Ik:M:sizengenngoshor	i$
+Ik:M:sizengenngosy	o
+Ik:M:sizengenngosyo	r
+Ik:M:sizengenngosyor	i$
+Ik:M:sizengeq	g
+Ik:M:sizengeqg	o$
+Ik:M:sizengeqgo	s r
+Ik:M:sizengeqgor	i
+Ik:M:sizengeqgori	k
+Ik:M:sizengeqgorik	a
+Ik:M:sizengeqgorika	i$
+Ik:M:sizengeqgos	h y
+Ik:M:sizengeqgosh	o
+Ik:M:sizengeqgosho	r
+Ik:M:sizengeqgoshor	i$
+Ik:M:sizengeqgosy	o
+Ik:M:sizengeqgosyo	r
+Ik:M:sizengeqgosyor	i$
+Ik:M:sizenn	g
+Ik:M:sizenng	e
+Ik:M:sizennge	n q
+Ik:M:sizenngen	g n
+Ik:M:sizenngeng	o$
+Ik:M:sizenngengo	s r
+Ik:M:sizenngengor	i
+Ik:M:sizenngengori	k
+Ik:M:sizenngengorik	a
+Ik:M:sizenngengorika	i$
+Ik:M:sizenngengos	h y
+Ik:M:sizenngengosh	o
+Ik:M:sizenngengosho	r
+Ik:M:sizenngengoshor	i$
+Ik:M:sizenngengosy	o
+Ik:M:sizenngengosyo	r
+Ik:M:sizenngengosyor	i$
+Ik:M:sizenngenn	g
+Ik:M:sizenngenng	o$
+Ik:M:sizenngenngo	s r
+Ik:M:sizenngenngor	i
+Ik:M:sizenngenngori	k
+Ik:M:sizenngenngorik	a
+Ik:M:sizenngenngorika	i$
+Ik:M:sizenngenngos	h y
+Ik:M:sizenngenngosh	o
+Ik:M:sizenngenngosho	r
+Ik:M:sizenngenngoshor	i$
+Ik:M:sizenngenngosy	o
+Ik:M:sizenngenngosyo	r
+Ik:M:sizenngenngosyor	i$
+Ik:M:sizenngeq	g
+Ik:M:sizenngeqg	o$
+Ik:M:sizenngeqgo	s r
+Ik:M:sizenngeqgor	i
+Ik:M:sizenngeqgori	k
+Ik:M:sizenngeqgorik	a
+Ik:M:sizenngeqgorika	i$
+Ik:M:sizenngeqgos	h y
+Ik:M:sizenngeqgosh	o
+Ik:M:sizenngeqgosho	r
+Ik:M:sizenngeqgoshor	i$
+Ik:M:sizenngeqgosy	o
+Ik:M:sizenngeqgosyo	r
+Ik:M:sizenngeqgosyor	i$
+Ik:M:sizeq	g
+Ik:M:sizeqg	e
+Ik:M:sizeqge	n q
+Ik:M:sizeqgen	g n
+Ik:M:sizeqgeng	o$
+Ik:M:sizeqgengo	s r
+Ik:M:sizeqgengor	i
+Ik:M:sizeqgengori	k
+Ik:M:sizeqgengorik	a
+Ik:M:sizeqgengorika	i$
+Ik:M:sizeqgengos	h y
+Ik:M:sizeqgengosh	o
+Ik:M:sizeqgengosho	r
+Ik:M:sizeqgengoshor	i$
+Ik:M:sizeqgengosy	o
+Ik:M:sizeqgengosyo	r
+Ik:M:sizeqgengosyor	i$
+Ik:M:sizeqgenn	g
+Ik:M:sizeqgenng	o$
+Ik:M:sizeqgenngo	s r
+Ik:M:sizeqgenngor	i
+Ik:M:sizeqgenngori	k
+Ik:M:sizeqgenngorik	a
+Ik:M:sizeqgenngorika	i$
+Ik:M:sizeqgenngos	h y
+Ik:M:sizeqgenngosh	o
+Ik:M:sizeqgenngosho	r
+Ik:M:sizeqgenngoshor	i$
+Ik:M:sizeqgenngosy	o
+Ik:M:sizeqgenngosyo	r
+Ik:M:sizeqgenngosyor	i$
+Ik:M:sizeqgeq	g
+Ik:M:sizeqgeqg	o$
+Ik:M:sizeqgeqgo	s r
+Ik:M:sizeqgeqgor	i
+Ik:M:sizeqgeqgori	k
+Ik:M:sizeqgeqgorik	a
+Ik:M:sizeqgeqgorika	i$
+Ik:M:sizeqgeqgos	h y
+Ik:M:sizeqgeqgosh	o
+Ik:M:sizeqgeqgosho	r
+Ik:M:sizeqgeqgoshor	i$
+Ik:M:sizeqgeqgosy	o
+Ik:M:sizeqgeqgosyo	r
+Ik:M:sizeqgeqgosyor	i$
+Ik:M:sizf	n q
+Ik:M:sizfn	g n
+Ik:M:sizfng	e
+Ik:M:sizfnge	n q
+Ik:M:sizfngen	g n
+Ik:M:sizfngeng	o$
+Ik:M:sizfngengo	s r
+Ik:M:sizfngengor	i
+Ik:M:sizfngengori	k
+Ik:M:sizfngengorik	a
+Ik:M:sizfngengorika	i$
+Ik:M:sizfngengos	h y
+Ik:M:sizfngengosh	o
+Ik:M:sizfngengosho	r
+Ik:M:sizfngengoshor	i$
+Ik:M:sizfngengosy	o
+Ik:M:sizfngengosyo	r
+Ik:M:sizfngengosyor	i$
+Ik:M:sizfngenn	g
+Ik:M:sizfngenng	o$
+Ik:M:sizfngenngo	s r
+Ik:M:sizfngenngor	i
+Ik:M:sizfngenngori	k
+Ik:M:sizfngenngorik	a
+Ik:M:sizfngenngorika	i$
+Ik:M:sizfngenngos	h y
+Ik:M:sizfngenngosh	o
+Ik:M:sizfngenngosho	r
+Ik:M:sizfngenngoshor	i$
+Ik:M:sizfngenngosy	o
+Ik:M:sizfngenngosyo	r
+Ik:M:sizfngenngosyor	i$
+Ik:M:sizfngeq	g
+Ik:M:sizfngeqg	o$
+Ik:M:sizfngeqgo	s r
+Ik:M:sizfngeqgor	i
+Ik:M:sizfngeqgori	k
+Ik:M:sizfngeqgorik	a
+Ik:M:sizfngeqgorika	i$
+Ik:M:sizfngeqgos	h y
+Ik:M:sizfngeqgosh	o
+Ik:M:sizfngeqgosho	r
+Ik:M:sizfngeqgoshor	i$
+Ik:M:sizfngeqgosy	o
+Ik:M:sizfngeqgosyo	r
+Ik:M:sizfngeqgosyor	i$
+Ik:M:sizfnn	g
+Ik:M:sizfnng	e
+Ik:M:sizfnnge	n q
+Ik:M:sizfnngen	g n
+Ik:M:sizfnngeng	o$
+Ik:M:sizfnngengo	s r
+Ik:M:sizfnngengor	i
+Ik:M:sizfnngengori	k
+Ik:M:sizfnngengorik	a
+Ik:M:sizfnngengorika	i$
+Ik:M:sizfnngengos	h y
+Ik:M:sizfnngengosh	o
+Ik:M:sizfnngengosho	r
+Ik:M:sizfnngengoshor	i$
+Ik:M:sizfnngengosy	o
+Ik:M:sizfnngengosyo	r
+Ik:M:sizfnngengosyor	i$
+Ik:M:sizfnngenn	g
+Ik:M:sizfnngenng	o$
+Ik:M:sizfnngenngo	s r
+Ik:M:sizfnngenngor	i
+Ik:M:sizfnngenngori	k
+Ik:M:sizfnngenngorik	a
+Ik:M:sizfnngenngorika	i$
+Ik:M:sizfnngenngos	h y
+Ik:M:sizfnngenngosh	o
+Ik:M:sizfnngenngosho	r
+Ik:M:sizfnngenngoshor	i$
+Ik:M:sizfnngenngosy	o
+Ik:M:sizfnngenngosyo	r
+Ik:M:sizfnngenngosyor	i$
+Ik:M:sizfnngeq	g
+Ik:M:sizfnngeqg	o$
+Ik:M:sizfnngeqgo	s r
+Ik:M:sizfnngeqgor	i
+Ik:M:sizfnngeqgori	k
+Ik:M:sizfnngeqgorik	a
+Ik:M:sizfnngeqgorika	i$
+Ik:M:sizfnngeqgos	h y
+Ik:M:sizfnngeqgosh	o
+Ik:M:sizfnngeqgosho	r
+Ik:M:sizfnngeqgoshor	i$
+Ik:M:sizfnngeqgosy	o
+Ik:M:sizfnngeqgosyo	r
+Ik:M:sizfnngeqgosyor	i$
+Ik:M:sizfq	g
+Ik:M:sizfqg	e
+Ik:M:sizfqge	n q
+Ik:M:sizfqgen	g n
+Ik:M:sizfqgeng	o$
+Ik:M:sizfqgengo	s r
+Ik:M:sizfqgengor	i
+Ik:M:sizfqgengori	k
+Ik:M:sizfqgengorik	a
+Ik:M:sizfqgengorika	i$
+Ik:M:sizfqgengos	h y
+Ik:M:sizfqgengosh	o
+Ik:M:sizfqgengosho	r
+Ik:M:sizfqgengoshor	i$
+Ik:M:sizfqgengosy	o
+Ik:M:sizfqgengosyo	r
+Ik:M:sizfqgengosyor	i$
+Ik:M:sizfqgenn	g
+Ik:M:sizfqgenng	o$
+Ik:M:sizfqgenngo	s r
+Ik:M:sizfqgenngor	i
+Ik:M:sizfqgenngori	k
+Ik:M:sizfqgenngorik	a
+Ik:M:sizfqgenngorika	i$
+Ik:M:sizfqgenngos	h y
+Ik:M:sizfqgenngosh	o
+Ik:M:sizfqgenngosho	r
+Ik:M:sizfqgenngoshor	i$
+Ik:M:sizfqgenngosy	o
+Ik:M:sizfqgenngosyo	r
+Ik:M:sizfqgenngosyor	i$
+Ik:M:sizfqgeq	g
+Ik:M:sizfqgeqg	o$
+Ik:M:sizfqgeqgo	s r
+Ik:M:sizfqgeqgor	i
+Ik:M:sizfqgeqgori	k
+Ik:M:sizfqgeqgorik	a
+Ik:M:sizfqgeqgorika	i$
+Ik:M:sizfqgeqgos	h y
+Ik:M:sizfqgeqgosh	o
+Ik:M:sizfqgeqgosho	r
+Ik:M:sizfqgeqgoshor	i$
+Ik:M:sizfqgeqgosy	o
+Ik:M:sizfqgeqgosyo	r
+Ik:M:sizfqgeqgosyor	i$
+Ik:M:w	o$ a
+Ik:M:wa	k
+Ik:M:wak	e$
+Ik:M:x	i
+Ik:M:xi	z
+Ik:M:xiz	d
+Ik:M:xizd	g
+Ik:M:xizdg	d
+Ik:M:xizdgd	g
+Ik:M:xizdgdg	o$
+Ik:M:xizdgdgo	s x r
+Ik:M:xizdgdgor	i
+Ik:M:xizdgdgori	k
+Ik:M:xizdgdgorik	q$
+Ik:M:xizdgdgos	h y
+Ik:M:xizdgdgosh	o
+Ik:M:xizdgdgosho	r
+Ik:M:xizdgdgoshor	i$
+Ik:M:xizdgdgosy	o
+Ik:M:xizdgdgosyo	r
+Ik:M:xizdgdgosyor	i$
+Ik:M:xizdgdgox	o
+Ik:M:xizdgdgoxo	r
+Ik:M:xizdgdgoxor	i$
+M:!	/！/感嘆符
+M:!=	/≠
+M:#chi'mf	C#ちーむ
+M:#chi'mu	C#ちーむ
+M:#chi-mf	C#ちーむ
+M:#chi-mu	C#ちーむ
+M:#chi:mf	C#ちーむ
+M:#chi:mu	C#ちーむ
+M:#chi^mf	C#ちーむ
+M:#chi^mu	C#ちーむ
+M:#ci'mf	C#ちーむ
+M:#ci'mu	C#ちーむ
+M:#ci-mf	C#ちーむ
+M:#ci-mu	C#ちーむ
+M:#ci:mf	C#ちーむ
+M:#ci:mu	C#ちーむ
+M:#ci^mf	C#ちーむ
+M:#ci^mu	C#ちーむ
+M:#gatsu#ka	C#がつ#か
+M:#gatsu#nichi	C#がつ#にち
+M:#gatsu#nici	C#がつ#にち
+M:#gatsu#niti	C#がつ#にち
+M:#gatsu#nityi	C#がつ#にち
+M:#gatsu#nt	C#がつ#にち
+M:#gatu#ka	C#がつ#か
+M:#gatu#nichi	C#がつ#にち
+M:#gatu#nici	C#がつ#にち
+M:#gatu#niti	C#がつ#にち
+M:#gatu#nityi	C#がつ#にち
+M:#gatu#nt	C#がつ#にち
+M:#gyoume	C#ぎょうめ
+M:#gyowhume	C#ぎょうめ
+M:#gypme	C#ぎょうめ
+M:#kaime	C#かいめ
+M:#kara#	C#から#
+M:#kqme	C#かいめ
+M:#kr#	C#から#
+M:#nd	C#ねん
+M:#nd#gatsu#nt	C#ねん#がつ#にち
+M:#nd#gatu#nt	C#ねん#がつ#にち
+M:#nen	C#ねん
+M:#nen#gatsu#nichi	C#ねん#がつ#にち
+M:#nen#gatsu#nici	C#ねん#がつ#にち
+M:#nen#gatsu#niti	C#ねん#がつ#にち
+M:#nen#gatsu#nityi	C#ねん#がつ#にち
+M:#nen#gatu#nichi	C#ねん#がつ#にち
+M:#nen#gatu#nici	C#ねん#がつ#にち
+M:#nen#gatu#niti	C#ねん#がつ#にち
+M:#nen#gatu#nityi	C#ねん#がつ#にち
+M:#nenn	C#ねん
+M:#nenn#gatsu#nichi	C#ねん#がつ#にち
+M:#nenn#gatsu#nici	C#ねん#がつ#にち
+M:#nenn#gatsu#niti	C#ねん#がつ#にち
+M:#nenn#gatsu#nityi	C#ねん#がつ#にち
+M:#nenn#gatu#nichi	C#ねん#がつ#にち
+M:#nenn#gatu#nici	C#ねん#がつ#にち
+M:#nenn#gatu#niti	C#ねん#がつ#にち
+M:#nenn#gatu#nityi	C#ねん#がつ#にち
+M:#neq	C#ねん
+M:#neq#gatsu#nichi	C#ねん#がつ#にち
+M:#neq#gatsu#nici	C#ねん#がつ#にち
+M:#neq#gatsu#niti	C#ねん#がつ#にち
+M:#neq#gatsu#nityi	C#ねん#がつ#にち
+M:#neq#gatu#nichi	C#ねん#がつ#にち
+M:#neq#gatu#nici	C#ねん#がつ#にち
+M:#neq#gatu#niti	C#ねん#がつ#にち
+M:#neq#gatu#nityi	C#ねん#がつ#にち
+M:#ti'mf	C#ちーむ
+M:#ti'mu	C#ちーむ
+M:#ti-mf	C#ちーむ
+M:#ti-mu	C#ちーむ
+M:#ti:mf	C#ちーむ
+M:#ti:mu	C#ちーむ
+M:#ti^mf	C#ちーむ
+M:#ti^mu	C#ちーむ
+M:#tyi'mf	C#ちーむ
+M:#tyi'mu	C#ちーむ
+M:#tyi-mf	C#ちーむ
+M:#tyi-mu	C#ちーむ
+M:#tyi:mf	C#ちーむ
+M:#tyi:mu	C#ちーむ
+M:#tyi^mf	C#ちーむ
+M:#tyi^mu	C#ちーむ
+M:#かいめ	/#0回目/#3回目
+M:#から#	/#1〜#1
+M:#がつ#か	/#1月#1日/#0月#0日/#2月#2日/#2月#1日
+M:#がつ#にち	/#1月#1日/#0月#0日/#2月#2日/#2月#1日
+M:#ぎょうめ	/#0行目/#1行目
+M:#ちーむ	/#0チーム
+M:#ねん	/#1年/#0年/#3年/#2年
+M:#ねん#がつ#にち	/#0年#0月#0日/#1年#1月#1日
+M:*	/＊/※/×
+M:.	/．/・/。/…;...
+M:/	/／/÷
+M:=kumikomf	くみこむ
+M:=kumikomu	くみこむ
+M:=nn	んん
+M:=nnn	んん
+M:=nnnn	んん
+M:=nnq	んん
+M:=nq	んん
+M:=qn	んん
+M:=qnn	んん
+M:=qq	んん
+M:=shita	した
+M:=sita	した
+M:=st	した
+M:>an	C>あん
+M:>ann	C>あん
+M:>aq	C>あん
+M:>あん	/案
+M:?	/？
+M:aU	Cあu
+M:developer	/デベロッパー/ディベロッパー/デベロッパ
+M:eR	Cえr
+M:hdka	Cへんか
+M:hdkaS	Cへんかs
+M:hdkn	Cへんかん
+M:hdkz	Cへんかん
+M:henka	Cへんか
+M:henkaS	Cへんかs
+M:henkan	Cへんかん
+M:henkann	Cへんかん
+M:henkaq	Cへんかん
+M:hennka	Cへんか
+M:hennkaS	Cへんかs
+M:hennkan	Cへんかん
+M:hennkann	Cへんかん
+M:hennkaq	Cへんかん
+M:heqka	Cへんか
+M:heqkaS	Cへんかs
+M:heqkan	Cへんかん
+M:heqkann	Cへんかん
+M:heqkaq	Cへんかん
+M:i;chi	Cいっち
+M:i;ci	Cいっち
+M:i;tyi	Cいっち
+M:i@chi	Cいっち
+M:i@ci	Cいっち
+M:i@tyi	Cいっち
+M:icchi	Cいっち
+M:icci	Cいっち
+M:inngp	Cいんにょう
+M:innngp	Cいんにょう
+M:innnyou	Cいんにょう
+M:innnyowhu	Cいんにょう
+M:innnyp	Cいんにょう
+M:innyou	Cいんにょう/いんよう
+M:innyowhu	Cいんにょう/いんよう
+M:innyp	Cいんにょう/いんよう
+M:inyou	Cいんよう
+M:inyowhu	Cいんよう
+M:inyp	Cいんよう
+M:iqngp	Cいんにょう
+M:iqnyou	Cいんにょう
+M:iqnyowhu	Cいんにょう
+M:iqnyp	Cいんにょう
+M:iqyou	Cいんよう
+M:iqyowhu	Cいんよう
+M:iqyp	Cいんよう
+M:ittyi	Cいっち
+M:ka+	Cか+
+M:ka;ko	Cかっこ
+M:ka@ko	Cかっこ
+M:kaT	Cかt
+M:ka`	Cか`
+M:kakko	Cかっこ
+M:kani	Cかに/かんい
+M:kanni	Cかんい
+M:kaqi	Cかんい
+M:kni	Cかんい
+M:ko'hi'	Cこーひー
+M:ko'hi-	Cこーひー
+M:ko'hi:	Cこーひー
+M:ko'hi^	Cこーひー
+M:ko-hi'	Cこーひー
+M:ko-hi-	Cこーひー
+M:ko-hi:	Cこーひー
+M:ko-hi^	Cこーひー
+M:ko:hi'	Cこーひー
+M:ko:hi-	Cこーひー
+M:ko:hi:	Cこーひー
+M:ko:hi^	Cこーひー
+M:ko;ka	Cこっか
+M:ko@ka	Cこっか
+M:ko^hi'	Cこーひー
+M:ko^hi-	Cこーひー
+M:ko^hi:	Cこーひー
+M:ko^hi^	Cこーひー
+M:kokka	Cこっか
+M:kumikomi	Cくみこみ
+M:kzi	Cかんい
+M:miR	Cみr
+M:okonaU	Cおこなu
+M:sakf	Cさき
+M:saki	Cさき
+M:saku	Cさく
+M:shizdgdgo	Cしぜんげんご
+M:shizdgdgorikq	Cしぜんげんごりかい
+M:shizdgdgoshori	Cしぜんげんごしょり
+M:shizdgdgosyori	Cしぜんげんごしょり
+M:shizdgdgoxori	Cしぜんげんごしょり
+M:shizengengo	Cしぜんげんご
+M:shizengengorikai	Cしぜんげんごりかい
+M:shizengengoshori	Cしぜんげんごしょり
+M:shizengengosyori	Cしぜんげんごしょり
+M:shizengenngo	Cしぜんげんご
+M:shizengenngorikai	Cしぜんげんごりかい
+M:shizengenngoshori	Cしぜんげんごしょり
+M:shizengenngosyori	Cしぜんげんごしょり
+M:shizengeqgo	Cしぜんげんご
+M:shizengeqgorikai	Cしぜんげんごりかい
+M:shizengeqgoshori	Cしぜんげんごしょり
+M:shizengeqgosyori	Cしぜんげんごしょり
+M:shizenngengo	Cしぜんげんご
+M:shizenngengorikai	Cしぜんげんごりかい
+M:shizenngengoshori	Cしぜんげんごしょり
+M:shizenngengosyori	Cしぜんげんごしょり
+M:shizenngenngo	Cしぜんげんご
+M:shizenngenngorikai	Cしぜんげんごりかい
+M:shizenngenngoshori	Cしぜんげんごしょり
+M:shizenngenngosyori	Cしぜんげんごしょり
+M:shizenngeqgo	Cしぜんげんご
+M:shizenngeqgorikai	Cしぜんげんごりかい
+M:shizenngeqgoshori	Cしぜんげんごしょり
+M:shizenngeqgosyori	Cしぜんげんごしょり
+M:shizeqgengo	Cしぜんげんご
+M:shizeqgengorikai	Cしぜんげんごりかい
+M:shizeqgengoshori	Cしぜんげんごしょり
+M:shizeqgengosyori	Cしぜんげんごしょり
+M:shizeqgenngo	Cしぜんげんご
+M:shizeqgenngorikai	Cしぜんげんごりかい
+M:shizeqgenngoshori	Cしぜんげんごしょり
+M:shizeqgenngosyori	Cしぜんげんごしょり
+M:shizeqgeqgo	Cしぜんげんご
+M:shizeqgeqgorikai	Cしぜんげんごりかい
+M:shizeqgeqgoshori	Cしぜんげんごしょり
+M:shizeqgeqgosyori	Cしぜんげんごしょり
+M:shizfngengo	Cしぜんげんご
+M:shizfngengorikai	Cしぜんげんごりかい
+M:shizfngengoshori	Cしぜんげんごしょり
+M:shizfngengosyori	Cしぜんげんごしょり
+M:shizfngenngo	Cしぜんげんご
+M:shizfngenngorikai	Cしぜんげんごりかい
+M:shizfngenngoshori	Cしぜんげんごしょり
+M:shizfngenngosyori	Cしぜんげんごしょり
+M:shizfngeqgo	Cしぜんげんご
+M:shizfngeqgorikai	Cしぜんげんごりかい
+M:shizfngeqgoshori	Cしぜんげんごしょり
+M:shizfngeqgosyori	Cしぜんげんごしょり
+M:shizfnngengo	Cしぜんげんご
+M:shizfnngengorikai	Cしぜんげんごりかい
+M:shizfnngengoshori	Cしぜんげんごしょり
+M:shizfnngengosyori	Cしぜんげんごしょり
+M:shizfnngenngo	Cしぜんげんご
+M:shizfnngenngorikai	Cしぜんげんごりかい
+M:shizfnngenngoshori	Cしぜんげんごしょり
+M:shizfnngenngosyori	Cしぜんげんごしょり
+M:shizfnngeqgo	Cしぜんげんご
+M:shizfnngeqgorikai	Cしぜんげんごりかい
+M:shizfnngeqgoshori	Cしぜんげんごしょり
+M:shizfnngeqgosyori	Cしぜんげんごしょり
+M:shizfqgengo	Cしぜんげんご
+M:shizfqgengorikai	Cしぜんげんごりかい
+M:shizfqgengoshori	Cしぜんげんごしょり
+M:shizfqgengosyori	Cしぜんげんごしょり
+M:shizfqgenngo	Cしぜんげんご
+M:shizfqgenngorikai	Cしぜんげんごりかい
+M:shizfqgenngoshori	Cしぜんげんごしょり
+M:shizfqgenngosyori	Cしぜんげんごしょり
+M:shizfqgeqgo	Cしぜんげんご
+M:shizfqgeqgorikai	Cしぜんげんごりかい
+M:shizfqgeqgoshori	Cしぜんげんごしょり
+M:shizfqgeqgosyori	Cしぜんげんごしょり
+M:sizdgdgo	Cしぜんげんご
+M:sizdgdgorikq	Cしぜんげんごりかい
+M:sizdgdgoshori	Cしぜんげんごしょり
+M:sizdgdgosyori	Cしぜんげんごしょり
+M:sizdgdgoxori	Cしぜんげんごしょり
+M:sizengengo	Cしぜんげんご
+M:sizengengorikai	Cしぜんげんごりかい
+M:sizengengoshori	Cしぜんげんごしょり
+M:sizengengosyori	Cしぜんげんごしょり
+M:sizengenngo	Cしぜんげんご
+M:sizengenngorikai	Cしぜんげんごりかい
+M:sizengenngoshori	Cしぜんげんごしょり
+M:sizengenngosyori	Cしぜんげんごしょり
+M:sizengeqgo	Cしぜんげんご
+M:sizengeqgorikai	Cしぜんげんごりかい
+M:sizengeqgoshori	Cしぜんげんごしょり
+M:sizengeqgosyori	Cしぜんげんごしょり
+M:sizenngengo	Cしぜんげんご
+M:sizenngengorikai	Cしぜんげんごりかい
+M:sizenngengoshori	Cしぜんげんごしょり
+M:sizenngengosyori	Cしぜんげんごしょり
+M:sizenngenngo	Cしぜんげんご
+M:sizenngenngorikai	Cしぜんげんごりかい
+M:sizenngenngoshori	Cしぜんげんごしょり
+M:sizenngenngosyori	Cしぜんげんごしょり
+M:sizenngeqgo	Cしぜんげんご
+M:sizenngeqgorikai	Cしぜんげんごりかい
+M:sizenngeqgoshori	Cしぜんげんごしょり
+M:sizenngeqgosyori	Cしぜんげんごしょり
+M:sizeqgengo	Cしぜんげんご
+M:sizeqgengorikai	Cしぜんげんごりかい
+M:sizeqgengoshori	Cしぜんげんごしょり
+M:sizeqgengosyori	Cしぜんげんごしょり
+M:sizeqgenngo	Cしぜんげんご
+M:sizeqgenngorikai	Cしぜんげんごりかい
+M:sizeqgenngoshori	Cしぜんげんごしょり
+M:sizeqgenngosyori	Cしぜんげんごしょり
+M:sizeqgeqgo	Cしぜんげんご
+M:sizeqgeqgorikai	Cしぜんげんごりかい
+M:sizeqgeqgoshori	Cしぜんげんごしょり
+M:sizeqgeqgosyori	Cしぜんげんごしょり
+M:sizfngengo	Cしぜんげんご
+M:sizfngengorikai	Cしぜんげんごりかい
+M:sizfngengoshori	Cしぜんげんごしょり
+M:sizfngengosyori	Cしぜんげんごしょり
+M:sizfngenngo	Cしぜんげんご
+M:sizfngenngorikai	Cしぜんげんごりかい
+M:sizfngenngoshori	Cしぜんげんごしょり
+M:sizfngenngosyori	Cしぜんげんごしょり
+M:sizfngeqgo	Cしぜんげんご
+M:sizfngeqgorikai	Cしぜんげんごりかい
+M:sizfngeqgoshori	Cしぜんげんごしょり
+M:sizfngeqgosyori	Cしぜんげんごしょり
+M:sizfnngengo	Cしぜんげんご
+M:sizfnngengorikai	Cしぜんげんごりかい
+M:sizfnngengoshori	Cしぜんげんごしょり
+M:sizfnngengosyori	Cしぜんげんごしょり
+M:sizfnngenngo	Cしぜんげんご
+M:sizfnngenngorikai	Cしぜんげんごりかい
+M:sizfnngenngoshori	Cしぜんげんごしょり
+M:sizfnngenngosyori	Cしぜんげんごしょり
+M:sizfnngeqgo	Cしぜんげんご
+M:sizfnngeqgorikai	Cしぜんげんごりかい
+M:sizfnngeqgoshori	Cしぜんげんごしょり
+M:sizfnngeqgosyori	Cしぜんげんごしょり
+M:sizfqgengo	Cしぜんげんご
+M:sizfqgengorikai	Cしぜんげんごりかい
+M:sizfqgengoshori	Cしぜんげんごしょり
+M:sizfqgengosyori	Cしぜんげんごしょり
+M:sizfqgenngo	Cしぜんげんご
+M:sizfqgenngorikai	Cしぜんげんごりかい
+M:sizfqgenngoshori	Cしぜんげんごしょり
+M:sizfqgenngosyori	Cしぜんげんごしょり
+M:sizfqgeqgo	Cしぜんげんご
+M:sizfqgeqgorikai	Cしぜんげんごりかい
+M:sizfqgeqgoshori	Cしぜんげんごしょり
+M:sizfqgeqgosyori	Cしぜんげんごしょり
+M:wake	Cわけ
+M:watashiH	Cわたしh
+M:watasiH	Cわたしh
+M:wo	Cを
+M:wtshiH	Cわたしh
+M:wtsiH	Cわたしh
+M:wtxiH	Cわたしh
+M:xizdgdgo	Cしぜんげんご
+M:xizdgdgorikq	Cしぜんげんごりかい
+M:xizdgdgoshori	Cしぜんげんごしょり
+M:xizdgdgosyori	Cしぜんげんごしょり
+M:xizdgdgoxori	Cしぜんげんごしょり
+M:{	/｛
+M:あu	/合;(一致) 話が合う/会;人と会う/遭;(偶然、特によくないことにあう) 事故に遭う/逢;(人と|運命的にあう) 巡り逢う/遇;≒遭う/會;「会」の旧字
+M:いっち	/一致/イッチ
+M:いんにょう	/飲尿/廴繞;[部首]
+M:いんよう	/引用/飲用/陰陽
+M:えr	/得/獲;NB:「とr」と同形/選;NB:「よr」「すぐr」と同形
+M:おこなu	/行/行な;※送り位置補正
+M:か+	/勝/買/飼/刈;(crop)草を刈る
+M:か`	/勝/買/飼/刈;(crop)草を刈る
+M:かt	/勝/買/飼/刈;(crop)草を刈る
+M:かっこ	/確固/括弧/各個/各戸/確乎/羯鼓;雅楽の打楽器/格好/『』/【】/［］/〔〕/〈〉/《》/｛｝/「」/（）/‘’/“”
+M:かに	/蟹/可児/蠏
+M:かんい	/簡易/官位/冠位;-十二階/漢医;漢方医/敢為/官医/寛衣/換位/簡意
+M:くみこみ	/組み込み/組込
+M:こっか	/国家;state/国歌;anthem.「-斉唱」/国花/骨化/國家;「国」旧字/黒化/刻下/】/）/］/』
+M:こーひー	/コーヒー
+M:さき	/先/崎/左記/前/早紀/沙樹/早岐/沙貴/咲/埼/尖/嵜/碕/早記
+M:さく	/策/柵/作/佐久;地名/朔;朔日 ⇔晦/槊;ほこ/搾;搾取/昨;昨夜/咋;(くう)/窄;狭窄/酢;酢酸/柞;いすのき/炸;炸裂/筰;山田耕筰/削;削除/索;検索/錯;錯誤/筴/縒;より/鑿/做;「作」の異体字/簀;す/嘖;さいな・む/捉;(漢音) とら・える/齪;齷齪/冊;(慣用音)竹冊/册;「冊」の旧字/辟;?/乍;?
+M:しぜんげんご	/自然言語
+M:しぜんげんごしょり	/自然言語処理
+M:しぜんげんごりかい	/自然言語理解
+M:へんか	/変化/返歌
+M:へんかs	/変化
+M:へんかん	/変換/返還
+M:みr	/見/観;(字義:みわたす)/視;(字義:じっとみる)/診;(diagnose) 患者を診る/看;(nurse) 病母を看る/觀;「観」の旧字
+M:わけ	/訳/和気;地名/理由;当て字/分け/分/譯;「訳」の旧字/戯奴
+M:わたしh	/私
+M:を	/小/緒/雄/男/牡/尾/悪/汚/惡;「悪」の旧字(人名用漢字)
+SEKKA:VERSION	1.2.1

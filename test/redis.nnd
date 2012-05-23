@@ -51,19 +51,19 @@
        (test-error SocketError)
        (let1 sv (Kvs.new dbtype)
          (sv.open "nohost.example.com")
-         (sv.put! "temp::1" "one")))
+         (sv.put! "temp:1" "one")))
 
 (test* "db connect NG and Exception"
        (test-error Timeout::Error)
        (let1 sv (Kvs.new dbtype)
          (sv.open "126.0.0.1")
-         (sv.put! "temp::1" "one")))
+         (sv.put! "temp:1" "one")))
 
 (test* "db connect OK"
        "one"
        (begin
          (cachesv.open "localhost")
-         (cachesv.put! "temp::1" "one")))
+         (cachesv.put! "temp:1" "one")))
 
 (print "sleep 100")
 (.sleep 100)
@@ -71,15 +71,15 @@
 
 (test* "db store 1"
        "one"
-       (cachesv.put! "temp::1" "one"))
+       (cachesv.put! "temp:1" "one"))
 
 (test* "db fetch  1"
        "one"
-       (cachesv.get "temp::1"))
+       (cachesv.get "temp:1"))
 
 (test* "db fetch  fallback"
        false
-       (cachesv.get "temp::none" false))
+       (cachesv.get "temp:none" false))
 
 
 ;;===================================================================

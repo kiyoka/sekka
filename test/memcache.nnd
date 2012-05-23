@@ -51,25 +51,25 @@
        (test-error MemCache::MemCacheError)
        (let1 sv (Kvs.new dbtype)
          (sv.open "localhost:11111")
-         (sv.put! "temp::1" "one")))
+         (sv.put! "temp:1" "one")))
 
 (test* "db connect OK"
        "one"
        (begin
          (cachesv.open "localhost:11211")
-         (cachesv.put! "temp::1" "one")))
+         (cachesv.put! "temp:1" "one")))
 
 (test* "db store 1"
        "one"
-       (cachesv.put! "temp::1" "one"))
+       (cachesv.put! "temp:1" "one"))
 
 (test* "db fetch  1"
        "one"
-       (cachesv.get "temp::1"))
+       (cachesv.get "temp:1"))
 
 (test* "db fetch  fallback"
        false
-       (cachesv.get "temp::none" false))
+       (cachesv.get "temp:none" false))
 
 
 ;;-------------------------------------------------------------------
@@ -81,10 +81,10 @@
          (for-each
           (lambda (n)
             (let1 str (sprintf "%06d" n)
-              (cachesv.put! (+ "temp::" str) str)
+              (cachesv.put! (+ "temp:" str) str)
               (when (string=?
                      str
-                     (cachesv.get (+ "temp::" str) str))
+                     (cachesv.get (+ "temp:" str) str))
                 (set! count (+ count 1)))))
           (range 10000))
          count))
@@ -93,17 +93,17 @@
 (test-section "memcached expire data")
 (test* "db expire time 1"
        "now"
-       (cachesv.put! "temp::1" "now" 2))
+       (cachesv.put! "temp:1" "now" 2))
 
 (test* "db expire time 2"
        "now"
-       (cachesv.get "temp::1" "now"))
+       (cachesv.get "temp:1" "now"))
 
 (test* "db expire time 3"
        "miss"
        (begin
          (.sleep 3)
-         (cachesv.get "temp::1" "miss")))
+         (cachesv.get "temp:1" "miss")))
 
 
 ;;===================================================================

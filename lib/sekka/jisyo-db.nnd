@@ -40,8 +40,8 @@
 (require "distributedtrie")
 (use sekka.util)
 
-(define master-prefix  "MASTER")
-(define version-prefix "SEKKA::VERSION")
+(define master-prefix  "M")
+(define version-prefix "SEKKA:VERSION")
 (define okuri-ari-prefix       "IK")
 (define okuri-nashi-prefix     "Ik")
 (define hiragana-phrase-prefix "Ih")
@@ -56,12 +56,12 @@
 
 
 ;; dict-get search sequence
-;;   (1) try "userid::keyword" key
-;;   (2) try "MASTER::keyword" key
+;;   (1) try "userid:keyword" key
+;;   (2) try "M:keyword" key
 (define (dict-get userid kvs key . fallback)
   (if-let1 value
-      (or (kvs.get (+ userid "::" key) #f)
-          (kvs.get (+ master-prefix "::" key) #f))
+      (or (kvs.get (+ userid ":" key) #f)
+          (kvs.get (+ master-prefix ":" key) #f))
     value
     (let1 opt (get-optional fallback #f)
       opt)))
@@ -119,18 +119,18 @@
                              (length okuri-nashi-list)
                              (length hiragana-phrase-list))))))
 
-      (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-ari-prefix "::" userid "::"))
+      (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-ari-prefix ":" userid ":"))
         (trie-add-autocommit trie   okuri-ari-list       progress))
       
-      (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-nashi-prefix "::" userid "::"))
+      (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-nashi-prefix ":" userid ":"))
         (trie-add-autocommit trie   okuri-nashi-list     progress))
       
-      (let1 trie (DistributedTrie::Trie.new kvs (+ hiragana-phrase-prefix "::" userid "::"))
+      (let1 trie (DistributedTrie::Trie.new kvs (+ hiragana-phrase-prefix ":" userid ":"))
         (trie-add-autocommit trie   hiragana-phrase-list progress)))))
 
 
 (define (append-entry userid kvs _key value)
-  (let1 key (+ userid "::" _key)
+  (let1 key (+ userid ":" _key)
     (cond
      ((rxmatch #/^=/ _key)
       ;; hiragana-phrase entry
