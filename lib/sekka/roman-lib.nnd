@@ -660,7 +660,7 @@
                       sekka-kana->roman-alist-long)))
 
 (define sekka-kana->roman-hash-long-no-azik
-  (alist->hash-table '()))
+  (alist->hash-table sekka-kana->roman-alist-short))
 
 ;; ハッシュテーブル  ローマ字 =>平仮名
 (define (sekka-alist-swap alist)
@@ -743,8 +743,6 @@
        (list
         (gen-hiragana->roman-pattens-with-hash  sekka-kana->roman-hash-short-no-azik  hiragana)
         (gen-hiragana->roman-pattens-with-hash  sekka-kana->roman-hash-long-no-azik   hiragana)))))
-
-   
 
 
 ;; if failed, return #f
