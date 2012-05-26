@@ -66,35 +66,35 @@
 
 (test* "kana->roman 1"
        '("fu" "hu" "hf")
-       (hash-table-get sekka-kana->roman-hash-short "ふ" #f))
+       (hash-table-get sekka-kana->roman-hash-short-azik "ふ" #f))
 (test* "kana->roman 2"
        '("la" "xa" "xxa")
-       (hash-table-get sekka-kana->roman-hash-short "ぁ" #f))
+       (hash-table-get sekka-kana->roman-hash-short-azik "ぁ" #f))
 (test* "kana->roman 3"
        '("chi" "tyi" "ti" "ci")
-       (hash-table-get sekka-kana->roman-hash-short "ち" #f))
+       (hash-table-get sekka-kana->roman-hash-short-azik "ち" #f))
 (test* "kana->roman 4"
        '("tt" "@" ";" "ltu" "xtu")
-       (hash-table-get sekka-kana->roman-hash-short "っ" #f))
+       (hash-table-get sekka-kana->roman-hash-short-azik "っ" #f))
 (test* "kana->roman 5"
        '("-" "^" ":" "'")
-       (hash-table-get sekka-kana->roman-hash-short "ー" #f))
+       (hash-table-get sekka-kana->roman-hash-short-azik "ー" #f))
 (test* "kana->roman 6"
        '("#")
-       (hash-table-get sekka-kana->roman-hash-short "#" #f))
+       (hash-table-get sekka-kana->roman-hash-short-azik "#" #f))
 
 ;;-------------------------------------------------------------------
 (test-section "kana->roman conversion hash (long)")
 
 (test* "kana->roman 1"
        '("kz" "kn")
-       (hash-table-get sekka-kana->roman-hash-long "かん" #f))
+       (hash-table-get sekka-kana->roman-hash-long-azik "かん" #f))
 (test* "kana->roman 2"
        '("kt")
-       (hash-table-get sekka-kana->roman-hash-long "こと" #f))
+       (hash-table-get sekka-kana->roman-hash-long-azik "こと" #f))
 (test* "kana->roman 3"
        '("ffu" "hhu" "@fu" "@hu" ";fu" ";hu")
-       (hash-table-get sekka-kana->roman-hash-long "っふ" #f))
+       (hash-table-get sekka-kana->roman-hash-long-azik "っふ" #f))
 
 ;;-------------------------------------------------------------------
 (test-section "roman->kana conversion hash (short)")
@@ -273,7 +273,7 @@
 (test-section "kana->roman conversion functions")
 
 (let1 hira-list
-    (hash-table-keys sekka-kana->roman-hash-long)
+    (hash-table-keys sekka-kana->roman-hash-long-azik)
   (test* "kana->roman table length"        524 (length hira-list))
   (test* "kana->roman key duplicate check" 524 (length (uniq (sort hira-list)))))
 

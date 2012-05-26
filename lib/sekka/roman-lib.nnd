@@ -37,6 +37,11 @@
 (use util.list)
 (use util.combinations)
 
+
+;; azikを展開するかどうか(グローバル変数)
+(define global-use-azik #t)
+
+
 ;; 子音が1音だけ入ったテーブル
 ;; このテーブルはruby-romkan から変換し、一部不足を追加した。
 ;;  クンレイ、日本式、ヘボン式もデータ中に併記し全てを網羅している。
@@ -630,12 +635,32 @@
 
 
 ;; ハッシュテーブル  平仮名   =>ローマ字
-(define sekka-kana->roman-hash-short
+(define sekka-kana->roman-hash-short-azik
   (alist->hash-table sekka-kana->roman-alist-short))
-(define sekka-kana->roman-hash-long
+
+(define sekka-kana->roman-hash-short-no-azik
+  (alist->hash-table
+   (map
+    (lambda (x)
+      (let (
+            [k  (car x)]
+            [v  (cdr x)])
+        (cons k
+              (filter
+               (lambda (str)
+                 (if (not (rxmatch #/[@\;]/ str))
+                     str
+                     #f))
+               v))))
+    sekka-kana->roman-alist-short)))
+
+(define sekka-kana->roman-hash-long-azik
   (alist->hash-table (append
                       sekka-kana->roman-alist-short
                       sekka-kana->roman-alist-long)))
+
+(define sekka-kana->roman-hash-long-no-azik
+  (alist->hash-table '()))
 
 ;; ハッシュテーブル  ローマ字 =>平仮名
 (define (sekka-alist-swap alist)
@@ -709,10 +734,17 @@
 
 
 (define (gen-hiragana->roman-pattens hiragana)
-  (delete-duplicates
-   (list
-    (gen-hiragana->roman-pattens-with-hash  sekka-kana->roman-hash-short  hiragana)
-    (gen-hiragana->roman-pattens-with-hash  sekka-kana->roman-hash-long   hiragana))))
+  (if global-use-azik
+      (delete-duplicates
+       (list
+        (gen-hiragana->roman-pattens-with-hash  sekka-kana->roman-hash-short-azik  hiragana)
+        (gen-hiragana->roman-pattens-with-hash  sekka-kana->roman-hash-long-azik   hiragana)))
+      (delete-duplicates
+       (list
+        (gen-hiragana->roman-pattens-with-hash  sekka-kana->roman-hash-short-no-azik  hiragana)
+        (gen-hiragana->roman-pattens-with-hash  sekka-kana->roman-hash-long-no-azik   hiragana)))))
+
+   
 
 
 ;; if failed, return #f
