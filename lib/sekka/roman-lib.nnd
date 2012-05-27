@@ -695,7 +695,7 @@
                (lambda (str)
                  (if (rxmatch #/[@\;]/ str)
                      #f
-                     #?=(if (member #?=str azik-exclude-list)
+                     (if (member str azik-exclude-list)
                             #f
                             str)))
                v))))
