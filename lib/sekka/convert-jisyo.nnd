@@ -140,7 +140,6 @@
              (lambda (line)
                (line.chomp))
              (f.readlines))]
-           [_ (set! total (lines.size))]
            [result '#()])
       (for-each
        (lambda (x)

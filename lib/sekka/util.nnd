@@ -58,4 +58,12 @@
     (list line)))
 
 
-
+;; ファイルの行数を求める
+(define (file-length f)
+  (let1 total 0
+    (for-each
+     (lambda (x)
+       (set! total (+ 1 total)))
+     f)
+    (f.rewind)
+    total))

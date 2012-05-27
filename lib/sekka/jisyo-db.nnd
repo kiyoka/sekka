@@ -161,15 +161,6 @@
         (kvs.put! key value))))))
 
 
-(define (file-length f)
-  (let1 total 0
-    (for-each
-     (lambda (x)
-       (set! total (+ 1 total)))
-     f)
-    (f.rewind)
-    total))
-
 (define (load-sekka-jisyo-f f filename)
   (define keylist '())
   (define (create-keylist kvs f)
