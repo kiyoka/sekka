@@ -159,7 +159,7 @@ task :alljisyoS => [ :jisyoS, :loadS, :dumpS ]
 task :alljisyoL => [ :jisyoL, :loadL, :dumpL ]
 
 task :jisyoS do
-  [ "N" "A" ].each {|x|
+  [ "N", "A" ].each {|x|
     sh "time ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.201008           >  ./data/SEKKA-JISYO.SMALL.#{x}"
     sh "time ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.SMALL.#{x}"
     sh "time ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase    >> ./data/SEKKA-JISYO.SMALL.#{x}"
@@ -168,7 +168,7 @@ task :jisyoS do
 end
 
 task :jisyoL do
-  [ "N" "A" ].each {|x|
+  [ "N", "A" ].each {|x|
     sh "time ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.201008           >  ./data/SEKKA-JISYO.LARGE.#{x}"
     sh "time ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.LARGE.#{x}"
     sh "time ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.fullname           >> ./data/SEKKA-JISYO.LARGE.#{x}"

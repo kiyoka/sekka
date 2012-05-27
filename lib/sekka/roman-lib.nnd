@@ -313,6 +313,51 @@
     ("#"         "#")
     ))
 
+;; 上記 sekka-kana->roman-alist-short からazik専用キーワードを除外するためのリスト
+(define azik-exclude-list
+  '("whu"
+    "kf"
+    "kga"
+    "kgu"
+    "kge"
+    "kgo"
+    "zc" ;; AZIKザ行の特別措置
+    "xi"
+    "xa" "xc"
+    "xu"
+    "xe"
+    "xo"
+    "jf"
+    "zf"
+    "df"
+    "nf"
+    "nga"
+    "ngu"
+    "nge"
+    "ngo"
+    "nf"
+    "hga"
+    "hgu"
+    "hge"
+    "hgo"
+    "pga"
+    "pgu"
+    "pge"
+    "pgo"
+    "hf"
+    "mga"
+    "mgu"
+    "mge"
+    "mgo"
+    "mf"
+    "yf"
+    "dci"
+    "dcu"
+    "tgi"
+    "tgu"
+    "cc"
+    "cf"))
+
 ;; 子音が2音入ったテーブル
 (define sekka-kana->roman-alist-long
   `(
@@ -648,9 +693,11 @@
         (cons k
               (filter
                (lambda (str)
-                 (if (not (rxmatch #/[@\;]/ str))
-                     str
-                     #f))
+                 (if (rxmatch #/[@\;]/ str)
+                     #f
+                     #?=(if (member #?=str azik-exclude-list)
+                            #f
+                            str)))
                v))))
     sekka-kana->roman-alist-short)))
 
@@ -660,7 +707,7 @@
                       sekka-kana->roman-alist-long)))
 
 (define sekka-kana->roman-hash-long-no-azik
-  (alist->hash-table sekka-kana->roman-alist-short))
+  sekka-kana->roman-hash-short-no-azik)
 
 ;; ハッシュテーブル  ローマ字 =>平仮名
 (define (sekka-alist-swap alist)
