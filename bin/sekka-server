@@ -16,17 +16,23 @@ DICTURL = "https://raw.github.com/kiyoka/sekka/master/public_dict/" + SekkaVersi
 
 PIDFILE = DICTDIR + "/pid"
 
-TC_OPTS = "#xmsiz=256m"
-TC_FILE = DICTDIR + "/SEKKA-JISYO.SMALL.tch" + TC_OPTS
-TSVFILE = DICTDIR + "/SEKKA-JISYO.SMALL.tsv"
-SUMFILE = DICTDIR + "/SEKKA-JISYO.SMALL.md5"
+DICTTYPE = if ENV.has_key?( 'SEKKA_AZIK' )
+             "A"
+           else
+             "N"
+           end
 
-URLURL  = DICTURL + "/SEKKA-JISYO.SMALL.url"
-SUMURL  = DICTURL + "/SEKKA-JISYO.SMALL.md5"
+TC_OPTS = "#xmsiz=256m"
+TC_FILE = DICTDIR + "/SEKKA-JISYO.SMALL.#{DICTTYPE}.tch" + TC_OPTS
+TSVFILE = DICTDIR + "/SEKKA-JISYO.SMALL.#{DICTTYPE}.tsv"
+SUMFILE = DICTDIR + "/SEKKA-JISYO.SMALL.#{DICTTYPE}.md5"
+
+URLURL  = DICTURL + "/SEKKA-JISYO.SMALL.#{DICTTYPE}.url"
+SUMURL  = DICTURL + "/SEKKA-JISYO.SMALL.#{DICTTYPE}.md5"
 
 TC_FILE_LIST = [ DICTDIR + "/SEKKA-JISYO.CUSTOM.tch" + TC_OPTS,
-                 DICTDIR + "/SEKKA-JISYO.LARGE.tch"  + TC_OPTS,
-                 DICTDIR + "/SEKKA-JISYO.SMALL.tch"  + TC_OPTS ]
+                 DICTDIR + "/SEKKA-JISYO.LARGE.#{DICTTYPE}.tch"  + TC_OPTS,
+                 DICTDIR + "/SEKKA-JISYO.SMALL.#{DICTTYPE}.tch"  + TC_OPTS ]
 
 MEMCACHED = "localhost:11211"                # memcahced
 
