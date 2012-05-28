@@ -99,11 +99,11 @@ module SekkaServer
                         else
                           ";; comment"
                         end
-                      STDERR.print "Info: processing  [register(" + dictline + ") on " + userid + "] batch command... "
+                      STDERR.puts "Info: processing  [register(" + dictline + ") on " + userid + "] batch command... "
                       begin
                         registered = @core.registerUserJisyo(userid, @kvs, dictline)
                       rescue RuntimeError
-                        "Info: missing [register(" + dictline + ")] batch command..."
+                        STDERR.puts "Info: missing [register(" + dictline + ")] batch command..."
                       end
                       if registered
                         str = d.strftime( "%D %X" )
