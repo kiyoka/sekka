@@ -57,7 +57,7 @@ def getSekkaDbInfo( env )
 end
 
 def checkJisyoIsInstalled( dictType, dictSource )
-  key = "SEKKA::VERSION"
+  key = "SEKKA:VERSION"
   STDERR.printf( "Info: Checking SEKKA jisyo on #{dictType} server...\n" )
   begin
     result = case dictType
