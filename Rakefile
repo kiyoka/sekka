@@ -23,7 +23,7 @@ begin
   require 'jeweler2'
   Jeweler::Tasks.new do |gemspec|
     vh = Jeweler::VersionHelper.new "."
-    gemspec.version = vh.to_s + ".pre"
+    gemspec.version = vh.to_s
     gemspec.name = "sekka"
     gemspec.summary = "Sekka is a SKK like input method."
     gemspec.description = "Sekka is a SKK like input method. Sekka server provides REST Based API. If you are SKK user, let's try it."
