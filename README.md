@@ -5,4 +5,4 @@
 ##  Sekka(石火)はSKKライクな日本語入力メソッドです。
  <http://oldtype.sumibi.org/show-page/Sekka>
 
- ![Logo]( http://pix.am/u2Hv.png )
+ ![Logo]( http://dl.dropbox.com/u/3870066/blog/iStock_000016378483XSmall.jpg )
