@@ -34,9 +34,10 @@
 ;;;  $Id: 
 ;;;
 (use srfi-1)
+(use util.list)
 (use sekka.util)
 (use sekka.roman-lib)
-(require "progressbar")
+(require "ruby-progressbar")
 
 (define (expand-hiragana-phrase-entry key)
   (let1 roman-list (gen-hiragana->roman-list key)
@@ -85,10 +86,13 @@
 
 
 (define (convert-skk-jisyo-f f)
-  (let1 progress (ProgressBar.new "convert  " (file-length f) STDERR)
-
+  (let1 progress (ProgressBar.create (alist->hash-table
+                                      `(
+                                        [title  . "convert  "]
+                                        [total  . ,(file-length f)]
+                                        [output . ,STDERR])))
     (define (gen-sekka-entries line)
-      (progress.inc)
+      (progress.increment)
       
       (let* ((line   (line.sub #/\/$/ ""))
              (fields (split-dict-line line)))

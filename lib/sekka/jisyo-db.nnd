@@ -34,7 +34,8 @@
 ;;;  $Id: 
 ;;;
 (use srfi-1)
-(require "progressbar")
+(use util.list)
+(require "ruby-progressbar")
 (require "sekka/kvs")
 (require "sekka/sekkaversion")
 (require "distributedtrie")
@@ -78,7 +79,7 @@
          (when (= 0 (% i 100))
            (trie.commit!))
          (when progress
-           (progress.inc)))
+           (progress.increment)))
        keylist))
     trie.commit!)
 
@@ -97,14 +98,18 @@
                      (push! okuri-ari-list   k)
                      (push! okuri-nashi-list k))))
          (when progress
-           (progress.inc)))
+           (progress.increment)))
        keylist)
       (values okuri-ari-list
               okuri-nashi-list
               hiragana-phrase-list)))
 
   (let1 progress (if displayProgress
-                     (ProgressBar.new "trie-tree  "  (* 2 (length keylist)) STDERR)
+                     (ProgressBar.create (alist->hash-table
+                                          `(
+                                            [title  . "trie-tree  "]
+                                            [total  . ,(* 2 (length keylist))]
+                                            [output . ,STDERR])))
                      #f)
     (receive (okuri-ari-list
               okuri-nashi-list
@@ -112,12 +117,12 @@
         (grouping-keylist keylist progress)
 
       (when progress 
-        (progress.set (+ (length keylist)
-                         (- (length keylist)
-                            (+
-                             (length okuri-ari-list)
-                             (length okuri-nashi-list)
-                             (length hiragana-phrase-list))))))
+        (progress.progress= (+ (length keylist)
+                               (- (length keylist)
+                                  (+
+                                   (length okuri-ari-list)
+                                   (length okuri-nashi-list)
+                                   (length hiragana-phrase-list))))))
 
       (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-ari-prefix ":" userid ":"))
         (trie-add-autocommit trie   okuri-ari-list       progress))
@@ -164,7 +169,11 @@
 (define (load-sekka-jisyo-f f filename)
   (define keylist '())
   (define (create-keylist kvs f)
-    (let1 progress (ProgressBar.new "data-body  " (file-length f) STDERR)
+    (let1 progress (ProgressBar.create (alist->hash-table
+                                        `(
+                                          [title  . "data-body  "]
+                                          [total  . ,(file-length f)]
+                                          [output . ,STDERR])))
       (for-each
        (lambda (line)
          (let* (
@@ -172,7 +181,7 @@
                 [fields (split-dict-line line)])
            (push! keylist (first fields))
            (append-entry master-prefix kvs (first fields) (second fields)))
-         (progress.inc))
+         (progress.increment))
        f)))
   (let1 kvs (Kvs.new (get-kvs-type))
     (kvs.open filename)
@@ -205,14 +214,18 @@
                          ""
                          (second key-value))])
         (kvs.put! key value)
-        (progress.inc))
+        (progress.increment))
       (when (not (f.eof))
         (loop (f.readline.chomp)))))
 
 
   (let1 total (file-length f)
     (let ([kvs (Kvs.new (get-kvs-type))]
-          [progress (ProgressBar.new "Restore" total STDERR)])
+          [progress (ProgressBar.create (alist->hash-table
+                                         `(
+                                           [title  . "Restore"]
+                                           [total  . ,total]
+                                           [output . ,STDERR])))])
       (kvs.open filename-or-hostname)
       (kvs.clear)
       (restore f kvs progress)
