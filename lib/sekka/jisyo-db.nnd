@@ -46,6 +46,7 @@
 (define okuri-ari-prefix       "IK")
 (define okuri-nashi-prefix     "Ik")
 (define hiragana-phrase-prefix "Ih")
+(define progressbar-format     "%E |%B| %p%% %t")
 
 ;; KVS type setting
 (define *kvs-type* 'tokyocabinet)  ;; default
@@ -109,7 +110,9 @@
                                           `(
                                             [title  . "trie-tree  "]
                                             [total  . ,(* 2 (length keylist))]
-                                            [output . ,STDERR])))
+                                            [output . ,STDERR]
+                                            [format . ,progressbar-format]
+                                            )))
                      #f)
     (receive (okuri-ari-list
               okuri-nashi-list
@@ -173,7 +176,9 @@
                                         `(
                                           [title  . "data-body  "]
                                           [total  . ,(file-length f)]
-                                          [output . ,STDERR])))
+                                          [output . ,STDERR]
+                                          [format . ,progressbar-format]
+                                          )))
       (for-each
        (lambda (line)
          (let* (
@@ -223,9 +228,11 @@
     (let ([kvs (Kvs.new (get-kvs-type))]
           [progress (ProgressBar.create (alist->hash-table
                                          `(
-                                           [title  . "Restore"]
+                                           [title  . "restore    "]
                                            [total  . ,total]
-                                           [output . ,STDERR])))])
+                                           [output . ,STDERR]
+                                           [format . ,progressbar-format]
+                                           )))])
       (kvs.open filename-or-hostname)
       (kvs.clear)
       (restore f kvs progress)
