@@ -1,4 +1,5 @@
 source "http://rubygems.org"
+gem "jeweler2"
 gem "rspec"
 gem "distributed-trie"
 gem "memcache-client"
