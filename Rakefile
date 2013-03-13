@@ -144,7 +144,7 @@ task :test do
   end
   files.each {|filename|
     nendopath = `which nendo`.chomp
-    sh  sprintf( "time ruby -I ./lib %s %s", nendopath, filename )
+    sh  sprintf( "ruby -I ./lib %s %s", nendopath, filename )
   }
   sh "cat test.record"
 end
