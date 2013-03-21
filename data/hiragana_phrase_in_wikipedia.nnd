@@ -1,0 +1,65 @@
+#!/bin/sh
+:; #-*- mode: nendo; syntax: scheme -*-;;
+:; exec /usr/local/bin/nendo $0 $*
+
+;;
+;; 分かち書きされたWikipediaのプレインテキストから平仮名のフレーズリストを抜き出す
+;;
+
+
+(use srfi-1)
+(use sekka.roman-lib)
+
+;; 平仮名文字列の正規表現
+(define not-hiragana-regexp #/[^あ-んぁぃぅぇぉゃゅょっ]+/) ;; "ー" は含まない
+
+;; 1行から3文字以上の平仮名フレーズのみを抜き出す。
+(define (split-to-hiragana line)
+  (filter
+   (lambda (entry)
+     (and (<= 3 entry.size)
+          (<= entry.size 7)))
+   (line.split not-hiragana-regexp)))
+
+;; 分かち書きされた1行の文章から、「てにおは」を消した文章を出す。
+(define (remove-tenioha line)
+  (let1 vec (filter
+             (lambda (token)
+               (not (token.match #/^[てにをはがのへと]$/)))
+             (line.split))
+
+    (string-join (to-list vec) "")))
+
+
+;; 平仮名のフレーズリストを標準出力に出す。
+(define (print-hiragana-phrase filename)
+   (with-open
+    filename   
+    (lambda (f)
+      (for-each
+       print
+       (map
+        (lambda (line)
+          (string-join
+           (to-list
+            (split-to-hiragana
+             (remove-tenioha line)))
+           "\n"))
+        (readlines f))))))
+  
+
+(define (test-code)
+  (let1 input1 "など は 、 いわゆる 主語 の ない 文 である 。 しかし 、 日本 語 の 文 で は 述語 に 中心 が あり 、 補 語 を 必要に 応じて 付け足す と 考えれば 、 上記 の いずれ も 、 省略 の ない 完全な 文 と 見なして 差し支え ない 。"
+    (print (remove-tenioha input1))
+    (print (split-to-hiragana
+            (remove-tenioha input1)))))
+
+
+(define (main argv)
+  (if (> 1 (length argv))
+      (begin
+        (test-code)
+        (print "hiragana_phrase_in_wikipedia.nnd [plain-text-file]")
+        (exit 1))
+      (print-hiragana-phrase (car (to-list argv)))))
+

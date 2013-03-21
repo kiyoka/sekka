@@ -52,7 +52,7 @@ begin
                            "sekka-server",
                            "sekka-benchmark",
                            "sekka-path"]
-    gemspec.required_ruby_version = '>= 1.9.1'
+    gemspec.required_ruby_version = '>= 1.9.2'
     gemspec.add_dependency( "eventmachine" )
     gemspec.add_dependency( "memcache-client" )
     gemspec.add_dependency( "nendo", "= 0.6.4" )
@@ -70,7 +70,7 @@ end
 
 task :compile do
   # generate version.rb
-  dictVersion = "1.2.2"
+  dictVersion = "1.3.0"
   vh = Jeweler::VersionHelper.new "."
   open( "./lib/sekka/sekkaversion.rb", "w" ) {|f|
     f.puts(   "class SekkaVersion" )
@@ -204,17 +204,23 @@ task :dumpL do
 end
 
 
-# Fetched data from
-#   http://s-yata.jp/corpus/nwc2010/ngrams/
-task :phrase => [ "./data/6gm-0000.txt" ]  do
-  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase_in_webcorpus.nnd           ./data/6gm-0000.txt | sort | uniq > /tmp/tmp.txt"
-  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/writing_phrase_filter.nnd /tmp/tmp.txt  | sort | uniq     > ./data/SKK-JISYO.hiragana-phrase"
+task :phrase => [ "./data/wikipedia/jawiki-latest-pages-articles.xml.bz2", "./data/wikipedia/jawiki.hiragana.txt" ] do
+  sh "sort ./data/wikipedia/jawiki.hiragana.txt | uniq -c | sort > ./data/wikipedia/ranking.txt"
+  sh "ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase_in_wikipedia2.nnd ./data/wikipedia/ranking.txt > ./data/SKK-JISYO.hiragana-phrase"
 end
 
-file "./data/6gm-0000.txt"  do
-  sh "wget http://dist.s-yata.jp/corpus/nwc2010/ngrams/word/over999/6gms/6gm-0000.xz -O /tmp/6gm-0000.xz"
-  sh "xz -cd /tmp/6gm-0000.xz > ./data/6gm-0000.txt"
+file "./data/wikipedia/jawiki.hiragana.txt" do
+  sh "wp2txt --input-file ./data/wikipedia/jawiki-latest-pages-articles.xml.bz2 --output-dir ./data/wikipedia/txt"
+  sh "cat ./data/wikipedia/txt/*.txt > /tmp/jawiki.txt"
+  sh "mecab --input-buffer-size=65536 -O wakati /tmp/jawiki.txt --output=/tmp/jawiki.wakati.txt"
+  sh "ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase_in_wikipedia.nnd /tmp/jawiki.wakati.txt > ./data/wikipedia/jawiki.hiragana.txt"
 end
+
+file "./data/wikipedia/jawiki-latest-pages-articles.xml.bz2" do
+  sh "mkdir -p ./data/wikipedia/txt"
+  sh "wget http://dumps.wikimedia.org/jawiki/latest/jawiki-latest-pages-articles.xml.bz2 -O ./data/wikipedia/jawiki-latest-pages-articles.xml.bz2"
+end
+
 
 task :phrase2 => [ "./data/ipadic.all.utf8.txt" ] do
   sh "time ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase_in_ipadic.nnd             ./data/ipadic.all.utf8.txt | sort | uniq > ./data/SKK-JISYO.hiragana-phrase2"

@@ -86,11 +86,13 @@
 
 
 (define (convert-skk-jisyo-f f)
+  (define progressbar-format     "%E |%B| %p%% %t")
   (let1 progress (ProgressBar.create (alist->hash-table
                                       `(
                                         [title  . "convert  "]
                                         [total  . ,(file-length f)]
-                                        [output . ,STDERR])))
+                                        [output . ,STDERR]
+                                        [format . ,progressbar-format])))
     (define (gen-sekka-entries line)
       (progress.increment)
       

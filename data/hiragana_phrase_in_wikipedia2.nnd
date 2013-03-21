@@ -1,0 +1,35 @@
+#!/bin/sh
+:; #-*- mode: nendo; syntax: scheme -*-;;
+:; exec /usr/local/bin/nendo $0 $*
+
+;;
+;; ランキングされた平仮名フレーズを、足切りしてSKK辞書フォーマットに変換する。
+;;
+
+
+;; ランキングを足切りする
+(define (top-ranking filename)
+  (let1 thresh 30
+    (with-open
+     filename
+     (lambda (f)
+       (for-each
+        print
+        (filter (lambda (x) x)
+                (map
+                 (lambda (line)
+                   (let* ([fields (to-list (line.split))]
+                          [freq   (to-i (car fields))])
+                     (if (and (<= thresh freq) (<= 2 (length fields)))
+                         (sprintf "%s // ;; freq=%d" (second fields) freq)
+                         #f)))
+                 (readlines f))))))))
+
+
+(define (main argv)
+  (if (> 1 (length argv))
+      (begin
+        (print "hiragana_phrase_in_wikipedia2.nnd [ranking-file]")
+        (exit 1))
+      (top-ranking (car (to-list argv)))))
+
