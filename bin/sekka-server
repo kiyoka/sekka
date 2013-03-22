@@ -22,17 +22,19 @@ DICTTYPE = if ENV.has_key?( 'SEKKA_AZIK' )
              "N"
            end
 
+DICTSIZE = if ENV.has_key?( 'SEKKA_LARGE' )
+             "LARGE"
+           else
+             "SMALL"
+           end
+
 TC_OPTS = "#xmsiz=256m"
-TC_FILE = DICTDIR + "/SEKKA-JISYO.SMALL.#{DICTTYPE}.tch" + TC_OPTS
-TSVFILE = DICTDIR + "/SEKKA-JISYO.SMALL.#{DICTTYPE}.tsv"
-SUMFILE = DICTDIR + "/SEKKA-JISYO.SMALL.#{DICTTYPE}.md5"
+TC_FILE = DICTDIR + "/SEKKA-JISYO.#{DICTSIZE}.#{DICTTYPE}.tch" + TC_OPTS
+TSVFILE = DICTDIR + "/SEKKA-JISYO.#{DICTSIZE}.#{DICTTYPE}.tsv"
+SUMFILE = DICTDIR + "/SEKKA-JISYO.#{DICTSIZE}.#{DICTTYPE}.md5"
 
-URLURL  = DICTURL + "/SEKKA-JISYO.SMALL.#{DICTTYPE}.url"
-SUMURL  = DICTURL + "/SEKKA-JISYO.SMALL.#{DICTTYPE}.md5"
-
-TC_FILE_LIST = [ DICTDIR + "/SEKKA-JISYO.CUSTOM.tch" + TC_OPTS,
-                 DICTDIR + "/SEKKA-JISYO.LARGE.#{DICTTYPE}.tch"  + TC_OPTS,
-                 DICTDIR + "/SEKKA-JISYO.SMALL.#{DICTTYPE}.tch"  + TC_OPTS ]
+URLURL  = DICTURL + "/SEKKA-JISYO.#{DICTSIZE}.#{DICTTYPE}.url"
+SUMURL  = DICTURL + "/SEKKA-JISYO.#{DICTSIZE}.#{DICTTYPE}.md5"
 
 MEMCACHED = "localhost:11211"                # memcahced
 
@@ -147,12 +149,9 @@ def main
 
   case dictType
   when :tokyocabinet
-    # .tchファイルが存在するか調べる
-    list = TC_FILE_LIST.select { |name| File.exist?( name ) }
-
-    # redisサーバーに辞書が投入済みか確認する
+    # TokyoCabinetに辞書が投入済みか確認する
     ok = checkJisyoIsInstalled( dictType, TC_FILE )
-    if 0 == list.size and (not ok)
+    unless ok
       # tsvファイルをuploadする
       STDERR.printf( "Info: Uploading...\n" )
       cmd = sprintf( "sekka-jisyo restore %s %s", TSVFILE, TC_FILE )
@@ -160,10 +159,8 @@ def main
       system( cmd )
     end
     STDERR.printf( "Info: [OK]\n" )
+    dictSource = TC_FILE
 
-    # 存在する.tchファイルの中で一番最初のファイルを使う。
-    list = TC_FILE_LIST.select { |name| File.exist?( name ) }
-    dictSource = list[0]
   when :redis
     # redisサーバーに辞書が投入済みか確認する
     ok = checkJisyoIsInstalled( dictType, dictSource )
