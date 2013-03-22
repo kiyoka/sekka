@@ -204,21 +204,24 @@ task :dumpL do
 end
 
 
-task :phrase => [ "./data/wikipedia/jawiki-latest-pages-articles.xml.bz2", "./data/wikipedia/jawiki.hiragana.txt" ] do
+task :phrase => [ "/tmp/jawiki.txt.gz", "./data/wikipedia/jawiki.hiragana.txt" ] do
   sh "sort ./data/wikipedia/jawiki.hiragana.txt | uniq -c | sort > ./data/wikipedia/ranking.txt"
   sh "ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase_in_wikipedia2.nnd ./data/wikipedia/ranking.txt > ./data/SKK-JISYO.hiragana-phrase"
 end
 
 file "./data/wikipedia/jawiki.hiragana.txt" do
-  sh "wp2txt --input-file ./data/wikipedia/jawiki-latest-pages-articles.xml.bz2 --output-dir ./data/wikipedia/txt"
-  sh "cat ./data/wikipedia/txt/*.txt > /tmp/jawiki.txt"
-  sh "mecab --input-buffer-size=65536 -O wakati /tmp/jawiki.txt --output=/tmp/jawiki.wakati.txt"
+  sh "zcat /tmp/jawiki.txt.gz | mecab --input-buffer-size=65536 -O wakati --output=/tmp/jawiki.wakati.txt"
   sh "ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase_in_wikipedia.nnd /tmp/jawiki.wakati.txt > ./data/wikipedia/jawiki.hiragana.txt"
+  sh "rm -f /tmp/jawiki.wakati.txt"
 end
 
-file "./data/wikipedia/jawiki-latest-pages-articles.xml.bz2" do
+file "/tmp/jawiki.txt.gz" do
   sh "mkdir -p ./data/wikipedia/txt"
-  sh "wget http://dumps.wikimedia.org/jawiki/latest/jawiki-latest-pages-articles.xml.bz2 -O ./data/wikipedia/jawiki-latest-pages-articles.xml.bz2"
+  sh "wget http://dumps.wikimedia.org/jawiki/latest/jawiki-latest-pages-articles.xml.bz2 -O /tmp/jawiki-latest-pages-articles.xml.bz2"
+  sh "wp2txt --input-file /tmp/jawiki-latest-pages-articles.xml.bz2 --output-dir ./data/wikipedia/txt"
+  sh "cat ./data/wikipedia/txt/*.txt | gzip -c > /tmp/jawiki.txt.gz"
+  sh "rm -f ./data/wikipedia/txt/*.txt"
+  sh "rm -f /tmp/jawiki-latest-pages-articles.xml.bz2"
 end
 
 
