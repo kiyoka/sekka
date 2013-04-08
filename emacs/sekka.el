@@ -337,8 +337,9 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   (defun one-request (func-name arg-alist)
     (let ((result (sekka-rest-request-sub func-name arg-alist)))
       (if (or
-	   (string-match-p "^curl: [(]6[)] " result) ;; Couldn't resolve host 'aaa.example.com' 
-	   (string-match-p "^curl: [(]7[)] " result) ;; Couldn't connect to host 'localhost'
+	   (string-match-p "^curl: [(]6[)] "  result) ;; Couldn't resolve host 'aaa.example.com' 
+	   (string-match-p "^curl: [(]7[)] "  result) ;; Couldn't connect to host 'localhost'
+	   (string-match-p "^curl: [(]28[)] " result) ;; Operation timed out after XXXX milliseconds with 0 bytes received
 	   )
 	  (progn
 	    (sekka-next-sekka-server)
