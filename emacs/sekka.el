@@ -317,7 +317,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 		  sekka-server-url-2)
     (if (< 0 (length sekka-server-url-3))
 	(setq current-sekka-server-url sekka-server-url-3)
-      (sekka-next-sekka-server-message "third"  "sekka-server-url-3")))
+      (setq current-sekka-server-url sekka-server-url)))
    (t
     (when (< 0 (length sekka-server-url))
       (setq current-sekka-server-url sekka-server-url)))))
@@ -1621,7 +1621,7 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
 (setq default-input-method "japanese-sekka")
 
 (defconst sekka-version
-  "1.2.2" ;;SEKKA-VERSION
+  "1.2.3" ;;SEKKA-VERSION
   )
 (defun sekka-version (&optional arg)
   "入力モード変更"
