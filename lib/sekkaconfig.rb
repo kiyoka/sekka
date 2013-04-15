@@ -72,6 +72,10 @@ module SekkaServer
     def self.proxyPort
       @@proxyPort
     end
+
+    def self.maxQueryLength
+      25
+    end
   end
 end
 

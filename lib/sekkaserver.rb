@@ -77,6 +77,7 @@ module SekkaServer
       STDERR.printf( "  listenPort     : %s\n", SekkaServer::Config.listenPort  )
       STDERR.printf( "  proxyHost      : %s\n", SekkaServer::Config.proxyHost   )
       STDERR.printf( "  proxyPort      : %s\n", SekkaServer::Config.proxyPort   )
+      STDERR.printf( "  maxQueryLength : %s\n", SekkaServer::Config.maxQueryLength )
       STDERR.puts(   "--------------------------------" )
 
       begin
@@ -160,9 +161,13 @@ module SekkaServer
                  _orRedis = if :redis == SekkaServer::Config.dictType then "or Redis-server" else "" end
                  @mutex.synchronize {
                     begin
-                      @core.writeToString( @core.sekkaHenkan( userid, @kvs, @cachesv, _yomi, _limit.to_i, _method ))
+                      if SekkaServer::Config.maxQueryLength < _yomi.size
+                        result = sprintf( "sekka-server: query string is too long (over %d character length)", SekkaServer::Config.maxQueryLength )
+                      else
+                        @core.writeToString( @core.sekkaHenkan( userid, @kvs, @cachesv, _yomi, _limit.to_i, _method ))
+                      end
                     rescue MemCache::MemCacheError
-                      "sekka-server: memcached server is down (or may be offline)"
+                      result = "sekka-server: memcached server is down (or may be offline)"
                     rescue Timeout
                       result = "sekka-server: Timeout to request memcached server #{_orRedis} (may be offline)"
                     rescue SocketError
