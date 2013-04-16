@@ -105,9 +105,6 @@
          ((not fields)
           ;; フォーマットエラー
           #f)
-         ((rxmatch #/\;\;/ line)
-          ;; フォーマットエラー
-          #f)
          ((and (is-hiragana (first fields))
                (= 1 (length fields)))
           ;; 平仮名フレーズ

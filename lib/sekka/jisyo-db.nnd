@@ -126,16 +126,20 @@
                                    (length okuri-ari-list)
                                    (length okuri-nashi-list)
                                    (length hiragana-phrase-list))))))
+      (set! keylist '()) ;; free memory
 
       (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-ari-prefix ":" userid ":"))
         (trie-add-autocommit trie   okuri-ari-list       progress))
+      (set! okuri-ari-list '()) ;; free memory
       
       (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-nashi-prefix ":" userid ":"))
         (trie-add-autocommit trie   okuri-nashi-list     progress))
+      (set! okuri-nashi-list '()) ;; free memory
       
       (let1 trie (DistributedTrie::Trie.new kvs (+ hiragana-phrase-prefix ":" userid ":"))
-        (trie-add-autocommit trie   hiragana-phrase-list progress)))))
-
+        (trie-add-autocommit trie   hiragana-phrase-list progress))
+      (set! hiragana-phrase-list '()) ;; free memory
+      )))
 
 (define (append-entry userid kvs _key value)
   (let1 key (+ userid ":" _key)
