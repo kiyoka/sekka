@@ -56,7 +56,7 @@
        (let* ((nn-number (min
                           (vector-length (keyword.scan #/nn/))
                           (vector-length (roman.scan   #/nn/))
-                          (- (vector-length (target.scan  #/ん/))
+                          (- (vector-length (target.scan  #/[ん]/))
                              (vector-length (target.scan  #/[ゃゅょ]/)))))
               (nn-number (max 0 nn-number)))
          (list
