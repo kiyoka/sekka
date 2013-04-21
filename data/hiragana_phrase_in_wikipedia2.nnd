@@ -21,7 +21,7 @@
                    (let* ([fields (to-list (line.split))]
                           [freq   (to-i (car fields))])
                      (if (and (<= thresh freq) (<= 2 (length fields)))
-                         (sprintf "%s // ;; freq=%d" (second fields) freq)
+                         (sprintf "%s //" (second fields))
                          #f)))
                  (readlines f))))))))
 
