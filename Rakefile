@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # -*- mode: ruby; -*-
 #                                                  Rakefile for Sekka
 #
@@ -206,7 +207,7 @@ end
 
 task :phrase => [ "/tmp/jawiki.txt.gz", "./data/wikipedia/jawiki.hiragana.txt" ] do
   sh "sort ./data/wikipedia/jawiki.hiragana.txt | uniq -c | sort > ./data/wikipedia/ranking.txt"
-  sh "ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase_in_wikipedia2.nnd ./data/wikipedia/ranking.txt > ./data/SKK-JISYO.hiragana-phrase"
+  sh "ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase_in_wikipedia2.nnd ./data/wikipedia/ranking.txt | grep -v 'してい //' > ./data/SKK-JISYO.hiragana-phrase"
 end
 
 file "./data/wikipedia/jawiki.hiragana.txt" do
