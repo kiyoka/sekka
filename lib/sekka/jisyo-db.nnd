@@ -43,9 +43,10 @@
 
 (define master-prefix  "M")
 (define version-prefix "SEKKA:VERSION")
-(define okuri-ari-prefix       "IK")
-(define okuri-nashi-prefix     "Ik")
-(define hiragana-phrase-prefix "Ih")
+(define okuri-ari-prefix             "IK")
+(define okuri-nashi-prefix           "Ik")
+(define okuri-nashi-reverse-prefix   "Ir")
+(define hiragana-phrase-prefix       "Ih")
 (define progressbar-format     "%E |%B| %p%% %t")
 
 ;; KVS type setting
@@ -119,27 +120,40 @@
               hiragana-phrase-list)
         (grouping-keylist keylist progress)
 
-      (when progress 
-        (progress.progress= (+ (length keylist)
-                               (- (length keylist)
-                                  (+
-                                   (length okuri-ari-list)
-                                   (length okuri-nashi-list)
-                                   (length hiragana-phrase-list))))))
-      (set! keylist '()) ;; free memory
+      (let1 okuri-nashi-reverse-list
+          (filter-map
+           (lambda (str)
+             (if (rxmatch #/[#]/ str)
+                 #f
+                 (str.reverse)))
+           okuri-nashi-list)
 
-      (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-ari-prefix ":" userid ":"))
-        (trie-add-autocommit trie   okuri-ari-list       progress))
-      (set! okuri-ari-list '()) ;; free memory
+        (when progress 
+          (progress.progress= (+ (length keylist)
+                                 (- (length keylist)
+                                    (+
+                                     (length okuri-ari-list)
+                                     (length okuri-nashi-list)
+                                     (length okuri-nashi-reverse-list)
+                                     (length hiragana-phrase-list))))))
+        (set! keylist '()) ;; free memory
+
+        (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-ari-prefix ":" userid ":"))
+          (trie-add-autocommit trie   okuri-ari-list       progress))
+        (set! okuri-ari-list '()) ;; free memory
       
-      (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-nashi-prefix ":" userid ":"))
-        (trie-add-autocommit trie   okuri-nashi-list     progress))
-      (set! okuri-nashi-list '()) ;; free memory
-      
-      (let1 trie (DistributedTrie::Trie.new kvs (+ hiragana-phrase-prefix ":" userid ":"))
-        (trie-add-autocommit trie   hiragana-phrase-list progress))
-      (set! hiragana-phrase-list '()) ;; free memory
-      )))
+        (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-nashi-prefix ":" userid ":"))
+          (trie-add-autocommit trie   okuri-nashi-list     progress))
+        (set! okuri-nashi-list '()) ;; free memory
+
+        (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-nashi-reverse-prefix ":" userid ":"))
+          (trie-add-autocommit trie   okuri-nashi-reverse-list     progress))
+        (set! okuri-nashi-reverse-list '()) ;; free memory
+
+        (let1 trie (DistributedTrie::Trie.new kvs (+ hiragana-phrase-prefix ":" userid ":"))
+          (trie-add-autocommit trie   hiragana-phrase-list progress))
+        (set! hiragana-phrase-list '()) ;; free memory
+        ))))
 
 (define (append-entry userid kvs _key value)
   (let1 key (+ userid ":" _key)

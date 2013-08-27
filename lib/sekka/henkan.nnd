@@ -76,9 +76,13 @@
 ;;  リストで返す。 (ソート済み検索結果)
 (define (approximate-search userid kvs keyword type limit)
   (let ([jarow-threshold
-         (if (= "h" type)
-             0.975
-             0.94)])
+         (cond
+          ((= "h" type)
+           0.975)
+          ((= "r" type)
+           0.90)
+          (else
+           0.94))])
 
     (let* ((a-search (ApproximateSearch.new jarow-threshold))
            (lst      (to-list
@@ -87,7 +91,9 @@
                         (lambda (x)
                           (let* ((val (vector-ref x 0))
                                  (k   (vector-ref x 1))
-                                 (v   (dict-get userid kvs k ""))
+                                 (v   (if (= "r" type)
+                                          (dict-get userid kvs k.reverse "")
+                                          (dict-get userid kvs k         "")))
                                  (v-pair (string-split-first-and-rest v))
                                  (v-first (car v-pair))
                                  (v-rest  (cdr v-pair)))
@@ -142,11 +148,14 @@
 
 ;; 送り仮名なしの変換
 (define (henkan-okuri-nashi userid kvs keyword limit)
-  (let* ((result (approximate-search userid kvs keyword "k" limit))
+  (let* ((result1 (approximate-search userid kvs keyword         "k" limit))
+         (result2 (if (rxmatch #/[#]/ keyword)
+                      '()
+                      (approximate-search userid kvs keyword.reverse "r" limit)))
          (kouho  (uniq (map
                         (lambda (x)
                           (third x))
-                        result))))
+                        (append result1 result2)))))
     (let1 lst
         (append-map
          (lambda (value)

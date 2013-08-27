@@ -576,6 +576,38 @@
        '(("組み込み" #f "くみこみ" j) ("組込" #f "くみこみ" j))
        (henkan-okuri-nashi userid kvs "Kumikomu" 0))
 
+
+;;-------------------------------------------------------------------
+(test-section "henkan (okuri nashi reverse)")
+(test* "okuri nashi reverse 1"
+       '(("変換" #f "へんかん" j) ("返還" #f "へんかん" j))
+       (henkan-okuri-nashi userid kvs "hnkan" 0))
+
+(test* "okuri nashi reverse 2"
+       '()
+       (henkan-okuri-nashi userid kvs "hnka" 0))
+
+(test* "okuri nashi reverse 3"
+       '(("変換" #f "へんかん" j) ("返還" #f "へんかん" j))
+       (henkan-okuri-nashi userid kvs "hnkann" 0))
+
+(test* "okuri nashi reverse 4"
+       '(("変換" #f "へんかん" j) ("返還" #f "へんかん" j))
+       (henkan-okuri-nashi userid kvs "hnnkan" 0))
+
+(test* "okuri nashi reverse 5"
+       '(("変換" #f "へんかん" j) ("返還" #f "へんかん" j))
+       (henkan-okuri-nashi userid kvs "hnnkann" 0))
+
+(test* "okuri nashi reverse 6"
+       '(("自然言語" #f "しぜんげんご" j))
+       (henkan-okuri-nashi userid kvs "hizengengo" 0))
+
+(test* "okuri nashi reverse 7"
+       '(("自然言語処理" #f "しぜんげんごしょり" j))
+       (henkan-okuri-nashi userid kvs "hizengengosyori" 0))
+
+
 ;;-------------------------------------------------------------------
 (test-section "henkan (okuri nashi and number)")
 

@@ -944,6 +944,596 @@ Ik:M:xizdgdgosyor	i$
 Ik:M:xizdgdgox	o
 Ik:M:xizdgdgoxo	r
 Ik:M:xizdgdgoxor	i$
+Ir:M:	?$ n z q a o i r ' - : ^ e u f p
+Ir:M:'	i
+Ir:M:'i	h
+Ir:M:'ih	' - : ^
+Ir:M:'ih'	o
+Ir:M:'ih'o	k$
+Ir:M:'ih-	o
+Ir:M:'ih-o	k$
+Ir:M:'ih:	o
+Ir:M:'ih:o	k$
+Ir:M:'ih^	o
+Ir:M:'ih^o	k$
+Ir:M:-	i
+Ir:M:-i	h
+Ir:M:-ih	' - : ^
+Ir:M:-ih'	o
+Ir:M:-ih'o	k$
+Ir:M:-ih-	o
+Ir:M:-ih-o	k$
+Ir:M:-ih:	o
+Ir:M:-ih:o	k$
+Ir:M:-ih^	o
+Ir:M:-ih^o	k$
+Ir:M::	i
+Ir:M::i	h
+Ir:M::ih	' - : ^
+Ir:M::ih'	o
+Ir:M::ih'o	k$
+Ir:M::ih-	o
+Ir:M::ih-o	k$
+Ir:M::ih:	o
+Ir:M::ih:o	k$
+Ir:M::ih^	o
+Ir:M::ih^o	k$
+Ir:M:^	i
+Ir:M:^i	h
+Ir:M:^ih	' - : ^
+Ir:M:^ih'	o
+Ir:M:^ih'o	k$
+Ir:M:^ih-	o
+Ir:M:^ih-o	k$
+Ir:M:^ih:	o
+Ir:M:^ih:o	k$
+Ir:M:^ih^	o
+Ir:M:^ih^o	k$
+Ir:M:a	k
+Ir:M:ak	d n q ; @ k
+Ir:M:ak;	o
+Ir:M:ak;o	k$
+Ir:M:ak@	o
+Ir:M:ak@o	k$
+Ir:M:akd	h$
+Ir:M:akk	o
+Ir:M:akko	k$
+Ir:M:akn	e n
+Ir:M:akne	h$
+Ir:M:aknn	e
+Ir:M:aknne	h$
+Ir:M:akq	e
+Ir:M:akqe	h$
+Ir:M:e	k
+Ir:M:ek	a
+Ir:M:eka	w$
+Ir:M:f	k
+Ir:M:fk	a
+Ir:M:fka	s$
+Ir:M:i	r a n q z h c y k m
+Ir:M:ia	k
+Ir:M:iak	i
+Ir:M:iaki	r
+Ir:M:iakir	o
+Ir:M:iakiro	g
+Ir:M:iakirog	n q
+Ir:M:iakirogn	e n
+Ir:M:iakirogne	g
+Ir:M:iakirogneg	n q
+Ir:M:iakirognegn	e n f
+Ir:M:iakirognegne	z
+Ir:M:iakirognegnez	i
+Ir:M:iakirognegnezi	s$ h
+Ir:M:iakirognegnezih	s$
+Ir:M:iakirognegnf	z
+Ir:M:iakirognegnfz	i
+Ir:M:iakirognegnfzi	s$ h
+Ir:M:iakirognegnfzih	s$
+Ir:M:iakirognegnn	e f
+Ir:M:iakirognegnne	z
+Ir:M:iakirognegnnez	i
+Ir:M:iakirognegnnezi	s$ h
+Ir:M:iakirognegnnezih	s$
+Ir:M:iakirognegnnf	z
+Ir:M:iakirognegnnfz	i
+Ir:M:iakirognegnnfzi	s$ h
+Ir:M:iakirognegnnfzih	s$
+Ir:M:iakirognegq	e f
+Ir:M:iakirognegqe	z
+Ir:M:iakirognegqez	i
+Ir:M:iakirognegqezi	s$ h
+Ir:M:iakirognegqezih	s$
+Ir:M:iakirognegqf	z
+Ir:M:iakirognegqfz	i
+Ir:M:iakirognegqfzi	s$ h
+Ir:M:iakirognegqfzih	s$
+Ir:M:iakirognn	e
+Ir:M:iakirognne	g
+Ir:M:iakirognneg	n q
+Ir:M:iakirognnegn	e n f
+Ir:M:iakirognnegne	z
+Ir:M:iakirognnegnez	i
+Ir:M:iakirognnegnezi	s$ h
+Ir:M:iakirognnegnezih	s$
+Ir:M:iakirognnegnf	z
+Ir:M:iakirognnegnfz	i
+Ir:M:iakirognnegnfzi	s$ h
+Ir:M:iakirognnegnfzih	s$
+Ir:M:iakirognnegnn	e f
+Ir:M:iakirognnegnne	z
+Ir:M:iakirognnegnnez	i
+Ir:M:iakirognnegnnezi	s$ h
+Ir:M:iakirognnegnnezih	s$
+Ir:M:iakirognnegnnf	z
+Ir:M:iakirognnegnnfz	i
+Ir:M:iakirognnegnnfzi	s$ h
+Ir:M:iakirognnegnnfzih	s$
+Ir:M:iakirognnegq	e f
+Ir:M:iakirognnegqe	z
+Ir:M:iakirognnegqez	i
+Ir:M:iakirognnegqezi	s$ h
+Ir:M:iakirognnegqezih	s$
+Ir:M:iakirognnegqf	z
+Ir:M:iakirognnegqfz	i
+Ir:M:iakirognnegqfzi	s$ h
+Ir:M:iakirognnegqfzih	s$
+Ir:M:iakirogq	e
+Ir:M:iakirogqe	g
+Ir:M:iakirogqeg	n q
+Ir:M:iakirogqegn	e n f
+Ir:M:iakirogqegne	z
+Ir:M:iakirogqegnez	i
+Ir:M:iakirogqegnezi	s$ h
+Ir:M:iakirogqegnezih	s$
+Ir:M:iakirogqegnf	z
+Ir:M:iakirogqegnfz	i
+Ir:M:iakirogqegnfzi	s$ h
+Ir:M:iakirogqegnfzih	s$
+Ir:M:iakirogqegnn	e f
+Ir:M:iakirogqegnne	z
+Ir:M:iakirogqegnnez	i
+Ir:M:iakirogqegnnezi	s$ h
+Ir:M:iakirogqegnnezih	s$
+Ir:M:iakirogqegnnf	z
+Ir:M:iakirogqegnnfz	i
+Ir:M:iakirogqegnnfzi	s$ h
+Ir:M:iakirogqegnnfzih	s$
+Ir:M:iakirogqegq	e f
+Ir:M:iakirogqegqe	z
+Ir:M:iakirogqegqez	i
+Ir:M:iakirogqegqezi	s$ h
+Ir:M:iakirogqegqezih	s$
+Ir:M:iakirogqegqf	z
+Ir:M:iakirogqegqfz	i
+Ir:M:iakirogqegqfzi	s$ h
+Ir:M:iakirogqegqfzih	s$
+Ir:M:ic	; @ c
+Ir:M:ic;	i$
+Ir:M:ic@	i$
+Ir:M:icc	i$
+Ir:M:ih	c
+Ir:M:ihc	; @ c
+Ir:M:ihc;	i$
+Ir:M:ihc@	i$
+Ir:M:ihcc	i$
+Ir:M:ik	a
+Ir:M:ika	s$
+Ir:M:im	o
+Ir:M:imo	k
+Ir:M:imok	i
+Ir:M:imoki	m
+Ir:M:imokim	u
+Ir:M:imokimu	k$
+Ir:M:in	k$ a n
+Ir:M:ina	k$
+Ir:M:inn	a
+Ir:M:inna	k$
+Ir:M:iq	a
+Ir:M:iqa	k$
+Ir:M:ir	o
+Ir:M:iro	h y x
+Ir:M:iroh	s
+Ir:M:irohs	o
+Ir:M:irohso	g
+Ir:M:irohsog	d n q
+Ir:M:irohsogd	g
+Ir:M:irohsogdg	d
+Ir:M:irohsogdgd	z
+Ir:M:irohsogdgdz	i
+Ir:M:irohsogdgdzi	s$ x$ h
+Ir:M:irohsogdgdzih	s$
+Ir:M:irohsogn	e n
+Ir:M:irohsogne	g
+Ir:M:irohsogneg	n q
+Ir:M:irohsognegn	e n f
+Ir:M:irohsognegne	z
+Ir:M:irohsognegnez	i
+Ir:M:irohsognegnezi	s$ h
+Ir:M:irohsognegnezih	s$
+Ir:M:irohsognegnf	z
+Ir:M:irohsognegnfz	i
+Ir:M:irohsognegnfzi	s$ h
+Ir:M:irohsognegnfzih	s$
+Ir:M:irohsognegnn	e f
+Ir:M:irohsognegnne	z
+Ir:M:irohsognegnnez	i
+Ir:M:irohsognegnnezi	s$ h
+Ir:M:irohsognegnnezih	s$
+Ir:M:irohsognegnnf	z
+Ir:M:irohsognegnnfz	i
+Ir:M:irohsognegnnfzi	s$ h
+Ir:M:irohsognegnnfzih	s$
+Ir:M:irohsognegq	e f
+Ir:M:irohsognegqe	z
+Ir:M:irohsognegqez	i
+Ir:M:irohsognegqezi	s$ h
+Ir:M:irohsognegqezih	s$
+Ir:M:irohsognegqf	z
+Ir:M:irohsognegqfz	i
+Ir:M:irohsognegqfzi	s$ h
+Ir:M:irohsognegqfzih	s$
+Ir:M:irohsognn	e
+Ir:M:irohsognne	g
+Ir:M:irohsognneg	n q
+Ir:M:irohsognnegn	e n f
+Ir:M:irohsognnegne	z
+Ir:M:irohsognnegnez	i
+Ir:M:irohsognnegnezi	s$ h
+Ir:M:irohsognnegnezih	s$
+Ir:M:irohsognnegnf	z
+Ir:M:irohsognnegnfz	i
+Ir:M:irohsognnegnfzi	s$ h
+Ir:M:irohsognnegnfzih	s$
+Ir:M:irohsognnegnn	e f
+Ir:M:irohsognnegnne	z
+Ir:M:irohsognnegnnez	i
+Ir:M:irohsognnegnnezi	s$ h
+Ir:M:irohsognnegnnezih	s$
+Ir:M:irohsognnegnnf	z
+Ir:M:irohsognnegnnfz	i
+Ir:M:irohsognnegnnfzi	s$ h
+Ir:M:irohsognnegnnfzih	s$
+Ir:M:irohsognnegq	e f
+Ir:M:irohsognnegqe	z
+Ir:M:irohsognnegqez	i
+Ir:M:irohsognnegqezi	s$ h
+Ir:M:irohsognnegqezih	s$
+Ir:M:irohsognnegqf	z
+Ir:M:irohsognnegqfz	i
+Ir:M:irohsognnegqfzi	s$ h
+Ir:M:irohsognnegqfzih	s$
+Ir:M:irohsogq	e
+Ir:M:irohsogqe	g
+Ir:M:irohsogqeg	n q
+Ir:M:irohsogqegn	e n f
+Ir:M:irohsogqegne	z
+Ir:M:irohsogqegnez	i
+Ir:M:irohsogqegnezi	s$ h
+Ir:M:irohsogqegnezih	s$
+Ir:M:irohsogqegnf	z
+Ir:M:irohsogqegnfz	i
+Ir:M:irohsogqegnfzi	s$ h
+Ir:M:irohsogqegnfzih	s$
+Ir:M:irohsogqegnn	e f
+Ir:M:irohsogqegnne	z
+Ir:M:irohsogqegnnez	i
+Ir:M:irohsogqegnnezi	s$ h
+Ir:M:irohsogqegnnezih	s$
+Ir:M:irohsogqegnnf	z
+Ir:M:irohsogqegnnfz	i
+Ir:M:irohsogqegnnfzi	s$ h
+Ir:M:irohsogqegnnfzih	s$
+Ir:M:irohsogqegq	e f
+Ir:M:irohsogqegqe	z
+Ir:M:irohsogqegqez	i
+Ir:M:irohsogqegqezi	s$ h
+Ir:M:irohsogqegqezih	s$
+Ir:M:irohsogqegqf	z
+Ir:M:irohsogqegqfz	i
+Ir:M:irohsogqegqfzi	s$ h
+Ir:M:irohsogqegqfzih	s$
+Ir:M:irox	o
+Ir:M:iroxo	g
+Ir:M:iroxog	d
+Ir:M:iroxogd	g
+Ir:M:iroxogdg	d
+Ir:M:iroxogdgd	z
+Ir:M:iroxogdgdz	i
+Ir:M:iroxogdgdzi	s$ x$ h
+Ir:M:iroxogdgdzih	s$
+Ir:M:iroy	s
+Ir:M:iroys	o
+Ir:M:iroyso	g
+Ir:M:iroysog	d n q
+Ir:M:iroysogd	g
+Ir:M:iroysogdg	d
+Ir:M:iroysogdgd	z
+Ir:M:iroysogdgdz	i
+Ir:M:iroysogdgdzi	s$ x$ h
+Ir:M:iroysogdgdzih	s$
+Ir:M:iroysogn	e n
+Ir:M:iroysogne	g
+Ir:M:iroysogneg	n q
+Ir:M:iroysognegn	e n f
+Ir:M:iroysognegne	z
+Ir:M:iroysognegnez	i
+Ir:M:iroysognegnezi	s$ h
+Ir:M:iroysognegnezih	s$
+Ir:M:iroysognegnf	z
+Ir:M:iroysognegnfz	i
+Ir:M:iroysognegnfzi	s$ h
+Ir:M:iroysognegnfzih	s$
+Ir:M:iroysognegnn	e f
+Ir:M:iroysognegnne	z
+Ir:M:iroysognegnnez	i
+Ir:M:iroysognegnnezi	s$ h
+Ir:M:iroysognegnnezih	s$
+Ir:M:iroysognegnnf	z
+Ir:M:iroysognegnnfz	i
+Ir:M:iroysognegnnfzi	s$ h
+Ir:M:iroysognegnnfzih	s$
+Ir:M:iroysognegq	e f
+Ir:M:iroysognegqe	z
+Ir:M:iroysognegqez	i
+Ir:M:iroysognegqezi	s$ h
+Ir:M:iroysognegqezih	s$
+Ir:M:iroysognegqf	z
+Ir:M:iroysognegqfz	i
+Ir:M:iroysognegqfzi	s$ h
+Ir:M:iroysognegqfzih	s$
+Ir:M:iroysognn	e
+Ir:M:iroysognne	g
+Ir:M:iroysognneg	n q
+Ir:M:iroysognnegn	e n f
+Ir:M:iroysognnegne	z
+Ir:M:iroysognnegnez	i
+Ir:M:iroysognnegnezi	s$ h
+Ir:M:iroysognnegnezih	s$
+Ir:M:iroysognnegnf	z
+Ir:M:iroysognnegnfz	i
+Ir:M:iroysognnegnfzi	s$ h
+Ir:M:iroysognnegnfzih	s$
+Ir:M:iroysognnegnn	e f
+Ir:M:iroysognnegnne	z
+Ir:M:iroysognnegnnez	i
+Ir:M:iroysognnegnnezi	s$ h
+Ir:M:iroysognnegnnezih	s$
+Ir:M:iroysognnegnnf	z
+Ir:M:iroysognnegnnfz	i
+Ir:M:iroysognnegnnfzi	s$ h
+Ir:M:iroysognnegnnfzih	s$
+Ir:M:iroysognnegq	e f
+Ir:M:iroysognnegqe	z
+Ir:M:iroysognnegqez	i
+Ir:M:iroysognnegqezi	s$ h
+Ir:M:iroysognnegqezih	s$
+Ir:M:iroysognnegqf	z
+Ir:M:iroysognnegqfz	i
+Ir:M:iroysognnegqfzi	s$ h
+Ir:M:iroysognnegqfzih	s$
+Ir:M:iroysogq	e
+Ir:M:iroysogqe	g
+Ir:M:iroysogqeg	n q
+Ir:M:iroysogqegn	e n f
+Ir:M:iroysogqegne	z
+Ir:M:iroysogqegnez	i
+Ir:M:iroysogqegnezi	s$ h
+Ir:M:iroysogqegnezih	s$
+Ir:M:iroysogqegnf	z
+Ir:M:iroysogqegnfz	i
+Ir:M:iroysogqegnfzi	s$ h
+Ir:M:iroysogqegnfzih	s$
+Ir:M:iroysogqegnn	e f
+Ir:M:iroysogqegnne	z
+Ir:M:iroysogqegnnez	i
+Ir:M:iroysogqegnnezi	s$ h
+Ir:M:iroysogqegnnezih	s$
+Ir:M:iroysogqegnnf	z
+Ir:M:iroysogqegnnfz	i
+Ir:M:iroysogqegnnfzi	s$ h
+Ir:M:iroysogqegnnfzih	s$
+Ir:M:iroysogqegq	e f
+Ir:M:iroysogqegqe	z
+Ir:M:iroysogqegqez	i
+Ir:M:iroysogqegqezi	s$ h
+Ir:M:iroysogqegqezih	s$
+Ir:M:iroysogqegqf	z
+Ir:M:iroysogqegqfz	i
+Ir:M:iroysogqegqfzi	s$ h
+Ir:M:iroysogqegqfzih	s$
+Ir:M:iy	t
+Ir:M:iyt	; @ t
+Ir:M:iyt;	i$
+Ir:M:iyt@	i$
+Ir:M:iytt	i$
+Ir:M:iz	k$
+Ir:M:n	k a n
+Ir:M:na	>$ k
+Ir:M:nak	n q
+Ir:M:nakn	e n
+Ir:M:nakne	h$
+Ir:M:naknn	e
+Ir:M:naknne	h$
+Ir:M:nakq	e
+Ir:M:nakqe	h$
+Ir:M:nk	d
+Ir:M:nkd	h$
+Ir:M:nn	a
+Ir:M:nna	>$ k
+Ir:M:nnak	n q
+Ir:M:nnakn	e n
+Ir:M:nnakne	h$
+Ir:M:nnaknn	e
+Ir:M:nnaknne	h$
+Ir:M:nnakq	e
+Ir:M:nnakqe	h$
+Ir:M:o	w$ g k
+Ir:M:og	d n q
+Ir:M:ogd	g
+Ir:M:ogdg	d
+Ir:M:ogdgd	z
+Ir:M:ogdgdz	i
+Ir:M:ogdgdzi	s$ x$ h
+Ir:M:ogdgdzih	s$
+Ir:M:ogn	e n
+Ir:M:ogne	g
+Ir:M:ogneg	n q
+Ir:M:ognegn	e n f
+Ir:M:ognegne	z
+Ir:M:ognegnez	i
+Ir:M:ognegnezi	s$ h
+Ir:M:ognegnezih	s$
+Ir:M:ognegnf	z
+Ir:M:ognegnfz	i
+Ir:M:ognegnfzi	s$ h
+Ir:M:ognegnfzih	s$
+Ir:M:ognegnn	e f
+Ir:M:ognegnne	z
+Ir:M:ognegnnez	i
+Ir:M:ognegnnezi	s$ h
+Ir:M:ognegnnezih	s$
+Ir:M:ognegnnf	z
+Ir:M:ognegnnfz	i
+Ir:M:ognegnnfzi	s$ h
+Ir:M:ognegnnfzih	s$
+Ir:M:ognegq	e f
+Ir:M:ognegqe	z
+Ir:M:ognegqez	i
+Ir:M:ognegqezi	s$ h
+Ir:M:ognegqezih	s$
+Ir:M:ognegqf	z
+Ir:M:ognegqfz	i
+Ir:M:ognegqfzi	s$ h
+Ir:M:ognegqfzih	s$
+Ir:M:ognn	e
+Ir:M:ognne	g
+Ir:M:ognneg	n q
+Ir:M:ognnegn	e n f
+Ir:M:ognnegne	z
+Ir:M:ognnegnez	i
+Ir:M:ognnegnezi	s$ h
+Ir:M:ognnegnezih	s$
+Ir:M:ognnegnf	z
+Ir:M:ognnegnfz	i
+Ir:M:ognnegnfzi	s$ h
+Ir:M:ognnegnfzih	s$
+Ir:M:ognnegnn	e f
+Ir:M:ognnegnne	z
+Ir:M:ognnegnnez	i
+Ir:M:ognnegnnezi	s$ h
+Ir:M:ognnegnnezih	s$
+Ir:M:ognnegnnf	z
+Ir:M:ognnegnnfz	i
+Ir:M:ognnegnnfzi	s$ h
+Ir:M:ognnegnnfzih	s$
+Ir:M:ognnegq	e f
+Ir:M:ognnegqe	z
+Ir:M:ognnegqez	i
+Ir:M:ognnegqezi	s$ h
+Ir:M:ognnegqezih	s$
+Ir:M:ognnegqf	z
+Ir:M:ognnegqfz	i
+Ir:M:ognnegqfzi	s$ h
+Ir:M:ognnegqfzih	s$
+Ir:M:ogq	e
+Ir:M:ogqe	g
+Ir:M:ogqeg	n q
+Ir:M:ogqegn	e n f
+Ir:M:ogqegne	z
+Ir:M:ogqegnez	i
+Ir:M:ogqegnezi	s$ h
+Ir:M:ogqegnezih	s$
+Ir:M:ogqegnf	z
+Ir:M:ogqegnfz	i
+Ir:M:ogqegnfzi	s$ h
+Ir:M:ogqegnfzih	s$
+Ir:M:ogqegnn	e f
+Ir:M:ogqegnne	z
+Ir:M:ogqegnnez	i
+Ir:M:ogqegnnezi	s$ h
+Ir:M:ogqegnnezih	s$
+Ir:M:ogqegnnf	z
+Ir:M:ogqegnnfz	i
+Ir:M:ogqegnnfzi	s$ h
+Ir:M:ogqegnnfzih	s$
+Ir:M:ogqegq	e f
+Ir:M:ogqegqe	z
+Ir:M:ogqegqez	i
+Ir:M:ogqegqezi	s$ h
+Ir:M:ogqegqezih	s$
+Ir:M:ogqegqf	z
+Ir:M:ogqegqfz	i
+Ir:M:ogqegqfzi	s$ h
+Ir:M:ogqegqfzih	s$
+Ir:M:ok	; @ k
+Ir:M:ok;	a
+Ir:M:ok;a	k$
+Ir:M:ok@	a
+Ir:M:ok@a	k$
+Ir:M:okk	a
+Ir:M:okka	k$
+Ir:M:p	g y
+Ir:M:pg	n
+Ir:M:pgn	n q
+Ir:M:pgnn	i$ n
+Ir:M:pgnnn	i$
+Ir:M:pgnq	i$
+Ir:M:py	n q
+Ir:M:pyn	i$ n q
+Ir:M:pynn	i$ n
+Ir:M:pynnn	i$
+Ir:M:pynq	i$
+Ir:M:pyq	i$
+Ir:M:q	a k
+Ir:M:qa	>$ k
+Ir:M:qak	n q
+Ir:M:qakn	e n
+Ir:M:qakne	h$
+Ir:M:qaknn	e
+Ir:M:qaknne	h$
+Ir:M:qakq	e
+Ir:M:qakqe	h$
+Ir:M:qk	i
+Ir:M:qki	r
+Ir:M:qkir	o
+Ir:M:qkiro	g
+Ir:M:qkirog	d
+Ir:M:qkirogd	g
+Ir:M:qkirogdg	d
+Ir:M:qkirogdgd	z
+Ir:M:qkirogdgdz	i
+Ir:M:qkirogdgdzi	s$ x$ h
+Ir:M:qkirogdgdzih	s$
+Ir:M:r	e
+Ir:M:re	p
+Ir:M:rep	o
+Ir:M:repo	l
+Ir:M:repol	e
+Ir:M:repole	v
+Ir:M:repolev	e
+Ir:M:repoleve	d$
+Ir:M:u	k o h
+Ir:M:uh	w
+Ir:M:uhw	o
+Ir:M:uhwo	y
+Ir:M:uhwoy	n q
+Ir:M:uhwoyn	i$ n q
+Ir:M:uhwoynn	i$ n
+Ir:M:uhwoynnn	i$
+Ir:M:uhwoynq	i$
+Ir:M:uhwoyq	i$
+Ir:M:uk	a
+Ir:M:uka	s$
+Ir:M:uo	y
+Ir:M:uoy	n q
+Ir:M:uoyn	i$ n q
+Ir:M:uoynn	i$ n
+Ir:M:uoynnn	i$
+Ir:M:uoynq	i$
+Ir:M:uoyq	i$
+Ir:M:z	k
+Ir:M:zk	d
+Ir:M:zkd	h$
 M:!	/！/感嘆符
 M:!=	/≠
 M:#chi'mf	C#ちーむ
