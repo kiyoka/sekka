@@ -48,6 +48,7 @@
 (define okuri-nashi-reverse-prefix   "Ir")
 (define hiragana-phrase-prefix       "Ih")
 (define progressbar-format     "%E |%B| %p%% %t")
+(define okuri-nashi-reverse-min-length  6)
 
 ;; KVS type setting
 (define *kvs-type* 'tokyocabinet)  ;; default
@@ -123,7 +124,7 @@
       (let1 okuri-nashi-reverse-list
           (filter-map
            (lambda (str)
-             (if (rxmatch #/[#]/ str)
+             (if (or (< str.length okuri-nashi-reverse-min-length) (rxmatch #/[#]/ str))
                  #f
                  (str.reverse)))
            okuri-nashi-list)

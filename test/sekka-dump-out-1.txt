@@ -944,7 +944,7 @@ Ik:M:xizdgdgosyor	i$
 Ik:M:xizdgdgox	o
 Ik:M:xizdgdgoxo	r
 Ik:M:xizdgdgoxor	i$
-Ir:M:	?$ n z q a o i r ' - : ^ e u f p
+Ir:M:	n q a o i r ' - : ^ p u
 Ir:M:'	i
 Ir:M:'i	h
 Ir:M:'ih	' - : ^
@@ -990,27 +990,11 @@ Ir:M:^ih:o	k$
 Ir:M:^ih^	o
 Ir:M:^ih^o	k$
 Ir:M:a	k
-Ir:M:ak	d n q ; @ k
-Ir:M:ak;	o
-Ir:M:ak;o	k$
-Ir:M:ak@	o
-Ir:M:ak@o	k$
-Ir:M:akd	h$
-Ir:M:akk	o
-Ir:M:akko	k$
-Ir:M:akn	e n
-Ir:M:akne	h$
+Ir:M:ak	n
+Ir:M:akn	n
 Ir:M:aknn	e
 Ir:M:aknne	h$
-Ir:M:akq	e
-Ir:M:akqe	h$
-Ir:M:e	k
-Ir:M:ek	a
-Ir:M:eka	w$
-Ir:M:f	k
-Ir:M:fk	a
-Ir:M:fka	s$
-Ir:M:i	r a n q z h c y k m
+Ir:M:i	r a m
 Ir:M:ia	k
 Ir:M:iak	i
 Ir:M:iaki	r
@@ -1107,29 +1091,12 @@ Ir:M:iakirogqegqf	z
 Ir:M:iakirogqegqfz	i
 Ir:M:iakirogqegqfzi	s$ h
 Ir:M:iakirogqegqfzih	s$
-Ir:M:ic	; @ c
-Ir:M:ic;	i$
-Ir:M:ic@	i$
-Ir:M:icc	i$
-Ir:M:ih	c
-Ir:M:ihc	; @ c
-Ir:M:ihc;	i$
-Ir:M:ihc@	i$
-Ir:M:ihcc	i$
-Ir:M:ik	a
-Ir:M:ika	s$
 Ir:M:im	o
 Ir:M:imo	k
 Ir:M:imok	i
 Ir:M:imoki	m
 Ir:M:imokim	u
 Ir:M:imokimu	k$
-Ir:M:in	k$ a n
-Ir:M:ina	k$
-Ir:M:inn	a
-Ir:M:inna	k$
-Ir:M:iq	a
-Ir:M:iqa	k$
 Ir:M:ir	o
 Ir:M:iro	h y x
 Ir:M:iroh	s
@@ -1341,14 +1308,8 @@ Ir:M:iroysogqegqf	z
 Ir:M:iroysogqegqfz	i
 Ir:M:iroysogqegqfzi	s$ h
 Ir:M:iroysogqegqfzih	s$
-Ir:M:iy	t
-Ir:M:iyt	; @ t
-Ir:M:iyt;	i$
-Ir:M:iyt@	i$
-Ir:M:iytt	i$
-Ir:M:iz	k$
-Ir:M:n	k a n
-Ir:M:na	>$ k
+Ir:M:n	a n
+Ir:M:na	k
 Ir:M:nak	n q
 Ir:M:nakn	e n
 Ir:M:nakne	h$
@@ -1356,10 +1317,8 @@ Ir:M:naknn	e
 Ir:M:naknne	h$
 Ir:M:nakq	e
 Ir:M:nakqe	h$
-Ir:M:nk	d
-Ir:M:nkd	h$
 Ir:M:nn	a
-Ir:M:nna	>$ k
+Ir:M:nna	k
 Ir:M:nnak	n q
 Ir:M:nnakn	e n
 Ir:M:nnakne	h$
@@ -1367,7 +1326,7 @@ Ir:M:nnaknn	e
 Ir:M:nnaknne	h$
 Ir:M:nnakq	e
 Ir:M:nnakqe	h$
-Ir:M:o	w$ g k
+Ir:M:o	g
 Ir:M:og	d n q
 Ir:M:ogd	g
 Ir:M:ogdg	d
@@ -1465,27 +1424,17 @@ Ir:M:ogqegqf	z
 Ir:M:ogqegqfz	i
 Ir:M:ogqegqfzi	s$ h
 Ir:M:ogqegqfzih	s$
-Ir:M:ok	; @ k
-Ir:M:ok;	a
-Ir:M:ok;a	k$
-Ir:M:ok@	a
-Ir:M:ok@a	k$
-Ir:M:okk	a
-Ir:M:okka	k$
 Ir:M:p	g y
 Ir:M:pg	n
-Ir:M:pgn	n q
-Ir:M:pgnn	i$ n
+Ir:M:pgn	n
+Ir:M:pgnn	n
 Ir:M:pgnnn	i$
-Ir:M:pgnq	i$
-Ir:M:py	n q
-Ir:M:pyn	i$ n q
-Ir:M:pynn	i$ n
+Ir:M:py	n
+Ir:M:pyn	n
+Ir:M:pynn	n
 Ir:M:pynnn	i$
-Ir:M:pynq	i$
-Ir:M:pyq	i$
 Ir:M:q	a k
-Ir:M:qa	>$ k
+Ir:M:qa	k
 Ir:M:qak	n q
 Ir:M:qakn	e n
 Ir:M:qakne	h$
@@ -1512,7 +1461,7 @@ Ir:M:repol	e
 Ir:M:repole	v
 Ir:M:repolev	e
 Ir:M:repoleve	d$
-Ir:M:u	k o h
+Ir:M:u	o h
 Ir:M:uh	w
 Ir:M:uhw	o
 Ir:M:uhwo	y
@@ -1522,18 +1471,12 @@ Ir:M:uhwoynn	i$ n
 Ir:M:uhwoynnn	i$
 Ir:M:uhwoynq	i$
 Ir:M:uhwoyq	i$
-Ir:M:uk	a
-Ir:M:uka	s$
 Ir:M:uo	y
-Ir:M:uoy	n q
-Ir:M:uoyn	i$ n q
+Ir:M:uoy	n
+Ir:M:uoyn	n q
 Ir:M:uoynn	i$ n
 Ir:M:uoynnn	i$
 Ir:M:uoynq	i$
-Ir:M:uoyq	i$
-Ir:M:z	k
-Ir:M:zk	d
-Ir:M:zkd	h$
 M:!	/！/感嘆符
 M:!=	/≠
 M:#chi'mf	C#ちーむ
@@ -1925,4 +1868,4 @@ M:みr	/見/観;(字義:みわたす)/視;(字義:じっとみる)/診;(diagnose
 M:わけ	/訳/和気;地名/理由;当て字/分け/分/譯;「訳」の旧字/戯奴
 M:わたしh	/私
 M:を	/小/緒/雄/男/牡/尾/悪/汚/惡;「悪」の旧字(人名用漢字)
-SEKKA:VERSION	1.3.1
+SEKKA:VERSION	1.4.0
