@@ -20,6 +20,10 @@
 #
 
 require 'rake'
+
+# generate `normal' and `azik' dictionary
+generateTypes = [ "N", "A" ]
+
 begin
   require 'jeweler2'
   Jeweler::Tasks.new do |gemspec|
@@ -29,6 +33,7 @@ begin
     gemspec.summary = "Sekka is a SKK like input method."
     gemspec.description = "Sekka is a SKK like input method. Sekka server provides REST Based API. If you are SKK user, let's try it."
     gemspec.email = "kiyoka@sumibi.org"
+    gemspec.license = 'New BSD'
     gemspec.homepage = "http://github.com/kiyoka/sekka"
     gemspec.authors = ["Kiyoka Nishiyama"]
     gemspec.files = FileList['Rakefile',
@@ -160,7 +165,7 @@ task :alljisyoS => [ :jisyoS, :loadS, :dumpS ]
 task :alljisyoL => [ :jisyoL, :loadL, :dumpL ]
 
 task :jisyoS do
-  [ "N", "A" ].each {|x|
+  generateTypes.each {|x|
     sh "time ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.201008           >  ./data/SEKKA-JISYO.SMALL.#{x}"
     sh "time ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.SMALL.#{x}"
     sh "time ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase    >> ./data/SEKKA-JISYO.SMALL.#{x}"
@@ -169,7 +174,7 @@ task :jisyoS do
 end
 
 task :jisyoL do
-  [ "N", "A" ].each {|x|
+  generateTypes.each {|x|
     sh "time ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.201008           >  ./data/SEKKA-JISYO.LARGE.#{x}"
     sh "time ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.LARGE.#{x}"
     sh "time ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.fullname           >> ./data/SEKKA-JISYO.LARGE.#{x}"
@@ -181,25 +186,25 @@ task :jisyoL do
 end
 
 task :loadS do
-  [ "N", "A" ].each {|x|
+  generateTypes.each {|x|
     sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.SMALL.#{x}  ./data/SEKKA-JISYO.SMALL.#{x}.tch"
   }
 end
 
 task :loadL do
-  [ "N", "A" ].each {|x|
+  generateTypes.each {|x|
     sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.LARGE.#{x}  ./data/SEKKA-JISYO.LARGE.#{x}.tch"
   }
 end
 
 task :dumpS do
-  [ "N", "A" ].each {|x|
+  generateTypes.each {|x|
     sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.SMALL.#{x}.tch > ./data/SEKKA-JISYO.SMALL.#{x}.tsv"
   }
 end
 
 task :dumpL do
-  [ "N", "A" ].each {|x|
+  generateTypes.each {|x|
     sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.LARGE.#{x}.tch > ./data/SEKKA-JISYO.LARGE.#{x}.tsv"
   }
 end
