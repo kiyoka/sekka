@@ -151,7 +151,9 @@
   (let* ((result1 (approximate-search userid kvs keyword         "k" limit))
          (result2 (if (rxmatch #/[#]/ keyword)
                       '()
-                      (approximate-search userid kvs keyword.reverse "r" limit)))
+                      (if (rxmatch #/^[A-Z]/ keyword)
+                          (approximate-search userid kvs keyword.reverse "r" limit)
+                          '())))
          (kouho  (uniq (map
                         (lambda (x)
                           (third x))
