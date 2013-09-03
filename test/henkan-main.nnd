@@ -580,7 +580,7 @@
 ;;-------------------------------------------------------------------
 (test-section "henkan (okuri nashi reverse)")
 (test* "okuri nashi reverse 1"
-       '(("変換" #f "へんかん" j) ("返還" #f "へんかん" j))
+       '()
        (henkan-okuri-nashi userid kvs "Hnkan" 0))
 
 (test* "okuri nashi reverse 2"
@@ -588,22 +588,26 @@
        (henkan-okuri-nashi userid kvs "Hnka" 0))
 
 (test* "okuri nashi reverse 3"
-       '(("変換" #f "へんかん" j) ("返還" #f "へんかん" j))
+       '()
        (henkan-okuri-nashi userid kvs "Hnkann" 0))
 
 (test* "okuri nashi reverse 4"
-       '(("変換" #f "へんかん" j) ("返還" #f "へんかん" j))
+       '()
        (henkan-okuri-nashi userid kvs "Hnnkan" 0))
 
 (test* "okuri nashi reverse 5"
-       '(("変換" #f "へんかん" j) ("返還" #f "へんかん" j))
+       '()
        (henkan-okuri-nashi userid kvs "Hnnkann" 0))
 
 (test* "okuri nashi reverse 6"
+       '(("変換" #f "へんかん" j) ("返還" #f "へんかん" j))
+       (henkan-okuri-nashi userid kvs "enkann" 0))
+
+(test* "okuri nashi reverse 7"
        '(("自然言語" #f "しぜんげんご" j))
        (henkan-okuri-nashi userid kvs "Hizengengo" 0))
 
-(test* "okuri nashi reverse 7"
+(test* "okuri nashi reverse 8"
        '(("自然言語処理" #f "しぜんげんごしょり" j))
        (henkan-okuri-nashi userid kvs "Hizengengosyori" 0))
 
@@ -1108,6 +1112,37 @@
        '(("100回目" #f "#かいめ" n 0) ("百回目" #f "#かいめ" n 1) ("１００ｋａｉｍｅ" #f "100kaime" z 2) ("100kaime" #f "100kaime" l 3))
        (sekka-henkan userid kvs "100kaime" 0 :normal))
 
+(test* "henkan toplevel 31"
+       '(("はんかん" #f "hnkan" h 0) ("ハンカン" #f "hnkan" k 1) ("Ｈｎｋａｎ" #f "Hnkan" z 2) ("Hnkan" #f "Hnkan" l 3))
+       (sekka-henkan userid kvs "Hnkan" 0 :normal))
+
+(test* "henkan toplevel 32"
+       '(("はんか" #f "hnka" h 0) ("ハンカ" #f "hnka" k 1) ("Ｈｎｋａ" #f "Hnka" z 2) ("Hnka" #f "Hnka" l 3))
+       (sekka-henkan userid kvs "Hnka" 0 :normal))
+
+(test* "henkan toplevel 33"
+       '(("はんかん" #f "hnkann" h 0) ("ハンカン" #f "hnkann" k 1) ("Ｈｎｋａｎｎ" #f "Hnkann" z 2) ("Hnkann" #f "Hnkann" l 3))
+       (sekka-henkan userid kvs "Hnkann" 0 :normal))
+
+(test* "henkan toplevel 34"
+       '(("はんにんあん" #f "hnnkan" h 0) ("ハンニンアン" #f "hnnkan" k 1) ("Ｈｎｎｋａｎ" #f "Hnnkan" z 2) ("Hnnkan" #f "Hnnkan" l 3))
+       (sekka-henkan userid kvs "Hnnkan" 0 :normal))
+
+(test* "henkan toplevel 35"
+       '(("はんにんあん" #f "hnnkann" h 0) ("ハンニンアン" #f "hnnkann" k 1) ("Ｈｎｎｋａｎｎ" #f "Hnnkann" z 2) ("Hnnkann" #f "Hnnkann" l 3))
+       (sekka-henkan userid kvs "Hnnkann" 0 :normal))
+
+(test* "henkan toplevel 36"
+       '(("変換" #f "へんかん" j 0) ("返還" #f "へんかん" j 1) ("えんかん" #f "enkann" h 2) ("エンカン" #f "enkann" k 3) ("えにんあん" #f "enkann" h 4) ("エニンアン" #f "enkann" k 5) ("Ｅｎｋａｎｎ" #f "Enkann" z 6) ("Enkann" #f "Enkann" l 7))
+       (sekka-henkan userid kvs "Enkann" 0 :normal))
+
+(test* "henkan toplevel 37"
+       '(("自然言語" #f "しぜんげんご" j 0) ("ひぜんげんご" #f "hizengengo" h 1) ("ヒゼンゲンゴ" #f "hizengengo" k 2) ("ひぜにぇにょ" #f "hizengengo" h 3) ("ヒゼニェニョ" #f "hizengengo" k 4) ("Ｈｉｚｅｎｇｅｎｇｏ" #f "Hizengengo" z 5) ("Hizengengo" #f "Hizengengo" l 6))
+       (sekka-henkan userid kvs "Hizengengo" 0 :normal))
+
+(test* "henkan toplevel 38"
+       '(("自然言語処理" #f "しぜんげんごしょり" j 0) ("ひぜんげんごしょり" #f "hizengengosyori" h 1) ("ヒゼンゲンゴショリ" #f "hizengengosyori" k 2) ("ひぜにぇにょしょり" #f "hizengengosyori" h 3) ("ヒゼニェニョショリ" #f "hizengengosyori" k 4) ("Ｈｉｚｅｎｇｅｎｇｏｓｙｏｒｉ" #f "Hizengengosyori" z 5) ("Hizengengosyori" #f "Hizengengosyori" l 6))
+       (sekka-henkan userid kvs "Hizengengosyori" 0 :normal))
 
 
 (test* "henkan toplevel(for Elisp) 1"

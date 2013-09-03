@@ -80,7 +80,7 @@
           ((= "h" type)
            0.975)
           ((= "r" type)
-           0.90)
+           0.970)
           (else
            0.94))])
 
@@ -151,9 +151,7 @@
   (let* ((result1 (approximate-search userid kvs keyword         "k" limit))
          (result2 (if (rxmatch #/[#]/ keyword)
                       '()
-                      (if (rxmatch #/^[A-Z]/ keyword)
-                          (approximate-search userid kvs keyword.reverse "r" limit)
-                          '())))
+                      (approximate-search userid kvs keyword.reverse  "r" limit)))
          (kouho  (uniq (map
                         (lambda (x)
                           (third x))

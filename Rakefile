@@ -4,7 +4,7 @@
 #
 # Release Engineering:
 #   1. edit the VERSION.yml file
-#   2. rake compile  &&   rake test   &&   rake gemspec   &&   rake build
+#   2. rake compile  &&   rake test   &&   rake gemspec   &&   gem build sekka.gemspec
 #      to generate sekka-x.x.x.gem
 #   3. install sekka-x.x.x.gem to clean environment and test
 #   4. rake release
