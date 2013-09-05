@@ -50,6 +50,7 @@ module SekkaServer
       $LOAD_PATH.push( File.dirname(__FILE__) + "/../lib" )
       @core = Nendo::Core.new()
       @core.loadInitFile
+      @core.disableRuntimeCheck( )
       @core.evalStr( "(use debug.syslog)" )
       @core.evalStr( "(use sekka.henkan)" )
       @core.evalStr( '(define (writeToString sexp) (write-to-string sexp))' )
