@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 # -*- mode: ruby; -*-
 #                                                  Rakefile for Sekka
 #
 # Release Engineering:
 #   1. edit the VERSION.yml file
-#   2. rake compile  &&   rake test   &&   rake gemspec   &&   rake build
+#   2. rake compile  &&   rake test   &&   rake gemspec   &&   gem build sekka.gemspec
 #      to generate sekka-x.x.x.gem
 #   3. install sekka-x.x.x.gem to clean environment and test
 #   4. rake release
@@ -19,6 +20,10 @@
 #
 
 require 'rake'
+
+# generate `normal' and `azik' dictionary
+generateTypes = [ "N", "A" ]
+
 begin
   require 'jeweler2'
   Jeweler::Tasks.new do |gemspec|
@@ -28,6 +33,7 @@ begin
     gemspec.summary = "Sekka is a SKK like input method."
     gemspec.description = "Sekka is a SKK like input method. Sekka server provides REST Based API. If you are SKK user, let's try it."
     gemspec.email = "kiyoka@sumibi.org"
+    gemspec.license = 'New BSD'
     gemspec.homepage = "http://github.com/kiyoka/sekka"
     gemspec.authors = ["Kiyoka Nishiyama"]
     gemspec.files = FileList['Rakefile',
@@ -55,7 +61,7 @@ begin
     gemspec.required_ruby_version = '>= 1.9.2'
     gemspec.add_dependency( "eventmachine" )
     gemspec.add_dependency( "memcache-client" )
-    gemspec.add_dependency( "nendo", "= 0.6.5" )
+    gemspec.add_dependency( "nendo", "= 0.6.6" )
     gemspec.add_dependency( "distributed-trie" )
     gemspec.add_dependency( "rack" )
     gemspec.add_dependency( "ruby-progressbar" )
@@ -70,7 +76,7 @@ end
 
 task :compile do
   # generate version.rb
-  dictVersion = "1.3.1"
+  dictVersion = "1.4.0"
   vh = Jeweler::VersionHelper.new "."
   open( "./lib/sekka/sekkaversion.rb", "w" ) {|f|
     f.puts(   "class SekkaVersion" )
@@ -159,7 +165,7 @@ task :alljisyoS => [ :jisyoS, :loadS, :dumpS ]
 task :alljisyoL => [ :jisyoL, :loadL, :dumpL ]
 
 task :jisyoS do
-  [ "N", "A" ].each {|x|
+  generateTypes.each {|x|
     sh "time ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.201008           >  ./data/SEKKA-JISYO.SMALL.#{x}"
     sh "time ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.SMALL.#{x}"
     sh "time ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase    >> ./data/SEKKA-JISYO.SMALL.#{x}"
@@ -168,7 +174,7 @@ task :jisyoS do
 end
 
 task :jisyoL do
-  [ "N", "A" ].each {|x|
+  generateTypes.each {|x|
     sh "time ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.201008           >  ./data/SEKKA-JISYO.LARGE.#{x}"
     sh "time ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.LARGE.#{x}"
     sh "time ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.fullname           >> ./data/SEKKA-JISYO.LARGE.#{x}"
@@ -180,25 +186,25 @@ task :jisyoL do
 end
 
 task :loadS do
-  [ "N", "A" ].each {|x|
+  generateTypes.each {|x|
     sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.SMALL.#{x}  ./data/SEKKA-JISYO.SMALL.#{x}.tch"
   }
 end
 
 task :loadL do
-  [ "N", "A" ].each {|x|
+  generateTypes.each {|x|
     sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.LARGE.#{x}  ./data/SEKKA-JISYO.LARGE.#{x}.tch"
   }
 end
 
 task :dumpS do
-  [ "N", "A" ].each {|x|
+  generateTypes.each {|x|
     sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.SMALL.#{x}.tch > ./data/SEKKA-JISYO.SMALL.#{x}.tsv"
   }
 end
 
 task :dumpL do
-  [ "N", "A" ].each {|x|
+  generateTypes.each {|x|
     sh "time ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.LARGE.#{x}.tch > ./data/SEKKA-JISYO.LARGE.#{x}.tsv"
   }
 end
@@ -207,6 +213,7 @@ end
 task :phrase => [ "/tmp/jawiki.txt.gz", "./data/wikipedia/jawiki.hiragana.txt" ] do
   sh "sort ./data/wikipedia/jawiki.hiragana.txt | uniq -c | sort > ./data/wikipedia/ranking.txt"
   sh "ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase_in_wikipedia2.nnd ./data/wikipedia/ranking.txt > ./data/SKK-JISYO.hiragana-phrase"
+  sh "echo 'して //' >> ./data/SKK-JISYO.hiragana-phrase"
 end
 
 file "./data/wikipedia/jawiki.hiragana.txt" do

@@ -57,6 +57,8 @@ class ApproximateSearch
     pair = case type
            when 'k' # okuri nashi kanji entry
              ["Ik:" + userid + ":", keyword.downcase]
+           when 'r' # okuri nashi kanji (reverse) entry
+             ["Ir:" + userid + ":", keyword.downcase]
            when 'K' # okuri ari   kanji entry
              ["IK:" + userid + ":", keyword]
            when 'h' # hiragana phrase entry

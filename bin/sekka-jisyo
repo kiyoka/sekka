@@ -5,6 +5,7 @@ $LOAD_PATH.push( File.dirname(__FILE__) + "/../lib" )
 core = Nendo::Core.new()
 core.setArgv( ARGV )
 core.loadInitFile
+core.disableRuntimeCheck( )
 core.evalStr( <<";;END-OF-SCRIPT" )
 ;;;
 ;;; sekka-jisyo - Sekkaの辞書メンテナンスツール
