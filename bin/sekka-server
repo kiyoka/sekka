@@ -16,11 +16,10 @@ DICTURL = "https://raw.github.com/kiyoka/sekka/master/public_dict/" + SekkaVersi
 
 PIDFILE = DICTDIR + "/pid"
 
-DICTTYPE = if ENV.has_key?( 'SEKKA_AZIK' )
-             "A"
-           else
-             "N"
-           end
+DICTTYPE = "N"
+if ENV.has_key?( 'SEKKA_AZIK' )
+  STDERR.printf( "Error: SEKKA_AZIK became obsolute. sekka-server use normal dictionary.\n" )
+end
 
 DICTSIZE = if ENV.has_key?( 'SEKKA_LARGE' )
              "LARGE"
