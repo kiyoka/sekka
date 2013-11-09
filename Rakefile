@@ -12,11 +12,11 @@
 #
 # Enviroment Variables:
 #   Please select from
-#     DB=dbm
+#     DB=sdbm
 #     DB=tokyocabinet
 #     DB=redis
 #     DB=                (default)
-#     DB=all             dbm/tokyocabinet/redis
+#     DB=all             sdbm/tokyocabinet/redis
 #
 
 require 'rake'
@@ -130,8 +130,8 @@ task :test do
   files << "./test/google-ime.nnd"
   STDERR.printf( "Info:  env DB=%s\n", ENV['DB'] )
   case ENV['DB']
-  when 'dbm'
-    files << "./test/henkan-main.nnd  dbm"
+  when 'sdbm'
+    files << "./test/henkan-main.nnd  sdbm"
   when 'tokyocabinet'
     files << "./test/henkan-main.nnd  tokyocabinet"
   when 'redis'
@@ -140,7 +140,7 @@ task :test do
   when 'pure'
     files << "./test/henkan-main.nnd  pure"
   when 'all'
-    files << "./test/henkan-main.nnd  dbm"
+    files << "./test/henkan-main.nnd  sdbm"
     files << "./test/henkan-main.nnd  tokyocabinet"
     files << "./test/henkan-main.nnd  redis"
     files << "./test/henkan-main.nnd  pure"
@@ -187,7 +187,7 @@ end
 
 task :loadS do
   generateTypes.each {|x|
-    sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.SMALL.#{x}  ./data/SEKKA-JISYO.SMALL.#{x}.tch"
+    sh "time ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.SMALL.#{x}  ./data/SEKKA-JISYO.SMALL.#{x}.db"
   }
 end
 

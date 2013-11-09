@@ -49,11 +49,11 @@ class Kvs
       @redisFlag = false
     end
 
-    @dbmFlag = true
+    @sdbmFlag = true
     begin
-      require 'dbm'
+      require 'gdbm'
     rescue LoadError
-      @dbmFlag = false
+      @sdbmFlag = false
     end
 
     @dbtype = dbtype
@@ -73,11 +73,11 @@ class Kvs
     when :memcache
       # do nothing
 
-    when :dbm
-      if @dbmFlag
+    when :sdbm
+      if @sdbmFlag
         # do nothing
       else
-        raise RuntimeError, "Kvs.new() missed require( 'dbm' )."
+        raise RuntimeError, "Kvs.new() missed require( 'gdbm' )."
       end
 
       # do nothing
@@ -101,8 +101,8 @@ class Kvs
       @db = MemCache.new( name,
                           :connect_timeout => 1000.0,
                           :timeout => 1000.0 )
-    when :dbm
-      @db = DBM.new( name )
+    when :sdbm
+      @db = GDBM.new( name + ".db", nil, GDBM::WRCREAT )
     when :pure
       @name = name
       if File.exist?( @name )
@@ -138,7 +138,7 @@ class Kvs
   def pure_put!( key, value, timeout = 0 )
     if 0 < key.size
       case @dbtype
-      when :tokyocabinet, :dbm, :redis
+      when :tokyocabinet, :sdbm, :redis
         @db[ key.force_encoding("ASCII-8BIT") ] = value.force_encoding("ASCII-8BIT")
       when :memcache
         @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"), timeout )
@@ -176,7 +176,7 @@ class Kvs
 
   def clear()
     case @dbtype
-    when :tokyocabinet, :dbm, :pure
+    when :tokyocabinet, :sdbm, :pure
       @db.clear
     when :redis
       @db.flushall
@@ -190,7 +190,7 @@ class Kvs
   # return array of key string
   def keys()
     case @dbtype
-    when :tokyocabinet, :dbm, :redis
+    when :tokyocabinet, :sdbm, :redis
       @db.keys.map { |k|
         k.force_encoding("UTF-8")
       }
@@ -215,7 +215,7 @@ class Kvs
       }
     when :memcache
       raise RuntimeError, "Kvs#forward_match_keys method was not implemented for memcache."
-    when :dbm, :pure
+    when :sdbm, :pure
       self.keys( ).select {|key|
         key.match( "^" + prefix )
       }
@@ -226,7 +226,7 @@ class Kvs
 
   def close()
     case @dbtype
-    when :tokyocabinet, :dbm
+    when :tokyocabinet, :sdbm
       @db.close
     when :memcache, :redis
       # do nothing
