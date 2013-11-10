@@ -32,7 +32,7 @@ TC_FILE = DICTDIR + "/SEKKA-JISYO.#{DICTSIZE}.#{DICTTYPE}.tch" + TC_OPTS
 TSVFILE = DICTDIR + "/SEKKA-JISYO.#{DICTSIZE}.#{DICTTYPE}.tsv"
 SUMFILE = DICTDIR + "/SEKKA-JISYO.#{DICTSIZE}.#{DICTTYPE}.md5"
 
-SDBM_FILE = DICTDIR + "/SEKKA-JISYO.#{DICTSIZE}.#{DICTTYPE}.db"
+GDBM_FILE = DICTDIR + "/SEKKA-JISYO.#{DICTSIZE}.#{DICTTYPE}.db"
 
 
 URLURL  = DICTURL + "/SEKKA-JISYO.#{DICTSIZE}.#{DICTTYPE}.url"
@@ -52,8 +52,8 @@ def getSekkaDbInfo( env )
       [ :redis, dictSource ]
     elsif m = ENV['SEKKA_DB'].match( /^tokyo[a-z]+$/ )
       [ :tokyocabinet, nil ]
-    elsif m = ENV['SEKKA_DB'].match( /^sdbm$/i )
-      [ :sdbm, nil ]
+    elsif m = ENV['SEKKA_DB'].match( /^gdbm$/i )
+      [ :gdbm, nil ]
     else
       raise RuntimeError, "Error: env var SEKKA_DB requires [redis:hostname] or [redis:] or [tokyocabinet]"
     end
@@ -67,9 +67,9 @@ def checkJisyoIsInstalled( dictType, dictSource )
   STDERR.printf( "Info: Checking SEKKA jisyo on #{dictType} server...\n" )
   begin
     result = case dictType
-             when :sdbm
+             when :gdbm
                require 'sekka/kvs'
-               tc = Kvs.new( :sdbm )
+               tc = Kvs.new( :gdbm )
                tc.open( dictSource )
                ret = tc.get( key )
                tc.close()
@@ -159,18 +159,18 @@ def main
   ( dictType, dictSource ) = getSekkaDbInfo( ENV )
 
   case dictType
-  when :sdbm
-    # SDBMに辞書が投入済みか確認する
-    ok = checkJisyoIsInstalled( dictType, SDBM_FILE )
+  when :gdbm
+    # GDBMに辞書が投入済みか確認する
+    ok = checkJisyoIsInstalled( dictType, GDBM_FILE )
     unless ok
       # tsvファイルをuploadする
       STDERR.printf( "Info: Uploading...\n" )
-      cmd = sprintf( "sekka-jisyo restore %s %s", TSVFILE, TC_FILE )
+      cmd = sprintf( "sekka-jisyo restore %s %s", TSVFILE, GDBM_FILE )
       STDERR.printf( "Command : %s\n", cmd )
       system( cmd )
     end
     STDERR.printf( "Info: [OK]\n" )
-    dictSource = TC_FILE
+    dictSource = GDBM_FILE
 
   when :tokyocabinet
     # TokyoCabinetに辞書が投入済みか確認する

@@ -49,11 +49,11 @@ class Kvs
       @redisFlag = false
     end
 
-    @sdbmFlag = true
+    @gdbmFlag = true
     begin
       require 'gdbm'
     rescue LoadError
-      @sdbmFlag = false
+      @gdbmFlag = false
     end
 
     @dbtype = dbtype
@@ -73,8 +73,8 @@ class Kvs
     when :memcache
       # do nothing
 
-    when :sdbm
-      if @sdbmFlag
+    when :gdbm
+      if @gdbmFlag
         # do nothing
       else
         raise RuntimeError, "Kvs.new() missed require( 'gdbm' )."
@@ -101,7 +101,7 @@ class Kvs
       @db = MemCache.new( name,
                           :connect_timeout => 1000.0,
                           :timeout => 1000.0 )
-    when :sdbm
+    when :gdbm
       @db = GDBM.new( name + ".db", nil, GDBM::WRCREAT )
     when :pure
       @name = name
@@ -138,7 +138,7 @@ class Kvs
   def pure_put!( key, value, timeout = 0 )
     if 0 < key.size
       case @dbtype
-      when :tokyocabinet, :sdbm, :redis
+      when :tokyocabinet, :gdbm, :redis
         @db[ key.force_encoding("ASCII-8BIT") ] = value.force_encoding("ASCII-8BIT")
       when :memcache
         @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"), timeout )
@@ -176,7 +176,7 @@ class Kvs
 
   def clear()
     case @dbtype
-    when :tokyocabinet, :sdbm, :pure
+    when :tokyocabinet, :gdbm, :pure
       @db.clear
     when :redis
       @db.flushall
@@ -190,7 +190,7 @@ class Kvs
   # return array of key string
   def keys()
     case @dbtype
-    when :tokyocabinet, :sdbm, :redis
+    when :tokyocabinet, :gdbm, :redis
       @db.keys.map { |k|
         k.force_encoding("UTF-8")
       }
@@ -215,7 +215,7 @@ class Kvs
       }
     when :memcache
       raise RuntimeError, "Kvs#forward_match_keys method was not implemented for memcache."
-    when :sdbm, :pure
+    when :gdbm, :pure
       self.keys( ).select {|key|
         key.match( "^" + prefix )
       }
@@ -226,7 +226,7 @@ class Kvs
 
   def close()
     case @dbtype
-    when :tokyocabinet, :sdbm
+    when :tokyocabinet, :gdbm
       @db.close
     when :memcache, :redis
       # do nothing

@@ -58,7 +58,7 @@
 
 
 ;;-------------------------------------------------------------------
-(let1 kvs      (Kvs.new     'sdbm)
+(let1 kvs      (Kvs.new     'gdbm)
   (kvs.open    "./test")
 
   (bench-task #f
