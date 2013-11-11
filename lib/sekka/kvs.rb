@@ -102,7 +102,7 @@ class Kvs
                           :connect_timeout => 1000.0,
                           :timeout => 1000.0 )
     when :gdbm
-      @db = GDBM.new( name + ".db", nil, GDBM::WRCREAT )
+      @db = GDBM.new( name + ".db", nil, GDBM::FAST | GDBM::WRCREAT )
     when :pure
       @name = name
       if File.exist?( @name )
