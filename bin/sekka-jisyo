@@ -48,8 +48,9 @@ core.evalStr( <<";;END-OF-SCRIPT" )
   (let1 lines (with-open
                filename
                (lambda (f)
-                 (convert-skk-jisyo-f f)))
-    (for-each print lines)))
+                 (convert-skk-jisyo-f f))
+	       "r:UTF-8")
+	(for-each print lines)))
 
 
 (define (load-sekka-jisyo sekka-file target)
@@ -59,7 +60,8 @@ core.evalStr( <<";;END-OF-SCRIPT" )
      (load-sekka-jisyo-f
       f
       (target.gsub #/[.]db$/ "") ;; drop ".db" suffix
-      ))))
+      )))
+  "r:UTF-8")
 
 
 (define (dump-sekka-jisyo sekka-file)
@@ -72,7 +74,8 @@ core.evalStr( <<";;END-OF-SCRIPT" )
    (lambda (f)
      (restore-sekka-jisyo-f
       f
-      target))))
+      target)))
+  "r:UTF-8")
 
 
 (define (display-help)

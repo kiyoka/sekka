@@ -70,22 +70,23 @@
 (with-open "./test/skk-jisyo-in-1.txt"
            (lambda (_input)
              (let1 sekka-jisyo-data
-                 (with-open "./test/sekka-jisyo-out-1.txt"
-                            (lambda (f)
-                              (read f)))
-
-               (test* "Create test jisyo"
-                      sekka-jisyo-data          
-                      (convert-skk-jisyo-f _input))
-               
-               (test* "default KVS type" 'tokyocabinet (get-kvs-type))
-               
-               (set-kvs-type dbtype)
-               (test* "changed KVS type" dbtype (get-kvs-type))
-               
-               (let1 sio (StringIO.new (string-join sekka-jisyo-data "\n"))
-                 (sio.set_encoding "utf-8")
-                 (load-sekka-jisyo-f sio target)))))
+		   (with-open #?="./test/sekka-jisyo-out-1.txt"
+			      (lambda (f)
+				(read f))
+			      "r:UTF-8")
+		   (test* "Create test jisyo"
+			  sekka-jisyo-data          
+			  (convert-skk-jisyo-f _input))
+		   
+		   (test* "default KVS type" 'tokyocabinet (get-kvs-type))
+		   
+		   (set-kvs-type #?=dbtype)
+		   (test* "changed KVS type" dbtype (get-kvs-type))
+		   
+		   (let1 sio (StringIO.new (string-join sekka-jisyo-data "\n"))
+			 (sio.set_encoding "utf-8")
+			 (load-sekka-jisyo-f sio target))))
+	   "r:UTF-8")
 
 
 ;;-------------------------------------------------------------------
@@ -126,7 +127,9 @@
                                        (lambda (f) (f.write (_output2.string)))
                                        "w")
                             (Digest::MD5.hexdigest
-                             (_output2.string)))))))))
+                             (_output2.string))))))))
+	   "r:UTF-8")
+
                  
   
 
