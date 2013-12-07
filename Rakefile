@@ -118,7 +118,9 @@ task :test do
     exit 1
   end
 
-  sh "del test.record test.tch test.db"
+  ["test.record", "test.tch", "test.db" ].each {|name|
+    File.unlink( name ) if File.exist?( name )
+  }
   files = []
   files << "./test/memcache.nnd"
   files << "./test/util.nnd"
