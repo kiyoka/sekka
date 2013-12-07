@@ -108,8 +108,8 @@ task :compile do
 end
 
 task :test do
-  sh "ruby -I ./lib ./bin/sekka-path > /tmp/path1"
-  path1 = open( "/tmp/path1" ) {|f|
+  sh "ruby -I ./lib ./bin/sekka-path > ./path1.tmp"
+  path1 = open( "./path1.tmp" ) {|f|
     f.readline.chomp
   }
   path2 = File.dirname( __FILE__ )
@@ -118,7 +118,7 @@ task :test do
     exit 1
   end
 
-  sh "/bin/rm -f test.record test.tch test.db"
+  sh "del test.record test.tch test.db"
   files = []
   files << "./test/memcache.nnd"
   files << "./test/util.nnd"
@@ -149,8 +149,7 @@ task :test do
     files << "./test/henkan-main.nnd  pure"
   end
   files.each {|filename|
-    nendopath = `which nendo`.chomp
-    sh  sprintf( "ruby -I ./lib %s %s", nendopath, filename )
+    sh  sprintf( "ruby -I ./lib -S nendo %s", filename )
   }
   sh "cat test.record"
 end
