@@ -37,7 +37,6 @@
 require 'rack'
 require 'nendo'
 require 'eventmachine'
-require 'syslog'
 require 'uri'
 require 'date'
 require 'sekkaconfig'
@@ -51,7 +50,13 @@ module SekkaServer
       @core = Nendo::Core.new()
       @core.loadInitFile
       @core.disableRuntimeCheck( )
-      @core.evalStr( "(use debug.syslog)" )
+      begin
+        require 'syslog'
+        @core.evalStr( "(use debug.syslog)" )
+      rescue LoadError
+        STDERR.printf( "Sekka Warning: this platform does not support 'syslog'...\n" )
+        @core.evalStr( "(use debug.null)" )
+      end
       @core.evalStr( "(use sekka.henkan)" )
       @core.evalStr( '(define (writeToString sexp) (write-to-string sexp))' )
       @core.evalStr( '(export-to-ruby writeToString)' )
