@@ -252,6 +252,7 @@
                                            [output . ,STDERR]
                                            [format . ,progressbar-format]
                                            )))])
+      (f.set_encoding "utf-8" "utf-8")
       (kvs.open filename-or-hostname)
       (kvs.clear)
       (restore f kvs progress)
