@@ -367,7 +367,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	  (append
 	   (if (< 0 (length sekka-no-proxy-hosts))
 	       (list "--noproxy" sekka-no-proxy-hosts)
-	     (list ""))
+	     nil)
 	   (sekka-construct-curl-argstr (cons
 					 '(format . "sexp")
 					 arg-alist))))
