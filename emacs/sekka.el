@@ -25,7 +25,6 @@
 ;;; Code:
 (require 'cl)
 (require 'http-get)
-(require 'http-post-simple)
 (require 'popup)
 (require 'url-parse)
 
