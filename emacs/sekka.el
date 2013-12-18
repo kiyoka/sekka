@@ -63,7 +63,7 @@
   :type  'string
   :group 'sekka)
 
-(defcustom sekka-curl nil
+(defcustom sekka-curl "curl"
   "curlコマンドの絶対パスを設定する"
   :type  'string
   :group 'sekka)
@@ -281,14 +281,16 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 
 
 (defun sekka-construct-curl-argstr (arg-alist)
-  (apply 'concat
-	 (mapcar
-	  (lambda (x)
-	    (format "--data '%s=%s' " (car x)
-		    (if (stringp (cdr x))
-			(http-url-encode (cdr x) 'utf-8)
-		      (cdr x))))
-	  arg-alist)))
+  (apply
+   'append
+   (mapcar
+    (lambda (x)
+      (list "--data" (format "%s=%s"
+			     (car x)
+			     (if (stringp (cdr x))
+				 (http-url-encode (cdr x) 'utf-8)
+			       (cdr x)))))
+    arg-alist)))
 
 ;; test-code
 (when nil
@@ -297,7 +299,8 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
      ("yomi"   .  "kanji")
      ("limit"  .  2)
      ("method" .  "normal")
-     )))
+     ))
+  )
 
 
 ;;
@@ -360,78 +363,45 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
       " " sekka-server-url-2
       " " sekka-server-url-3))))
 
-
 (defun sekka-rest-request-by-curl (func-name arg-alist)
-  (let ((command
-	 (concat
-	  sekka-curl " --silent --show-error "
-	  (if (< 0 (length sekka-no-proxy-hosts))
-	      (concat " --noproxy " sekka-no-proxy-hosts)
-	    "")
-	  (format " --max-time %d " sekka-server-timeout)
-	  " --insecure "
-	  " --header 'Content-Type: application/x-www-form-urlencoded' "
-	  (format "%s%s " current-sekka-server-url func-name)
-	  (sekka-construct-curl-argstr (cons
-					'("format" . "sexp")
-					arg-alist)))))
-    (sekka-debug-print (format "curl-command :%s\n" command))
-    
-    (let (
-	  (result
-	   (shell-command-to-string
-	    command)))
-      
-      (sekka-debug-print (format "curl-result-sexp :%s\n" result))
+  (let* ((lst
+	  (append
+	   (if (< 0 (length sekka-no-proxy-hosts))
+	       (list "--noproxy" sekka-no-proxy-hosts)
+	     (list ""))
+	   (sekka-construct-curl-argstr (cons
+					 '(format . "sexp")
+					 arg-alist))))
+	 (buffername "*sekka-output*")
+	 (result ""))
+    (sekka-debug-print (format "arg-lst :[%S]\n" lst))
+    (progn
+      (apply
+       'call-process
+       sekka-curl
+       nil buffername nil
+       "--silent" "--show-error"
+       "--max-time" (format "%d" sekka-server-timeout)
+       "--insecure"
+       "--header" "Content-Type: application/x-www-form-urlencoded"
+       (concat current-sekka-server-url func-name)
+       lst)
+      (setq result
+	    (with-current-buffer buffername
+	      (buffer-substring-no-properties (point-min) (point-max))))
+      (kill-buffer buffername)
       result)))
-  
-(defun sekka-rest-request-by-elisp (func-name arg-alist)
-  (let* ((new-arg-alist (mapcar (lambda (x)
-				  (let ((key    (car x))
-					(value  (cdr x)))
-				    (cons
-				     (if (stringp key)
-					 (intern key)
-				       key)
-				     (http-url-encode value 'utf-8))))
-				arg-alist))
-	 (url (format "%s%s" current-sekka-server-url func-name))
-	 (fields 
-	  (cons
-	   '(format . "sexp")
-	   new-arg-alist)))
-    (sekka-debug-print (format "url: %s\n" url))
-    (sekka-debug-print (format "fields: %S\n" fields))
-    (setq url-http-version "1.0")
-    (let* ((response
-	   (http-post-simple
-	    ;; url
-	    url
-	    ;; fields
-	    fields
-	    ;; charset
-	    'utf-8))
-	   (body        (decode-coding-string (first response) 'utf-8))
-	   (result-code (third response)))
-      (sekka-debug-print (format "result-code: %d\n" result-code))
-      (sekka-debug-print (format "body: [[%s]]\n" body))
-      (cond
-       ((= result-code 200)
-	body)
-       (t
-	(sekka-debug-print (format "error-data: %s\n" (second response)))
-	"curl: (7) " ;; Couldn't connect to host 'localhost' (emulation of curl)
-	)))))
+
 
 (when nil
   ;; unit test
   (setq sekka-curl "curl")
   (setq sekka-login-name (user-login-name))
   (setq current-sekka-server-url "http://localhost:12929/")
-  (sekka-rest-request
+  (sekka-rest-request-by-curl
    "henkan"
    '(
-     ("yomi"   . "Nihongo")
+     ("yomi"   . "Nihon")
      (limit    . "1")
      (method   . "normal")
      ("userid" . "kiyoka")))
@@ -455,9 +425,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	;;    "(\"初回起動\", \"諸快気堂\", \"諸開基堂\", \"しょかいきどう\", \"ショカイキドウ\")"
 	))
     ;; 実際のサーバに接続する
-    (if sekka-curl
-	(sekka-rest-request-by-curl func-name arg-alist)
-      (sekka-rest-request-by-elisp func-name arg-alist))))
+    (sekka-rest-request-by-curl func-name arg-alist)))
 
 ;;
 ;; 現在時刻をUNIXタイムを返す(単位は秒)
