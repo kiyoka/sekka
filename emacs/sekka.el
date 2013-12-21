@@ -77,7 +77,7 @@
   :type  'integer
   :group 'sekka)
 
-(defcustom sekka-realtime-guide-limit-lines 2
+(defcustom sekka-realtime-guide-limit-lines 3
   "最後に変換した行から N 行離れたらリアルタイムガイド表示が止まる"
   :type  'integer
   :group 'sekka)
