@@ -22,7 +22,11 @@ if ENV.has_key?( 'SEKKA_AZIK' )
 end
 
 DICTSIZE = if ENV.has_key?( 'SEKKA_LARGE' )
-             "LARGE"
+             if 1 == ENV[ 'SEKKA_LARGE' ].to_i
+               "LARGE"
+             else
+               "SMALL"
+             end
            else
              "SMALL"
            end
