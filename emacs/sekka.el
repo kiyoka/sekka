@@ -27,6 +27,7 @@
 (require 'http-get)
 (require 'popup)
 (require 'url-parse)
+(require 'http-post-simple)
 
 ;;; 
 ;;;
@@ -401,6 +402,60 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
    "henkan"
    '(
      ("yomi"   . "Nihon")
+     (limit    . "1")
+     (method   . "normal")
+     ("userid" . "kiyoka")))
+  )
+
+
+
+(defun sekka-rest-request-by-elisp (func-name arg-alist)
+  (let* ((new-arg-alist (mapcar (lambda (x)
+				  (let ((key    (car x))
+					(value  (cdr x)))
+				    (cons
+				     (if (stringp key)
+					 (intern key)
+				       key)
+				     (http-url-encode value 'utf-8))))
+				arg-alist))
+	 (url (format "%s%s" current-sekka-server-url func-name))
+	 (fields 
+	  (cons
+	   '(format . "sexp")
+	   new-arg-alist)))
+    (sekka-debug-print (format "url: %s\n" url))
+    (sekka-debug-print (format "fields: %S\n" fields))
+    (setq url-http-version "1.0")
+    (let* ((response
+	   (http-post-simple
+	    ;; url
+	    url
+	    ;; fields
+	    fields
+	    ;; charset
+	    'utf-8))
+	   (body        (decode-coding-string (first response) 'utf-8))
+	   (result-code (third response)))
+      (sekka-debug-print (format "result-code: %d\n" result-code))
+      (sekka-debug-print (format "body: [[%s]]\n" body))
+      (cond
+       ((= result-code 200)
+	body)
+       (t
+	(sekka-debug-print (format "error-data: %s\n" (second response)))
+	"curl: (7) " ;; Couldn't connect to host 'localhost' (emulation of curl)
+	)))))
+
+(when nil
+  ;; unit test
+  (setq sekka-curl nil)
+  (setq sekka-login-name (user-login-name))
+  (setq current-sekka-server-url "http://localhost:12929/")
+  (sekka-rest-request-by-elisp
+   "henkan"
+   '(
+     ("yomi"   . "Nihongo")
      (limit    . "1")
      (method   . "normal")
      ("userid" . "kiyoka")))
