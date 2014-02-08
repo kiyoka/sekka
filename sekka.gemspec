@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = "sekka"
-  s.version = "1.5.0"
+  s.version = "1.5.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kiyoka Nishiyama"]
-  s.date = "2014-01-26"
+  s.date = "2014-02-07"
   s.description = "Sekka is a SKK like input method. Sekka server provides REST Based API. If you are SKK user, let's try it."
   s.email = "kiyoka@sumibi.org"
   s.executables = ["sekka-jisyo", "sekka-server", "sekka-benchmark", "sekka-path"]
@@ -74,45 +74,45 @@ Gem::Specification.new do |s|
     s.specification_version = 4
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<eventmachine>, [">= 0"])
-      s.add_runtime_dependency(%q<memcache-client>, [">= 0"])
-      s.add_runtime_dependency(%q<nendo>, ["= 0.6.6"])
-      s.add_runtime_dependency(%q<distributed-trie>, [">= 0"])
-      s.add_runtime_dependency(%q<rack>, [">= 0"])
-      s.add_runtime_dependency(%q<ruby-progressbar>, [">= 0"])
-      s.add_runtime_dependency(%q<eventmachine>, [">= 0"])
-      s.add_runtime_dependency(%q<memcache-client>, [">= 0"])
-      s.add_runtime_dependency(%q<nendo>, ["= 0.6.6"])
-      s.add_runtime_dependency(%q<distributed-trie>, [">= 0"])
-      s.add_runtime_dependency(%q<rack>, [">= 0"])
-      s.add_runtime_dependency(%q<ruby-progressbar>, [">= 0"])
+      s.add_runtime_dependency(%q<eventmachine>, ["~> 1.0"])
+      s.add_runtime_dependency(%q<memcache-client>, ["~> 1.8"])
+      s.add_runtime_dependency(%q<nendo>, ["= 0.6.8"])
+      s.add_runtime_dependency(%q<distributed-trie>, ["= 0.8.0"])
+      s.add_runtime_dependency(%q<rack>, ["~> 1.5"])
+      s.add_runtime_dependency(%q<ruby-progressbar>, ["~> 1.4"])
+      s.add_runtime_dependency(%q<eventmachine>, ["~> 1.0"])
+      s.add_runtime_dependency(%q<memcache-client>, ["~> 1.8"])
+      s.add_runtime_dependency(%q<nendo>, ["= 0.6.8"])
+      s.add_runtime_dependency(%q<distributed-trie>, ["= 0.8.0"])
+      s.add_runtime_dependency(%q<rack>, ["~> 1.5"])
+      s.add_runtime_dependency(%q<ruby-progressbar>, ["~> 1.4"])
     else
-      s.add_dependency(%q<eventmachine>, [">= 0"])
-      s.add_dependency(%q<memcache-client>, [">= 0"])
-      s.add_dependency(%q<nendo>, ["= 0.6.6"])
-      s.add_dependency(%q<distributed-trie>, [">= 0"])
-      s.add_dependency(%q<rack>, [">= 0"])
-      s.add_dependency(%q<ruby-progressbar>, [">= 0"])
-      s.add_dependency(%q<eventmachine>, [">= 0"])
-      s.add_dependency(%q<memcache-client>, [">= 0"])
-      s.add_dependency(%q<nendo>, ["= 0.6.6"])
-      s.add_dependency(%q<distributed-trie>, [">= 0"])
-      s.add_dependency(%q<rack>, [">= 0"])
-      s.add_dependency(%q<ruby-progressbar>, [">= 0"])
+      s.add_dependency(%q<eventmachine>, ["~> 1.0"])
+      s.add_dependency(%q<memcache-client>, ["~> 1.8"])
+      s.add_dependency(%q<nendo>, ["= 0.6.8"])
+      s.add_dependency(%q<distributed-trie>, ["= 0.8.0"])
+      s.add_dependency(%q<rack>, ["~> 1.5"])
+      s.add_dependency(%q<ruby-progressbar>, ["~> 1.4"])
+      s.add_dependency(%q<eventmachine>, ["~> 1.0"])
+      s.add_dependency(%q<memcache-client>, ["~> 1.8"])
+      s.add_dependency(%q<nendo>, ["= 0.6.8"])
+      s.add_dependency(%q<distributed-trie>, ["= 0.8.0"])
+      s.add_dependency(%q<rack>, ["~> 1.5"])
+      s.add_dependency(%q<ruby-progressbar>, ["~> 1.4"])
     end
   else
-    s.add_dependency(%q<eventmachine>, [">= 0"])
-    s.add_dependency(%q<memcache-client>, [">= 0"])
-    s.add_dependency(%q<nendo>, ["= 0.6.6"])
-    s.add_dependency(%q<distributed-trie>, [">= 0"])
-    s.add_dependency(%q<rack>, [">= 0"])
-    s.add_dependency(%q<ruby-progressbar>, [">= 0"])
-    s.add_dependency(%q<eventmachine>, [">= 0"])
-    s.add_dependency(%q<memcache-client>, [">= 0"])
-    s.add_dependency(%q<nendo>, ["= 0.6.6"])
-    s.add_dependency(%q<distributed-trie>, [">= 0"])
-    s.add_dependency(%q<rack>, [">= 0"])
-    s.add_dependency(%q<ruby-progressbar>, [">= 0"])
+    s.add_dependency(%q<eventmachine>, ["~> 1.0"])
+    s.add_dependency(%q<memcache-client>, ["~> 1.8"])
+    s.add_dependency(%q<nendo>, ["= 0.6.8"])
+    s.add_dependency(%q<distributed-trie>, ["= 0.8.0"])
+    s.add_dependency(%q<rack>, ["~> 1.5"])
+    s.add_dependency(%q<ruby-progressbar>, ["~> 1.4"])
+    s.add_dependency(%q<eventmachine>, ["~> 1.0"])
+    s.add_dependency(%q<memcache-client>, ["~> 1.8"])
+    s.add_dependency(%q<nendo>, ["= 0.6.8"])
+    s.add_dependency(%q<distributed-trie>, ["= 0.8.0"])
+    s.add_dependency(%q<rack>, ["~> 1.5"])
+    s.add_dependency(%q<ruby-progressbar>, ["~> 1.4"])
   end
 end
 

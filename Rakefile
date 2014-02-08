@@ -60,12 +60,12 @@ begin
                            "sekka-benchmark",
                            "sekka-path"]
     gemspec.required_ruby_version = '>= 1.9.2'
-    gemspec.add_dependency( "eventmachine" )
-    gemspec.add_dependency( "memcache-client" )
-    gemspec.add_dependency( "nendo", "= 0.6.6" )
-    gemspec.add_dependency( "distributed-trie" )
-    gemspec.add_dependency( "rack" )
-    gemspec.add_dependency( "ruby-progressbar" )
+    gemspec.add_dependency( "eventmachine", "~> 1.0" )
+    gemspec.add_dependency( "memcache-client", "~> 1.8" )
+    gemspec.add_dependency( "nendo", "= 0.6.8" )
+    gemspec.add_dependency( "distributed-trie", "= 0.8.0" )
+    gemspec.add_dependency( "rack",  "~> 1.5" )
+    gemspec.add_dependency( "ruby-progressbar", "~> 1.4" )
   end
 rescue LoadError
   puts "Jeweler2 not available. Install it with: sudo gem install jeweler2"
