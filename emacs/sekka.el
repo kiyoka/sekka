@@ -2,7 +2,7 @@
 ;;
 ;; "sekka.el" is a client for Sekka server
 ;;
-;;   Copyright (C) 2010,2011 Kiyoka Nishiyama
+;;   Copyright (C) 2010-2014 Kiyoka Nishiyama
 ;;   This program was derived from sumibi.el and yc.el-4.0.13(auther: knak)
 ;;
 ;;
@@ -77,7 +77,7 @@
   :type  'integer
   :group 'sekka)
 
-(defcustom sekka-realtime-guide-limit-lines 3
+(defcustom sekka-realtime-guide-limit-lines 2
   "最後に変換した行から N 行離れたらリアルタイムガイド表示が止まる"
   :type  'integer
   :group 'sekka)
@@ -671,7 +671,9 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
       (defun sekka-char-charset (ch)
 	(let ((result (char-charset ch)))
 	  (sekka-debug-print (format "sekka-char-charset:1(%s) => %s\n" ch result))
-	  result))
+	  (if (multibyte-string-p (char-to-string ch)) 
+	      'japanese-jisx0208
+	    result)))
     (defun sekka-char-charset (ch)
       (sekka-debug-print (format "sekka-char-charset:2(%s) => %s\n" ch (char-category)))
       (cond ((equal (char-category ch) "a") 'ascii)
@@ -1648,7 +1650,7 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
 (setq default-input-method "japanese-sekka")
 
 (defconst sekka-version
-  "1.5.1" ;;SEKKA-VERSION
+  "1.5.2" ;;SEKKA-VERSION
   )
 (defun sekka-version (&optional arg)
   "入力モード変更"
