@@ -75,7 +75,7 @@
 
 (define (expand-okuri-ari-entry key okuri value)
   (cond
-   ((eq? "t" okuri)
+   ((equal? "t" okuri)
     (append-map (lambda (x) x)
                 (list
                  (expand-okuri-ari-entry-internal key okuri                value)

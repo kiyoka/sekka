@@ -49,12 +49,12 @@
             "")
            ((1)
             (+
-             (if (eq? "□" kurai1)
+             (if (equal? "□" kurai1)
                  (vector-ref kan-vector num)
                  kurai1)))
            (else
             (+ 
-             (if (eq? "□" kurai1)
+             (if (equal? "□" kurai1)
                  (vector-ref kan-vector num)
                  (+ (vector-ref kan-vector num)
                     kurai1))))))

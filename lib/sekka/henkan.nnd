@@ -459,11 +459,11 @@
           (let* ((kouho-lst (split-henkan-kouho kouho-str key))
                  (no1
                   (filter (lambda (x)
-                               (eq? (car x) tango))
+                               (equal? (car x) tango))
                              kouho-lst))
                  (other
                   (filter (lambda (x)
-                               (not (eq? (car x) tango)))
+                               (not (equal? (car x) tango)))
                              kouho-lst))
                  (new-kouho-str
                   (join-henkan-kouho (append no1 other))))
