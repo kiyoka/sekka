@@ -62,7 +62,7 @@ begin
     gemspec.required_ruby_version = '>= 1.9.2'
     gemspec.add_dependency( "eventmachine", "~> 1.0" )
     gemspec.add_dependency( "memcache-client", "~> 1.8" )
-    gemspec.add_dependency( "nendo", "= 0.6.8" )
+    gemspec.add_dependency( "nendo", "= 0.7.0" )
     gemspec.add_dependency( "distributed-trie", "= 0.8.0" )
     gemspec.add_dependency( "rack",  "~> 1.5" )
     gemspec.add_dependency( "ruby-progressbar", "~> 1.4" )

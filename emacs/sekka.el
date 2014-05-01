@@ -1650,7 +1650,7 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
 (setq default-input-method "japanese-sekka")
 
 (defconst sekka-version
-  "1.5.2" ;;SEKKA-VERSION
+  "1.5.3" ;;SEKKA-VERSION
   )
 (defun sekka-version (&optional arg)
   "入力モード変更"
