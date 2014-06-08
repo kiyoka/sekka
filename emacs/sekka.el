@@ -27,6 +27,7 @@
 (require 'http-get)
 (require 'popup)
 (require 'url-parse)
+(require 'deferred)
 
 ;;; 
 ;;;
@@ -273,7 +274,13 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
     (setq current-sekka-server-url  sekka-server-url) ;; 第一候補で初期化しておく。
 
     ;; ユーザー語彙のロード + サーバーへの登録
-    (sekka-register-userdict-internal)
+    (deferred:$
+      (deferred:next
+	(lambda (x)
+	  (sekka-register-userdict-internal)))
+      (deferred:nextc it
+	(lambda (x)
+	  (message "Register user sekka dict done."))))
     
     ;; 初期化完了
     (setq sekka-init t)))
@@ -561,21 +568,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	(while (< 0 (length str-lst))
 	  (push 
 	   (concat
-	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" 
-	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" 
-
-	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" 
-	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" 
-
-	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" 
-	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" 
-
-	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" 
-	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" 
-
-	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" 
-	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" 
-	    )
+	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" )
 	   result))
 	(reverse result))
     '()))
