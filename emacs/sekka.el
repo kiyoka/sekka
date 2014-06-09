@@ -27,7 +27,7 @@
 (require 'http-get)
 (require 'popup)
 (require 'url-parse)
-(require 'deferred)
+(require 'concurrent)
 
 ;;; 
 ;;;
@@ -274,13 +274,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
     (setq current-sekka-server-url  sekka-server-url) ;; 第一候補で初期化しておく。
 
     ;; ユーザー語彙のロード + サーバーへの登録
-    (deferred:$
-      (deferred:next
-	(lambda (x)
-	  (sekka-register-userdict-internal)))
-      (deferred:nextc it
-	(lambda (x)
-	  (message "Register user sekka dict done."))))
+    (sekka-register-userdict-internal)
     
     ;; 初期化完了
     (setq sekka-init t)))
@@ -520,20 +514,20 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   
 ;;
 ;; ユーザー語彙をサーバーに登録する。
-;;   only-first が t の時は、1ブロック目だけを登録する
 (defun sekka-register-userdict-internal (&optional only-first)
-  (let* ((str      (sekka-get-jisyo-str sekka-jisyo-filename))
-	 (str-lst  (sekka-divide-into-few-line str)))
-    (mapcar
-     (lambda (x)
-       ;;(message "Requesting to sekka server...")
-       (sekka-debug-print (format "register [%s]\n" x))
-       (let ((result (sekka-rest-request "register" `((dict . ,x)))))
-	 (sekka-debug-print (format "register-result:%S\n" result))
-	 (message result)))
-     (if only-first
-	 (list (car str-lst))
-       str-lst))
+  (lexical-let ((str      (sekka-get-jisyo-str sekka-jisyo-filename)))
+    (lexical-let ((str-lst  (if only-first
+				(list (car (sekka-divide-into-few-line str)))
+			      (sekka-divide-into-few-line str)))
+		  (x '()))
+      (cc:thread 100
+	(while (< 0 (length str-lst))
+	  (setq x (pop str-lst))
+	  ;;(message "Requesting to sekka server...")
+	  (sekka-debug-print (format "register [%s]\n" x))
+	  (lexical-let ((result (sekka-rest-request "register" `((dict . ,x)))))
+	    (sekka-debug-print (format "register-result:%S\n" result))
+	    (message result)))))
     t))
 
 
@@ -1643,7 +1637,7 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
 (setq default-input-method "japanese-sekka")
 
 (defconst sekka-version
-  "1.5.3" ;;SEKKA-VERSION
+  "1.5.4" ;;SEKKA-VERSION
   )
 (defun sekka-version (&optional arg)
   "入力モード変更"
