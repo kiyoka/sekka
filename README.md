@@ -1,5 +1,5 @@
 # Sekka (石火) SKK like Japanese input method
- [![Build Status](https://travis-ci.org/kiyoka/sekka.svg?branch=v1.5.4)](https://travis-ci.org/kiyoka/sekka)
+ [![Build Status](https://travis-ci.org/kiyoka/sekka.svg?branch=master)](https://travis-ci.org/kiyoka/sekka)
 
 
 ##  Sekka(石火)はSKKライクな日本語入力メソッドです。
