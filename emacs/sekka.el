@@ -133,10 +133,14 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 (defvar sekka-mode nil             "漢字変換トグル変数")
 (defun sekka-modeline-string ()
   ;; 接続先sekka-serverのホスト名を表示する。
-  (format " Sekka[%s]" (if current-sekka-server-url
-			   (url-host
-			    (url-generic-parse-url current-sekka-server-url))
-			 "")))
+  (format " Sekka[%s%s]"
+	  (if current-sekka-server-url
+	      (url-host
+	       (url-generic-parse-url current-sekka-server-url))
+	    "")
+	  (if sekka-uploading-flag
+	      "(UPLOADING)"
+	    "")))
 (defvar sekka-select-mode nil      "候補選択モード変数")
 (or (assq 'sekka-mode minor-mode-alist)
     (setq minor-mode-alist (cons
@@ -188,6 +192,10 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 
 ;;; 現在のsekka-serverの接続先
 (defvar current-sekka-server-url     nil)
+
+;;; 辞書のアップロード中かどうか
+(defvar sekka-uploading-flag         nil)
+
 
 ;;; 候補選択モード用
 (defvar sekka-history-stack '())        ; 過去に変換した、場所と変換候補の状態を保存しておくスタック
@@ -520,14 +528,17 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 				(list (car (sekka-divide-into-few-line str)))
 			      (sekka-divide-into-few-line str)))
 		  (x '()))
+      (setq sekka-uploading-flag t)
+      (redraw-modeline)
       (cc:thread 100
 	(while (< 0 (length str-lst))
 	  (setq x (pop str-lst))
 	  ;;(message "Requesting to sekka server...")
 	  (sekka-debug-print (format "register [%s]\n" x))
 	  (lexical-let ((result (sekka-rest-request "register" `((dict . ,x)))))
-	    (sekka-debug-print (format "register-result:%S\n" result))
-	    (message result)))))
+	    (sekka-debug-print (format "register-result:%S\n" result))))
+	(setq sekka-uploading-flag nil)
+	(redraw-modeline)))
     t))
 
 
