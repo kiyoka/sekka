@@ -535,6 +535,6 @@
 
 ;; ユーザー定義語彙の登録処理
 (define (googleIme keyword proxy-host proxy-port)
-  (request-google-ime keyword #f proxy-host proxy-port))
+  (request-google-ime keyword proxy-host proxy-port))
 ;; Export to Ruby world
 (export-to-ruby googleIme)

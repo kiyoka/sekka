@@ -53,9 +53,9 @@
          (apply zip kouho-list)))))
 
 
-(define (request-google-ime keyword unit-test proxy-host proxy-port)
+(define (request-google-ime keyword proxy-host proxy-port)
   (let* ((body "")
-         (target "google-ime-api-normalizer.heroku.com")
+         (target "www.google.com")
          (_ (Net::HTTP.version_1_2))
          (http (if proxy-host
                    (let1 proxy-class (Net::HTTP.Proxy proxy-host proxy-port)
@@ -65,8 +65,7 @@
     (set! http.read_timeout 20)
     (http.start 
      (&block ()
-       (let* ((path (sprintf "/transliterate%s?langpair=%s&text=%s"
-                             (if unit-test "_test" "")
+       (let* ((path (sprintf "/transliterate?langpair=%s&text=%s"
                              "ja-Hira|ja" (URI.encode keyword)))
               (response (http.get path)))
          (set! body response.body))))
