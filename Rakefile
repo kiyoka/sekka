@@ -77,7 +77,7 @@ end
 
 task :compile do
   # generate version.rb
-  dictVersion = "1.4.0"
+  dictVersion = "1.4.1"
   vh = Jeweler::VersionHelper.new "."
   open( "./lib/sekka/sekkaversion.rb", "w" ) {|f|
     f.puts(   "class SekkaVersion" )
@@ -172,6 +172,7 @@ task :jisyoS do
     sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.SMALL.#{x}"
     sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase    >> ./data/SEKKA-JISYO.SMALL.#{x}"
     sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase2   >> ./data/SEKKA-JISYO.SMALL.#{x}"
+    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase3   >> ./data/SEKKA-JISYO.SMALL.#{x}"
   }
 end
 
@@ -184,6 +185,7 @@ task :jisyoL do
     sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.station            >> ./data/SEKKA-JISYO.LARGE.#{x}"
     sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase    >> ./data/SEKKA-JISYO.LARGE.#{x}"
     sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase2   >> ./data/SEKKA-JISYO.LARGE.#{x}"
+    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase3   >> ./data/SEKKA-JISYO.LARGE.#{x}"
   }
 end
 
@@ -211,7 +213,7 @@ task :dumpL do
   }
 end
 
-
+# SKK-JISYO.hiragana-phrase はWikipediaから作られる。
 task :phrase => [ "/tmp/jawiki.txt.gz", "./data/wikipedia/jawiki.hiragana.txt" ] do
   sh "sort ./data/wikipedia/jawiki.hiragana.txt | uniq -c | sort > ./data/wikipedia/ranking.txt"
   sh "ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase_in_wikipedia2.nnd ./data/wikipedia/ranking.txt > ./data/SKK-JISYO.hiragana-phrase"
@@ -234,6 +236,7 @@ file "/tmp/jawiki.txt.gz" do
 end
 
 
+# SKK-JISYO.hiragana-phrase2 はIPADicから作られる。
 task :phrase2 => [ "./data/ipadic.all.utf8.txt" ] do
   sh "time ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase_in_ipadic.nnd             ./data/ipadic.all.utf8.txt | sort | uniq > ./data/SKK-JISYO.hiragana-phrase2"
 end
@@ -244,12 +247,16 @@ file "./data/ipadic.all.utf8.txt" do
   sh "iconv -f euc-jp -t utf-8 /tmp/ipadic-2.7.0/*.dic > ./data/ipadic.all.utf8.txt"
 end
 
+# SKK-JISYO.hiragana-phrase3 kiyokaが普段の運用で不足していると思ったものを手で補ったもの。
+# SKK-JISYO.hiragana-phrase3 はgitにコミットする必要あり。
+#
 
 task :rackup do
   # how to install mongrel is "gem install mongrel --pre"
   sh "ruby -I ./lib ./bin/sekka-server"
 end
 
+# SKK-JISYO.L.hira-kata はSKK辞書のカタカナ語を抜き出したもの。
 task :katakanago do
   sh "nkf --euc ./data/SKK-JISYO.L.201008 > tmpfile.euc"
   sh "/usr/share/skktools/filters/abbrev-convert.rb -k tmpfile.euc | skkdic-expr2 | iconv -f=EUC-JP -t=UTF-8 > ./data/SKK-JISYO.L.hira-kata"
