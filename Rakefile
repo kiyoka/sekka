@@ -163,8 +163,13 @@ task :bench do
 end
 
 task :alljisyo  => [ :alljisyoS, :alljisyoL ]
-task :alljisyoS => [ :jisyoS, :loadS, :dumpS ]
-task :alljisyoL => [ :jisyoL, :loadL, :dumpL ]
+task :alljisyoS => [ :jisyoS, :loadS, :dumpS, :md5 ]
+task :alljisyoL => [ :jisyoL, :loadL, :dumpL, :md5 ]
+
+task :md5 do
+  sh "md5sum ./data/SEKKA-JISYO.SMALL.N.tsv > ./data/SEKKA-JISYO.SMALL.N.md5"
+  sh "md5sum ./data/SEKKA-JISYO.LARGE.N.tsv > ./data/SEKKA-JISYO.LARGE.N.md5"
+end
 
 task :jisyoS do
   generateTypes.each {|x|
@@ -191,25 +196,25 @@ end
 
 task :loadS do
   generateTypes.each {|x|
-    sh "ruby ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.SMALL.#{x}  ./data/SEKKA-JISYO.SMALL.#{x}.tch"
+    sh "ruby ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.SMALL.#{x}  ./data/SEKKA-JISYO.SMALL.#{x}.tch#xmsiz=1024m"
   }
 end
 
 task :loadL do
   generateTypes.each {|x|
-    sh "ruby ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.LARGE.#{x}  ./data/SEKKA-JISYO.LARGE.#{x}.tch"
+    sh "ruby ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.LARGE.#{x}  ./data/SEKKA-JISYO.LARGE.#{x}.tch#xmsiz=1024m"
   }
 end
 
 task :dumpS do
   generateTypes.each {|x|
-    sh "ruby ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.SMALL.#{x}.tch > ./data/SEKKA-JISYO.SMALL.#{x}.tsv"
+    sh "ruby ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.SMALL.#{x}.tch#xmsiz=1024m > ./data/SEKKA-JISYO.SMALL.#{x}.tsv"
   }
 end
 
 task :dumpL do
   generateTypes.each {|x|
-    sh "ruby ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.LARGE.#{x}.tch > ./data/SEKKA-JISYO.LARGE.#{x}.tsv"
+    sh "ruby ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.LARGE.#{x}.tch#xmsiz=1024m > ./data/SEKKA-JISYO.LARGE.#{x}.tsv"
   }
 end
 
