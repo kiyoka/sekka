@@ -63,6 +63,11 @@
   :type  'string
   :group 'sekka)
 
+(defcustom sekka-use-curl t
+  "non-nil でcurlコマンドを使う。nilでEmacs Lisp(url.elを使う)"
+  :type  'boolean
+  :group 'sekka)
+
 (defcustom sekka-curl "curl"
   "curlコマンドの絶対パスを設定する"
   :type  'string
@@ -359,7 +364,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	result)))
   (let ((arg-alist
 	 (cons
-	  `(userid . ,sekka-login-name)
+	  `("userid" . ,sekka-login-name)
 	  arg-alist)))
     (or
      (one-request func-name arg-alist)
@@ -378,7 +383,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	       (list "--noproxy" sekka-no-proxy-hosts)
 	     nil)
 	   (sekka-construct-curl-argstr (cons
-					 '(format . "sexp")
+					 '("format" . "sexp")
 					 arg-alist))))
 	 (buffername "*sekka-output*")
 	 (result ""))
@@ -410,12 +415,59 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
    "henkan"
    '(
      ("yomi"   . "Nihon")
-     (limit    . "1")
-     (method   . "normal")
+     ("limit"  . "1")
+     ("method" . "normal")
      ("userid" . "kiyoka")))
   )
 
-	
+
+(defun sekka-url-http-post (url args)
+  "Send ARGS to URL as a POST request."
+  (let ((url-request-method "POST")
+	(url-request-extra-headers
+	 '(("Content-Type" . "application/x-www-form-urlencoded")))
+	(url-request-data
+	 (mapconcat (lambda (arg)
+		      (concat (url-hexify-string (car arg))
+			      "="
+			      (url-hexify-string (cdr arg))))
+		    args
+		    "&")))
+    ;; if you want, replace `my-switch-to-url-buffer' with `my-kill-url-buffer'
+    (let* ((lines
+	    (with-current-buffer (url-retrieve-synchronously url)
+	      (decode-coding-string 
+	       (buffer-substring-no-properties (point-min) (point-max))
+	       'utf-8)))
+	   (line-list
+	    (split-string lines "\n")))
+      (car (reverse line-list)))))
+
+;;
+;; http request function with pure emacs
+;;   (no proxy supported)
+(defun sekka-rest-request-by-pure (func-name arg-alist)
+  (let* ((arg-alist 
+	  (cons
+	   '("format" . "sexp")
+	   arg-alist))
+	 (result
+	  (sekka-url-http-post 
+	   (concat current-sekka-server-url func-name)
+	   arg-alist)))
+    result))
+
+(when nil
+  ;; unit test
+  (setq sekka-login-name (user-login-name))
+  (setq current-sekka-server-url "http://localhost:12929/")
+  (sekka-rest-request-by-pure
+   "henkan"
+   '(
+     ("yomi"   . "Nihon")
+     ("limit"  . "1")
+     ("method" . "normal")
+     ("userid" . "kiyoka"))))
 
 (defun sekka-rest-request-sub (func-name arg-alist)
   (if sekka-psudo-server
@@ -433,7 +485,10 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	;;    "(\"初回起動\", \"諸快気堂\", \"諸開基堂\", \"しょかいきどう\", \"ショカイキドウ\")"
 	))
     ;; 実際のサーバに接続する
-    (sekka-rest-request-by-curl func-name arg-alist)))
+    (if sekka-use-curl
+	(sekka-rest-request-by-curl func-name arg-alist)
+      (sekka-rest-request-by-pure func-name arg-alist))))
+
 
 ;;
 ;; 現在時刻をUNIXタイムを返す(単位は秒)
@@ -457,9 +512,9 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   (sekka-debug-print (format "henkan-send  :[%s]\n"  yomi))
 
   (let (
-	(result (sekka-rest-request "henkan" `((yomi   . ,yomi)
-					       (limit  . ,(format "%d" limit))
-					       (method . ,sekka-roman-method)))))
+	(result (sekka-rest-request "henkan" `(("yomi"   . ,yomi)
+					       ("limit"  . ,(format "%d" limit))
+					       ("method" . ,sekka-roman-method)))))
     (sekka-debug-print (format "henkan-result:%S\n" result))
     (if (eq (string-to-char result) ?\( )
 	(progn
@@ -483,8 +538,8 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   ;;(message "Requesting to sekka server...")
   
   (let ((result (sekka-rest-request "kakutei" `(
-						(key   . ,key)
-						(tango . ,tango)))))
+						("key"   . ,key)
+						("tango" . ,tango)))))
     (sekka-debug-print (format "kakutei-result:%S\n" result))
     (message result)
     t))
@@ -499,7 +554,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   ;;(message "Requesting to sekka server...")
   
   (let ((result (sekka-rest-request "googleime" `(
-						  (yomi  . ,yomi)))))
+						  ("yomi"  . ,yomi)))))
     (sekka-debug-print (format "googleime-result:%S\n" result))
     (progn
       (message nil)
@@ -535,7 +590,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	  (setq x (pop str-lst))
 	  ;;(message "Requesting to sekka server...")
 	  (sekka-debug-print (format "register [%s]\n" x))
-	  (lexical-let ((result (sekka-rest-request "register" `((dict . ,x)))))
+	  (lexical-let ((result (sekka-rest-request "register" `(("dict" . ,x)))))
 	    (sekka-debug-print (format "register-result:%S\n" result))))
 	(setq sekka-uploading-flag nil)
 	(redraw-modeline)))
