@@ -433,7 +433,6 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 			      (url-hexify-string (cdr arg))))
 		    args
 		    "&")))
-    ;; if you want, replace `my-switch-to-url-buffer' with `my-kill-url-buffer'
     (let* ((lines
 	    (with-current-buffer (url-retrieve-synchronously url)
 	      (decode-coding-string 
