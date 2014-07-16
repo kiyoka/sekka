@@ -155,67 +155,77 @@ module SekkaServer
 
     def call(env)
       req = Rack::Request.new(env)
-      body = case req.request_method
-             when 'POST'
-               userid = URI.decode( req.params['userid'].force_encoding("UTF-8") )
-               format = URI.decode( req.params['format'].force_encoding("UTF-8") )
-               case req.path
-               when "/henkan"
-                 _yomi    = URI.decode( req.params[  'yomi'].force_encoding("UTF-8") )
-                 _limit   = URI.decode( req.params[ 'limit'].force_encoding("UTF-8") )
-                 _method  = URI.decode( req.params['method'].force_encoding("UTF-8") )
-                 _orRedis = if :redis == SekkaServer::Config.dictType then "or Redis-server" else "" end
-                 @mutex.synchronize {
-                    begin
-                      if SekkaServer::Config.maxQueryLength < _yomi.size
-                        result = sprintf( "sekka-server: query string is too long (over %d character length)", SekkaServer::Config.maxQueryLength )
-                      else
-                        @core.writeToString( @core.sekkaHenkan( userid, @kvs, @cachesv, _yomi, _limit.to_i, _method ))
-                      end
-                    rescue MemCache::MemCacheError
-                      result = "sekka-server: memcached server is down (or may be offline)"
-                    rescue Timeout
-                      result = "sekka-server: Timeout to request memcached server #{_orRedis} (may be offline)"
-                    rescue SocketError
-                      result = "sekka-server: SocketError to request memcached server #{_orRedis} (may be offline)"
-                    rescue Errno::ECONNREFUSED
-                      result = "sekka-server: ConnectionRefused to request memcached server #{_orRedis} (may be offline)"
-                    end
-                 }
-               when "/kakutei"
-                 _key    = URI.decode( req.params[   'key'].force_encoding("UTF-8") )
-                 _tango  = URI.decode( req.params[ 'tango'].force_encoding("UTF-8") )
-                 @queue.push( 'k ' + userid + " " + _key + " " + _tango )
-               when "/register"
-                 dict    = URI.decode( req.params['dict'].force_encoding( "UTF-8" ) ).split( "\n" )
-                 dict.each { |x|
-                    @queue.push( 'r ' + userid + " " + x )
-                 }
-                 sprintf( "sekka-server:register request (%s) words added, current-queue-size (%s)", dict.size, @queue.size )
-               when "/flush"
-                 @queue.push( 'f ' + userid )
-                 sprintf( "sekka-server:flush request successful." )
-               when "/googleime"
-                 _yomi   = URI.decode( req.params[  'yomi'].force_encoding("UTF-8") )
-                 printf( "info : google-ime request [%s]\n", _yomi )
-                 result = "sekka-server: google-ime error"
-                 begin
-                   result = @core.googleIme( _yomi,
-                                             SekkaServer::Config.proxyHost,
-                                             SekkaServer::Config.proxyPort )
-                 rescue Timeout
-                   result = "sekka-server: Timeout to request google-ime (may be offline)"
-                 rescue SocketError
-                   result = "sekka-server: SocketError to request google-ime (may be offline)"
-                 rescue Errno::ECONNREFUSED
-                   result = "sekka-server: ConnectionRefused to request google-ime (or may be offline)"
-                 end
-                 @core.writeToString( result )
-               else
-                 sprintf( "sekka-server:unknown path name. [%s]", req.path )
-               end
+      body = if !req.params.has_key?('userid')
+               str = "Err: POST parameter 'userid' required"
+               STDERR.puts str
+               @core.writeToString( str )
+             elsif !req.params.has_key?('format')
+               str = "Err: POST parameter 'format' required"
+               STDERR.puts str
+               @core.writeToString( str )
              else
-               "no message."
+               case req.request_method
+               when 'POST'
+                 userid = URI.decode( req.params['userid'].force_encoding("UTF-8") )
+                 format = URI.decode( req.params['format'].force_encoding("UTF-8") )
+                 case req.path
+                 when "/henkan"
+                   _yomi    = URI.decode( req.params[  'yomi'].force_encoding("UTF-8") )
+                   _limit   = URI.decode( req.params[ 'limit'].force_encoding("UTF-8") )
+                   _method  = URI.decode( req.params['method'].force_encoding("UTF-8") )
+                   _orRedis = if :redis == SekkaServer::Config.dictType then "or Redis-server" else "" end
+                   @mutex.synchronize {
+                     begin
+                       if SekkaServer::Config.maxQueryLength < _yomi.size
+                         result = sprintf( "sekka-server: query string is too long (over %d character length)", SekkaServer::Config.maxQueryLength )
+                       else
+                         @core.writeToString( @core.sekkaHenkan( userid, @kvs, @cachesv, _yomi, _limit.to_i, _method ))
+                       end
+                     rescue MemCache::MemCacheError
+                       result = "sekka-server: memcached server is down (or may be offline)"
+                     rescue Timeout
+                       result = "sekka-server: Timeout to request memcached server #{_orRedis} (may be offline)"
+                     rescue SocketError
+                       result = "sekka-server: SocketError to request memcached server #{_orRedis} (may be offline)"
+                     rescue Errno::ECONNREFUSED
+                       result = "sekka-server: ConnectionRefused to request memcached server #{_orRedis} (may be offline)"
+                     end
+                 }
+                 when "/kakutei"
+                   _key    = URI.decode( req.params[   'key'].force_encoding("UTF-8") )
+                   _tango  = URI.decode( req.params[ 'tango'].force_encoding("UTF-8") )
+                   @queue.push( 'k ' + userid + " " + _key + " " + _tango )
+                 when "/register"
+                   dict    = URI.decode( req.params['dict'].force_encoding( "UTF-8" ) ).split( "\n" )
+                   dict.each { |x|
+                     @queue.push( 'r ' + userid + " " + x )
+                   }
+                   sprintf( "sekka-server:register request (%s) words added, current-queue-size (%s)", dict.size, @queue.size )
+                 when "/flush"
+                   @queue.push( 'f ' + userid )
+                   sprintf( "sekka-server:flush request successful." )
+                 when "/googleime"
+                   _yomi   = URI.decode( req.params[  'yomi'].force_encoding("UTF-8") )
+                   printf( "info : google-ime request [%s]\n", _yomi )
+                   result = "sekka-server: google-ime error"
+                   begin
+                     result = @core.googleIme( _yomi,
+                                               SekkaServer::Config.proxyHost,
+                                               SekkaServer::Config.proxyPort )
+                   rescue Timeout
+                     result = "sekka-server: Timeout to request google-ime (may be offline)"
+                   rescue SocketError
+                     result = "sekka-server: SocketError to request google-ime (may be offline)"
+                   rescue Errno::ECONNREFUSED
+                     result = "sekka-server: ConnectionRefused to request google-ime (or may be offline)"
+                   end
+                   @core.writeToString( result )
+                 else
+                   sprintf( "sekka-server:unknown path name. [%s]", req.path )
+                 end
+               else
+                 "no message."
+               end
              end
       res = Rack::Response.new { |r|
         r.status = 200
