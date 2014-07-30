@@ -854,7 +854,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 			 :scroll-bar t
 			 :margin t
 			 :keymap sekka-popup-menu-keymap
-			 :initial-offset sekka-cand-cur)))
+			 :initial-index sekka-cand-cur)))
       (let ((selected-word (car (split-string result " "))))
 	(setq sekka-cand-cur (sekka-find-by-tango selected-word))))))
 
