@@ -34,9 +34,9 @@
 ;; you might want to enable IME:
 ;;
 ;;  (require 'sekka)
-;;  (global-sekka-mode 1)))
+;;  (global-sekka-mode 1)
 ;;
-;; To enable sticky-shift with ";" key.
+;; To enable sticky-shift with ";" key:
 ;;
 ;;  (setq sekka-sticky-shift t)
 ;;
