@@ -1,4 +1,4 @@
-;; sekka.el --- A client for Sekka IME server
+;;; sekka.el --- A client for Sekka IME server
 ;;
 ;; Copyright (C) 2010-2014 Kiyoka Nishiyama
 ;;
@@ -23,6 +23,23 @@
 ;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with Sekka; see the file COPYING.
+;;
+
+;;; Commentary:
+
+;; Sekka is yet another Japanese Imput Method inspired by SKK.
+;; sekka.el is a client for Sekka IME server.
+;; [https://github.com/kiyoka/sekka]
+;;
+;; you might want to enable IME:
+;;
+;;  (require 'sekka)
+;;  (global-sekka-mode 1)))
+;;
+;; To enable sticky-shift with ";" key.
+;;
+;;  (setq sekka-sticky-shift t)
+;;
 ;;
 
 ;;; Code:
