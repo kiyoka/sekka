@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010-2014 Kiyoka Nishiyama
 ;;
 ;; Author: Kiyoka Nishiyama
-;; Version: "1.5.5"                      ;;SEKKA-VERSION
+;; Version: 1.5.6          ;;SEKKA-VERSION
 ;; URL: https://github.com/kiyoka/sekka
 ;;
 ;; This file is part of Sekka
@@ -1755,7 +1755,7 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
 (setq default-input-method "japanese-sekka")
 
 (defconst sekka-version
-  "1.5.5" ;;SEKKA-VERSION
+  "1.5.6" ;;SEKKA-VERSION
   )
 (defun sekka-version (&optional arg)
   "入力モード変更"

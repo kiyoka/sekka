@@ -94,7 +94,11 @@ task :compile do
     [ lines,
       lines.map {|line|
         if line.match( /;;SEKKA-VERSION/ )
-          sprintf( '  "%s" ;;SEKKA-VERSION', vh.to_s ) + "\n"
+          if line.match( /Version:/ )
+            sprintf( ';; Version: %s          ;;SEKKA-VERSION', vh.to_s ) + "\n"
+          else
+            sprintf( '  "%s" ;;SEKKA-VERSION', vh.to_s ) + "\n"
+          end
         else
           line
         end
