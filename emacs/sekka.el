@@ -1,23 +1,24 @@
-;; -*- coding: utf-8 -*-
+;; sekka.el ---- A client for Sekka IME server
 ;;
-;; "sekka.el" is a client for Sekka server
+;; Copyright (C) 2010-2014 Kiyoka Nishiyama
 ;;
-;;   Copyright (C) 2010-2014 Kiyoka Nishiyama
-;;   This program was derived from sumibi.el and yc.el-4.0.13(auther: knak)
-;;
+;; Author: Kiyoka Nishiyama
+;; Version: "1.5.5"                      ;;SEKKA-VERSION
+;; URL: https://github.com/kiyoka/sekka
 ;;
 ;; This file is part of Sekka
+;; This program was derived from sumibi.el and yc.el-4.0.13(auther: knak)
 ;;
 ;; Sekka is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)
 ;; any later version.
-;; 
+;;
 ;; Sekka is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
-;; 
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with Sekka; see the file COPYING.
 ;;
@@ -1762,3 +1763,9 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
   (message sekka-version))
 
 (provide 'sekka)
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
+
+;;; sekka.el ends here
