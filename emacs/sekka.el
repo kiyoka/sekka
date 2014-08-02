@@ -1,9 +1,11 @@
-;; sekka.el ---- A client for Sekka IME server
+;; sekka.el --- A client for Sekka IME server
 ;;
 ;; Copyright (C) 2010-2014 Kiyoka Nishiyama
 ;;
-;; Author: Kiyoka Nishiyama
+;; Author: Kiyoka Nishiyama <kiyoka@sumibi.org>
 ;; Version: 1.5.6          ;;SEKKA-VERSION
+;; Keywords: ime, skk, japanese
+;; Package-Requires: ((cl-lib "0.3") (concurrent "0.3.1") (popup "0.5.0"))
 ;; URL: https://github.com/kiyoka/sekka
 ;;
 ;; This file is part of Sekka
