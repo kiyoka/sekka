@@ -27,7 +27,7 @@
 
 ;;; Commentary:
 
-;; Sekka is yet another Japanese Imput Method inspired by SKK.
+;; Sekka is yet another Japanese Input Method inspired by SKK.
 ;; sekka.el is a client for Sekka IME server.
 ;; [https://github.com/kiyoka/sekka]
 ;;
