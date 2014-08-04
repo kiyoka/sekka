@@ -44,7 +44,6 @@
 
 ;;; Code:
 (require 'cl)
-(require 'http-get)
 (require 'popup)
 (require 'url-parse)
 (require 'concurrent)
@@ -316,7 +315,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
       (list "--data" (format "%s=%s"
 			     (car x)
 			     (if (stringp (cdr x))
-				 (http-url-encode (cdr x) 'utf-8)
+				 (url-hexify-string (cdr x))
 			       (cdr x)))))
     arg-alist)))
 
