@@ -14,11 +14,9 @@
 Sekkaには日本語モードがありません。
 ローマ字表記ルールはSKKに似ています。
 
-<p> Emacsの編集中バッファで <span style="color:red">K</span>anji `[Ctrl-j]` とタイプすると `漢字` に変換されます。 </p>
-
-<p> Emacsの編集中バッファで `kanji`[Ctrl-j] とタイプすると `かんじ` に変換されます。 </p>
-
-<p> Emacsの編集中バッファで `kanJi`[Ctrl-j] とタイプすると `感じ` に変換されます。 </p>
+   Emacsの編集中バッファで __K__anji `[Ctrl-j]` とタイプすると __漢字__ に変換されます。
+   Emacsの編集中バッファで kanji `[Ctrl-j]` とタイプすると __かんじ__ に変換されます。
+   Emacsの編集中バッファで kan__J__i `[Ctrl-j]` とタイプすると __感じ__ に変換されます。
 
 詳細は <http://oldtype.sumibi.org/show-page/Sekka.Emacs> を参照してください。
 
