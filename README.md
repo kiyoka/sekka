@@ -1,11 +1,6 @@
 # Sekka (石火) SKK like Japanese input method
- [![Build Status](https://travis-ci.org/kiyoka/sekka.svg?branch=master)](https://travis-ci.org/kiyoka/sekka)
 
-
-## Sekka(石火)はSKKライクな日本語入力メソッドです。
- <http://oldtype.sumibi.org/show-page/Sekka>
-
-![Logo]( https://dl.dropboxusercontent.com/u/3870066/blog/iStock_000016378483XTiny.jpg )
+ ![Logo]( https://dl.dropboxusercontent.com/u/3870066/blog/iStock_000016378483XTiny.jpg )　[![Build Status](https://travis-ci.org/kiyoka/sekka.svg?branch=master)](https://travis-ci.org/kiyoka/sekka)
 
 ----
 
@@ -42,3 +37,7 @@ localhostのポート番号12929でクライアントからのHTTP通信待ち�
 
     sudo docker run -p 12929:12929 -t kiyoka/sekka
 
+## 詳細
+ <http://oldtype.sumibi.org/show-page/Sekka>
+ 
+ 
