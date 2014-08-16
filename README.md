@@ -30,6 +30,8 @@ Melpaから`sekka`パッケージをインストールしてください。
 
 ![enabled]( ./doc/img/sekka.modeline.png )
 
+----
+
 ## 変換サーバーのインストール
 
 dockerでsekkaイメージをインストール・実行してください。
@@ -37,7 +39,8 @@ localhostのポート番号12929でクライアントからのHTTP通信待ち�
 
     sudo docker run -p 12929:12929 -t kiyoka/sekka
 
+----
+
 ## 詳細
  <http://oldtype.sumibi.org/show-page/Sekka>
- 
- 
+
