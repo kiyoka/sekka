@@ -853,113 +853,6 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
     (define-key map "\C-r"      'popup-select)
     map))
 
-;; 本家のpopup-elに :initial-index引数を追加した拡張バージョン。
-;; 本家のpopup-elに :initial-index引数が追加されるまで、こちらを使用する。
-(cl-defun sekka-popup-menu* (list
-                       &key
-                       point
-                       (around t)
-                       (width (popup-preferred-width list))
-                       (height 15)
-                       max-width
-                       margin
-                       margin-left
-                       margin-right
-                       scroll-bar
-                       symbol
-                       parent
-                       parent-offset
-                       cursor
-                       (keymap popup-menu-keymap)
-                       (fallback 'popup-menu-fallback)
-                       help-delay
-                       nowait
-                       prompt
-                       isearch
-                       (isearch-cursor-color popup-isearch-cursor-color)
-                       (isearch-keymap popup-isearch-keymap)
-                       isearch-callback
-		       (initial-index 0)
-                       &aux menu event)
-  "Show a popup menu of LIST at POINT. This function returns a
-value of the selected item. Almost arguments are same as
-`popup-create' except for KEYMAP, FALLBACK, HELP-DELAY, PROMPT,
-ISEARCH, ISEARCH-CURSOR-COLOR, ISEARCH-KEYMAP, and
-ISEARCH-CALLBACK.
-
-If KEYMAP is a keymap which is used when processing events during
-event loop.
-
-If FALLBACK is a function taking two arguments; a key and a
-command. FALLBACK is called when no special operation is found on
-the key. The default value is `popup-menu-fallback', which does
-nothing.
-
-HELP-DELAY is a delay of displaying helps.
-
-If NOWAIT is non-nil, this function immediately returns the menu
-instance without entering event loop.
-
-PROMPT is a prompt string when reading events during event loop.
-
-If ISEARCH is non-nil, do isearch as soon as displaying the popup
-menu.
-
-ISEARCH-CURSOR-COLOR is a cursor color during isearch. The
-default value is `popup-isearch-cursor-color'.
-
-ISEARCH-KEYMAP is a keymap which is used when processing events
-during event loop. The default value is `popup-isearch-keymap'.
-
-ISEARCH-CALLBACK is a function taking one argument.  `popup-menu'
-calls ISEARCH-CALLBACK, if specified, after isearch finished or
-isearch canceled. The arguments is whole filtered list of items."
-  (and (eq margin t) (setq margin 1))
-  (or margin-left (setq margin-left margin))
-  (or margin-right (setq margin-right margin))
-  (if (and scroll-bar
-           (integerp margin-right)
-           (> margin-right 0))
-      ;; Make scroll-bar space as margin-right
-      (cl-decf margin-right))
-  (setq menu (popup-create point width height
-                           :max-width max-width
-                           :around around
-                           :face 'popup-menu-face
-                           :mouse-face 'popup-menu-mouse-face
-                           :selection-face 'popup-menu-selection-face
-                           :summary-face 'popup-menu-summary-face
-                           :margin-left margin-left
-                           :margin-right margin-right
-                           :scroll-bar scroll-bar
-                           :symbol symbol
-                           :parent parent
-                           :parent-offset parent-offset))
-  (unwind-protect
-      (progn
-        (popup-set-list menu list)
-        (if cursor
-            (popup-jump menu cursor)
-          (popup-draw menu))
-	(when initial-index
-	  (popup-select menu
-			(let ((end-index (- (length list) 1)))
-			  (if (< end-index initial-index)
-			      end-index
-			    initial-index))))
-        (if nowait
-            menu
-          (popup-menu-event-loop menu keymap fallback
-                                 :prompt prompt
-                                 :help-delay help-delay
-                                 :isearch isearch
-                                 :isearch-cursor-color isearch-cursor-color
-                                 :isearch-keymap isearch-keymap
-                                 :isearch-callback isearch-callback)))
-    (unless nowait
-      (popup-delete menu))))
-
-
 ;; 選択操作回数のインクリメント
 (defun sekka-select-operation-inc ()
   (incf sekka-select-operation-times)
@@ -975,7 +868,7 @@ isearch canceled. The arguments is whole filtered list of items."
 	     sekka-henkan-kouho-list))
 	   (map (make-sparse-keymap))
 	   (result 
-	    (sekka-popup-menu* lst
+	    (popup-menu* lst
 			 :scroll-bar t
 			 :margin t
 			 :keymap sekka-popup-menu-keymap
@@ -1162,7 +1055,7 @@ isearch canceled. The arguments is whole filtered list of items."
 		    (message lst) ;; サーバーから返ってきたエラーメッセージを表示
 		    '())
 		lst))
-	 (result (sekka-popup-menu*
+	 (result (popup-menu*
 		  (append hiragana-lst
 			  (append lst `(,etc)))
 		  :margin t
