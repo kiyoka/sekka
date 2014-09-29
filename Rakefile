@@ -4,8 +4,8 @@
 #
 # Release Engineering:
 #   1. edit the VERSION.yml file
-#   2. rake compile  &&   rake test   &&   rake gemspec   &&   gem build sekka.gemspec
-#      to generate sekka-x.x.x.gem
+#   2. rake compile  &&   rake test   &&   rake build
+#      to generate pkg/sekka-x.x.x.gem
 #   3. install sekka-x.x.x.gem to clean environment and test
 #   4. rake release
 #   5. gem push pkg/sekka-x.x.x.gem   ( need gem version 1.3.6 or higer. Please "gem update --system" to update )
@@ -20,56 +20,11 @@
 #
 
 require 'rake'
+require "bundler/gem_tasks"
 
 # generate `normal' and `azik' dictionary
 # (generateTypes = [ "N", "A" ])
 generateTypes = [ "N" ]
-
-begin
-  require 'jeweler2'
-  Jeweler::Tasks.new do |gemspec|
-    vh = Jeweler::VersionHelper.new "."
-    gemspec.version = vh.to_s
-    gemspec.name = "sekka"
-    gemspec.summary = "Sekka is a SKK like input method."
-    gemspec.description = "Sekka is a SKK like input method. Sekka server provides REST Based API. If you are SKK user, let's try it."
-    gemspec.email = "kiyoka@sumibi.org"
-    gemspec.license = 'New BSD'
-    gemspec.homepage = "http://github.com/kiyoka/sekka"
-    gemspec.authors = ["Kiyoka Nishiyama"]
-    gemspec.files = FileList['Rakefile',
-                             '.gemtest',
-                             'VERSION.yml',
-                             'README',
-                             'COPYING',
-                             'lib/*.rb',
-                             'lib/*.ru',
-                             'lib/sekka/*.rb',
-                             'lib/sekka/*.nnd',
-                             'bin/sekka-jisyo',
-                             'bin/sekka-server',
-                             'bin/sekka-benchmark',
-                             'bin/sekka-path',
-                             'test/*.nnd',
-                             'test/*.rb',
-                             'test/*.txt',
-                             'script/sekkaserver.*',
-                             'emacs/*.el'].to_a
-    gemspec.executables = ["sekka-jisyo",
-                           "sekka-server",
-                           "sekka-benchmark",
-                           "sekka-path"]
-    gemspec.required_ruby_version = '>= 1.9.2'
-    gemspec.add_dependency( "eventmachine", "~> 1.0" )
-    gemspec.add_dependency( "memcache-client", "~> 1.8" )
-    gemspec.add_dependency( "nendo", "= 0.7.0" )
-    gemspec.add_dependency( "distributed-trie", "= 0.8.0" )
-    gemspec.add_dependency( "rack",  "~> 1.5" )
-    gemspec.add_dependency( "ruby-progressbar", "~> 1.4" )
-  end
-rescue LoadError
-  puts "Jeweler2 not available. Install it with: sudo gem install jeweler2"
-end
 
 
 task :default => [:test] do
