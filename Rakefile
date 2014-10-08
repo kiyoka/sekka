@@ -21,6 +21,7 @@
 
 require 'rake'
 require "bundler/gem_tasks"
+require 'jeweler2'
 
 # generate `normal' and `azik' dictionary
 # (generateTypes = [ "N", "A" ])
