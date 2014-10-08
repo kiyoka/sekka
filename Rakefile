@@ -111,7 +111,7 @@ task :test do
     files << "./test/henkan-main.nnd  pure"
   end
   files.each {|filename|
-    sh  sprintf( "ruby -I ./lib -S nendo %s", filename )
+    sh  sprintf( "ruby -I ./lib -S nendo -d %s", filename )
   }
   sh "cat test.record"
 end
