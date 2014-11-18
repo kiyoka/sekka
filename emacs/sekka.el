@@ -442,23 +442,44 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 
 (defun sekka-url-http-post (url args)
   "Send ARGS to URL as a POST request."
-  (let ((url-request-method "POST")
-	(url-request-extra-headers
-	 '(("Content-Type" . "application/x-www-form-urlencoded")))
-	(url-request-data
-	 (mapconcat (lambda (arg)
-		      (concat (url-hexify-string (car arg))
-			      "="
-			      (url-hexify-string (cdr arg))))
-		    args
-		    "&")))
+  (progn
+    (setq url-request-method "POST")
+    (setq url-http-version "1.0")
+    (setq url-request-extra-headers
+	  '(("Content-Type" . "application/x-www-form-urlencoded")))
+    (setq url-request-data
+	  (mapconcat (lambda (arg)
+		       (concat (url-hexify-string (car arg))
+			       "="
+			       (url-hexify-string (cdr arg))))
+		     args
+		     "&"))
+    (sekka-debug-print url-request-method)
+    (sekka-debug-print "\n")
+    (sekka-debug-print url-request-data)
+    (sekka-debug-print "\n")
+    (sekka-debug-print url)
+    (sekka-debug-print "\n")
     (let* ((lines
-	    (with-current-buffer (url-retrieve-synchronously url)
-	      (decode-coding-string 
-	       (buffer-substring-no-properties (point-min) (point-max))
-	       'utf-8)))
-	   (line-list
-	    (split-string lines "\n")))
+	    (let ((buf (url-retrieve-synchronously url)))
+	      (sekka-debug-print (buffer-name buf))
+	      (sekka-debug-print "\n")
+	      (if buf
+		  (with-current-buffer buf
+		    (decode-coding-string 
+		     (let ((str (buffer-substring-no-properties (point-min) (point-max))))
+		       (sekka-debug-print (format "result code:%s" url-http-response-status))
+		       (sekka-debug-print "\n")
+		       (sekka-debug-print (format "(%d-%d) eoh=%s" (point-min) (point-max) url-http-end-of-headers))
+		       (sekka-debug-print "\n")
+		       (sekka-debug-print (concat "<<<" str ">>>"))
+		       (sekka-debug-print "\n")
+		       str)
+		     'utf-8))
+                (list "curl: (7)  Couldn't connect to host 'localhost'")))) ;; Emulate curl error.
+           (line-list
+            (split-string lines "\n")))
+      
       (car (reverse line-list)))))
 
 ;;
@@ -503,10 +524,14 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	;;    "(\"初回起動\", \"諸快気堂\", \"諸開基堂\", \"しょかいきどう\", \"ショカイキドウ\")"
 	))
     ;; 実際のサーバに接続する
-    (if sekka-use-curl
-	(sekka-rest-request-by-curl func-name arg-alist)
-      (sekka-rest-request-by-pure func-name arg-alist))))
-
+    (cond
+     (sekka-use-curl
+      (sekka-rest-request-by-curl func-name arg-alist))
+     ((and (string-equal func-name "henkan")
+           (not sekka-use-curl))
+      (sekka-rest-request-by-pure func-name arg-alist))
+     (t
+      (sekka-rest-request-by-curl func-name arg-alist)))))
 
 ;;
 ;; 現在時刻をUNIXタイムを返す(単位は秒)
