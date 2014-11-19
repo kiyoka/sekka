@@ -213,6 +213,8 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	  (goto-char (point-max))
 	  (insert string)))))
 
+;; HTTPクライアントの多重起動防止用
+(defvar sekka-busy 0)
 
 ;;; 現在のsekka-serverの接続先
 (defvar current-sekka-server-url     nil)
@@ -454,12 +456,6 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 			       (url-hexify-string (cdr arg))))
 		     args
 		     "&"))
-    (sekka-debug-print url-request-method)
-    (sekka-debug-print "\n")
-    (sekka-debug-print url-request-data)
-    (sekka-debug-print "\n")
-    (sekka-debug-print url)
-    (sekka-debug-print "\n")
     (let* ((lines
 	    (let ((buf (url-retrieve-synchronously url)))
 	      (sekka-debug-print (buffer-name buf))
@@ -468,12 +464,9 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 		  (with-current-buffer buf
 		    (decode-coding-string 
 		     (let ((str (buffer-substring-no-properties (point-min) (point-max))))
-		       (sekka-debug-print (format "result code:%s" url-http-response-status))
-		       (sekka-debug-print "\n")
-		       (sekka-debug-print (format "(%d-%d) eoh=%s" (point-min) (point-max) url-http-end-of-headers))
-		       (sekka-debug-print "\n")
-		       (sekka-debug-print (concat "<<<" str ">>>"))
-		       (sekka-debug-print "\n")
+		       (sekka-debug-print (format "http result code:%s\n" url-http-response-status))
+		       (sekka-debug-print (format "(%d-%d) eoh=%s\n" (point-min) (point-max) url-http-end-of-headers))
+		       (sekka-debug-print (format "<<<%s>>>\n" str))
 		       str)
 		     'utf-8))
                 (list "curl: (7)  Couldn't connect to host 'localhost'")))) ;; Emulate curl error.
@@ -486,6 +479,8 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 ;; http request function with pure emacs
 ;;   (no proxy supported)
 (defun sekka-rest-request-by-pure (func-name arg-alist)
+  (setq sekka-busy (+ sekka-busy 1))
+  (sekka-debug-print (format "sekka-busy=%d\n" sekka-busy))
   (let* ((arg-alist 
 	  (cons
 	   '("format" . "sexp")
@@ -494,6 +489,8 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	  (sekka-url-http-post 
 	   (concat current-sekka-server-url func-name)
 	   arg-alist)))
+    (setq sekka-busy (- sekka-busy 1))
+    (sekka-debug-print (format "sekka-busy=%d\n" sekka-busy))
     result))
 
 (when nil
@@ -1577,6 +1574,10 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   "リアルタイムで変換中のガイドを出す
 sekka-modeがONの間中呼び出される可能性がある。"
   (cond
+   ((< 0 sekka-busy)
+    ;; 残り回数のデクリメント
+    (setq sekka-timer-rest (- sekka-timer-rest 1))
+    (sekka-debug-print "busy!\n"))
    ((or (null sekka-mode)
 	(> 1 sekka-timer-rest))
     (cancel-timer sekka-timer)
