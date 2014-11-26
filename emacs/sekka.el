@@ -524,11 +524,8 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
     (cond
      (sekka-use-curl
       (sekka-rest-request-by-curl func-name arg-alist))
-     ((and (string-equal func-name "henkan")
-           (not sekka-use-curl))
-      (sekka-rest-request-by-pure func-name arg-alist))
      (t
-      (sekka-rest-request-by-curl func-name arg-alist)))))
+      (sekka-rest-request-by-pure func-name arg-alist)))))
 
 ;;
 ;; 現在時刻をUNIXタイムを返す(単位は秒)
