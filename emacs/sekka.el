@@ -83,7 +83,7 @@
   :group 'sekka)
 
 (defcustom sekka-use-curl t
-  "non-nil でcurlコマンドを使う。nilでEmacs Lisp(url.elを使う)"
+  "non-nil でcurlコマンドを優先して使う。nilで変換動作だけEmacs Lisp(url.el)を使う"
   :type  'boolean
   :group 'sekka)
 
@@ -525,7 +525,9 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
      (sekka-use-curl
       (sekka-rest-request-by-curl func-name arg-alist))
      (t
-      (sekka-rest-request-by-pure func-name arg-alist)))))
+      (if (string-equal "register" func-name)
+          (sekka-rest-request-by-curl func-name arg-alist) ;; 辞書登録はcurlを使ってバックグラウンドで実行する。pure版は平行動作できない。
+        (sekka-rest-request-by-pure func-name arg-alist))))))
 
 ;;
 ;; 現在時刻をUNIXタイムを返す(単位は秒)
