@@ -32,6 +32,7 @@
 #  $Id:
 #
 require 'memcache'
+require 'memcache_mock'
 
 class Kvs
   def initialize( dbtype )
@@ -70,7 +71,7 @@ class Kvs
         raise RuntimeError, "Kvs.new() missed require( 'redis' )."
       end
 
-    when :memcache
+    when :memcache, :memcache_mock
       # do nothing
 
     when :gdbm
@@ -101,6 +102,8 @@ class Kvs
       @db = MemCache.new( name,
                           :connect_timeout => 1000.0,
                           :timeout => 1000.0 )
+    when :memcache_mock
+      @db = MemcacheMock.new
     when :gdbm
       if not name.match( /.db$/ )
         name = name + ".db"
@@ -145,6 +148,8 @@ class Kvs
         @db[ key.force_encoding("ASCII-8BIT") ] = value.force_encoding("ASCII-8BIT")
       when :memcache
         @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"), timeout )
+      when :memcache_mock
+        @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"))
       when :pure
         @db[ key ] = value
       else
@@ -158,7 +163,12 @@ class Kvs
     if 0 == key.size
       fallback
     else
-      val = @db[ key ]
+      val = case @dbtype
+            when :memcache_mock
+              @db.get( key )
+            else
+              @db[ key ]
+            end
       if val
         val.force_encoding("UTF-8")
       else
@@ -183,7 +193,7 @@ class Kvs
       @db.clear
     when :redis
       @db.flushall
-    when :memcache
+    when :memcache, :memcache_mock
       # do nothing
     else
       raise RuntimeError
@@ -197,7 +207,7 @@ class Kvs
       @db.keys.map { |k|
         k.force_encoding("UTF-8")
       }
-    when :memcache
+    when :memcache, :memcache_mock
       raise RuntimeError, "Kvs#keys method was not implemented for memcache."
     when :pure
       @db.keys
@@ -216,7 +226,7 @@ class Kvs
       @db.keys( prefix + "*" ).each { |k|
         k.force_encoding("UTF-8")
       }
-    when :memcache
+    when :memcache, :memcache_mock
       raise RuntimeError, "Kvs#forward_match_keys method was not implemented for memcache."
     when :gdbm, :pure
       self.keys( ).select {|key|
@@ -231,7 +241,7 @@ class Kvs
     case @dbtype
     when :tokyocabinet, :gdbm
       @db.close
-    when :memcache, :redis
+    when :memcache, :memcache_mock, :redis
       # do nothing
     when :pure
       File.open( @name, "w" ) { |f|

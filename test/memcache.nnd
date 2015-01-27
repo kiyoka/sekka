@@ -37,9 +37,9 @@
 (use nendo.test)
 (load "./test/common.nnd")
 
-(define dbtype   'memcache)
 (define userid   "temp")
-(define cachesv (Kvs.new dbtype))
+(define cachesv      (Kvs.new 'memcache))
+(define cachesv-mock (Kvs.new 'memcache_mock))
 
 (test-start "memcached I/F")
 ;;===================================================================
@@ -49,7 +49,7 @@
 
 (test* "db connect NG and Exception"
        (test-error MemCache::MemCacheError)
-       (let1 sv (Kvs.new dbtype)
+       (let1 sv (Kvs.new 'memcache)
          (sv.open "localhost:11111")
          (sv.put! "temp:1" "one")))
 
@@ -70,6 +70,28 @@
 (test* "db fetch  fallback"
        false
        (cachesv.get "temp:none" false))
+
+
+;;-------------------------------------------------------------------
+(test-section "memcached_mock access")
+
+(test* "mock db connect OK"
+       "two"
+       (begin
+         (cachesv-mock.open "localhost:11211")
+         (cachesv-mock.put! "temp:2" "two")))
+
+(test* "mock db store 2"
+       "two"
+       (cachesv-mock.put! "temp:2" "two"))
+
+(test* "mock db fetch 2"
+       "two"
+       (cachesv-mock.get "temp:2"))
+
+(test* "mock db fetch fallback"
+       false
+       (cachesv-mock.get "temp:none" false))
 
 
 ;;-------------------------------------------------------------------
