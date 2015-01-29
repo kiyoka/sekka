@@ -133,7 +133,7 @@ end
 
 task :jisyoS do
   generateTypes.each {|x|
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.201008           >  ./data/SEKKA-JISYO.SMALL.#{x}"
+    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.201501           >  ./data/SEKKA-JISYO.SMALL.#{x}"
     sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.SMALL.#{x}"
     sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase    >> ./data/SEKKA-JISYO.SMALL.#{x}"
     sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase2   >> ./data/SEKKA-JISYO.SMALL.#{x}"
@@ -143,7 +143,7 @@ end
 
 task :jisyoL do
   generateTypes.each {|x|
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.201008           >  ./data/SEKKA-JISYO.LARGE.#{x}"
+    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.201501           >  ./data/SEKKA-JISYO.LARGE.#{x}"
     sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.LARGE.#{x}"
     sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.fullname           >> ./data/SEKKA-JISYO.LARGE.#{x}"
     sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.jinmei             >> ./data/SEKKA-JISYO.LARGE.#{x}"
@@ -223,7 +223,8 @@ end
 
 # SKK-JISYO.L.hira-kata はSKK辞書のカタカナ語を抜き出したもの。
 task :katakanago do
-  sh "nkf --euc ./data/SKK-JISYO.L.201008 > tmpfile.euc"
-  sh "/usr/share/skktools/filters/abbrev-convert.rb -k tmpfile.euc | skkdic-expr2 | iconv -f=EUC-JP -t=UTF-8 > ./data/SKK-JISYO.L.hira-kata"
+  sh "nkf --euc ./data/SKK-JISYO.L.201501 > tmpfile.euc"
+  sh "/usr/share/skktools/filters/abbrev-convert.rb -k tmpfile.euc | skkdic-expr2 | /usr/bin/iconv -f EUC-JP -t UTF-8 > ./data/SKK-JISYO.L.hira-kata"
+  sh "cat ./data/MY-JISYO.hira-kata >> ./data/SKK-JISYO.L.hira-kata"
   sh "/bin/rm -f tmpfile.euc"
 end
