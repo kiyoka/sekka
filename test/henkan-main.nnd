@@ -460,12 +460,12 @@
         (approximate-search userid kvs "=narimase"  "h" 0)))
 
 (test* "approximate search 20"
-       '((0.9852 "=narimasd" "なりません") (0.9852 "=narimast" "なりました") (0.9852 "=narimasu" "なります") (0.9793 "=narimaseq" "なりません") (0.9793 "=narimasen" "なりません") (0.9792 "=narimashita" "なりました"))
+       '((0.9852 "=narimasd" "なりません") (0.9852 "=narimast" "なりました") (0.9852 "=narimasu" "なります") (0.9793 "=narimasen" "なりません") (0.9793 "=narimaseq" "なりません") (0.9792 "=narimashita" "なりました"))
        (my-round-map
         (approximate-search userid kvs "=narimash"  "h" 0)))
 
 (test* "approximate search 21"
-       '((0.9907 "=narimashita" "なりました") (0.9793 "=narimast" "なりました") (0.9793 "=narimasd" "なりません") (0.9793 "=narimasu" "なります"))
+       '((0.9907 "=narimashita" "なりました") (0.9793 "=narimasd" "なりません") (0.9793 "=narimast" "なりました") (0.9793 "=narimasu" "なります"))
        (my-round-map
         (approximate-search userid kvs "=narimashi"  "h" 0)))
 
@@ -831,11 +831,11 @@
 ;; 送り仮名が "R" で始っているのに、"t" や "`" もマッチしている理由は、送り仮名の開始子音1文字まで含めたJaro-WInkler distanceで候補で並べており、送り仮名が違うからといって排除しない方針をとっているため。
 ;; それにより送り仮名のミスタイプの許容をしている。
 (test* "okuri ari 23"
-       '(("ブログりました" #f "ぶろぐr" j) ("ブログりました" #f "ぶろぐt" j) ("ブログりました" #f "ぶろぐ+" j) ("ブログりました" #f "ぶろぐ`" j))
+       '(("ブログりました" #f "ぶろぐr" j) ("ブログりました" #f "ぶろぐ+" j) ("ブログりました" #f "ぶろぐt" j) ("ブログりました" #f "ぶろぐ`" j))
        (henkan-okuri-ari userid kvs "buroguRimashita" 0 :normal))
 
 (test* "okuri ari 24"
-       '(("ブログった" #f "ぶろぐt" j) ("ブログった" #f "ぶろぐr" j) ("ブログった" #f "ぶろぐ+" j) ("ブログった" #f "ぶろぐ`" j))
+       '(("ブログった" #f "ぶろぐt" j) ("ブログった" #f "ぶろぐ+" j) ("ブログった" #f "ぶろぐr" j) ("ブログった" #f "ぶろぐ`" j))
        (henkan-okuri-ari userid kvs "buroguTta" 0 :normal))
 
 ;;-------------------------------------------------------------------
@@ -1177,11 +1177,11 @@
        (sekkaHenkan userid kvs #f "Henkanenji" 0 "normal"))
 
 (test* "henkan toplevel(for Elisp) 8"
-       '(("ブログった" nil "ぶろぐt" j 0) ("ブログった" nil "ぶろぐr" j 1) ("ブログった" nil "ぶろぐ+" j 2) ("ブログった" nil "ぶろぐ`" j 3) ("ぶろぐった" nil "burogutta" h 4) ("ブログッタ" nil "burogutta" k 5) ("ｂｕｒｏｇｕＴｔａ" nil "buroguTta" z 6) ("buroguTta" nil "buroguTta" l 7))
+       '(("ブログった" nil "ぶろぐt" j 0) ("ブログった" nil "ぶろぐ+" j 1) ("ブログった" nil "ぶろぐr" j 2) ("ブログった" nil "ぶろぐ`" j 3) ("ぶろぐった" nil "burogutta" h 4) ("ブログッタ" nil "burogutta" k 5) ("ｂｕｒｏｇｕＴｔａ" nil "buroguTta" z 6) ("buroguTta" nil "buroguTta" l 7))
        (sekkaHenkan userid kvs #f "buroguTta" 0 "normal"))
 
 (test* "henkan toplevel(for Elisp) 9"
-       '(("ブログりました" nil "ぶろぐr" j 0) ("ブログりました" nil "ぶろぐt" j 1) ("ブログりました" nil "ぶろぐ+" j 2) ("ブログりました" nil "ぶろぐ`" j 3) ("ぶろぐりました" nil "burogurimashita" h 4) ("ブログリマシタ" nil "burogurimashita" k 5) ("ｂｕｒｏｇｕＲｉｍａｓｈｉｔａ" nil "buroguRimashita" z 6) ("buroguRimashita" nil "buroguRimashita" l 7))
+       '(("ブログりました" nil "ぶろぐr" j 0) ("ブログりました" nil "ぶろぐ+" j 1) ("ブログりました" nil "ぶろぐt" j 2) ("ブログりました" nil "ぶろぐ`" j 3) ("ぶろぐりました" nil "burogurimashita" h 4) ("ブログリマシタ" nil "burogurimashita" k 5) ("ｂｕｒｏｇｕＲｉｍａｓｈｉｔａ" nil "buroguRimashita" z 6) ("buroguRimashita" nil "buroguRimashita" l 7))
        (sekkaHenkan userid kvs #f "buroguRimashita" 0 "normal"))
 
 (test* "henkan toplevel(for Elisp) 10"
