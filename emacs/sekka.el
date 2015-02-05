@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010-2014 Kiyoka Nishiyama
 ;;
 ;; Author: Kiyoka Nishiyama <kiyoka@sumibi.org>
-;; Version: 1.5.8          ;;SEKKA-VERSION
+;; Version: 1.5.9          ;;SEKKA-VERSION
 ;; Keywords: ime, skk, japanese
 ;; Package-Requires: ((cl-lib "0.3") (concurrent "0.3.1") (popup "0.5.0"))
 ;; URL: https://github.com/kiyoka/sekka
@@ -1746,7 +1746,7 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
 (setq default-input-method "japanese-sekka")
 
 (defconst sekka-version
-  "1.5.8" ;;SEKKA-VERSION
+  "1.5.9" ;;SEKKA-VERSION
   )
 (defun sekka-version (&optional arg)
   "入力モード変更"
