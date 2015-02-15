@@ -179,7 +179,8 @@ task :dumpL do
 end
 
 task :ngram do
-  sh "ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd < ./data/ngram/nwc2010.1000/2gm.1000.txt > ./data/SEKKA-JISYO.2GRAM.tsv"
+  sh "ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd      2  < ./data/ngram/nwc2010.1000/2gm.1000.txt > ./data/SEKKA-JISYO.2GRAM.tsv"
+  sh "ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  < ./data/ngram/nwc2010.1000/3gm.1000.txt > ./data/SEKKA-JISYO.SKIP2GRAM.tsv"
 end
 
 

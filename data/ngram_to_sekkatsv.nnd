@@ -7,14 +7,18 @@
 
 (define limit-entries 1000)
 
-(define (construct-hash f)
+(define (construct-hash f mode)
   (let1 h (make-hash-table)
     (for-each
      (lambda (line)
        (let1 lst (to-list (line.chomp.split))
          (let* ([k (first  lst)]
-                [real-k (+ "2:" k)]
-                [v (second lst)]
+                [real-k (if (= "2" mode)
+                            (+ "2:"  k)
+                            (+ "2_:" k))]
+                [v (if (= "2" mode)
+                       (second lst)
+                       (third lst))]
                 [_ (hash-table-get h real-k "")])
            (when
                (and
@@ -25,8 +29,8 @@
      f.lazy)
     h))
 
-(define (main argv)
-  (let1 h (construct-hash STDIN)
+(define (construct mode)
+  (let1 h (construct-hash STDIN mode)
     (hash-table-for-each h
       (lambda (key value)
         (let1 entries (to-list (value.split #/\//))
@@ -34,3 +38,20 @@
               (printf "%s\t%s\n" key value)
               (STDERR.printf "ignored key [%s] entries=%d\n" key (length entries))))))))
 
+(define (usage)
+  (STDERR.print "usage: ngram_to_sekkatsv.nnd [mode]\n")
+  (STDERR.print "        mode ... 2 or skip2        \n"))
+
+(define (main argv)
+  (if (= 0 (length argv))
+      (begin
+        (usage)
+        (exit 1))
+      (cond
+       ((= "2" (car argv))
+        (construct "2"))
+       ((= "skip2" (car argv))
+        (construct "skip2"))
+       (else
+        (usage)
+        (exit 1)))))
