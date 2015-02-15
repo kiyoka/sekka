@@ -178,6 +178,11 @@ task :dumpL do
   }
 end
 
+task :ngram do
+  sh "ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd < ./data/ngram/nwc2010.1000/2gm-1000.txt > ./data/SEKKA-JISYO.2GRAM.tsv"
+end
+
+
 # SKK-JISYO.hiragana-phrase はWikipediaから作られる。
 task :phrase => [ "/tmp/jawiki.txt.gz", "./data/wikipedia/jawiki.hiragana.txt" ] do
   sh "sort ./data/wikipedia/jawiki.hiragana.txt | uniq -c | sort > ./data/wikipedia/ranking.txt"

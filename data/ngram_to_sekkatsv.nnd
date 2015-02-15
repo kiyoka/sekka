@@ -1,0 +1,36 @@
+#!/usr/local/bin/nendo
+:; #-*- mode: nendo; syntax: scheme -*-;;
+
+(use srfi-1)
+(use sekka.roman-lib)
+(use sekka.alphabet-lib)
+
+(define limit-entries 1000)
+
+(define (construct-hash f)
+  (let1 h (make-hash-table)
+    (for-each
+     (lambda (line)
+       (let1 lst (to-list (line.chomp.split))
+         (let* ([k (first  lst)]
+                [real-k (+ "2:" k)]
+                [v (second lst)]
+                [_ (hash-table-get h real-k "")])
+           (when
+               (and
+                (not (include-alphabet-hankaku k)) ;; kに記号が含まれない
+                (not (include-alphabet-hankaku v)) ;; vに記号が含まれない
+                )
+             (hash-table-put! h real-k (+ _ "/" v))))))
+     f.lazy)
+    h))
+
+(define (main argv)
+  (let1 h (construct-hash STDIN)
+    (hash-table-for-each h
+      (lambda (key value)
+        (let1 entries (to-list (value.split #/\//))
+          (if (< (length entries) limit-entries)
+              (printf "%s\t%s\n" key value)
+              (STDERR.printf "ignored key [%s] entries=%d\n" key (length entries))))))))
+
