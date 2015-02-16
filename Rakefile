@@ -23,17 +23,12 @@ require 'rake'
 require "bundler/gem_tasks"
 require 'jeweler2'
 
-# generate `normal' and `azik' dictionary
-# (generateTypes = [ "N", "A" ])
-generateTypes = [ "N" ]
-
-
 task :default => [:test] do
 end
 
 task :compile do
   # generate version.rb
-  dictVersion = "1.4.2"
+  dictVersion = "1.5.0"
   vh = Jeweler::VersionHelper.new "."
   open( "./lib/sekka/sekkaversion.rb", "w" ) {|f|
     f.puts(   "class SekkaVersion" )
@@ -122,9 +117,9 @@ task :bench do
   sh "time ruby -I ./lib /usr/local/bin/nendo ./test/henkan-bench.nnd"
 end
 
-task :alljisyo  => [ :alljisyoS, :alljisyoL ]
-task :alljisyoS => [ :jisyoS, :loadS, :dumpS, :md5 ]
-task :alljisyoL => [ :jisyoL, :loadL, :dumpL, :md5 ]
+task :alljisyo  => [ :alljisyoS, :alljisyoL, :alljisyoH ]
+task :alljisyoS => [ :jisyoS, :loadS, :ngramS, :dumpS, :md5 ]
+task :alljisyoL => [ :jisyoL, :loadL, :ngramL, :dumpL, :md5 ]
 
 task :md5 do
   sh "md5sum ./data/SEKKA-JISYO.SMALL.N.tsv > ./data/SEKKA-JISYO.SMALL.N.md5"
@@ -132,55 +127,52 @@ task :md5 do
 end
 
 task :jisyoS do
-  generateTypes.each {|x|
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.201501           >  ./data/SEKKA-JISYO.SMALL.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.SMALL.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase    >> ./data/SEKKA-JISYO.SMALL.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase2   >> ./data/SEKKA-JISYO.SMALL.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase3   >> ./data/SEKKA-JISYO.SMALL.#{x}"
-  }
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.L.201501           >  ./data/SEKKA-JISYO.SMALL.N"
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.SMALL.N"
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.hiragana-phrase    >> ./data/SEKKA-JISYO.SMALL.N"
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.hiragana-phrase2   >> ./data/SEKKA-JISYO.SMALL.N"
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.hiragana-phrase3   >> ./data/SEKKA-JISYO.SMALL.N"
 end
 
 task :jisyoL do
-  generateTypes.each {|x|
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.201501           >  ./data/SEKKA-JISYO.LARGE.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.LARGE.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.fullname           >> ./data/SEKKA-JISYO.LARGE.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.jinmei             >> ./data/SEKKA-JISYO.LARGE.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.station            >> ./data/SEKKA-JISYO.LARGE.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase    >> ./data/SEKKA-JISYO.LARGE.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase2   >> ./data/SEKKA-JISYO.LARGE.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase3   >> ./data/SEKKA-JISYO.LARGE.#{x}"
-  }
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.L.201501           >  ./data/SEKKA-JISYO.LARGE.N"
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.LARGE.N"
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.fullname           >> ./data/SEKKA-JISYO.LARGE.N"
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.jinmei             >> ./data/SEKKA-JISYO.LARGE.N"
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.station            >> ./data/SEKKA-JISYO.LARGE.N"
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.hiragana-phrase    >> ./data/SEKKA-JISYO.LARGE.N"
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.hiragana-phrase2   >> ./data/SEKKA-JISYO.LARGE.N"
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.hiragana-phrase3   >> ./data/SEKKA-JISYO.LARGE.N"
 end
 
 task :loadS do
-  generateTypes.each {|x|
-    sh "ruby ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.SMALL.#{x}  ./data/SEKKA-JISYO.SMALL.#{x}.tch#xmsiz=1024m"
-  }
+  sh "ruby ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.SMALL.N  ./data/SEKKA-JISYO.SMALL.N.tch#xmsiz=1024m"
 end
 
 task :loadL do
-  generateTypes.each {|x|
-    sh "ruby ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.LARGE.#{x}  ./data/SEKKA-JISYO.LARGE.#{x}.tch#xmsiz=1024m"
-  }
+  sh "ruby ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.LARGE.N  ./data/SEKKA-JISYO.LARGE.N.tch#xmsiz=1024m"
 end
 
 task :dumpS do
-  generateTypes.each {|x|
-    sh "ruby ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.SMALL.#{x}.tch#xmsiz=1024m > ./data/SEKKA-JISYO.SMALL.#{x}.tsv"
-  }
+  sh "ruby ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.SMALL.N.tch#xmsiz=1024m >  ./data/SEKKA-JISYO.SMALL.N.tsv"
+  sh "cat ./data/SEKKA-JISYO.SMALL.2GRAM.tsv                                    >> ./data/SEKKA-JISYO.SMALL.N.tsv"
+  sh "cat ./data/SEKKA-JISYO.SMALL.SKIP2GRAM.tsv                                >> ./data/SEKKA-JISYO.SMALL.N.tsv"
 end
 
 task :dumpL do
-  generateTypes.each {|x|
-    sh "ruby ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.LARGE.#{x}.tch#xmsiz=1024m > ./data/SEKKA-JISYO.LARGE.#{x}.tsv"
-  }
+  sh "ruby ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.LARGE.N.tch#xmsiz=1024m >  ./data/SEKKA-JISYO.LARGE.N.tsv"
+  sh "cat ./data/SEKKA-JISYO.LARGE.2GRAM.tsv                                    >> ./data/SEKKA-JISYO.LARGE.N.tsv"
+  sh "cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv                                >> ./data/SEKKA-JISYO.LARGE.N.tsv"
 end
 
-task :ngram do
-  sh "ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd      2  < ./data/ngram/nwc2010.1000/2gm.1000.txt > ./data/SEKKA-JISYO.2GRAM.tsv"
-  sh "ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  < ./data/ngram/nwc2010.1000/3gm.1000.txt > ./data/SEKKA-JISYO.SKIP2GRAM.tsv"
+task :ngramS do
+  sh "ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd      2  < ./data/ngram/nwc2010.1000/2gm.1000.txt > ./data/SEKKA-JISYO.SMALL.2GRAM.tsv"
+  sh "ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  < ./data/ngram/nwc2010.1000/3gm.1000.txt > ./data/SEKKA-JISYO.SMALL.SKIP2GRAM.tsv"
+end
+
+task :ngramL do
+  sh "ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd      2  < ./data/ngram/nwc2010.100/2gm.100.txt   > ./data/SEKKA-JISYO.LARGE.2GRAM.tsv"
+  sh "ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  < ./data/ngram/nwc2010.100/3gm.100.txt   > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv"
 end
 
 
