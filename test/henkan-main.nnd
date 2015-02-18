@@ -1294,6 +1294,14 @@
        '(("確立" #f "かくりつ" j 0) ("確率" #f "かくりつ" j 1) ("かくりつ" #f "kakuritu" h 2) ("カクリツ" #f "kakuritu" k 3) ("Ｋａｋｕｒｉｔｕ" #f "Kakuritu" z 4) ("Kakuritu" #f "Kakuritu" l 5))
        (sekka-henkan-with-pre userid kvs "Kakuritu" 0 :normal "" "理論"))
 
+(test* "henkan toplevel with pre 8"
+       '(("通信" #f "つうしん" j 0) ("つうしん" #f "tuushin" h 1) ("ツウシン" #f "tuushin" k 2) ("ｔｕｕｓｈｉｎ" #f "tuushin" z 3) ("tuushin" #f "tuushin" l 4) ("痛心" #f "つうしん" j 5))
+       (sekka-henkan-with-pre userid kvs "tuushin" 0 :normal "高速" ""))
+
+(test* "henkan toplevel with pre 9"
+       '(("確立" #f "かくりつ" j 0) ("かくりつ" #f "kakuritu" h 1) ("カクリツ" #f "kakuritu" k 2) ("ｋａｋｕｒｉｔｕ" #f "kakuritu" z 3) ("kakuritu" #f "kakuritu" l 4) ("確率" #f "かくりつ" j 5))
+       (sekka-henkan-with-pre userid kvs "kakuritu" 0 :normal "" "理論"))
+
 
 ;;-------------------------------------------------------------------
 (test-section "henkan kakutei")
