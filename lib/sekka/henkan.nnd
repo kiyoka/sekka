@@ -384,6 +384,61 @@
       (henkan-alphabet kvs keyword))))))
 
 
+;; 共起頻度を使って、優先度を並び換える
+(define (reorder-henkan-result collocation-word henkan-result)
+  (define (renumbering lst)
+    (map
+     (lambda (elem)
+       (let* ([x (first elem)]
+              [index (second elem)])
+         (list (first x)
+               (second x)
+               (third x)
+               (fourth x)
+               index)))
+     (zip
+      lst
+      (range (length lst)))))
+  
+  (let* ((collocation-word   (collocation-word.sub #/^\// ""))
+         [coll-list (to-list (collocation-word.split #/\//))])
+    (let1 reordered
+        (append
+         (filter-map
+          (lambda (x)
+            (if (memv (car x) coll-list)
+                x
+                #f))
+          henkan-result)
+         (filter-map
+          (lambda (x)
+            (if (memv (car x) coll-list)
+                #f
+                x))
+          henkan-result))
+      (renumbering reordered))))
+
+
+;; keyword には ローマ字のみを受け付ける
+;; 前方の確定済単語を２個与えることができる
+;;   pre1 前方の１つとなりの確定済単語
+;;   pre2 前方の２つとなりの確定済単語
+(define (sekka-henkan-with-pre userid kvs keyword limit roman-method pre1 pre2)
+  (let1 result (sekka-henkan userid kvs keyword limit roman-method)
+    (cond
+     ((< 0 pre1.size)
+      (let1 val (kvs.get (+ "2:" pre1))
+        (if val
+            (reorder-henkan-result val result)
+            result)))
+     ((< 0 pre2.size)
+      (let1 val (kvs.get (+ "2_:" pre2))
+        (if val
+            (reorder-henkan-result val result)
+            result)))
+     (else
+      result))))
+    
 
 ;; conversion #f => nil for EmacsLisp
 (define (sekkaHenkan userid kvs cachesv keyword limit roman-method)

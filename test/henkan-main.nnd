@@ -198,6 +198,38 @@
 
 
 ;;-------------------------------------------------------------------
+(test-section "create ngram db entry")
+(test* "db put 1"
+       "/道路/通信"
+       (let1 res (kvs.put! "2:高速" "/道路/通信")
+         (res.force_encoding "UTF-8")))
+
+(test* "db put 2"
+       "/確率/ビル"
+       (let1 res (kvs.put! "2:高い" "/確率/ビル")
+         (res.force_encoding "UTF-8")))
+
+(test* "db put 3"
+       "/する"
+       (let1 res (kvs.put! "2:確立" "/する")
+         (res.force_encoding "UTF-8")))
+
+(test* "db put 4"
+       "/変数/を/が/の"
+       (let1 res (kvs.put! "2:確率" "/変数/を/が/の")
+         (res.force_encoding "UTF-8")))
+
+(test* "db put 5"
+       "/確率/可能性"       
+       (let1 res (kvs.put! "2_:失敗" "/確率/可能性")
+         (res.force_encoding "UTF-8")))
+
+(test* "db put 6"
+       "/確立/成立"
+       (let1 res (kvs.put! "2_:理論" "/確立/成立")
+         (res.force_encoding "UTF-8")))
+
+;;-------------------------------------------------------------------
 (test-section "simple db fetch")
 (test* "db fetch 1"
        "Cへんかん"
@@ -993,7 +1025,7 @@
 
 
 ;;-------------------------------------------------------------------
-(test-section "sekka henkan toplevel")
+(test-section "sekka henkan toplevel(1)")
 
 (test* "henkan toplevel 1"
        '(("＊" #f "*" j 0) ("※" #f "*" j 1) ("×" #f "*" j 2) ("＊" #f "*" z 3) ("*" #f "*" l 4))
@@ -1231,6 +1263,36 @@
        '(("3チーム" nil "#ちーむ" n 0) ("３ｃｈｉ－ｍｕ" nil "3chi-mu" z 1) ("3chi-mu" nil "3chi-mu" l 2))
        (sekkaHenkan userid kvs #f "3chi-mu" 0 "normal"))
 
+
+;;-------------------------------------------------------------------
+(test-section "sekka henkan toplevel(2)")
+(test* "henkan toplevel with pre 1"
+       '(("変換" #f "へんかん" j 0) ("返還" #f "へんかん" j 1) ("変化" #f "へんか" j 2) ("返歌" #f "へんか" j 3) ("へんかん" #f "henkan" h 4) ("ヘンカン" #f "henkan" k 5) ("へにんあん" #f "henkan" h 6) ("ヘニンアン" #f "henkan" k 7) ("Ｈｅｎｋａｎ" #f "Henkan" z 8) ("Henkan" #f "Henkan" l 9))
+       (sekka-henkan-with-pre userid kvs "Henkan" 0 :normal "" ""))
+
+(test* "henkan toplevel with pre 2"
+       '(("拘束" #f "こうそく" j 0) ("高速" #f "こうそく" j 1) ("光速" #f "こうそく" j 2) ("こうそく" #f "kousoku" h 3) ("コウソク" #f "kousoku" k 4) ("Ｋｏｕｓｏｋｕ" #f "Kousoku" z 5) ("Kousoku" #f "Kousoku" l 6))
+       (sekka-henkan-with-pre userid kvs "Kousoku" 0 :normal "" ""))
+
+(test* "henkan toplevel with pre 3"
+       '(("痛心" #f "つうしん" j 0) ("通信" #f "つうしん" j 1) ("つうしん" #f "tuushin" h 2) ("ツウシン" #f "tuushin" k 3) ("Ｔｕｕｓｈｉｎ" #f "Tuushin" z 4) ("Tuushin" #f "Tuushin" l 5))
+       (sekka-henkan-with-pre userid kvs "Tuushin" 0 :normal "" ""))
+
+(test* "henkan toplevel with pre 4"
+       '(("通信" #f "つうしん" j 0) ("痛心" #f "つうしん" j 1) ("つうしん" #f "tuushin" h 2) ("ツウシン" #f "tuushin" k 3) ("Ｔｕｕｓｈｉｎ" #f "Tuushin" z 4) ("Tuushin" #f "Tuushin" l 5))
+       (sekka-henkan-with-pre userid kvs "Tuushin" 0 :normal "高速" ""))
+
+(test* "henkan toplevel with pre 5"
+       '(("確率" #f "かくりつ" j 0) ("確立" #f "かくりつ" j 1) ("かくりつ" #f "kakuritu" h 2) ("カクリツ" #f "kakuritu" k 3) ("Ｋａｋｕｒｉｔｕ" #f "Kakuritu" z 4) ("Kakuritu" #f "Kakuritu" l 5))
+       (sekka-henkan-with-pre userid kvs "Kakuritu" 0 :normal "高い" ""))
+
+(test* "henkan toplevel with pre 6"
+       '(("確率" #f "かくりつ" j 0) ("確立" #f "かくりつ" j 1) ("かくりつ" #f "kakuritu" h 2) ("カクリツ" #f "kakuritu" k 3) ("Ｋａｋｕｒｉｔｕ" #f "Kakuritu" z 4) ("Kakuritu" #f "Kakuritu" l 5))
+       (sekka-henkan-with-pre userid kvs "Kakuritu" 0 :normal "" "失敗"))
+
+(test* "henkan toplevel with pre 7"
+       '(("確立" #f "かくりつ" j 0) ("確率" #f "かくりつ" j 1) ("かくりつ" #f "kakuritu" h 2) ("カクリツ" #f "kakuritu" k 3) ("Ｋａｋｕｒｉｔｕ" #f "Kakuritu" z 4) ("Kakuritu" #f "Kakuritu" l 5))
+       (sekka-henkan-with-pre userid kvs "Kakuritu" 0 :normal "" "理論"))
 
 
 ;;-------------------------------------------------------------------

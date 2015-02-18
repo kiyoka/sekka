@@ -59,7 +59,7 @@ Ih:M:=shi	t
 Ih:M:=shit	a$
 Ih:M:=si	t
 Ih:M:=sit	a$
-Ik:M:	?$ h s x d > k i w #
+Ik:M:	?$ h s x d > k i w # t
 Ik:M:#	g k c t n
 Ik:M:#c	h i
 Ik:M:#ch	i
@@ -225,7 +225,7 @@ Ik:M:#tyi^m	f$ u$
 Ik:M:>	a
 Ik:M:>a	n$ q$
 Ik:M:>an	n$
-Ik:M:d	e
+Ik:M:d	e o p
 Ik:M:de	v
 Ik:M:dev	e
 Ik:M:deve	l
@@ -233,6 +233,15 @@ Ik:M:devel	o
 Ik:M:develo	p
 Ik:M:develop	e
 Ik:M:develope	r$
+Ik:M:do	u w
+Ik:M:dou	r
+Ik:M:dour	o$
+Ik:M:dow	h
+Ik:M:dowh	u
+Ik:M:dowhu	r
+Ik:M:dowhur	o$
+Ik:M:dp	r
+Ik:M:dpr	o$
 Ik:M:h	d e
 Ik:M:hd	k
 Ik:M:hdk	n$ z$ a$
@@ -294,19 +303,24 @@ Ik:M:iqyowh	u$
 Ik:M:it	t
 Ik:M:itt	y
 Ik:M:itty	i$
-Ik:M:k	a o n z u
+Ik:M:k	a o n z u p
 Ik:M:ka	; @ k n q
 Ik:M:ka;	k
 Ik:M:ka;k	o$
 Ik:M:ka@	k
 Ik:M:ka@k	o$
-Ik:M:kak	k
+Ik:M:kak	k u
 Ik:M:kakk	o$
+Ik:M:kaku	r
+Ik:M:kakur	i
+Ik:M:kakuri	t
+Ik:M:kakurit	u$ s
+Ik:M:kakurits	u$
 Ik:M:kan	i$ n
 Ik:M:kann	i$
 Ik:M:kaq	i$
 Ik:M:kn	i$
-Ik:M:ko	; @ k ' - : ^
+Ik:M:ko	; @ k ' - : ^ u w
 Ik:M:ko'	h
 Ik:M:ko'h	i
 Ik:M:ko'hi	'$ -$ :$ ^$
@@ -325,6 +339,20 @@ Ik:M:ko^h	i
 Ik:M:ko^hi	'$ -$ :$ ^$
 Ik:M:kok	k
 Ik:M:kokk	a$
+Ik:M:kou	s
+Ik:M:kous	o
+Ik:M:kouso	k
+Ik:M:kousok	u$
+Ik:M:kow	h
+Ik:M:kowh	u
+Ik:M:kowhu	s
+Ik:M:kowhus	o
+Ik:M:kowhuso	k
+Ik:M:kowhusok	u$
+Ik:M:kp	s
+Ik:M:kps	o
+Ik:M:kpso	k
+Ik:M:kpsok	u$
 Ik:M:ku	m
 Ik:M:kum	i
 Ik:M:kumi	k
@@ -920,6 +948,45 @@ Ik:M:sizfqgeqgoshor	i$
 Ik:M:sizfqgeqgosy	o
 Ik:M:sizfqgeqgosyo	r
 Ik:M:sizfqgeqgosyor	i$
+Ik:M:t	h s u
+Ik:M:th	s x
+Ik:M:ths	k$
+Ik:M:thx	k$
+Ik:M:ts	u
+Ik:M:tsu	u w
+Ik:M:tsuu	s
+Ik:M:tsuus	h i
+Ik:M:tsuush	i
+Ik:M:tsuushi	n$ q$
+Ik:M:tsuushin	n$
+Ik:M:tsuusi	n$ q$
+Ik:M:tsuusin	n$
+Ik:M:tsuw	h
+Ik:M:tsuwh	u
+Ik:M:tsuwhu	s
+Ik:M:tsuwhus	h i
+Ik:M:tsuwhush	i
+Ik:M:tsuwhushi	n$ q$
+Ik:M:tsuwhushin	n$
+Ik:M:tsuwhusi	n$ q$
+Ik:M:tsuwhusin	n$
+Ik:M:tu	u w
+Ik:M:tuu	s
+Ik:M:tuus	h i
+Ik:M:tuush	i
+Ik:M:tuushi	n$ q$
+Ik:M:tuushin	n$
+Ik:M:tuusi	n$ q$
+Ik:M:tuusin	n$
+Ik:M:tuw	h
+Ik:M:tuwh	u
+Ik:M:tuwhu	s
+Ik:M:tuwhus	h i
+Ik:M:tuwhush	i
+Ik:M:tuwhushi	n$ q$
+Ik:M:tuwhushin	n$
+Ik:M:tuwhusi	n$ q$
+Ik:M:tuwhusin	n$
 Ik:M:w	o$ a
 Ik:M:wa	k
 Ik:M:wak	e$
@@ -1308,7 +1375,7 @@ Ir:M:iroysogqegqf	z
 Ir:M:iroysogqegqfz	i
 Ir:M:iroysogqegqfzi	s$ h
 Ir:M:iroysogqegqfzih	s$
-Ir:M:n	a n
+Ir:M:n	a n i
 Ir:M:na	k
 Ir:M:nak	n q
 Ir:M:nakn	e n
@@ -1317,7 +1384,25 @@ Ir:M:naknn	e
 Ir:M:naknne	h$
 Ir:M:nakq	e
 Ir:M:nakqe	h$
-Ir:M:nn	a
+Ir:M:ni	h s
+Ir:M:nih	s
+Ir:M:nihs	u
+Ir:M:nihsu	u h
+Ir:M:nihsuh	w
+Ir:M:nihsuhw	u
+Ir:M:nihsuhwu	t$ s
+Ir:M:nihsuhwus	t$
+Ir:M:nihsuu	t$ s
+Ir:M:nihsuus	t$
+Ir:M:nis	u
+Ir:M:nisu	u h
+Ir:M:nisuh	w
+Ir:M:nisuhw	u
+Ir:M:nisuhwu	t$ s
+Ir:M:nisuhwus	t$
+Ir:M:nisuu	t$ s
+Ir:M:nisuus	t$
+Ir:M:nn	a i
 Ir:M:nna	k
 Ir:M:nnak	n q
 Ir:M:nnakn	e n
@@ -1326,7 +1411,25 @@ Ir:M:nnaknn	e
 Ir:M:nnaknne	h$
 Ir:M:nnakq	e
 Ir:M:nnakqe	h$
-Ir:M:o	g
+Ir:M:nni	h s
+Ir:M:nnih	s
+Ir:M:nnihs	u
+Ir:M:nnihsu	u h
+Ir:M:nnihsuh	w
+Ir:M:nnihsuhw	u
+Ir:M:nnihsuhwu	t$ s
+Ir:M:nnihsuhwus	t$
+Ir:M:nnihsuu	t$ s
+Ir:M:nnihsuus	t$
+Ir:M:nnis	u
+Ir:M:nnisu	u h
+Ir:M:nnisuh	w
+Ir:M:nnisuhw	u
+Ir:M:nnisuhwu	t$ s
+Ir:M:nnisuhwus	t$
+Ir:M:nnisuu	t$ s
+Ir:M:nnisuus	t$
+Ir:M:o	g r
 Ir:M:og	d n q
 Ir:M:ogd	g
 Ir:M:ogdg	d
@@ -1424,6 +1527,11 @@ Ir:M:ogqegqf	z
 Ir:M:ogqegqfz	i
 Ir:M:ogqegqfzi	s$ h
 Ir:M:ogqegqfzih	s$
+Ir:M:or	u
+Ir:M:oru	h
+Ir:M:oruh	w
+Ir:M:oruhw	o
+Ir:M:oruhwo	d$
 Ir:M:p	g y
 Ir:M:pg	n
 Ir:M:pgn	n
@@ -1433,7 +1541,7 @@ Ir:M:py	n
 Ir:M:pyn	n
 Ir:M:pynn	n
 Ir:M:pynnn	i$
-Ir:M:q	a k
+Ir:M:q	a k i
 Ir:M:qa	k
 Ir:M:qak	n q
 Ir:M:qakn	e n
@@ -1442,6 +1550,24 @@ Ir:M:qaknn	e
 Ir:M:qaknne	h$
 Ir:M:qakq	e
 Ir:M:qakqe	h$
+Ir:M:qi	h s
+Ir:M:qih	s
+Ir:M:qihs	u
+Ir:M:qihsu	u h
+Ir:M:qihsuh	w
+Ir:M:qihsuhw	u
+Ir:M:qihsuhwu	t$ s
+Ir:M:qihsuhwus	t$
+Ir:M:qihsuu	t$ s
+Ir:M:qihsuus	t$
+Ir:M:qis	u
+Ir:M:qisu	u h
+Ir:M:qisuh	w
+Ir:M:qisuhw	u
+Ir:M:qisuhwu	t$ s
+Ir:M:qisuhwus	t$
+Ir:M:qisuu	t$ s
+Ir:M:qisuus	t$
 Ir:M:qk	i
 Ir:M:qki	r
 Ir:M:qkir	o
@@ -1461,7 +1587,7 @@ Ir:M:repol	e
 Ir:M:repole	v
 Ir:M:repolev	e
 Ir:M:repoleve	d$
-Ir:M:u	o h
+Ir:M:u	o h k s t
 Ir:M:uh	w
 Ir:M:uhw	o
 Ir:M:uhwo	y
@@ -1471,12 +1597,34 @@ Ir:M:uhwoynn	i$ n
 Ir:M:uhwoynnn	i$
 Ir:M:uhwoynq	i$
 Ir:M:uhwoyq	i$
+Ir:M:uk	o
+Ir:M:uko	s
+Ir:M:ukos	u p
+Ir:M:ukosp	k$
+Ir:M:ukosu	o h
+Ir:M:ukosuh	w
+Ir:M:ukosuhw	o
+Ir:M:ukosuhwo	k$
+Ir:M:ukosuo	k$
 Ir:M:uo	y
 Ir:M:uoy	n
 Ir:M:uoyn	n q
 Ir:M:uoynn	i$ n
 Ir:M:uoynnn	i$
 Ir:M:uoynq	i$
+Ir:M:us	t
+Ir:M:ust	i
+Ir:M:usti	r
+Ir:M:ustir	u
+Ir:M:ustiru	k
+Ir:M:ustiruk	a
+Ir:M:ustiruka	k$
+Ir:M:ut	i
+Ir:M:uti	r
+Ir:M:utir	u
+Ir:M:utiru	k
+Ir:M:utiruk	a
+Ir:M:utiruka	k$
 M:!	/！/感嘆符
 M:!=	/≠
 M:#chi'mf	C#ちーむ
@@ -1591,6 +1739,9 @@ M:>あん	/案
 M:?	/？
 M:aU	Cあu
 M:developer	/デベロッパー/ディベロッパー/デベロッパ
+M:douro	Cどうろ
+M:dowhuro	Cどうろ
+M:dpro	Cどうろ
 M:eR	Cえr
 M:hdka	Cへんか
 M:hdkaS	Cへんかs
@@ -1644,6 +1795,8 @@ M:ka@ko	Cかっこ
 M:kaT	Cかt
 M:ka`	Cか`
 M:kakko	Cかっこ
+M:kakuritsu	Cかくりつ
+M:kakuritu	Cかくりつ
 M:kani	Cかに/かんい
 M:kanni	Cかんい
 M:kaqi	Cかんい
@@ -1667,6 +1820,9 @@ M:ko^hi-	Cこーひー
 M:ko^hi:	Cこーひー
 M:ko^hi^	Cこーひー
 M:kokka	Cこっか
+M:kousoku	Cこうそく
+M:kowhusoku	Cこうそく
+M:kpsoku	Cこうそく
 M:kumikomi	Cくみこみ
 M:kzi	Cかんい
 M:miR	Cみr
@@ -1828,6 +1984,32 @@ M:sizfqgeqgo	Cしぜんげんご
 M:sizfqgeqgorikai	Cしぜんげんごりかい
 M:sizfqgeqgoshori	Cしぜんげんごしょり
 M:sizfqgeqgosyori	Cしぜんげんごしょり
+M:thsk	Cつうしん
+M:thxk	Cつうしん
+M:tsuushin	Cつうしん
+M:tsuushinn	Cつうしん
+M:tsuushiq	Cつうしん
+M:tsuusin	Cつうしん
+M:tsuusinn	Cつうしん
+M:tsuusiq	Cつうしん
+M:tsuwhushin	Cつうしん
+M:tsuwhushinn	Cつうしん
+M:tsuwhushiq	Cつうしん
+M:tsuwhusin	Cつうしん
+M:tsuwhusinn	Cつうしん
+M:tsuwhusiq	Cつうしん
+M:tuushin	Cつうしん
+M:tuushinn	Cつうしん
+M:tuushiq	Cつうしん
+M:tuusin	Cつうしん
+M:tuusinn	Cつうしん
+M:tuusiq	Cつうしん
+M:tuwhushin	Cつうしん
+M:tuwhushinn	Cつうしん
+M:tuwhushiq	Cつうしん
+M:tuwhusin	Cつうしん
+M:tuwhusinn	Cつうしん
+M:tuwhusiq	Cつうしん
 M:wake	Cわけ
 M:watashiH	Cわたしh
 M:watasiH	Cわたしh
@@ -1850,10 +2032,12 @@ M:おこなu	/行/行な;※送り位置補正
 M:か+	/勝/買/飼/刈;(crop)草を刈る
 M:か`	/勝/買/飼/刈;(crop)草を刈る
 M:かt	/勝/買/飼/刈;(crop)草を刈る
+M:かくりつ	/確率/確立
 M:かっこ	/確固/括弧/各個/各戸/確乎/羯鼓;雅楽の打楽器/格好/『』/【】/［］/〔〕/〈〉/《》/｛｝/「」/（）/‘’/“”
 M:かに	/蟹/可児/蠏
 M:かんい	/簡易/官位/冠位;-十二階/漢医;漢方医/敢為/官医/寛衣/換位/簡意
 M:くみこみ	/組み込み/組込
+M:こうそく	/拘束/高速/光速
 M:こっか	/国家;state/国歌;anthem.「-斉唱」/国花/骨化/國家;「国」旧字/黒化/刻下/】/）/］/』
 M:こーひー	/コーヒー
 M:さき	/先/崎/左記/前/早紀/沙樹/早岐/沙貴/咲/埼/尖/嵜/碕/早記
@@ -1861,6 +2045,8 @@ M:さく	/策/柵/作/佐久;地名/朔;朔日 ⇔晦/槊;ほこ/搾;搾取/昨;
 M:しぜんげんご	/自然言語
 M:しぜんげんごしょり	/自然言語処理
 M:しぜんげんごりかい	/自然言語理解
+M:つうしん	/痛心/通信
+M:どうろ	/道路
 M:へんか	/変化/返歌
 M:へんかs	/変化
 M:へんかん	/変換/返還
@@ -1868,4 +2054,4 @@ M:みr	/見/観;(字義:みわたす)/視;(字義:じっとみる)/診;(diagnose
 M:わけ	/訳/和気;地名/理由;当て字/分け/分/譯;「訳」の旧字/戯奴
 M:わたしh	/私
 M:を	/小/緒/雄/男/牡/尾/悪/汚/惡;「悪」の旧字(人名用漢字)
-SEKKA:VERSION	1.4.2
+SEKKA:VERSION	1.5.0
