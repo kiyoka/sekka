@@ -41,6 +41,7 @@
 (use sekka.alphabet-lib)
 (use sekka.sharp-number)
 (use sekka.google-ime)
+(require "digest/md5")
 (require "sekka/approximatesearch")
 
 
@@ -441,33 +442,35 @@
     
 
 ;; conversion #f => nil for EmacsLisp
-(define (sekkaHenkan userid kvs cachesv keyword limit roman-method)
-  (define cache-exp-second (* 60 60))
-  (let* ((keyword (keyword.strip))
-         (sekka-keyword (+ "sekka:" roman-method ":" (limit.to_s) ":" keyword)))
-    (if-let1 fetched (and cachesv
-                          (cachesv.get sekka-keyword #f))
-      (begin
-        keyword
-        (read-from-string fetched))
-      (let1 henkan-result (map
-                           (lambda (x)
-                             (map (lambda (val) (if val val nil)) x))
-                           (sekka-henkan userid kvs keyword limit (make-keyword roman-method)))
-        (and cachesv
-             (not (null? henkan-result))
-             (let1 fetched2 (cachesv.get  "sekka:(keys)" #f)
-               (cachesv.put! sekka-keyword (write-to-string henkan-result) cache-exp-second)
-               (cachesv.put! "sekka:(keys)" (if fetched2
-                                                 (+ fetched2 " " sekka-keyword)
-                                                 sekka-keyword)
-                             cache-exp-second)
-               (if-let1 v (cachesv.get  "sekka:(keys)" #f)
-                 (begin
-                   #?=(v.size)
-                   #?=v)
-                 #f)))
-        henkan-result))))
+(define (sekkaHenkan userid kvs cachesv keyword limit roman-method pre1 pre2)
+  (let* ([pre1-md5 (Digest::MD5.hexdigest (pre1.force_encoding "UTF-8"))]
+         [pre2-md5 (Digest::MD5.hexdigest (pre2.force_encoding "UTF-8"))])
+    (define cache-exp-second (* 60 60))
+    (let* ((keyword (keyword.strip))
+           (sekka-keyword (+ "sekka:" roman-method ":" (limit.to_s) ":" keyword ":" pre1-md5 ":" pre2-md5)))
+      (if-let1 fetched (and cachesv
+                            (cachesv.get sekka-keyword #f))
+        (begin
+          keyword
+          (read-from-string fetched))
+        (let1 henkan-result (map
+                             (lambda (x)
+                               (map (lambda (val) (if val val nil)) x))
+                             (sekka-henkan-with-pre userid kvs keyword limit (make-keyword roman-method) pre1 pre2))
+          (and cachesv
+               (not (null? henkan-result))
+               (let1 fetched2 (cachesv.get  "sekka:(keys)" #f)
+                 (cachesv.put! sekka-keyword (write-to-string henkan-result) cache-exp-second)
+                 (cachesv.put! "sekka:(keys)" (if fetched2
+                                                  (+ fetched2 " " sekka-keyword)
+                                                  sekka-keyword)
+                               cache-exp-second)
+                 (if-let1 v (cachesv.get  "sekka:(keys)" #f)
+                   (begin
+                     #?=(v.size)
+                     #?=v)
+                   #f)))
+          henkan-result)))))
 ;; Export to Ruby world
 (export-to-ruby sekkaHenkan)
 

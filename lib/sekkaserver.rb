@@ -173,13 +173,23 @@ module SekkaServer
                    _yomi    = URI.decode( req.params[  'yomi'].force_encoding("UTF-8") )
                    _limit   = URI.decode( req.params[ 'limit'].force_encoding("UTF-8") )
                    _method  = URI.decode( req.params['method'].force_encoding("UTF-8") )
+                   _pre1    = if req.params.has_key?('pre1')
+                                URI.decode( req.params['pre1'].force_encoding("UTF-8") )
+                              else
+                                ""
+                              end
+                   _pre2    = if req.params.has_key?('pre2')
+                                URI.decode( req.params['pre2'].force_encoding("UTF-8") )
+                              else
+                                ""
+                              end
                    _orRedis = if :redis == SekkaServer::Config.dictType then "or Redis-server" else "" end
                    @mutex.synchronize {
                      begin
                        if SekkaServer::Config.maxQueryLength < _yomi.size
                          result = sprintf( "sekka-server: query string is too long (over %d character length)", SekkaServer::Config.maxQueryLength )
                        else
-                         @core.writeToString( @core.sekkaHenkan( userid, @kvs, @cachesv, _yomi, _limit.to_i, _method ))
+                         @core.writeToString( @core.sekkaHenkan( userid, @kvs, @cachesv, _yomi, _limit.to_i, _method, _pre1, _pre2 ))
                        end
                      rescue MemCache::MemCacheError
                        result = "sekka-server: memcached server is down (or may be offline)"
