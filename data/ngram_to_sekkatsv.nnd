@@ -24,6 +24,8 @@
                (and
                 (not (include-alphabet-hankaku k)) ;; kに記号が含まれない
                 (not (include-alphabet-hankaku v)) ;; vに記号が含まれない
+                (not (is-hiragana k))              ;; kにひらがなが含まれない
+                (not (is-hiragana v))              ;; vにひらがなが含まれない
                 )
              (hash-table-put! h real-k (+ _ "/" v))))))
      f.lazy)
@@ -36,8 +38,11 @@
         (let1 entries (to-list (value.split #/\//))
           (if (< (length entries) limit-entries)
               (printf "%s\t%s\n" key value)
-              (STDERR.printf "ignored key [%s] entries=%d\n" key (length entries))))))))
-
+              (begin
+                (printf "%s\t%s\n" key (string-join
+                                        (take entries limit-entries)
+                                        "/")))))))))
+  
 (define (usage)
   (STDERR.print "usage: ngram_to_sekkatsv.nnd [mode]\n")
   (STDERR.print "        mode ... 2 or skip2        \n"))
