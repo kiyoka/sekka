@@ -24,7 +24,7 @@ http://dist.s-yata.jp/corpus/nwc2010/ngrams/word/over99/3gms/3gm-0005.xz
 ## txt化したもの
 以下に置いています。
 SekkaのRakefileから利用する時に事前にダウンロードする必要があります。
-   https://s3-ap-northeast-1.amazonaws.com/sekkadict/dictsource/2gm.100.txt
-   https://s3-ap-northeast-1.amazonaws.com/sekkadict/dictsource/3gm.100.txt
+   https://s3-ap-northeast-1.amazonaws.com/sekkadict/dictsource/2gm.100.txt.gz
+   https://s3-ap-northeast-1.amazonaws.com/sekkadict/dictsource/3gm.100.txt.gz
 
 [以上]

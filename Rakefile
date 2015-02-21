@@ -165,14 +165,19 @@ task :dumpL do
   sh "cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv                                >> ./data/SEKKA-JISYO.LARGE.N.tsv"
 end
 
+task :ngramTest do
+  sh "ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd      2  < ./data/ngram/nwc2010.1000/2gm.1000.txt > ./data/SEKKA-JISYO.TEST.2GRAM.tsv"
+  sh "ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  < ./data/ngram/nwc2010.1000/3gm.1000.txt > ./data/SEKKA-JISYO.TEST.SKIP2GRAM.tsv"
+end
+
 task :ngramS do
-  sh "ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd      2  < ./data/ngram/nwc2010.1000/2gm.1000.txt > ./data/SEKKA-JISYO.SMALL.2GRAM.tsv"
-  sh "ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  < ./data/ngram/nwc2010.1000/3gm.1000.txt > ./data/SEKKA-JISYO.SMALL.SKIP2GRAM.tsv"
+  sh "zcat ./data/ngram/nwc2010.100/2gm.100.txt.gz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd      2     > ./data/SEKKA-JISYO.SMALL.2GRAM.tsv"
+  sh "zcat ./data/ngram/nwc2010.100/3gm.100.txt.gz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2     > ./data/SEKKA-JISYO.SMALL.SKIP2GRAM.tsv"
 end
 
 task :ngramL do
-  sh "ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd      2  < ./data/ngram/nwc2010.100/2gm.100.txt   > ./data/SEKKA-JISYO.LARGE.2GRAM.tsv"
-  sh "ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  < ./data/ngram/nwc2010.100/3gm.100.txt   > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv"
+  sh "zcat ./data/ngram/nwc2010.10/2gm.10.txt.gz   | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd      2     > ./data/SEKKA-JISYO.LARGE.2GRAM.tsv"
+  sh "zcat ./data/ngram/nwc2010.10/3gm.10.txt.gz   | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2     > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv"
 end
 
 
