@@ -31,19 +31,19 @@
      f.lazy)
     h))
 
+(define (delete-duplicate-string string-arr)
+  (string-arr.sort.uniq))
+
 (define (construct mode)
   (let1 h (construct-hash STDIN mode)
     (hash-table-for-each h
       (lambda (key value)
-        (let* ([entries (to-list (value.split #/\//))]
-               [entries (delete-duplicates entries)])
-          (if (< (length entries) limit-entries)
-              (printf "%s\t%s\n" key value)
-              (begin
-                (printf "%s\t%s\n" key (string-join
-                                        (take entries limit-entries)
-                                        "/")))))))))
-  
+        (let* ([arr (value.split #/\//)]
+               [entries (to-list (delete-duplicate-string arr))])
+          (printf "%s\t%s\n" key (string-join
+                                  (take* entries limit-entries)
+                                  "/")))))))
+
 (define (usage)
   (STDERR.print "usage: ngram_to_sekkatsv.nnd [mode]\n")
   (STDERR.print "        mode ... 2 or skip2        \n"))
