@@ -290,6 +290,14 @@
        #f
        (is-kanji "ABCDE"))
 
+(test* "is kanji 6"
+       #f
+       (is-kanji "¢"))
+
+(test* "is kanji 7"
+       #f
+       (is-kanji "з"))
+
 (test* "include kanji 1"
        #t
        (include-kanji "感じ"))
