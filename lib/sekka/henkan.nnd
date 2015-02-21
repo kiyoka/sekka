@@ -402,20 +402,21 @@
       (range (length lst)))))
   
   (let* ((collocation-word   (collocation-word.sub #/^\// ""))
-         [coll-list (to-list (collocation-word.split #/\//))])
+         (coll-hash (make-hash-table)))
+    (for-each
+     (lambda (word)
+       (hash-table-put! coll-hash word #t))
+     (to-list (collocation-word.split #/\//)))
     (let1 reordered
         (append
-         (filter-map
+         (filter
           (lambda (x)
-            (if (memv (car x) coll-list)
-                x
-                #f))
+            (hash-table-get coll-hash (car x) #f))
           henkan-result)
-         (filter-map
+         (filter
           (lambda (x)
-            (if (memv (car x) coll-list)
-                #f
-                x))
+            (not
+             (hash-table-get coll-hash (car x) #f)))
           henkan-result))
       (renumbering reordered))))
 
