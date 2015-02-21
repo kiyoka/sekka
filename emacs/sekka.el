@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010-2014 Kiyoka Nishiyama
 ;;
 ;; Author: Kiyoka Nishiyama <kiyoka@sumibi.org>
-;; Version: 1.5.9          ;;SEKKA-VERSION
+;; Version: 1.6.0          ;;SEKKA-VERSION
 ;; Keywords: ime, skk, japanese
 ;; Package-Requires: ((cl-lib "0.3") (concurrent "0.3.1") (popup "0.5.0"))
 ;; URL: https://github.com/kiyoka/sekka
@@ -370,6 +370,9 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 ;;     ("yomi"   .  "kanji")
 ;;     ("limit"  .  2)
 ;;     ("method" .  "normal")
+;;     ("userid" .  "xxxx")
+;;     ("pre1"   .  "で"
+;;     ("pre2"   .  "ローマ字")
 ;;    )
 (defun sekka-rest-request (func-name arg-alist)
   (defun one-request (func-name arg-alist)
@@ -427,7 +430,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
       result)))
 
 
-(when nil
+(when t
   ;; unit test
   (setq sekka-curl "curl")
   (setq sekka-login-name (user-login-name))
@@ -435,11 +438,12 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   (sekka-rest-request-by-curl
    "henkan"
    '(
-     ("yomi"   . "Nihon")
+     ("yomi"   . "naiyou")
      ("limit"  . "1")
      ("method" . "normal")
-     ("userid" . "kiyoka")))
-  )
+     ("userid" . "kiyoka")
+     ("pre1"   . "おなじ")
+     ("pre2"   . ""))))
 
 
 (defun sekka-url-http-post (url args)
@@ -545,29 +549,32 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 ;; ローマ字で書かれた文章をSekkaサーバーを使って変換する
 ;;
 (defun sekka-henkan-request (yomi limit)
-  (sekka-debug-print (format "henkan-input :[%s]\n"  yomi))
-  (when (string-equal "en" sekka-keyboard-type)
-    (setq yomi (replace-regexp-in-string ":" "+" yomi)))
-  (sekka-debug-print (format "henkan-send  :[%s]\n"  yomi))
-
-  (let (
-	(result (sekka-rest-request "henkan" `(("yomi"   . ,yomi)
-					       ("limit"  . ,(format "%d" limit))
-					       ("method" . ,sekka-roman-method)))))
-    (sekka-debug-print (format "henkan-result:%S\n" result))
-    (if (eq (string-to-char result) ?\( )
-	(progn
-	  (message nil)
-	  (condition-case err
-	      (read result)
-	    (end-of-file
-	     (progn
-	       (message "Parse error for parsing result of Sekka Server.")
-	       nil))))
-      (progn
-	(message result)
-	nil))))
-
+  (let ((pre-words (sekka-get-pre-words)))
+    (sekka-debug-print (format "henkan-input :pre1=[%s] pre2=[%s] [%s]\n" (car pre-words) (cadr pre-words) yomi))
+    (when (string-equal "en" sekka-keyboard-type)
+      (setq yomi (replace-regexp-in-string ":" "+" yomi)))
+    (sekka-debug-print (format "henkan-send  :[%s]\n"  yomi))
+    
+    (let (
+          (result (sekka-rest-request "henkan" `(("yomi"   . ,yomi)
+                                                 ("limit"  . ,(format "%d" limit))
+                                                 ("method" . ,sekka-roman-method)
+                                                 ("pre1"   . ,(car  pre-words))
+                                                 ("pre2"   . ,(cadr pre-words))))))
+      (sekka-debug-print (format "henkan-result:%S\n" result))
+      (if (eq (string-to-char result) ?\( )
+          (progn
+            (message nil)
+            (condition-case err
+                (read result)
+              (end-of-file
+               (progn
+                 (message "Parse error for parsing result of Sekka Server.")
+                 nil))))
+        (progn
+          (message result)
+          nil)))))
+  
 ;;
 ;; 確定した単語をサーバーに伝達する
 ;;
@@ -1241,6 +1248,74 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   (sekka-debug-print (format "sekka-history-gc after  len=%d\n" (length sekka-history-stack))))
 
 
+;;確定済みヒストリーから、バッファ内の位置(point)のリストを求める
+;; 戻り値: (
+;;           (バッファ名 開始位置 終了位置)
+;;           (バッファ名 開始位置 終了位置)
+;;           (バッファ名 開始位置 終了位置))
+;;   並び順は、開始位置順
+(defun sekka-get-history-list ()
+  ;; カーソル位置に有効な変換済エントリがあるか探す
+  (let ((lst '()))
+    (mapcar
+     (lambda (alist)
+       (let* ((markers  (sekka-assoc-ref 'markers  alist nil))
+              (last-fix (sekka-assoc-ref 'last-fix alist ""))
+              (end      (marker-position (cdr markers)))
+              (start    (- end (length last-fix)))
+              (bufname  (sekka-assoc-ref 'bufname alist ""))
+              (pickup   (if (string-equal bufname (buffer-name))
+                            (buffer-substring start end)
+                          "")))
+         (if (string-equal last-fix pickup)
+             (progn
+               (sekka-debug-print (format "sekka-get-history-list    range:     %d-%d\n"  start end))
+               (sekka-debug-print (format "sekka-get-history-list    bufname:   %s\n"     bufname))
+               (sekka-debug-print (format "sekka-get-history-list    pickup:    %s\n"     pickup))
+               (push 
+                (list bufname start end last-fix)
+                lst)))))
+     sekka-history-stack)
+    (sort lst
+          (lambda (a b) (< (cadr a) (cadr b))))))
+
+;; カーソル位置の前の単語 ( 2 word ) を探す。
+(defun sekka-get-pre-words ()
+  (let* ((bufname (buffer-name (current-buffer)))
+         (lst (sekka-get-history-list)))
+    (sekka-debug-print (format "point=%d lst=%s\n" (point) lst))
+    (let* ((leftside-words '())
+           (ends '())
+           (pre1 "")
+           (pre2 ""))
+      (mapcar
+       (lambda (x)
+         (let ((bufname (car x))
+               (start (cadr x))
+               (end (caddr x))
+               (str (cadddr x)))
+           (sekka-debug-print (format "bufname=%s\n" bufname))
+           (sekka-debug-print (format "%d-%d\n" start end))
+           (sekka-debug-print (format "str=%s\n" str))
+           (if (and
+                (string-equal (car x) bufname)
+                (< (caddr x) (point))
+                (not (member end ends)))
+               (progn
+                 (push end ends)
+                 (push x leftside-words)))))
+       (reverse lst))
+      (sekka-debug-print (format "result=%s\n" leftside-words))
+      (when (< 0 (length leftside-words))
+        (let ((entry (car (reverse leftside-words))))
+          (setq pre1 (cadddr entry))))
+      (when (< 1 (length leftside-words))
+        (let ((entry (cadr (reverse leftside-words))))
+          (setq pre2 (cadddr entry))))
+      (sekka-debug-print (format "pre1=[%s] pre2[%s]\n" pre1 pre2))
+      (list pre1 pre2))))
+
+
 ;;確定ヒストリから、指定_pointに変換済の単語が埋まっているかどうか調べる
 ;; t か nil を返す。
 ;; また、_load に 真を渡すと、見付かった情報で、現在の変換候補変数にロードしてくれる。
@@ -1746,7 +1821,7 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
 (setq default-input-method "japanese-sekka")
 
 (defconst sekka-version
-  "1.5.9" ;;SEKKA-VERSION
+  "1.6.0" ;;SEKKA-VERSION
   )
 (defun sekka-version (&optional arg)
   "入力モード変更"
