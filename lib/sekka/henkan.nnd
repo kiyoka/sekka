@@ -407,18 +407,22 @@
      (lambda (word)
        (hash-table-put! coll-hash word #t))
      (to-list (collocation-word.split #/\//)))
-    (let1 reordered
-        (append
-         (filter
-          (lambda (x)
-            (hash-table-get coll-hash (car x) #f))
-          henkan-result)
-         (filter
-          (lambda (x)
-            (not
-             (hash-table-get coll-hash (car x) #f)))
-          henkan-result))
-      (renumbering reordered))))
+    (let* ([head (car henkan-result)]
+           [tail (cdr henkan-result)])
+      (let1 reordered
+          (cons
+           head
+           (append
+            (filter
+             (lambda (x)
+               (hash-table-get coll-hash (car x) #f))
+             tail)
+            (filter
+             (lambda (x)
+               (not
+                (hash-table-get coll-hash (car x) #f)))
+             tail)))
+        (renumbering reordered)))))
 
 
 ;; keyword には ローマ字のみを受け付ける
