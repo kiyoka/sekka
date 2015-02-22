@@ -1,0 +1,21 @@
+# ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv を作成するMakefileです。
+# make -j CPUコア数 で指定して、並列処理させることができます。
+
+all : ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	echo "do nothing."
+
+# 結合
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv : ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0000.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0001.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0000.tsv  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0001.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0000.tsv : ./data/ngram/nwc2010.10/3gm-0000.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0000.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0000.tsv
+
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0001.tsv : ./data/ngram/nwc2010.10/3gm-0001.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0001.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0001.tsv
+
+
+clean:
+	/bin/rm -f ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-*.tsv
+	/bin/rm -f ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv

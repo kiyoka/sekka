@@ -9,7 +9,7 @@ nwc2010 のサイトから共起頻度データをダウンロードして txt �
 
 ### ダウンロード (頻度10回以上のデータ)
 
-以下を結合して 2gm.10.txt として保存します。
+以下を結合して 2gm.10.txt.gz として保存します。
 http://dist.s-yata.jp/corpus/nwc2010/ngrams/word/over9/2gms/2gm-0000.xz
 http://dist.s-yata.jp/corpus/nwc2010/ngrams/word/over9/2gms/2gm-0001.xz
 http://dist.s-yata.jp/corpus/nwc2010/ngrams/word/over9/2gms/2gm-0002.xz
@@ -18,8 +18,7 @@ http://dist.s-yata.jp/corpus/nwc2010/ngrams/word/over9/2gms/2gm-0004.xz
 http://dist.s-yata.jp/corpus/nwc2010/ngrams/word/over9/2gms/2gm-0005.xz
 http://dist.s-yata.jp/corpus/nwc2010/ngrams/word/over9/2gms/2gm-0006.xz
 
-
-以下を結合して 3gm.10.txt として保存します。
+以下をダウンロードしておきます。拡張子はxzのままにしてください。
 http://dist.s-yata.jp/corpus/nwc2010/ngrams/word/over9/3gms/3gm-0000.xz
 http://dist.s-yata.jp/corpus/nwc2010/ngrams/word/over9/3gms/3gm-0001.xz
 http://dist.s-yata.jp/corpus/nwc2010/ngrams/word/over9/3gms/3gm-0002.xz
@@ -58,10 +57,9 @@ http://dist.s-yata.jp/corpus/nwc2010/ngrams/word/over9/3gms/3gm-0034.xz
 http://dist.s-yata.jp/corpus/nwc2010/ngrams/word/over9/3gms/3gm-0035.xz
 http://dist.s-yata.jp/corpus/nwc2010/ngrams/word/over9/3gms/3gm-0036.xz
 
-## txt化したもの
+## 結合した者
 以下に置いています。
 SekkaのRakefileから利用する時に事前にダウンロードする必要があります。
    https://s3-ap-northeast-1.amazonaws.com/sekkadict/dictsource/2gm.10.txt.gz
-   https://s3-ap-northeast-1.amazonaws.com/sekkadict/dictsource/3gm.10.txt.gz
 
 [以上]
