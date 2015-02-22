@@ -177,7 +177,8 @@ end
 
 task :ngramL do
   sh "zcat ./data/ngram/nwc2010.10/2gm.10.txt.gz   | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd      2     > ./data/SEKKA-JISYO.LARGE.2GRAM.tsv"
-  sh "zcat ./data/ngram/nwc2010.10/3gm.10.txt.gz   | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2     > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv"
+  # SKIP2GRAMはMakefile.large.ngramを使って手動で作成する必要がある。
+  # sh "zcat ./data/ngram/nwc2010.10/3gm.10.txt.gz   | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2     > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv"
 end
 
 
