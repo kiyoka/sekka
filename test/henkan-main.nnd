@@ -1311,6 +1311,14 @@
        '(("かくりつ" #f "kakuritu" h 0) ("確立" #f "かくりつ" j 1) ("カクリツ" #f "kakuritu" k 2) ("ｋａｋｕｒｉｔｕ" #f "kakuritu" z 3) ("kakuritu" #f "kakuritu" l 4) ("確率" #f "かくりつ" j 5))
        (sekka-henkan-with-pre userid kvs "kakuritu" 0 :normal "" "理論"))
 
+(test* "henkan toplevel with pre 10" ;; 大文字から始まりキーワードは救済対象ではない
+       '(("痛心" #f "つうしん" j 0) ("通信" #f "つうしん" j 1) ("つうしん" #f "tuushin" h 2) ("ツウシン" #f "tuushin" k 3) ("Ｔｕｕｓｈｉｎ" #f "Tuushin" z 4) ("Tuushin" #f "Tuushin" l 5))
+       (sekka-henkan-with-pre userid kvs "Tuushin" 0 :normal "高速" ""))
+
+(test* "henkan toplevel with pre 11" ;; 大文字から始まりキーワードは救済対象ではない
+       '(("確率" #f "かくりつ" j 0) ("確立" #f "かくりつ" j 1) ("かくりつ" #f "kakuritu" h 2) ("カクリツ" #f "kakuritu" k 3) ("Ｋａｋｕｒｉｔｕ" #f "Kakuritu" z 4) ("Kakuritu" #f "Kakuritu" l 5))
+       (sekka-henkan-with-pre userid kvs "Kakuritu" 0 :normal "" "理論"))
+
 ;;-------------------------------------------------------------------
 (test-section "henkan kakutei")
 (test* "henkan kakutei(for Elisp) 1"
