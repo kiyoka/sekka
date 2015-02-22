@@ -1,19 +1,151 @@
 # ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv を作成するMakefileです。
 # make -j CPUコア数 で指定して、並列処理させることができます。
 
+# 繰り返し部分は以下のnendoスクリプトで生成できます。
+#;(define files 37)
+#;
+#;(printf "./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv : ")
+#;(printf "%s"
+#;        (string-join
+#;         (map
+#;          (lambda (n)
+#;            (sprintf "./data/SEKKA-JISYO.LARGE.SKIP2GRAM-%04d.tsv" n))
+#;          (range files))
+#;         " "))
+#;(print "")
+#;
+#;(print "	rm -f ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv")
+#;(for-each
+#; (lambda (n)
+#;   (printf "	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-%04d.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv\n" n))
+#; (range files))
+#;
+#;(print "")
+#;
+#;(for-each
+#; (lambda (n)
+#;   (printf "./data/SEKKA-JISYO.LARGE.SKIP2GRAM-%04d.tsv : ./data/ngram/nwc2010.10/3gm-%04d.xz\n" n n)
+#;   (printf "	xzcat ./data/ngram/nwc2010.10/3gm-%04d.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-%04d.tsv\n" n n))
+#; (range files))
+
+
 all : ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
 	echo "do nothing."
 
-# 結合
-./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv : ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0000.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0001.tsv
-	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0000.tsv  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv : ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0000.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0001.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0002.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0003.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0004.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0005.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0006.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0007.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0008.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0009.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0010.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0011.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0012.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0013.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0014.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0015.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0016.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0017.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0018.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0019.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0020.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0021.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0022.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0023.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0024.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0025.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0026.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0027.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0028.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0029.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0030.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0031.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0032.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0033.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0034.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0035.tsv ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0036.tsv
+	rm -f ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0000.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
 	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0001.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0002.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0003.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0004.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0005.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0006.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0007.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0008.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0009.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0010.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0011.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0012.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0013.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0014.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0015.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0016.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0017.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0018.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0019.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0020.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0021.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0022.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0023.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0024.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0025.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0026.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0027.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0028.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0029.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0030.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0031.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0032.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0033.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0034.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0035.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
+	cat ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0036.tsv >> ./data/SEKKA-JISYO.LARGE.SKIP2GRAM.tsv
 
 ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0000.tsv : ./data/ngram/nwc2010.10/3gm-0000.xz
 	xzcat ./data/ngram/nwc2010.10/3gm-0000.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0000.tsv
-
 ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0001.tsv : ./data/ngram/nwc2010.10/3gm-0001.xz
 	xzcat ./data/ngram/nwc2010.10/3gm-0001.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0001.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0002.tsv : ./data/ngram/nwc2010.10/3gm-0002.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0002.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0002.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0003.tsv : ./data/ngram/nwc2010.10/3gm-0003.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0003.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0003.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0004.tsv : ./data/ngram/nwc2010.10/3gm-0004.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0004.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0004.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0005.tsv : ./data/ngram/nwc2010.10/3gm-0005.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0005.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0005.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0006.tsv : ./data/ngram/nwc2010.10/3gm-0006.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0006.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0006.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0007.tsv : ./data/ngram/nwc2010.10/3gm-0007.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0007.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0007.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0008.tsv : ./data/ngram/nwc2010.10/3gm-0008.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0008.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0008.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0009.tsv : ./data/ngram/nwc2010.10/3gm-0009.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0009.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0009.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0010.tsv : ./data/ngram/nwc2010.10/3gm-0010.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0010.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0010.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0011.tsv : ./data/ngram/nwc2010.10/3gm-0011.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0011.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0011.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0012.tsv : ./data/ngram/nwc2010.10/3gm-0012.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0012.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0012.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0013.tsv : ./data/ngram/nwc2010.10/3gm-0013.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0013.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0013.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0014.tsv : ./data/ngram/nwc2010.10/3gm-0014.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0014.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0014.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0015.tsv : ./data/ngram/nwc2010.10/3gm-0015.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0015.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0015.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0016.tsv : ./data/ngram/nwc2010.10/3gm-0016.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0016.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0016.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0017.tsv : ./data/ngram/nwc2010.10/3gm-0017.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0017.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0017.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0018.tsv : ./data/ngram/nwc2010.10/3gm-0018.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0018.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0018.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0019.tsv : ./data/ngram/nwc2010.10/3gm-0019.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0019.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0019.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0020.tsv : ./data/ngram/nwc2010.10/3gm-0020.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0020.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0020.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0021.tsv : ./data/ngram/nwc2010.10/3gm-0021.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0021.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0021.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0022.tsv : ./data/ngram/nwc2010.10/3gm-0022.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0022.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0022.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0023.tsv : ./data/ngram/nwc2010.10/3gm-0023.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0023.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0023.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0024.tsv : ./data/ngram/nwc2010.10/3gm-0024.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0024.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0024.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0025.tsv : ./data/ngram/nwc2010.10/3gm-0025.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0025.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0025.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0026.tsv : ./data/ngram/nwc2010.10/3gm-0026.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0026.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0026.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0027.tsv : ./data/ngram/nwc2010.10/3gm-0027.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0027.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0027.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0028.tsv : ./data/ngram/nwc2010.10/3gm-0028.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0028.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0028.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0029.tsv : ./data/ngram/nwc2010.10/3gm-0029.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0029.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0029.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0030.tsv : ./data/ngram/nwc2010.10/3gm-0030.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0030.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0030.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0031.tsv : ./data/ngram/nwc2010.10/3gm-0031.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0031.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0031.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0032.tsv : ./data/ngram/nwc2010.10/3gm-0032.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0032.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0032.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0033.tsv : ./data/ngram/nwc2010.10/3gm-0033.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0033.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0033.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0034.tsv : ./data/ngram/nwc2010.10/3gm-0034.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0034.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0034.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0035.tsv : ./data/ngram/nwc2010.10/3gm-0035.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0035.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0035.tsv
+./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0036.tsv : ./data/ngram/nwc2010.10/3gm-0036.xz
+	xzcat ./data/ngram/nwc2010.10/3gm-0036.xz | ruby -I ./lib /usr/local/bin/nendo ./data/ngram_to_sekkatsv.nnd  skip2  > ./data/SEKKA-JISYO.LARGE.SKIP2GRAM-0036.tsv
 
 
 clean:
