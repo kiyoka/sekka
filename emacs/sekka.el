@@ -549,7 +549,9 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 ;; ローマ字で書かれた文章をSekkaサーバーを使って変換する
 ;;
 (defun sekka-henkan-request (yomi limit)
-  (let ((pre-words (sekka-get-pre-words)))
+  (let ((pre-words (if (= 1 limit)
+                       '("" "")
+                     (sekka-get-pre-words))))
     (sekka-debug-print (format "henkan-input :pre1=[%s] pre2=[%s] [%s]\n" (car pre-words) (cadr pre-words) yomi))
     (when (string-equal "en" sekka-keyboard-type)
       (setq yomi (replace-regexp-in-string ":" "+" yomi)))
@@ -1263,6 +1265,9 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
               (last-fix (sekka-assoc-ref 'last-fix alist ""))
               (end      (marker-position (cdr markers)))
               (start    (- end (length last-fix)))
+              (start    (if (< start 1) ;; 1未満にならないように補正
+                            1
+                          start))
               (bufname  (sekka-assoc-ref 'bufname alist ""))
               (pickup   (if (string-equal bufname (buffer-name))
                             (buffer-substring start end)
