@@ -252,6 +252,74 @@
        (is-hiragana-and-okuri "123"))
 
 ;;-------------------------------------------------------------------
+(test-section "other judgement functions")
+
+(test* "include hiragana 1"
+       #t
+       (include-hiragana "123あ456"))
+
+(test* "include hiragana 2"
+       #f
+       (include-hiragana "123A456"))
+
+(test* "include hiragana 3"
+       #f
+       (include-hiragana "漢字"))
+
+(test* "include hiragana 4"
+       #f
+       (include-hiragana "カタカナ"))
+
+(test* "is kanji 1"
+       #t
+       (is-kanji "漢字"))
+
+(test* "is kanji 2"
+       #t
+       (is-kanji "薔薇"))
+
+(test* "is kanji 3"
+       #f
+       (is-kanji "感じ"))
+
+(test* "is kanji 4"
+       #f
+       (is-kanji "ひらがな"))
+
+(test* "is kanji 5"
+       #f
+       (is-kanji "ABCDE"))
+
+(test* "is kanji 6"
+       #f
+       (is-kanji "¢"))
+
+(test* "is kanji 7"
+       #f
+       (is-kanji "з"))
+
+(test* "include kanji 1"
+       #t
+       (include-kanji "感じ"))
+
+(test* "include kanji 2"
+       #t
+       (include-kanji "ABC漢字DEF"))
+
+(test* "include kanji 3"
+       #f
+       (include-kanji "ABCDEF"))
+
+(test* "include kanji 4"
+       #f
+       (include-kanji "ひらがな"))
+
+(test* "include kanji 5"
+       #f
+       (include-kanji "カタカナ"))
+
+
+;;-------------------------------------------------------------------
 (test-section "drop okurigana functions")
 (test* "drop okri 1"
        "行"

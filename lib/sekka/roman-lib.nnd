@@ -737,9 +737,21 @@
 (define (is-katakana str)
   (if (rxmatch #/^[ア-ンァィゥェォャュョッー]+$/ str) #t #f))
 
-;; 平仮名の文字列かどうかを評価する
+;; ひらがなの文字列かどうかを評価する
 (define (is-hiragana str)
   (if (rxmatch #/^[あ-んぁぃぅぇぉゃゅょっー]+$/ str) #t #f))
+
+;; ひらがなの文字列を含むかどうかを評価する
+(define (include-hiragana str)
+  (if (rxmatch #/[あ-んぁぃぅぇぉゃゅょっー]+/ str) #t #f))
+
+;; 漢字の文字列かどうかを評価する
+(define (is-kanji str)
+  (if (rxmatch #/^[\p{Han}]+$/ str) #t #f))
+
+;; 漢字の文字列を含むかどうか評価する
+(define (include-kanji str)
+  (if (rxmatch #/[\p{Han}]/ str) #t #f))
 
 ;; 送り仮名付き平仮名文字列(例:"おこなu") かどうかを評価する
 (define (is-hiragana-and-okuri str)
