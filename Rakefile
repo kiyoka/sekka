@@ -23,17 +23,13 @@ require 'rake'
 require "bundler/gem_tasks"
 require 'jeweler2'
 
-# generate `normal' and `azik' dictionary
-# (generateTypes = [ "N", "A" ])
-generateTypes = [ "N" ]
-
 
 task :default => [:test] do
 end
 
 task :compile do
   # generate version.rb
-  dictVersion = "1.4.2"
+  dictVersion = "1.5.0"
   vh = Jeweler::VersionHelper.new "."
   open( "./lib/sekka/sekkaversion.rb", "w" ) {|f|
     f.puts(   "class SekkaVersion" )
@@ -122,60 +118,29 @@ task :bench do
   sh "time ruby -I ./lib /usr/local/bin/nendo ./test/henkan-bench.nnd"
 end
 
-task :alljisyo  => [ :alljisyoS, :alljisyoL ]
-task :alljisyoS => [ :jisyoS, :loadS, :dumpS, :md5 ]
-task :alljisyoL => [ :jisyoL, :loadL, :dumpL, :md5 ]
+task :alljisyo => [ :jisyo, :load, :dump, :md5 ]
 
 task :md5 do
-  sh "md5sum ./data/SEKKA-JISYO.SMALL.N.tsv > ./data/SEKKA-JISYO.SMALL.N.md5"
-  sh "md5sum ./data/SEKKA-JISYO.LARGE.N.tsv > ./data/SEKKA-JISYO.LARGE.N.md5"
+  sh "md5sum ./data/SEKKA-JISYO.N.tsv > ./data/SEKKA-JISYO.N.md5"
 end
 
-task :jisyoS do
-  generateTypes.each {|x|
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.201501           >  ./data/SEKKA-JISYO.SMALL.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.SMALL.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase    >> ./data/SEKKA-JISYO.SMALL.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase2   >> ./data/SEKKA-JISYO.SMALL.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase3   >> ./data/SEKKA-JISYO.SMALL.#{x}"
-  }
+task :jisyo do
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.L.201501           >  ./data/SEKKA-JISYO.N"
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.N"
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.fullname           >> ./data/SEKKA-JISYO.N"
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.jinmei             >> ./data/SEKKA-JISYO.N"
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.station            >> ./data/SEKKA-JISYO.N"
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.hiragana-phrase    >> ./data/SEKKA-JISYO.N"
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.hiragana-phrase2   >> ./data/SEKKA-JISYO.N"
+  sh "ruby ./bin/sekka-jisyo convertN ./data/SKK-JISYO.hiragana-phrase3   >> ./data/SEKKA-JISYO.N"
 end
 
-task :jisyoL do
-  generateTypes.each {|x|
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.201501           >  ./data/SEKKA-JISYO.LARGE.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.L.hira-kata        >> ./data/SEKKA-JISYO.LARGE.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.fullname           >> ./data/SEKKA-JISYO.LARGE.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.jinmei             >> ./data/SEKKA-JISYO.LARGE.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.station            >> ./data/SEKKA-JISYO.LARGE.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase    >> ./data/SEKKA-JISYO.LARGE.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase2   >> ./data/SEKKA-JISYO.LARGE.#{x}"
-    sh "ruby ./bin/sekka-jisyo convert#{x} ./data/SKK-JISYO.hiragana-phrase3   >> ./data/SEKKA-JISYO.LARGE.#{x}"
-  }
+task :load do
+  sh "ruby ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.N  ./data/SEKKA-JISYO.N.tch#xmsiz=1024m"
 end
 
-task :loadS do
-  generateTypes.each {|x|
-    sh "ruby ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.SMALL.#{x}  ./data/SEKKA-JISYO.SMALL.#{x}.tch#xmsiz=1024m"
-  }
-end
-
-task :loadL do
-  generateTypes.each {|x|
-    sh "ruby ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.LARGE.#{x}  ./data/SEKKA-JISYO.LARGE.#{x}.tch#xmsiz=1024m"
-  }
-end
-
-task :dumpS do
-  generateTypes.each {|x|
-    sh "ruby ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.SMALL.#{x}.tch#xmsiz=1024m > ./data/SEKKA-JISYO.SMALL.#{x}.tsv"
-  }
-end
-
-task :dumpL do
-  generateTypes.each {|x|
-    sh "ruby ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.LARGE.#{x}.tch#xmsiz=1024m > ./data/SEKKA-JISYO.LARGE.#{x}.tsv"
-  }
+task :dump do
+  sh "ruby ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.N.tch#xmsiz=1024m > ./data/SEKKA-JISYO.N.tsv"
 end
 
 # SKK-JISYO.hiragana-phrase はWikipediaから作られる。
