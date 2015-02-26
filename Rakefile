@@ -108,14 +108,14 @@ task :test do
     files << "./test/henkan-main.nnd  pure"
   end
   files.each {|filename|
-    sh  sprintf( "ruby -I ./lib -S nendo -d %s", filename )
+    sh  sprintf( "nendo -I ./lib -d %s", filename )
   }
   sh "cat test.record"
 end
 
 task :bench do
-  sh "time ruby -I ./lib /usr/local/bin/nendo ./test/approximate-bench.nnd"
-  sh "time ruby -I ./lib /usr/local/bin/nendo ./test/henkan-bench.nnd"
+  sh "time nendo -I ./lib ./test/approximate-bench.nnd"
+  sh "time nendo -I ./lib ./test/henkan-bench.nnd"
 end
 
 task :alljisyo => [ :jisyo, :load, :dump, :md5 ]
@@ -146,13 +146,13 @@ end
 # SKK-JISYO.hiragana-phrase はWikipediaから作られる。
 task :phrase => [ "/tmp/jawiki.txt.gz", "./data/wikipedia/jawiki.hiragana.txt" ] do
   sh "sort ./data/wikipedia/jawiki.hiragana.txt | uniq -c | sort > ./data/wikipedia/ranking.txt"
-  sh "ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase_in_wikipedia2.nnd ./data/wikipedia/ranking.txt > ./data/SKK-JISYO.hiragana-phrase"
+  sh "nendo -I ./lib ./data/hiragana_phrase_in_wikipedia2.nnd ./data/wikipedia/ranking.txt > ./data/SKK-JISYO.hiragana-phrase"
   sh "echo 'して //' >> ./data/SKK-JISYO.hiragana-phrase"
 end
 
 file "./data/wikipedia/jawiki.hiragana.txt" do
   sh "zcat /tmp/jawiki.txt.gz | mecab --input-buffer-size=65536 -O wakati --output=/tmp/jawiki.wakati.txt"
-  sh "ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase_in_wikipedia.nnd /tmp/jawiki.wakati.txt > ./data/wikipedia/jawiki.hiragana.txt"
+  sh "nendo -I ./lib ./data/hiragana_phrase_in_wikipedia.nnd /tmp/jawiki.wakati.txt > ./data/wikipedia/jawiki.hiragana.txt"
   sh "rm -f /tmp/jawiki.wakati.txt"
 end
 
@@ -168,7 +168,7 @@ end
 
 # SKK-JISYO.hiragana-phrase2 はIPADicから作られる。
 task :phrase2 => [ "./data/ipadic.all.utf8.txt" ] do
-  sh "time ruby -I ./lib /usr/local/bin/nendo ./data/hiragana_phrase_in_ipadic.nnd             ./data/ipadic.all.utf8.txt | sort | uniq > ./data/SKK-JISYO.hiragana-phrase2"
+  sh "time nendo -I ./data/hiragana_phrase_in_ipadic.nnd             ./data/ipadic.all.utf8.txt | sort | uniq > ./data/SKK-JISYO.hiragana-phrase2"
 end
 
 file "./data/ipadic.all.utf8.txt" do
