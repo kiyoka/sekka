@@ -16,31 +16,16 @@ DICTURL = "https://raw.githubusercontent.com/kiyoka/sekka/master/public_dict/" +
 
 PIDFILE = DICTDIR + "/pid"
 
-DICTTYPE = "N"
-if ENV.has_key?( 'SEKKA_AZIK' )
-  STDERR.printf( "Error: SEKKA_AZIK became obsolute. sekka-server use normal dictionary.\n" )
-end
-
-DICTSIZE = if ENV.has_key?( 'SEKKA_LARGE' )
-             if 1 == ENV[ 'SEKKA_LARGE' ].to_i
-               "LARGE"
-             else
-               "SMALL"
-             end
-           else
-             "SMALL"
-           end
-
 TC_OPTS = "#xmsiz=256m"
-TC_FILE = DICTDIR + "/SEKKA-JISYO.#{DICTSIZE}.#{DICTTYPE}.tch" + TC_OPTS
-TSVFILE = DICTDIR + "/SEKKA-JISYO.#{DICTSIZE}.#{DICTTYPE}.tsv"
-SUMFILE = DICTDIR + "/SEKKA-JISYO.#{DICTSIZE}.#{DICTTYPE}.md5"
+TC_FILE = DICTDIR + "/SEKKA-JISYO.N.tch" + TC_OPTS
+TSVFILE = DICTDIR + "/SEKKA-JISYO.N.tsv"
+SUMFILE = DICTDIR + "/SEKKA-JISYO.N.md5"
 
-GDBM_FILE = DICTDIR + "/SEKKA-JISYO.#{DICTSIZE}.#{DICTTYPE}.db"
+GDBM_FILE = DICTDIR + "/SEKKA-JISYO.N.db"
 
 
-URLURL  = DICTURL + "/SEKKA-JISYO.#{DICTSIZE}.#{DICTTYPE}.url"
-SUMURL  = DICTURL + "/SEKKA-JISYO.#{DICTSIZE}.#{DICTTYPE}.md5"
+URLURL  = DICTURL + "/SEKKA-JISYO.N.url"
+SUMURL  = DICTURL + "/SEKKA-JISYO.N.md5"
 
 MEMCACHED = "localhost:11211"                # memcahced
 
