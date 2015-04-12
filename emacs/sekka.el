@@ -157,11 +157,16 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 (defvar sekka-mode nil             "漢字変換トグル変数")
 (defun sekka-modeline-string ()
   ;; 接続先sekka-serverのホスト名を表示する。
-  (format " Sekka[%s%s]"
+  (format " Sekka[%s:%s%s]"
 	  (if current-sekka-server-url
 	      (url-host
 	       (url-generic-parse-url current-sekka-server-url))
 	    "")
+          (if current-sekka-server-url
+              (format "%d"
+                      (url-port
+                       (url-generic-parse-url current-sekka-server-url)))
+            "")
 	  (if sekka-uploading-flag
 	      "(UPLOADING)"
 	    "")))
@@ -461,15 +466,20 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	      (sekka-debug-print (buffer-name buf))
 	      (sekka-debug-print "\n")
 	      (if buf
-		  (with-current-buffer buf
-		    (decode-coding-string 
-		     (let ((str (buffer-substring-no-properties (point-min) (point-max))))
-		       (sekka-debug-print (format "http result code:%s\n" url-http-response-status))
-		       (sekka-debug-print (format "(%d-%d) eoh=%s\n" (point-min) (point-max) url-http-end-of-headers))
-		       (sekka-debug-print (format "<<<%s>>>\n" str))
-		       str)
-		     'utf-8))
-                (list "curl: (7)  Couldn't connect to host 'localhost'")))) ;; Emulate curl error.
+                  (with-current-buffer buf
+                    (decode-coding-string 
+                     (let ((str (buffer-substring-no-properties (point-min) (point-max))))
+                       (cond
+                        (url-http-response-status
+                         (sekka-debug-print (format "http result code:%s\n" url-http-response-status))
+                         (sekka-debug-print (format "(%d-%d) eoh=%s\n" (point-min) (point-max) url-http-end-of-headers))
+                         (sekka-debug-print (format "<<<%s>>>\n" str))
+                         str)
+                        (t
+                         "curl: (28) Time out\n" ;; Emulate curl Operation timed out.
+                         )))
+                     'utf-8))
+                "curl: (7)  Couldn't connect to host 'localhost'\n"))) ;; Emulate curl error.
            (line-list
             (split-string lines "\n")))
       
