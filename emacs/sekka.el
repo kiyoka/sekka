@@ -157,13 +157,13 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 (defvar sekka-mode nil             "漢字変換トグル変数")
 (defun sekka-modeline-string ()
   ;; 接続先sekka-serverのホスト名を表示する。
-  (format " Sekka[%s:%s%s]"
+  (format " Sekka[%s%s%s]"
 	  (if current-sekka-server-url
 	      (url-host
 	       (url-generic-parse-url current-sekka-server-url))
 	    "")
           (if current-sekka-server-url
-              (format "%d"
+              (format ":%d"
                       (url-port
                        (url-generic-parse-url current-sekka-server-url)))
             "")
