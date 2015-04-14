@@ -1,10 +1,11 @@
 ;;; popup.el --- Visual Popup User Interface
 
-;; Copyright (C) 2009, 2010, 2011, 2012, 2013  Tomohiro Matsuyama
+;; Copyright (C) 2009-2015  Tomohiro Matsuyama
 
-;; Author: Tomohiro Matsuyama <tomo@cx4a.org>
+;; Author: Tomohiro Matsuyama <m2ym.pub@gmail.com>
 ;; Keywords: lisp
-;; Version: 0.5.0
+;; Package-Version: 20150315.612
+;; Version: 0.5.2
 ;; Package-Requires: ((cl-lib "0.3"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -31,7 +32,7 @@
 
 (require 'cl-lib)
 
-(defconst popup-version "0.5.0")
+(defconst popup-version "0.5.2")
 
 
 
@@ -148,34 +149,6 @@ untouched."
            (progn ,@body)
          (set-buffer-modified-p modified)))))
 
-(defun popup-window-full-width-p (&optional window)
-  "A portable version of `window-full-width-p'."
-  (if (fboundp 'window-full-width-p)
-      (window-full-width-p window)
-    (= (window-width window) (frame-width (window-frame (or window (selected-window)))))))
-
-(defun popup-truncated-partial-width-window-p (&optional window)
-  "A portable version of `truncated-partial-width-window-p'."
-  (unless window
-    (setq window (selected-window)))
-  (unless (popup-window-full-width-p window)
-    (let ((t-p-w-w (buffer-local-value 'truncate-partial-width-windows
-                                       (window-buffer window))))
-      (if (integerp t-p-w-w)
-          (< (window-width window) t-p-w-w)
-        t-p-w-w))))
-
-(defun popup-current-physical-column ()
-  "Return the current physical column."
-  (or (when (and popup-use-optimized-column-computation
-                 (eq (window-hscroll) 0))
-        (let ((current-column (current-column)))
-          (if (or (popup-truncated-partial-width-window-p)
-                  truncate-lines
-                  (< current-column (window-width)))
-              current-column)))
-      (car (posn-col-row (posn-at-point)))))
-
 (defun popup-vertical-motion (column direction)
   "A portable version of `vertical-motion'."
   (if (>= emacs-major-version 23)
@@ -243,7 +216,7 @@ buffer."
   face mouse-face selection-face summary-face
   margin-left margin-right margin-left-cancel scroll-bar symbol
   cursor offset scroll-top current-height list newlines
-  pattern original-list)
+  pattern original-list invis-overlays)
 
 (defun popup-item-propertize (item &rest properties)
   "Same as `propertize' except that this avoids overriding
@@ -537,8 +510,9 @@ KEYMAP is a keymap that will be put on the popup contents."
     (setq width (min width (popup-calculate-max-width max-width))))
   (save-excursion
     (goto-char point)
-    (let* ((row (line-number-at-pos))
-           (column (popup-current-physical-column))
+    (let* ((col-row (posn-col-row (posn-at-point)))
+           (row (cdr col-row))
+           (column (car col-row))
            (overlays (make-vector height nil))
            (popup-width (+ width
                            (if scroll-bar 1 0)
@@ -563,6 +537,7 @@ KEYMAP is a keymap that will be put on the popup contents."
                        (popup-calculate-direction height row)))
            (depth (if parent (1+ (popup-depth parent)) 0))
            (newlines (max 0 (+ (- height (count-lines point (point-max))) (if around 1 0))))
+           invis-overlays
            current-column)
       ;; Case: no newlines at the end of the buffer
       (when (> newlines 0)
@@ -596,17 +571,27 @@ KEYMAP is a keymap that will be put on the popup contents."
         (let (overlay begin w (dangle t) (prefix "") (postfix ""))
           (when around
             (popup-vertical-motion column direction))
-          (setq around t
-                current-column (popup-current-physical-column))
+          (cl-loop for ov in (overlays-in (save-excursion
+                                            (beginning-of-visual-line)
+                                            (point))
+                                          (save-excursion
+                                            (end-of-visual-line)
+                                            (point)))
+                   when (and (not (overlay-get ov 'popup))
+                             (not (overlay-get ov 'popup-item))
+                             (or (overlay-get ov 'invisible)
+                                 (overlay-get ov 'display)))
+                   do (progn
+                        (push (list ov (overlay-get ov 'display)) invis-overlays)
+                        (overlay-put ov 'display "")))
+          (setq around t)
+          (setq current-column (car (posn-col-row (posn-at-point))))
 
-          (when (> current-column column)
-            (backward-char)
-            (setq current-column (popup-current-physical-column)))
           (when (< current-column column)
             ;; Extend short buffer lines by popup prefix (line of spaces)
             (setq prefix (make-string
                           (+ (if (= current-column 0)
-                                 (- window-hscroll (current-column))
+                                 (- window-hscroll current-column)
                                0)
                              (- column current-column))
                           ? )))
@@ -621,6 +606,7 @@ KEYMAP is a keymap that will be put on the popup contents."
               (setq postfix (make-string (- w) ? )))
 
           (setq overlay (make-overlay begin (point)))
+          (overlay-put overlay 'popup t)
           (overlay-put overlay 'window window)
           (overlay-put overlay 'dangle dangle)
           (overlay-put overlay 'prefix prefix)
@@ -657,6 +643,7 @@ KEYMAP is a keymap that will be put on the popup contents."
                             :list nil
                             :newlines newlines
                             :overlays overlays
+                            :invis-overlays invis-overlays
                             :keymap keymap)))
         (push it popup-instances)
         it))))
@@ -674,12 +661,16 @@ KEYMAP is a keymap that will be put on the popup contents."
         (popup-save-buffer-state
           (goto-char (point-max))
           (dotimes (i newlines)
-            (if (= (char-before) ?\n)
+            (if (and (char-before)
+                     (= (char-before) ?\n))
                 (delete-char -1)))))))
   nil)
 
 (defun popup-draw (popup)
   "Draw POPUP."
+  (cl-loop for (ov olddisplay) in (popup-invis-overlays popup)
+           do (overlay-put ov 'display ""))
+
   (cl-loop with height = (popup-height popup)
            with min-height = (popup-min-height popup)
            with popup-face = (popup-face popup)
@@ -778,6 +769,8 @@ KEYMAP is a keymap that will be put on the popup contents."
 
 (defun popup-hide (popup)
   "Hide POPUP."
+  (cl-loop for (ov olddisplay) in (popup-invis-overlays popup)
+           do (overlay-put ov 'display olddisplay))
   (dotimes (i (popup-height popup))
     (popup-hide-line popup i)))
 
@@ -1383,8 +1376,8 @@ If `INITIAL-INDEX' is non-nil, this is an initial index value for
             (popup-jump menu cursor)
           (popup-draw menu))
         (when initial-index
-          (popup-select menu
-                        (min (- (length list) 1) initial-index)))
+          (dotimes (_i (min (- (length list) 1) initial-index))
+            (popup-next menu)))
         (if nowait
             menu
           (popup-menu-event-loop menu keymap fallback
