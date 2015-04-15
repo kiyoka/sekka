@@ -23,13 +23,14 @@ require 'rake'
 require "bundler/gem_tasks"
 require 'jeweler2'
 
+dictVersion = "1.5.1"
+
 
 task :default => [:test] do
 end
 
 task :compile do
   # generate version.rb
-  dictVersion = "1.5.0"
   vh = Jeweler::VersionHelper.new "."
   open( "./lib/sekka/sekkaversion.rb", "w" ) {|f|
     f.puts(   "class SekkaVersion" )
@@ -121,7 +122,7 @@ end
 task :alljisyo => [ :jisyo, :load, :dump, :md5 ]
 
 task :md5 do
-  sh "md5sum ./data/SEKKA-JISYO.N.tsv > ./data/SEKKA-JISYO.N.md5"
+  sh sprintf( "md5sum ./data/SEKKA-JISYO-%s.N.tsv > ./data/SEKKA-JISYO-%s.N.md5", dictVersion, dictVersion )
 end
 
 task :jisyo do
@@ -140,7 +141,7 @@ task :load do
 end
 
 task :dump do
-  sh "ruby ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.N.tch#xmsiz=1024m > ./data/SEKKA-JISYO.N.tsv"
+  sh sprintf( "ruby ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.N.tch#xmsiz=1024m > ./data/SEKKA-JISYO-%s.N.tsv", dictVersion )
 end
 
 # SKK-JISYO.hiragana-phrase はWikipediaから作られる。
