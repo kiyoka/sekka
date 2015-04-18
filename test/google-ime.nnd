@@ -67,7 +67,7 @@
 (test-section "request to google-ime")
 
 (test* "request online (1)"
-       '("日本語" "ニホンゴ" "にほんご" "ﾆﾎﾝｺﾞ")
+       '("日本語" "ニホンゴ" "日本後" "にほんご" "ﾆﾎﾝｺﾞ")
        (request-google-ime "にほんご" nil nil))
 
 (test* "request online (2)"

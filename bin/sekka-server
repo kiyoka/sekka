@@ -13,19 +13,17 @@ require 'sekka/sekkaversion'
 DICTDIR = File.expand_path( "~/.sekka-server" )
 DICTURL = "https://raw.githubusercontent.com/kiyoka/sekka/master/public_dict/" + SekkaVersion.dictVersion
 
+PIDFILE   = DICTDIR + "/pid"
 
-PIDFILE = DICTDIR + "/pid"
+TC_OPTS   = "#xmsiz=256m"
+TC_FILE   = sprintf( "%s/SEKKA-JISYO-%s.N.tch%s", DICTDIR, SekkaVersion.dictVersion, TC_OPTS )
+TSVFILE   = sprintf( "%s/SEKKA-JISYO-%s.N.tsv",   DICTDIR, SekkaVersion.dictVersion )
+SUMFILE   = sprintf( "%s/SEKKA-JISYO-%s.N.md5",   DICTDIR, SekkaVersion.dictVersion )
 
-TC_OPTS = "#xmsiz=256m"
-TC_FILE = DICTDIR + "/SEKKA-JISYO.N.tch" + TC_OPTS
-TSVFILE = DICTDIR + "/SEKKA-JISYO.N.tsv"
-SUMFILE = DICTDIR + "/SEKKA-JISYO.N.md5"
+GDBM_FILE = sprintf( "%s/SEKKA-JISYO-%s.N.db",    DICTDIR, SekkaVersion.dictVersion )
 
-GDBM_FILE = DICTDIR + "/SEKKA-JISYO.N.db"
-
-
-URLURL  = DICTURL + "/SEKKA-JISYO.N.url"
-SUMURL  = DICTURL + "/SEKKA-JISYO.N.md5"
+URLURL    = sprintf( "%s/SEKKA-JISYO-%s.N.url",   DICTURL, SekkaVersion.dictVersion )
+SUMURL    = sprintf( "%s/SEKKA-JISYO-%s.N.md5",   DICTURL, SekkaVersion.dictVersion )
 
 MEMCACHED = "localhost:11211"                # memcahced
 
