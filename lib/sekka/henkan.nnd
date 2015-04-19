@@ -2,7 +2,7 @@
 ;;;
 ;;; henkan.nnd - 変換エンジンのコア
 ;;;  
-;;;   Copyright (c) 2010  Kiyoka Nishiyama  <kiyoka@sumibi.org>
+;;;   Copyright (c) 2015  Kiyoka Nishiyama  <kiyoka@sumibi.org>
 ;;;   
 ;;;   Redistribution and use in source and binary forms, with or without
 ;;;   modification, are permitted provided that the following conditions
@@ -387,7 +387,7 @@
 
 ;; conversion #f => nil for EmacsLisp
 (define (sekkaHenkan userid kvs cachesv keyword limit roman-method)
-  (define cache-exp-second (* 60 60))
+  (define cache-exp-second (* 10 60))
   (let* ((keyword (keyword.strip))
          (sekka-keyword (+ "sekka:" roman-method ":" (limit.to_s) ":" keyword)))
     (if-let1 fetched (and cachesv
