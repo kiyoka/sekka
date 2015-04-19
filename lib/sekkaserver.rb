@@ -3,7 +3,7 @@
 #
 # sekkaserver.rb  -  "a sekka server"
 #
-#   Copyright (c) 2010  Kiyoka Nishiyama  <kiyoka@sumibi.org>
+#   Copyright (c) 2015  Kiyoka Nishiyama  <kiyoka@sumibi.org>
 #
 #   Redistribution and use in source and binary forms, with or without
 #   modification, are permitted provided that the following conditions
@@ -60,10 +60,12 @@ module SekkaServer
       @core.evalStr( "(use sekka.henkan)" )
       @core.evalStr( '(define (writeToString sexp) (write-to-string sexp))' )
       @core.evalStr( '(export-to-ruby writeToString)' )
-      (@kvs,@cachesv) = @core.openSekkaJisyo( SekkaServer::Config.dictType,
-                                              SekkaServer::Config.dictSource,
-                                              SekkaServer::Config.cacheSource )
-
+      (@kvs,@initialCachesv) = @core.openSekkaJisyo( SekkaServer::Config.dictType,
+                                                      SekkaServer::Config.dictSource,
+                                                      SekkaServer::Config.cacheSource )
+      @cachesv = @initialCachesv
+      @downTime = DateTime.now
+      
       version = @kvs.get( "SEKKA:VERSION" )
       if not SekkaVersion.dictVersion == version
         STDERR.printf(   "Sekka Error: require dict version [%s] but got [%s].\n", SekkaVersion.dictVersion, version )
@@ -166,6 +168,8 @@ module SekkaServer
              else
                case req.request_method
                when 'POST'
+                 revertMemcache()
+                 
                  userid = URI.decode( req.params['userid'].force_encoding("UTF-8") )
                  format = URI.decode( req.params['format'].force_encoding("UTF-8") )
                  case req.path
@@ -183,12 +187,16 @@ module SekkaServer
                        end
                      rescue MemCache::MemCacheError
                        result = "sekka-server: memcached server is down (or may be offline)"
+                       disableMemcache()
                      rescue Timeout
-                       result = "sekka-server: Timeout to request memcached server #{_orRedis} (may be offline)"
+                       result = "sekka-server: Timeout to request memcached server #{_orRedis} (or may be offline)"
+                       disableMemcache()
                      rescue SocketError
-                       result = "sekka-server: SocketError to request memcached server #{_orRedis} (may be offline)"
+                       result = "sekka-server: SocketError to request memcached server #{_orRedis} (or may be offline)"
+                       disableMemcache()
                      rescue Errno::ECONNREFUSED
-                       result = "sekka-server: ConnectionRefused to request memcached server #{_orRedis} (may be offline)"
+                       result = "sekka-server: ConnectionRefused to request memcached server #{_orRedis} (or may be offline)"
+                       disableMemcache()
                      end
                  }
                  when "/kakutei"
@@ -233,6 +241,23 @@ module SekkaServer
         r.write body
       }
       res.finish
+    end
+
+    def revertMemcache()
+      now = DateTime.now
+      ## STDERR.printf( "Sekka Debug: [%d]/[%d]\n", @downTime.to_time.to_i, now.to_time.to_i )
+      if not @cachesv
+        if (@downTime.to_time.to_i + (10 * 60)) < now.to_time.to_i
+          @cachesv = @initialCachesv
+          STDERR.printf( "Sekka Info: revert using memcache server. [%s]\n", @downTime )        
+        end
+      end
+    end
+    
+    def disableMemcache()
+      @cachesv  = false
+      @downTime = DateTime.now
+      STDERR.printf( "Sekka Warning: disabled using memcache server. [%s]\n", @downTime )
     end
   end
 end
