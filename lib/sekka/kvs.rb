@@ -56,6 +56,13 @@ class Kvs
       @gdbmFlag = false
     end
 
+    @daybreakFlag = true
+    begin
+      require 'daybreak'
+    rescue LoadError
+      @daybreakFlag = false
+    end
+
     @dbtype = dbtype
     case dbtype
     when :tokyocabinet
@@ -80,7 +87,12 @@ class Kvs
         raise RuntimeError, "Kvs.new() missed require( 'gdbm' )."
       end
 
-      # do nothing
+    when :daybreak
+      if @daybreakFlag
+        # do nothing
+      else
+        raise RuntimeError, "Kvs.new() missed require( 'daybreak' )."
+      end
 
     when :pure
       # do nothing
@@ -106,6 +118,11 @@ class Kvs
         name = name + ".db"
       end
       @db = GDBM.new( name, nil, GDBM::FAST | GDBM::WRCREAT )
+    when :daybreak
+      if not name.match( /.daybreak$/ )
+        name = name + ".daybreak"
+      end
+      @db = Daybreak::DB.new name
     when :pure
       @name = name
       if File.exist?( @name )
@@ -127,6 +144,8 @@ class Kvs
       if not @db.optimize( )
         raise RuntimeError, sprintf( "TokyoCabinet::HDB.optimize error: file=%s", name )
       end
+    when :daybreak
+      @db.compact
     end
     true
   end
@@ -145,6 +164,8 @@ class Kvs
         @db[ key.force_encoding("ASCII-8BIT") ] = value.force_encoding("ASCII-8BIT")
       when :memcache
         @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"), timeout )
+      when :daybreak
+        @db.set!( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"))
       when :pure
         @db[ key ] = value
       else
@@ -171,6 +192,8 @@ class Kvs
     case @dbtype
     when :redis
       @db.del( key )
+    when :daybreak
+      @db.delete!( key )
     else
       @db.delete( key )
     end
@@ -179,7 +202,7 @@ class Kvs
 
   def clear()
     case @dbtype
-    when :tokyocabinet, :gdbm, :pure
+    when :tokyocabinet, :gdbm, :daybreak, :pure
       @db.clear
     when :redis
       @db.flushall
@@ -199,7 +222,7 @@ class Kvs
       }
     when :memcache
       raise RuntimeError, "Kvs#keys method was not implemented for memcache."
-    when :pure
+    when :daybreak, :pure
       @db.keys
     else
       raise RuntimeError
@@ -218,7 +241,7 @@ class Kvs
       }
     when :memcache
       raise RuntimeError, "Kvs#forward_match_keys method was not implemented for memcache."
-    when :gdbm, :pure
+    when :gdbm, :daybreak, :pure
       self.keys( ).select {|key|
         key.match( "^" + prefix )
       }
@@ -229,7 +252,7 @@ class Kvs
 
   def close()
     case @dbtype
-    when :tokyocabinet, :gdbm
+    when :tokyocabinet, :daybreak, :gdbm
       @db.close
     when :memcache, :redis
       # do nothing

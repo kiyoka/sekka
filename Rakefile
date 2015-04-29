@@ -94,19 +94,24 @@ task :test do
     files << "./test/henkan-main.nnd  gdbm"
   when 'tokyocabinet'
     files << "./test/henkan-main.nnd  tokyocabinet"
+  when 'daybreak'
+    files << "./test/henkan-main.nnd  daybreak"
   when 'redis'
     files << "./test/redis.nnd"
     files << "./test/henkan-main.nnd  redis"
   when 'pure'
     files << "./test/henkan-main.nnd  pure"
+    files << "./test/henkan-main.nnd  daybreak"
   when 'all'
     files << "./test/henkan-main.nnd  gdbm"
     files << "./test/henkan-main.nnd  tokyocabinet"
     files << "./test/henkan-main.nnd  redis"
     files << "./test/henkan-main.nnd  pure"
+    files << "./test/henkan-main.nnd  daybreak"
   else # default
     files << "./test/henkan-main.nnd  tokyocabinet"
     files << "./test/henkan-main.nnd  pure"
+    files << "./test/henkan-main.nnd  daybreak"
   end
   files.each {|filename|
     sh  sprintf( "ruby -I ./lib -S nendo -I ./lib -d %s", filename )
@@ -137,11 +142,11 @@ task :jisyo do
 end
 
 task :load do
-  sh "ruby ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.N  ./data/SEKKA-JISYO.N.tch#xmsiz=1024m"
+  sh "ruby ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.N  ./data/SEKKA-JISYO.N.daybreak"
 end
 
 task :dump do
-  sh sprintf( "ruby ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.N.tch#xmsiz=1024m > ./data/SEKKA-JISYO-%s.N.tsv", dictVersion )
+  sh sprintf( "ruby ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.N.daybreak > ./data/SEKKA-JISYO-%s.N.tsv", dictVersion )
 end
 
 # SKK-JISYO.hiragana-phrase はWikipediaから作られる。
