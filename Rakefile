@@ -23,7 +23,7 @@ require 'rake'
 require "bundler/gem_tasks"
 require 'jeweler2'
 
-dictVersion = "1.6.0"
+dictVersion = "1.6.1"
 
 
 task :default => [:test] do
