@@ -20,7 +20,8 @@ TC_FILE   = sprintf( "%s/SEKKA-JISYO-%s.N.tch%s", DICTDIR, SekkaVersion.dictVers
 TSVFILE   = sprintf( "%s/SEKKA-JISYO-%s.N.tsv",   DICTDIR, SekkaVersion.dictVersion )
 SUMFILE   = sprintf( "%s/SEKKA-JISYO-%s.N.md5",   DICTDIR, SekkaVersion.dictVersion )
 
-GDBM_FILE = sprintf( "%s/SEKKA-JISYO-%s.N.db",    DICTDIR, SekkaVersion.dictVersion )
+GDBM_FILE     = sprintf( "%s/SEKKA-JISYO-%s.N.db",          DICTDIR, SekkaVersion.dictVersion )
+DAYBREAK_FILE = sprintf( "%s/SEKKA-JISYO-%s.N.daybreak",    DICTDIR, SekkaVersion.dictVersion )
 
 URLURL    = sprintf( "%s/SEKKA-JISYO-%s.N.url",   DICTURL, SekkaVersion.dictVersion )
 SUMURL    = sprintf( "%s/SEKKA-JISYO-%s.N.md5",   DICTURL, SekkaVersion.dictVersion )
@@ -41,8 +42,10 @@ def getSekkaDbInfo( env )
       [ :tokyocabinet, nil ]
     elsif m = ENV['SEKKA_DB'].match( /^gdbm$/i )
       [ :gdbm, nil ]
+    elsif m = ENV['SEKKA_DB'].match( /^day[a-z]+$/i )
+      [ :daybreak, nil ]
     else
-      raise RuntimeError, "Error: env var SEKKA_DB requires [redis:hostname] or [redis:] or [tokyocabinet]"
+      raise RuntimeError, "Error: env var SEKKA_DB requires [redis:hostname] or [redis:] or [tokyocabinet] or [daybreak]"
     end
   else
     [ :tokyocabinet, nil ]
@@ -57,6 +60,13 @@ def checkJisyoIsInstalled( dictType, dictSource )
              when :gdbm
                require 'sekka/kvs'
                tc = Kvs.new( :gdbm )
+               tc.open( dictSource )
+               ret = tc.get( key )
+               tc.close()
+               ret
+             when :daybreak
+               require 'sekka/kvs'
+               tc = Kvs.new( :daybreak )
                tc.open( dictSource )
                ret = tc.get( key )
                tc.close()
@@ -158,6 +168,10 @@ def main
     end
     STDERR.printf( "Info: [OK]\n" )
     dictSource = GDBM_FILE
+
+  when :daybreak
+    STDERR.printf( "Info: [OK]\n" )
+    dictSource = DAYBREAK_FILE
 
   when :tokyocabinet
     # TokyoCabinetに辞書が投入済みか確認する
