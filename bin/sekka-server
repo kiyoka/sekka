@@ -15,16 +15,20 @@ DICTURL = "https://raw.githubusercontent.com/kiyoka/sekka/master/public_dict/" +
 
 PIDFILE   = DICTDIR + "/pid"
 
-TC_OPTS   = "#xmsiz=256m"
-TC_FILE   = sprintf( "%s/SEKKA-JISYO-%s.N.tch%s", DICTDIR, SekkaVersion.dictVersion, TC_OPTS )
-TSVFILE   = sprintf( "%s/SEKKA-JISYO-%s.N.tsv",   DICTDIR, SekkaVersion.dictVersion )
-SUMFILE   = sprintf( "%s/SEKKA-JISYO-%s.N.md5",   DICTDIR, SekkaVersion.dictVersion )
+TC_OPTS       = "#xmsiz=256m"
+TC_FILE       = sprintf( "%s/SEKKA-JISYO-%s.N.tch%s",          DICTDIR, SekkaVersion.dictVersion, TC_OPTS )
+TSV_FILE      = sprintf( "%s/SEKKA-JISYO-%s.N.tsv",            DICTDIR, SekkaVersion.dictVersion )
+TSV_SUMFILE   = sprintf( "%s/SEKKA-JISYO-%s.N.md5",            DICTDIR, SekkaVersion.dictVersion )
+LDB_FILE      = sprintf( "%s/SEKKA-JISYO-%s.N.ldb.tar.gz",     DICTDIR, SekkaVersion.dictVersion )
+LDB_SUMFILE   = sprintf( "%s/SEKKA-JISYO-%s.N.ldb.tar.gz.md5", DICTDIR, SekkaVersion.dictVersion )
 
 GDBM_FILE     = sprintf( "%s/SEKKA-JISYO-%s.N.db",          DICTDIR, SekkaVersion.dictVersion )
 LEVELDB_FILE  = sprintf( "%s/SEKKA-JISYO-%s.N.ldb",         DICTDIR, SekkaVersion.dictVersion )
 
-URLURL    = sprintf( "%s/SEKKA-JISYO-%s.N.url",   DICTURL, SekkaVersion.dictVersion )
-SUMURL    = sprintf( "%s/SEKKA-JISYO-%s.N.md5",   DICTURL, SekkaVersion.dictVersion )
+TSV_URLURL    = sprintf( "%s/SEKKA-JISYO-%s.N.url",              DICTURL, SekkaVersion.dictVersion )
+TSV_SUMURL    = sprintf( "%s/SEKKA-JISYO-%s.N.md5",              DICTURL, SekkaVersion.dictVersion )
+LDB_URLURL    = sprintf( "%s/SEKKA-JISYO-%s.N.ldb.tar.gz.url",   DICTURL, SekkaVersion.dictVersion )
+LDB_SUMURL    = sprintf( "%s/SEKKA-JISYO-%s.N.ldb.tar.gz.md5",   DICTURL, SekkaVersion.dictVersion )
 
 MEMCACHED = "localhost:11211"                # memcahced
 
@@ -59,25 +63,25 @@ def checkJisyoIsInstalled( dictType, dictSource )
     result = case dictType
              when :gdbm
                require 'sekka/kvs'
-               tc = Kvs.new( :gdbm )
-               tc.open( dictSource )
-               ret = tc.get( key )
-               tc.close()
+               kvs = Kvs.new( :gdbm )
+               kvs.open( dictSource )
+               ret = kvs.get( key )
+               kvs.close()
                ret
              when :leveldb
                require 'sekka/kvs'
-               tc = Kvs.new( :leveldb )
-               tc.open( dictSource )
-               ret = tc.get( key )
-               tc.close()
+               kvs = Kvs.new( :leveldb )
+               kvs.open( dictSource )
+               ret = kvs.get( key )
+               kvs.close()
                ret
              when :tokyocabinet
                require 'tokyocabinet'
                require 'sekka/kvs'
-               tc = Kvs.new( :tokyocabinet )
-               tc.open( dictSource )
-               ret = tc.get( key )
-               tc.close()
+               kvs = Kvs.new( :tokyocabinet )
+               kvs.open( dictSource )
+               ret = kvs.get( key )
+               kvs.close()
                ret
              when :redis
                begin
@@ -96,6 +100,44 @@ def checkJisyoIsInstalled( dictType, dictSource )
   end
 end
 
+def downloadFile( targetfile, sumfile, urlurl, sumurl )
+  if not File.exist?( targetfile )
+    STDERR.printf( "Info: Downloading SEKKA-JISYO\n" )
+    # 辞書をダウンロードする
+    cmd = sprintf( "curl %s",          urlurl )
+    STDERR.printf( "Command : %s\n", cmd )
+    targeturl = open( "|" + cmd ) { |f|
+      f.read
+    }
+    STDERR.printf( "   download   URL of target file : %s\n", targeturl );
+    cmd = sprintf( "curl -o %s %s",    targetfile, targeturl )
+    STDERR.printf( "Command : %s\n", cmd )
+    system( cmd )
+    cmd = sprintf( "curl -o %s %s",    sumfile, sumurl )
+    STDERR.printf( "Command : %s\n", cmd )
+    system( cmd )
+
+    # チェックサムを確認する
+    downloadSum = ""
+    open( targetfile ) { |f|
+      dataBody = f.read
+      downloadSum = Digest::MD5.hexdigest( dataBody )
+    }
+    open( sumfile ) { |f|
+      correctSum = f.readline.chomp.split[0]
+      STDERR.printf( "   downloaded file's MD5 : %s\n", downloadSum )
+      STDERR.printf( "             correct MD5 : %s\n", correctSum   )
+      if downloadSum == correctSum
+        STDERR.printf( "Info:  downloaded file [%s] verify OK.\n", targetfile )
+      else
+        STDERR.printf( "Error: downloaded file [%s] verify NG.\n", targetfile )
+        File.unlink( targetfile )
+        exit( 1 )
+      end
+    }
+  end
+end
+  
 def main
   if not File.directory?( DICTDIR )
     Dir.mkdir( DICTDIR )
@@ -116,44 +158,16 @@ def main
     proxyHost = uri.host
   end
 
-  if not File.exist?( TSVFILE )
-    STDERR.printf( "Info: Downloading SEKKA-JISYO\n" )
-    # 辞書をダウンロードする
-    cmd = sprintf( "curl %s",          URLURL )
-    STDERR.printf( "Command : %s\n", cmd )
-    tsvurl = open( "|" + cmd ) { |f|
-      f.read
-    }
-    STDERR.printf( "   download   URL of tsv file : %s\n", tsvurl );
-    cmd = sprintf( "curl -o %s %s",    TSVFILE, tsvurl )
-    STDERR.printf( "Command : %s\n", cmd )
-    system( cmd )
-    cmd = sprintf( "curl -o %s %s",    SUMFILE, SUMURL )
-    STDERR.printf( "Command : %s\n", cmd )
-    system( cmd )
-
-    # チェックサムを確認する
-    downloadSum = ""
-    open( TSVFILE ) { |f|
-      dataBody = f.read
-      downloadSum = Digest::MD5.hexdigest( dataBody )
-    }
-    open( SUMFILE ) { |f|
-      correctSum = f.readline.chomp.split[0]
-      STDERR.printf( "   downloaded file's MD5 : %s\n", downloadSum )
-      STDERR.printf( "             correct MD5 : %s\n", correctSum   )
-      if downloadSum == correctSum
-        STDERR.printf( "Info:  downloaded file [%s] verify OK.\n", TSVFILE )
-      else
-        STDERR.printf( "Error: downloaded file [%s] verify NG.\n", TSVFILE )
-        File.unlink( TSVFILE )
-        exit( 1 )
-      end
-    }
-  end
-
   # 環境変数から、DBの接続先情報を取得する。
   ( dictType, dictSource ) = getSekkaDbInfo( ENV )
+
+  # 必要なファイルをダウンロードする
+  case dictType
+  when :leveldb
+    downloadFile( LDB_FILE, LDB_SUMFILE, LDB_URLURL, LDB_SUMURL )
+  else
+    downloadFile( TSV_FILE, TSV_SUMFILE, TSV_URLURL, TSV_SUMURL )
+  end
 
   case dictType
   when :gdbm
@@ -162,7 +176,7 @@ def main
     unless ok
       # tsvファイルをuploadする
       STDERR.printf( "Info: Uploading...\n" )
-      cmd = sprintf( "sekka-jisyo restore %s %s", TSVFILE, GDBM_FILE )
+      cmd = sprintf( "sekka-jisyo restore %s %s", TSV_FILE, GDBM_FILE )
       STDERR.printf( "Command : %s\n", cmd )
       system( cmd )
     end
@@ -170,6 +184,15 @@ def main
     dictSource = GDBM_FILE
 
   when :leveldb
+    # GDBMに辞書が展開済みか確認する
+    ok = checkJisyoIsInstalled( dictType, LDB_FILE )
+    unless ok
+      # tar.gzを展開する
+      STDERR.printf( "Info: Extracting...\n" )
+      cmd = sprintf( "tar zxCf %s %s", DICTDIR, LDB_FILE )
+      STDERR.printf( "Command : %s\n", cmd )
+      system( cmd )
+    end
     STDERR.printf( "Info: [OK]\n" )
     dictSource = LEVELDB_FILE
 
@@ -179,7 +202,7 @@ def main
     unless ok
       # tsvファイルをuploadする
       STDERR.printf( "Info: Uploading...\n" )
-      cmd = sprintf( "sekka-jisyo restore %s %s", TSVFILE, TC_FILE )
+      cmd = sprintf( "sekka-jisyo restore %s %s", TSV_FILE, TC_FILE )
       STDERR.printf( "Command : %s\n", cmd )
       system( cmd )
     end
@@ -192,7 +215,7 @@ def main
     unless ok
       # tsvファイルをuploadする。
       STDERR.printf( "Info: Uploading...\n" )
-      cmd = sprintf( "sekka-jisyo restore %s %s:%s", TSVFILE, dictType, dictSource )
+      cmd = sprintf( "sekka-jisyo restore %s %s:%s", TSV_FILE, dictType, dictSource )
       STDERR.printf( "Command : %s\n", cmd )
       system( cmd )
     end
