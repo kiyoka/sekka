@@ -56,6 +56,13 @@ class Kvs
       @gdbmFlag = false
     end
 
+    @leveldbFlag = true
+    begin
+      require 'leveldb'
+    rescue LoadError
+      @leveldbFlag = false
+    end
+
     @dbtype = dbtype
     case dbtype
     when :tokyocabinet
@@ -80,7 +87,12 @@ class Kvs
         raise RuntimeError, "Kvs.new() missed require( 'gdbm' )."
       end
 
-      # do nothing
+    when :leveldb
+      if @leveldbFlag
+        # do nothing
+      else
+        raise RuntimeError, "Kvs.new() missed require( 'leveldb' )."
+      end
 
     when :pure
       # do nothing
@@ -106,6 +118,11 @@ class Kvs
         name = name + ".db"
       end
       @db = GDBM.new( name, nil, GDBM::FAST | GDBM::WRCREAT )
+    when :leveldb
+      if not name.match( /.ldb$/ )
+        name = name + ".ldb"
+      end
+      @db = LevelDB::DB.new name
     when :pure
       @name = name
       if File.exist?( @name )
@@ -141,7 +158,7 @@ class Kvs
   def pure_put!( key, value, timeout = 0 )
     if 0 < key.size
       case @dbtype
-      when :tokyocabinet, :gdbm, :redis
+      when :tokyocabinet, :gdbm, :redis, :leveldb
         @db[ key.force_encoding("ASCII-8BIT") ] = value.force_encoding("ASCII-8BIT")
       when :memcache
         @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"), timeout )
@@ -181,6 +198,8 @@ class Kvs
     case @dbtype
     when :tokyocabinet, :gdbm, :pure
       @db.clear
+    when :leveldb
+      @db.clear!
     when :redis
       @db.flushall
     when :memcache
@@ -199,7 +218,7 @@ class Kvs
       }
     when :memcache
       raise RuntimeError, "Kvs#keys method was not implemented for memcache."
-    when :pure
+    when :leveldb, :pure
       @db.keys
     else
       raise RuntimeError
@@ -218,7 +237,7 @@ class Kvs
       }
     when :memcache
       raise RuntimeError, "Kvs#forward_match_keys method was not implemented for memcache."
-    when :gdbm, :pure
+    when :gdbm, :leveldb, :pure
       self.keys( ).select {|key|
         key.match( "^" + prefix )
       }
@@ -229,7 +248,7 @@ class Kvs
 
   def close()
     case @dbtype
-    when :tokyocabinet, :gdbm
+    when :tokyocabinet, :leveldb, :gdbm
       @db.close
     when :memcache, :redis
       # do nothing

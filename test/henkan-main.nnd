@@ -58,6 +58,8 @@
   (set! target "./test"))
  ((eq? dbtype 'pure)
   (set! target "./test.dump"))
+ ((eq? dbtype 'leveldb)
+  (set! target "./test.ldb"))
  ((eq? dbtype 'memcache)
   (error "memcached interface is obsolute."))
  (else
@@ -147,6 +149,8 @@
   (kvs.open target)
   (require "gdbm"))
  ((eq? dbtype 'pure)
+  (kvs.open target))
+ ((eq? dbtype 'leveldb)
   (kvs.open target))
  ((eq? dbtype 'memcache)
   (error "memcached interface is obsolute."))
