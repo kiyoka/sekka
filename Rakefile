@@ -127,10 +127,11 @@ task :bench do
   sh "time nendo -I ./lib ./test/henkan-bench.nnd"
 end
 
-task :alljisyo => [ :jisyo, :load, :dump, :md5 ]
+task :alljisyo => [ :jisyo, :load, :dump, :load_leveldb, :md5 ]
 
 task :md5 do
-  sh sprintf( "md5sum ./data/SEKKA-JISYO-%s.N.tsv > ./data/SEKKA-JISYO-%s.N.md5", dictVersion, dictVersion )
+  sh sprintf( "md5sum ./data/SEKKA-JISYO-%s.N.tsv        > ./data/SEKKA-JISYO-%s.N.md5",            dictVersion, dictVersion )
+  sh sprintf( "md5sum ./data/SEKKA-JISYO-%s.N.ldb.tar.gz > ./data/SEKKA-JISYO-%s.N.ldb.tar.gz.md5", dictVersion, dictVersion )
 end
 
 task :jisyo do
@@ -153,7 +154,8 @@ task :dump do
 end
 
 task :load_leveldb do
-  sh sprintf( "ruby ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.N  ./data/SEKKA-JISYO-%s.N.ldb", dictVersion )
+#  sh sprintf( "ruby ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.N  ./data/SEKKA-JISYO-%s.N.ldb", dictVersion )
+  sh sprintf( "tar zcCf ./data ./data/SEKKA-JISYO-%s.N.ldb.tar.gz ./SEKKA-JISYO-%s.N.ldb" , dictVersion, dictVersion )
 end
 
 # SKK-JISYO.hiragana-phrase はWikipediaから作られる。
