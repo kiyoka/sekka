@@ -104,7 +104,6 @@ task :test do
     files << "./test/henkan-main.nnd  redis"
   when 'pure'
     files << "./test/henkan-main.nnd  pure"
-    files << "./test/henkan-main.nnd  leveldb"
   when 'all'
     files << "./test/henkan-main.nnd  gdbm"
     files << "./test/henkan-main.nnd  tokyocabinet"
