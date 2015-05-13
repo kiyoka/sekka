@@ -23,7 +23,7 @@ require 'rake'
 require "bundler/gem_tasks"
 require 'jeweler2'
 
-dictVersion = "1.6.0"
+dictVersion = "1.6.1"
 
 
 task :default => [:test] do
@@ -79,6 +79,9 @@ task :test do
   ["test.record", "test.tch", "test.db" ].each {|name|
     File.unlink( name ) if File.exist?( name )
   }
+  ["test.ldb"].each {|name|
+    FileUtils.rm_rf( name ) if File.exist?( name )
+  }
   files = []
   files << "./test/memcache.nnd"
   files << "./test/util.nnd"
@@ -94,19 +97,24 @@ task :test do
     files << "./test/henkan-main.nnd  gdbm"
   when 'tokyocabinet'
     files << "./test/henkan-main.nnd  tokyocabinet"
+  when 'leveldb'
+    files << "./test/henkan-main.nnd  leveldb"
   when 'redis'
     files << "./test/redis.nnd"
     files << "./test/henkan-main.nnd  redis"
   when 'pure'
     files << "./test/henkan-main.nnd  pure"
+    files << "./test/henkan-main.nnd  leveldb"
   when 'all'
     files << "./test/henkan-main.nnd  gdbm"
     files << "./test/henkan-main.nnd  tokyocabinet"
     files << "./test/henkan-main.nnd  redis"
     files << "./test/henkan-main.nnd  pure"
+    files << "./test/henkan-main.nnd  leveldb"
   else # default
     files << "./test/henkan-main.nnd  tokyocabinet"
     files << "./test/henkan-main.nnd  pure"
+    files << "./test/henkan-main.nnd  leveldb"
   end
   files.each {|filename|
     sh  sprintf( "ruby -I ./lib -S nendo -I ./lib -d %s", filename )
@@ -119,10 +127,11 @@ task :bench do
   sh "time nendo -I ./lib ./test/henkan-bench.nnd"
 end
 
-task :alljisyo => [ :jisyo, :load, :dump, :md5 ]
+task :alljisyo => [ :jisyo, :load, :dump, :load_leveldb, :md5 ]
 
 task :md5 do
-  sh sprintf( "md5sum ./data/SEKKA-JISYO-%s.N.tsv > ./data/SEKKA-JISYO-%s.N.md5", dictVersion, dictVersion )
+  sh sprintf( "md5sum ./data/SEKKA-JISYO-%s.N.tsv        > ./data/SEKKA-JISYO-%s.N.md5",            dictVersion, dictVersion )
+  sh sprintf( "md5sum ./data/SEKKA-JISYO-%s.N.ldb.tar.gz > ./data/SEKKA-JISYO-%s.N.ldb.tar.gz.md5", dictVersion, dictVersion )
 end
 
 task :jisyo do
@@ -142,6 +151,11 @@ end
 
 task :dump do
   sh sprintf( "ruby ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.N.tch#xmsiz=1024m > ./data/SEKKA-JISYO-%s.N.tsv", dictVersion )
+end
+
+task :load_leveldb do
+#  sh sprintf( "ruby ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.N  ./data/SEKKA-JISYO-%s.N.ldb", dictVersion )
+  sh sprintf( "tar zcCf ./data ./data/SEKKA-JISYO-%s.N.ldb.tar.gz ./SEKKA-JISYO-%s.N.ldb" , dictVersion, dictVersion )
 end
 
 # SKK-JISYO.hiragana-phrase はWikipediaから作られる。
