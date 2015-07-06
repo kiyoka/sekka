@@ -23,7 +23,7 @@ require 'rake'
 require "bundler/gem_tasks"
 require 'jeweler2'
 
-dictVersion = "1.6.1"
+dictVersion = "1.6.2"
 
 
 task :default => [:test] do
@@ -153,7 +153,7 @@ task :dump do
 end
 
 task :load_leveldb do
-#  sh sprintf( "ruby ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.N  ./data/SEKKA-JISYO-%s.N.ldb", dictVersion )
+  sh sprintf( "ruby ./bin/sekka-jisyo load    ./data/SEKKA-JISYO.N  ./data/SEKKA-JISYO-%s.N.ldb", dictVersion )
   sh sprintf( "tar zcCf ./data ./data/SEKKA-JISYO-%s.N.ldb.tar.gz ./SEKKA-JISYO-%s.N.ldb" , dictVersion, dictVersion )
 end
 
