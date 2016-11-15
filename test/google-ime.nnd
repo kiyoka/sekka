@@ -67,11 +67,11 @@
 (test-section "request to google-ime")
 
 (test* "request online (1)"
-       '("日本語" "ニホンゴ" "にほんご" "ﾆﾎﾝｺﾞ")
+       '("日本語" "ニホンゴ" "二本語" "２本語" "2本語")
        (request-google-ime "にほんご" nil nil))
 
 (test* "request online (2)"
-       '("変換" "返還" "偏官" "へんかん" "ヘンカン")
+       '("変換" "返還" "偏官" "篇感" "篇館")
        (request-google-ime "へんかん" nil nil))
 
 (test* "request online (3)"
