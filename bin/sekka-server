@@ -93,7 +93,7 @@ def checkJisyoIsInstalled( dictType, dictSource )
                  redis.close()
                  ret
                rescue => e
-                 STDERR.printf( "Error: sekka-server can't connect to redis(port=%s)...\n", dictSource )
+                 STDERR.printf( "Error: sekka-server can't connect to redis(hostname=%s)...\n", dictSource )
                  exit 1
                end
              end
