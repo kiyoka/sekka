@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   spec.add_dependency "eventmachine", "~> 1.0"
   spec.add_dependency "memcache-client", "~> 1.8"
-  spec.add_dependency "nendo", "= 0.7.4"
+  spec.add_dependency "nendo", "~> 0.8.0"
   spec.add_dependency "distributed-trie", "= 0.8.0"
   spec.add_dependency "rack",  "~> 1.5"
   spec.add_dependency "ruby-progressbar", "~> 1.4"
