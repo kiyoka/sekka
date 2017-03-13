@@ -63,6 +63,25 @@ module SekkaServer
       (@kvs,@initialCachesv) = @core.openSekkaJisyo( SekkaServer::Config.dictType,
                                                       SekkaServer::Config.dictSource,
                                                       SekkaServer::Config.cacheSource )
+
+      # connection check to memcached
+      fail_message = "sekka-server: failt to access memcached.\n"
+      begin
+        @core.flushCacheServer(@initialCachesv)
+      rescue MemCache::MemCacheError
+        STDERR.printf(fail_message)
+        exit(1)
+      rescue Timeout
+        STDERR.printf(fail_message)
+        exit(1)
+      rescue SocketError
+        STDERR.printf(fail_message)
+        exit(1)
+      rescue Errno::ECONNREFUSED
+        STDERR.printf(fail_message)
+        exit(1)
+      end
+      
       @cachesv = @initialCachesv
       @downTime = DateTime.now
       
