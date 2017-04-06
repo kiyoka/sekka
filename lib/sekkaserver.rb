@@ -180,23 +180,23 @@ module SekkaServer
     def call(env)
       req = Rack::Request.new(env)
 
-      body = if !req.params.has_key?('userid')
-               str = "Err: parameter 'userid' required"
-               STDERR.puts str
-               @core.writeToString( str )
-             elsif !req.params.has_key?('format')
-               str = "Err: parameter 'format' required"
-               STDERR.puts str
-               @core.writeToString( str )
-             else 
-               case req.request_method
-               when 'GET'
-                 getMethod(req)
-               when 'POST'
-                 postMethod(req)
+      body = case req.request_method
+             when 'GET'
+               getMethod(req)
+             when 'POST'
+               if !req.params.has_key?('userid')
+                 str = "Err: parameter 'userid' required"
+                 STDERR.puts str
+                 @core.writeToString( str )
+               elsif !req.params.has_key?('format')
+                 str = "Err: parameter 'format' required"
+                 STDERR.puts str
+                 @core.writeToString( str )
                else
-                 "no message."        
+                 postMethod(req)
                end
+             else
+               "no message."        
              end
       res = Rack::Response.new { |r|
         r.status = 200
