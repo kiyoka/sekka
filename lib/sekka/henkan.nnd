@@ -386,19 +386,32 @@
 
 
 ;; conversion #f => nil for EmacsLisp
-(define (sekkaHenkan userid kvs cachesv keyword limit roman-method)
+(define (sekkaHenkan userid kvs cachesv keyword limit roman-method emacs-mode)
   (define cache-exp-second (* 10 60))
   (let* ((keyword (keyword.strip))
-         (sekka-keyword (+ "sekka:" roman-method ":" (limit.to_s) ":" keyword)))
+         (sekka-keyword (+ "sekka:" roman-method ":" (limit.to_s) ":" (if emacs-mode "sexp" "json") ":" keyword)))
     (if-let1 fetched (and cachesv
                           (cachesv.get sekka-keyword #f))
       (begin
         keyword
         (read-from-string fetched))
-      (let1 henkan-result (map
-                           (lambda (x)
-                             (map (lambda (val) (if val val nil)) x))
-                           (sekka-henkan userid kvs keyword limit (make-keyword roman-method)))
+      (let*
+          ((henkan-result-tmp
+            (sekka-henkan userid kvs keyword limit (make-keyword roman-method)))
+           (henkan-result
+            (if emacs-mode
+                (map
+                 (lambda (x)
+                   (map (lambda (val)
+                          (if val val nil))
+                        x))
+                 henkan-result-tmp)
+                (list->vector 
+                 (map
+                  (lambda (x)
+                    (list->vector x))
+                  henkan-result-tmp)))))
+
         (and cachesv
              (not (null? henkan-result))
              (let1 fetched2 (cachesv.get  "sekka:(keys)" #f)
