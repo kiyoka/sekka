@@ -32,17 +32,9 @@ hookToTextArea();
 
 // call status api on sekka server.
 function sekkaRequest_status() {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "http://sekka.example.com:12929/status", true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4) {
-            let text = xhr.responseText;
-            if (text.match(/^OK/)) {
-                alert("text:" + text);
-            }
-        }
-    };
-    xhr.send();
+    chrome.runtime.sendMessage({ api: "status" }, function (response) {
+        console.log(response);
+    });
 }
 
 function henkanResponseHandler(target, resp, startPos, endPos) {
@@ -59,22 +51,10 @@ function henkanResponseHandler(target, resp, startPos, endPos) {
 }
 
 // call api on sekka server.
-function sekkaRequest(target, apiName, argHash, startPos, endPos) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://sekka.example.com:12929/" + apiName, true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4) {
-            let text = xhr.responseText;
-            var resp = JSON.parse(text);
-            henkanResponseHandler(target, resp, startPos, endPos);
-        }
-    };
-
-    var formData = new FormData();
-    for (key in argHash) {
-        formData.append(key, argHash[key]);
-    }
-    xhr.send(formData);
+function sekkaRequest(target, apiname, argHash, startPos, endPos) {
+    chrome.runtime.sendMessage({ api: apiname, argHash: argHash }, function (response) {
+        henkanResponseHandler(target, response.result, startPos, endPos);
+    });
 }
 
 function henkanAction(target, ctrl_key, key_code) {
