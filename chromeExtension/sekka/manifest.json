@@ -1,0 +1,39 @@
+{
+    "manifest_version": 2,
+    "name": "sekka input method",
+    "description": "This extension is japanese input method.",
+    "version": "1.0",
+    //"browser_action": {
+    //  "default_icon": "icon.png",
+    //  "default_popup": "popup.html"
+    //},
+    "content_scripts": [
+        {
+            "matches": [
+                "file:///*/*",
+                "http://*/*",
+                "https://*/*",
+                "https://tweetdeck.twitter.com/"
+            ],
+            "js": [
+                "lib/jquery-3.2.0.js",
+                "japanese-util.js",
+                "dom-util.js",
+                "content-main.js"
+            ],
+            "run_at": "document_idle",
+			"all_frames": true
+        }
+    ],
+    "background": {
+        "scripts": [
+            "background.js"
+        ]
+    },
+    "permissions": [
+        "activeTab",
+        "file:///*/*",
+        "http://sekka.example.com:12929/*",
+        "https://sekka.example.com:12929/*"
+    ]
+}
