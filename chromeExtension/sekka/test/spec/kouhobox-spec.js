@@ -28,9 +28,12 @@ describe('KouhoBox', function () {
             expect(kouhobox.getNextKouho()).toEqual("変換")
         });
         it('次の変換候補(2)', function () {
+            kouhobox.getNextKouho();
             expect(kouhobox.getNextKouho()).toEqual("変化")
         });
         it('次の変換候補(3)', function () {
+            kouhobox.getNextKouho();
+            kouhobox.getNextKouho();
             expect(kouhobox.getNextKouho()).toEqual("返還")
         });
     });

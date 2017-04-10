@@ -104,6 +104,7 @@ function henkanAction(target, ctrl_key, key_code) {
         let textOfTextarea = $(target).val();
         let cursorPosition = $(target).prop("selectionStart");
         let [prevYomi, yomi, startPos, endPos] = jutil.takePrevCursorAscii(textOfTextarea, cursorPosition);
+        yomi = jutil.trimSlash(yomi);
         if (0 < yomi.length) {
             // アスキー文字列があったら、変換候補を捨てる。
             kouhoBox = null;
@@ -113,8 +114,8 @@ function henkanAction(target, ctrl_key, key_code) {
                 // カーソル位置を次の候補で差し替える。
                 let [origText, headText, yomi, tailText] = kouhoBox.getTextSet();
                 let kouhoStr = kouhoBox.getNextKouho();
-                $(target).val(headText+kouhoStr+tailText);
-                domutil.moveToPos(target,headText.length + kouhoStr.length);
+                $(target).val(headText + kouhoStr + tailText);
+                domutil.moveToPos(target, headText.length + kouhoStr.length);
             }
         }
         else {
