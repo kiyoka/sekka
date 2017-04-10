@@ -29,6 +29,7 @@
 //   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
+var kouhoBox = null;
 
 function domAddEventListener(element) {
     if (element.addEventListener) {
@@ -77,6 +78,11 @@ function henkanResponseHandler(target, resp, startPos, endPos) {
 
     domutil = new DomUtil();
     domutil.moveToPos(target, startPos + kanji.length);
+
+    let headText = textOfTextarea.substring(0, startPos)
+    let yomi = textOfTextarea.substring(startPos, endPos);
+    let tailText = textOfTextarea.substring(endPos);
+    kouhoBox = new KouhoBox(resp, textOfTextarea, headText, yomi, tailText)
     //alert("kanji:" + kanji + " startPos:" + startPos + " endPos:" + endPos + "repalced:" + replacedString);
 }
 
@@ -97,13 +103,28 @@ function henkanAction(target, ctrl_key, key_code) {
         consumeFlag = true;
         let textOfTextarea = $(target).val();
         let cursorPosition = $(target).prop("selectionStart");
-        let [yomi, startPos, endPos] = jutil.takeBeforeCursorAscii(textOfTextarea, cursorPosition);
-        sekkaRequest(target,
-            'henkan',
-            { 'userid': 'kiyoka', 'format': 'json', 'yomi': yomi, 'method': 'normal', 'limit': '0' },
-            startPos,
-            endPos
-        );
+        let [prevYomi, yomi, startPos, endPos] = jutil.takePrevCursorAscii(textOfTextarea, cursorPosition);
+        if (0 < yomi.length) {
+            // アスキー文字列があったら、変換候補を捨てる。
+            kouhoBox = null;
+        }
+        if (null != kouhoBox) {
+            if (kouhoBox.isSelectingPos(prevYomi + yomi)) {
+                // カーソル位置を次の候補で差し替える。
+                let [origText, headText, yomi, tailText] = kouhoBox.getTextSet();
+                let kouhoStr = kouhoBox.getNextKouho();
+                $(target).val(headText+kouhoStr+tailText);
+                domutil.moveToPos(target,headText.length + kouhoStr.length);
+            }
+        }
+        else {
+            sekkaRequest(target,
+                'henkan',
+                { 'userid': 'kiyoka', 'format': 'json', 'yomi': yomi, 'method': 'normal', 'limit': '0' },
+                startPos,
+                endPos
+            );
+        }
     }
     else if (ctrl_key && key_code == 70) { // CTRL+F
         console.log("ctrl+f");

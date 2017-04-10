@@ -46,11 +46,12 @@ JapaneseUtil.prototype.takeLastAscii = function (srcString) {
 }
 
 // カーソルの直前のアスキー文字列を取得する
-// ret = ['ASCII文字列',開始位置,終了位置]
-JapaneseUtil.prototype.takeBeforeCursorAscii = function (srcString, cursorPosition) {
-    let beforeCursorString = srcString.substring(0, cursorPosition);
-    let ascii = this.takeLastAscii(beforeCursorString);
-    return [ascii, beforeCursorString.length - ascii.length, beforeCursorString.length];
+// ret = ['ASCIIよりも前のの文字列', 'ASCII文字列',開始位置,終了位置]
+JapaneseUtil.prototype.takePrevCursorAscii = function (srcString, cursorPosition) {
+    let prevCursorString = srcString.substring(0, cursorPosition);
+    let ascii = this.takeLastAscii(prevCursorString);
+    let prevAsciiString = prevCursorString.substring(0,prevCursorString.length - ascii.length);
+    return [prevAsciiString, ascii, prevCursorString.length - ascii.length, prevCursorString.length];
 }
 
 // origStringのstartPosからendPosまでの文字列をreplaceStringで置換する

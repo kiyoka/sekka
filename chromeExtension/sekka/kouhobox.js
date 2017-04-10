@@ -70,7 +70,12 @@ KouhoBox.prototype.isSelectingPos = function (prevText) {
     return found;
 }
 
-// 次の候も文字列を返す
+// オリジナルテキスト、前方、読み、後方の4つのテキストを返す
+KouhoBox.prototype.getTextSet = function() {
+    return [ this.origText, this.headText, this.yomi, this.tailText ];
+}
+
+// 次の候補文字列を返す
 KouhoBox.prototype.getNextKouho = function () {
     this.index++;
     let list = this.getKouhoList();

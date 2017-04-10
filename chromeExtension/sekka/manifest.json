@@ -50,6 +50,7 @@
                 "lib/jquery-3.2.0.js",
                 "japanese-util.js",
                 "dom-util.js",
+                "kouhobox.js",
                 "content-main.js"
             ],
             "run_at": "document_idle",

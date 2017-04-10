@@ -15,6 +15,11 @@ describe('KouhoBox', function () {
         )
     });
 
+    describe('getter', function () {
+        it('4つのテキスト', function () {
+            expect(kouhobox.getTextSet()).toEqual(["漢字Henkanする", "漢字", "Henkan", "する"]);
+        });
+    });
     describe('変換候補の返却', function () {
         it('変換候補リスト', function () {
             expect(kouhobox.getKouhoList()).toEqual(["返還", "変換", "変化"])
