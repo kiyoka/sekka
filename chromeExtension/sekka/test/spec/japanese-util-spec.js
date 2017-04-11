@@ -35,7 +35,7 @@ describe('JapaneseUtil', function () {
     });
   });
 
-  describe('takeBeforeCursorAscii used', function () {
+  describe('takePrevCursorAscii used', function () {
     it('/ なし(1)', function () {
       expect(jutil.takePrevCursorAscii('000abc   ', 6)).toEqual(['000', 'abc', 3, 6]);
     });
@@ -59,6 +59,18 @@ describe('JapaneseUtil', function () {
     });
     it('1文字を1文字に置換', function () {
       expect(jutil.replaceString('a', 'あ', 0, 1)).toEqual('あ');
+    });
+  });
+
+  describe('takePrevNextString used', function () {
+    it('前後あり', function () {
+      expect(jutil.takePrevNextString('000abc', 3)).toEqual(['000', 'abc']);
+    });
+    it('行頭', function () {
+      expect(jutil.takePrevNextString('あいうabc', 0)).toEqual(['', 'あいうabc']);
+    });
+    it('行末', function () {
+      expect(jutil.takePrevNextString('abcdef', 6)).toEqual(['abcdef', '']);
     });
   });
 

@@ -137,6 +137,16 @@ function henkanAction(target, ctrl_key, key_code) {
         consumeFlag = true;
         domutil.moveBackward(target);
     }
+    else if (ctrl_key && key_code == 72) { // CTRL+H
+        console.log("ctrl+h");
+        consumeFlag = true;
+        domutil.backspace(target);
+    }
+    else if (ctrl_key && key_code == 68) { // CTRL+D
+        console.log("ctrl+d");
+        consumeFlag = true;
+        domutil.deleteNextChar(target);
+    }
     return consumeFlag;
 }
 
@@ -164,7 +174,7 @@ function keyDownHandler(e) {
         var ctrl_key = e.ctrlKey;
         var alt_key = e.altKey;
 
-        if (false) {
+        if (true) {
             console.log("code:" + key_code);
             console.log("shift:" + shift_key);
             console.log("ctrl" + ctrl_key);

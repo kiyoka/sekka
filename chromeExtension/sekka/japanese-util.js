@@ -35,7 +35,7 @@ function JapaneseUtil() {
 
 // 文字列の最後のアスキー文字列を取得する
 JapaneseUtil.prototype.takeLastAscii = function (srcString) {
-    let reString = /([/]?[a-zA-Z.-]+)$/;
+    let reString = /([/]?[a-zA-Z.?,-]+)$/;
     let arrayString = srcString.match(reString)
     if (arrayString) {
         return arrayString[1]
@@ -58,7 +58,7 @@ JapaneseUtil.prototype.trimSlash = function (srcString) {
 }
 
 // カーソルの直前のアスキー文字列を取得する
-// ret = ['ASCIIよりも前のの文字列', 'ASCII文字列',開始位置,終了位置]
+// ret = ['ASCIIよりも前の文字列', 'ASCII文字列',開始位置,終了位置]
 JapaneseUtil.prototype.takePrevCursorAscii = function (srcString, cursorPosition) {
     let prevCursorString = srcString.substring(0, cursorPosition);
     let ascii = this.takeLastAscii(prevCursorString);
@@ -74,4 +74,9 @@ JapaneseUtil.prototype.replaceString = function (origString, replaceString, star
     return ret;
 }
 
-
+// カーソル位置の前と後ろの２つの文字列を返す
+JapaneseUtil.prototype.takePrevNextString = function (srcString, cursorPosition) {
+    let prevString = srcString.substring(0, cursorPosition);
+    let nextString = srcString.substring(cursorPosition)
+    return [prevString, nextString];
+}

@@ -41,6 +41,38 @@ DomUtil.prototype.moveBackward = function (target) {
     this.moveOffset(target, -1)
 }
 
+// Emacs's Backspace
+DomUtil.prototype.backspace = function (target) {
+    let cursorPosition = $(target).prop("selectionStart");
+    let origText = $(target).val();
+    let jutil = new JapaneseUtil();
+    let [prevStr, nextStr] = jutil.takePrevNextString(origText, cursorPosition);
+    if (0 == prevStr.length) {
+        return;
+    }
+    else {
+        prevStr = prevStr.substring(0, prevStr.length - 1);
+        $(target).val(prevStr + nextStr);
+        this.moveToPos(target, cursorPosition - 1);
+    }
+}
+
+// Emacs's delete
+DomUtil.prototype.deleteNextChar = function (target) {
+    let cursorPosition = $(target).prop("selectionStart");
+    let origText = $(target).val();
+    let jutil = new JapaneseUtil();
+    let [prevStr, nextStr] = jutil.takePrevNextString(origText, cursorPosition);
+    if (0 == nextStr.length) {
+        return;
+    }
+    else {
+        nextStr = nextStr.substring(1);
+        $(target).val(prevStr + nextStr);
+        this.moveToPos(target, cursorPosition);
+    }
+}
+
 DomUtil.prototype.moveOffset = function (target, offset) {
     let cursorPosition = $(target).prop("selectionStart");
     let elem = target[0];
