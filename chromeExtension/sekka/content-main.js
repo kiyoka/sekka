@@ -30,6 +30,7 @@
 //
 
 var kouhoBox = null;
+var keydownCount = 0;
 
 function domAddEventListener(element) {
     if (element.addEventListener) {
@@ -77,7 +78,8 @@ function henkanResponseHandler(target, resp, startPos, endPos) {
     $(target).val(replacedString);
 
     domutil = new DomUtil();
-    domutil.moveToPos(target, startPos + kanji.length);
+    //console.log('keydownCount:' + keydownCount);
+    domutil.moveToPos(target, startPos + kanji.length + keydownCount);
 
     let headText = textOfTextarea.substring(0, startPos)
     let yomi = textOfTextarea.substring(startPos, endPos);
@@ -88,6 +90,7 @@ function henkanResponseHandler(target, resp, startPos, endPos) {
 
 // call api on sekka server.
 function sekkaRequest(target, apiname, argHash, startPos, endPos) {
+    keydownCount = 0;
     chrome.runtime.sendMessage({ api: apiname, argHash: argHash }, function (response) {
         henkanResponseHandler(target, response.result, startPos, endPos);
     });
@@ -147,6 +150,9 @@ function henkanAction(target, ctrl_key, key_code) {
         consumeFlag = true;
         domutil.deleteNextChar(target);
     }
+    else {
+        keydownCount++;
+    }
     return consumeFlag;
 }
 
@@ -174,7 +180,7 @@ function keyDownHandler(e) {
         var ctrl_key = e.ctrlKey;
         var alt_key = e.altKey;
 
-        if (true) {
+        if (false) {
             console.log("code:" + key_code);
             console.log("shift:" + shift_key);
             console.log("ctrl" + ctrl_key);
