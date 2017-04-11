@@ -84,7 +84,7 @@ function henkanResponseHandler(target, resp, startPos, endPos) {
     let headText = textOfTextarea.substring(0, startPos)
     let yomi = textOfTextarea.substring(startPos, endPos);
     let tailText = textOfTextarea.substring(endPos);
-    kouhoBox = new KouhoBox(resp, textOfTextarea, headText, yomi, tailText)
+    kouhoBox = new KouhoBox(resp, textOfTextarea, headText, yomi, tailText, endPos)
     //alert("kanji:" + kanji + " startPos:" + startPos + " endPos:" + endPos + "repalced:" + replacedString);
 }
 
@@ -149,6 +149,17 @@ function henkanAction(target, ctrl_key, key_code) {
         console.log("ctrl+d");
         consumeFlag = true;
         domutil.deleteNextChar(target);
+    }
+    else if (ctrl_key && key_code == 71) { // CTRL+G (revert)
+        console.log("ctrl+g");
+        consumeFlag = true;
+        if (null != kouhoBox) {
+            let origText = kouhoBox.getOrigText();
+            let origPos  = kouhoBox.getOrigPos();
+            $(target).val(origText);
+            domutil.moveToPos(target, origPos);
+            kouhoBox = null;          
+        }        
     }
     else {
         keydownCount++;

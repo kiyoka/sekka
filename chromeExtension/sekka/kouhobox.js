@@ -31,12 +31,13 @@
 //
 
 // コンストラクタ
-var KouhoBox = function (jsonObject, origText, headText, yomi, tailText) {
+var KouhoBox = function (jsonObject, origText, headText, yomi, tailText, origPos) {
     this.jsonObject = jsonObject;
     this.origText = origText; // for Undo
     this.headText = headText;
     this.yomi = yomi;
     this.tailText = tailText;
+    this.origPos = origPos;
 
     this.index = 0; // 第一候補を指しておく
 }
@@ -54,6 +55,11 @@ KouhoBox.prototype.getKouhoList = function () {
 // 変換前のテキスト全体を返す
 KouhoBox.prototype.getOrigText = function () {
     return this.origText;
+}
+
+// 変換前のカーソル位を返す
+KouhoBox.prototype.getOrigPos = function () {
+    return this.origPos;
 }
 
 // 変換直後の状態かどうかを返す
