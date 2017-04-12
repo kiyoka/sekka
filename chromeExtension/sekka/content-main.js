@@ -155,11 +155,21 @@ function henkanAction(target, ctrl_key, key_code) {
         consumeFlag = true;
         if (null != kouhoBox) {
             let origText = kouhoBox.getOrigText();
-            let origPos  = kouhoBox.getOrigPos();
+            let origPos = kouhoBox.getOrigPos();
             $(target).val(origText);
             domutil.moveToPos(target, origPos);
-            kouhoBox = null;          
-        }        
+            kouhoBox = null;
+        }
+    }
+    else if (ctrl_key && key_code == 65) { // CTRL+A
+        console.log("ctrl+a");
+        consumeFlag = true;
+        domutil.moveToBeginningOfLine(target);
+    }
+    else if (ctrl_key && key_code == 69) { // CTRL+E
+        console.log("ctrl+e");
+        consumeFlag = true;
+        domutil.moveToEndOfLine(target);
     }
     else {
         keydownCount++;

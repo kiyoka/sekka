@@ -41,6 +41,15 @@ DomUtil.prototype.moveBackward = function (target) {
     this.moveOffset(target, -1)
 }
 
+DomUtil.prototype.moveToBeginningOfLine = function (target) {
+    this.moveToPos(target, 0)
+}
+
+DomUtil.prototype.moveToEndOfLine = function (target) {
+    let origText = $(target).val();
+    this.moveToPos(target, origText.length);
+}
+
 // Emacs's Backspace
 DomUtil.prototype.backspace = function (target) {
     let cursorPosition = $(target).prop("selectionStart");
