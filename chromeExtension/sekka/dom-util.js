@@ -82,6 +82,22 @@ DomUtil.prototype.deleteNextChar = function (target) {
     }
 }
 
+// Emacs's kill-line
+DomUtil.prototype.killLine = function (target) {
+    let cursorPosition = $(target).prop("selectionStart");
+    let origText = $(target).val();
+    let jutil = new JapaneseUtil();
+    let [prevStr, nextStr] = jutil.takePrevNextString(origText, cursorPosition);
+    if (0 == nextStr.length) {
+        return;
+    }
+    else {
+        $(target).val(prevStr);
+        this.moveToPos(target, cursorPosition);
+    }
+}
+
+
 DomUtil.prototype.moveOffset = function (target, offset) {
     let cursorPosition = $(target).prop("selectionStart");
     let elem = target[0];

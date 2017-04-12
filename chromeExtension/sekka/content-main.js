@@ -171,6 +171,11 @@ function henkanAction(target, ctrl_key, key_code) {
         consumeFlag = true;
         domutil.moveToEndOfLine(target);
     }
+    else if (ctrl_key && key_code == 75) { // CTRL+K
+        console.log("ctrl+k");
+        consumeFlag = true;
+        domutil.killLine(target);
+    }
     else {
         keydownCount++;
     }
