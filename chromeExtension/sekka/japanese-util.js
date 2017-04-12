@@ -35,7 +35,7 @@ function JapaneseUtil() {
 
 // 文字列の最後のアスキー文字列を取得する
 JapaneseUtil.prototype.takeLastAscii = function (srcString) {
-    let reString = /([/]?[a-zA-Z.?,-]+)$/;
+    let reString = /([/]?[0-9a-zA-Z.?,-]+)$/;
     let arrayString = srcString.match(reString)
     if (arrayString) {
         return arrayString[1]
