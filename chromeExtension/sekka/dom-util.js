@@ -50,6 +50,10 @@ DomUtil.prototype.moveToEndOfLine = function (target) {
     this.moveToPos(target, origText.length);
 }
 
+DomUtil.prototype.getCursorPosition = function (target) {
+    return $(target).prop("selectionStart");
+}
+
 // Emacs's Backspace
 DomUtil.prototype.backspace = function (target) {
     let cursorPosition = $(target).prop("selectionStart");

@@ -163,8 +163,13 @@ function henkanAction(target, ctrl_key, key_code) {
     }
     else if (ctrl_key && key_code == 65) { // CTRL+A
         console.log("ctrl+a");
-        consumeFlag = true;
-        domutil.moveToBeginningOfLine(target);
+        if (0 == domutil.getCursorPosition(target)) {
+            // すでに行頭にいれば、既存の全選択が発動
+        }
+        else {
+            consumeFlag = true;
+            domutil.moveToBeginningOfLine(target);
+        }
     }
     else if (ctrl_key && key_code == 69) { // CTRL+E
         console.log("ctrl+e");
