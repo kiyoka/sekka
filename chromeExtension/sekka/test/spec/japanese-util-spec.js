@@ -7,7 +7,7 @@ describe('JapaneseUtil', function () {
 
   describe('takeLastAscii used', function () {
     it('/ なし(1)', function () {
-      expect(jutil.takeLastAscii('000abc')).toEqual('abc');
+      expect(jutil.takeLastAscii('000abc')).toEqual('000abc');
     });
     it('/ なし(2)', function () {
       expect(jutil.takeLastAscii('あいうabc')).toEqual('abc');
@@ -37,7 +37,7 @@ describe('JapaneseUtil', function () {
 
   describe('takePrevCursorAscii used', function () {
     it('/ なし(1)', function () {
-      expect(jutil.takePrevCursorAscii('000abc   ', 6)).toEqual(['000', 'abc', 3, 6]);
+      expect(jutil.takePrevCursorAscii('000abc   ', 6)).toEqual(['', '000abc', 0, 6]);
     });
     it('/ なし(2)', function () {
       expect(jutil.takePrevCursorAscii("あいうabc \n  ", 6)).toEqual(['あいう', 'abc', 3, 6]);
