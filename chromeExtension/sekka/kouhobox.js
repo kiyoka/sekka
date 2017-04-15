@@ -90,3 +90,9 @@ KouhoBox.prototype.getNextKouho = function () {
     }
     return list[this.index];
 }
+
+// 現在選択中の候補番号を取得する
+KouhoBox.prototype.getIndex = function () {
+    return this.index;
+}
+

@@ -28,7 +28,6 @@
 //   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 //   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-
 {
     "manifest_version": 2,
     "name": "Sekka input method",
@@ -46,8 +45,12 @@
                 "https://*/*",
                 "https://tweetdeck.twitter.com/"
             ],
+            "css": [
+                "lib/w2ui-1.5.rc1.css"
+            ],
             "js": [
                 "lib/jquery-3.2.0.js",
+                "lib/w2ui-1.5.rc1.js",
                 "japanese-util.js",
                 "dom-util.js",
                 "kouhobox.js",
