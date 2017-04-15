@@ -96,10 +96,20 @@ function sekkaRequest(target, apiname, argHash, startPos, endPos) {
     });
 }
 
+
+function displayTag(target, html) {
+    $(target).w2tag(html, {});
+}
+
+function hideTag(target) {
+    $(target).w2tag('', {});
+}
+
 function henkanAction(target, ctrl_key, key_code) {
     domutil = new DomUtil();
 
-    var consumeFlag = false;
+    let consumeFlag = false;
+    let henkanFlag = false;
     if (ctrl_key && key_code == 74) { // CTRL+J
         jutil = new JapaneseUtil();
         console.log("ctrl+j");
@@ -115,10 +125,28 @@ function henkanAction(target, ctrl_key, key_code) {
         if (null != kouhoBox) {
             if (kouhoBox.isSelectingPos(prevYomi + yomi)) {
                 // カーソル位置を次の候補で差し替える。
-                let [origText, headText, yomi, tailText] = kouhoBox.getTextSet();
-                let kouhoStr = kouhoBox.getNextKouho();
-                $(target).val(headText + kouhoStr + tailText);
-                domutil.moveToPos(target, headText.length + kouhoStr.length);
+                {
+                    let [origText, headText, yomi, tailText] = kouhoBox.getTextSet();
+                    let kouhoStr = kouhoBox.getNextKouho();
+                    $(target).val(headText + kouhoStr + tailText);
+                    domutil.moveToPos(target, headText.length + kouhoStr.length);
+                }
+
+                // 候がが多すぎる時は、オーバレイで候補をガイドしてくれる。
+                kouhoList = kouhoBox.getKouhoList();
+                let html = "";
+                jQuery.each(kouhoList, function (id, text) {
+                    line = id + ":" + text + " <br> ";
+                    if (kouhoBox.getIndex() == id) {
+                        html += "<b>" + line + "</b>";
+                    }
+                    else {
+                        html += line;
+                    }
+                });
+                if (1 < kouhoBox.getIndex()) {
+                    displayTag(target, html);
+                }
             }
         }
         else {
@@ -129,6 +157,7 @@ function henkanAction(target, ctrl_key, key_code) {
                 endPos
             );
         }
+        henkanFlag = true; // 変換コマンド実行した
     }
     else if (ctrl_key && key_code == 70) { // CTRL+F
         console.log("ctrl+f");
@@ -184,6 +213,11 @@ function henkanAction(target, ctrl_key, key_code) {
     else {
         keydownCount++;
     }
+
+    if (!henkanFlag) {
+        hideTag(target);
+    }
+
     return consumeFlag;
 }
 
