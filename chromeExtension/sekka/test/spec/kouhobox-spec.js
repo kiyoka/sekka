@@ -6,7 +6,8 @@ describe('KouhoBox', function () {
             [
                 ["返還", false, "へんかん", 'j', 0],
                 ["変換", false, "へんかん", 'j', 1],
-                ["変化", false, "へんか", 'j', 2]
+                ["変化", false, "へんか", 'j', 2],
+                ["Henkan", false, "へんかん", 'j', 3]
             ],
             "漢字Henkanする",
             "漢字",

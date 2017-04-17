@@ -42,13 +42,16 @@ var KouhoBox = function (jsonObject, origText, headText, yomi, tailText, origPos
     this.index = 0; // 第一候補を指しておく
 }
 
-// 変換候補の文字列リストを返す
+// 変換候補の文字列リストを返す(但し、アルファベットの候補は外す)
 KouhoBox.prototype.getKouhoList = function () {
+    const reString = /^[0-9a-zA-Z.?,-]+$/;
     let list = [];
-    jQuery.each(this.jsonObject,
-        function (i, entry) {
-            list.push(entry[0]);
-        });
+    for (entry of this.jsonObject) {
+        let nihongo = entry[0];
+        if (!nihongo.match(reString)) {
+            list.push(nihongo);
+        }
+    }
     return list;
 }
 
@@ -77,8 +80,8 @@ KouhoBox.prototype.isSelectingPos = function (prevText) {
 }
 
 // オリジナルテキスト、前方、読み、後方の4つのテキストを返す
-KouhoBox.prototype.getTextSet = function() {
-    return [ this.origText, this.headText, this.yomi, this.tailText ];
+KouhoBox.prototype.getTextSet = function () {
+    return [this.origText, this.headText, this.yomi, this.tailText];
 }
 
 // 次の候補文字列を返す
