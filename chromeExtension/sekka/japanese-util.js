@@ -29,54 +29,52 @@
 //   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-function JapaneseUtil() {
-
-}
-
-// 文字列の最後のアスキー文字列を取得する
-JapaneseUtil.prototype.takeLastAscii = function (srcString) {
-    const reString = /([/]?[0-9a-zA-Z.?,-]+)$/;
-    let arrayString = srcString.match(reString)
-    if (arrayString) {
-        return arrayString[1]
+class JapaneseUtil {
+    // 文字列の最後のアスキー文字列を取得する
+    takeLastAscii(srcString) {
+        const reString = /([/]?[0-9a-zA-Z.?,-]+)$/;
+        let arrayString = srcString.match(reString)
+        if (arrayString) {
+            return arrayString[1]
+        }
+        else {
+            return ""
+        }
     }
-    else {
-        return ""
+
+    // 文字列せ先の '/' を取る
+    trimSlash(srcString) {
+        let reString = /^[/]/;
+        let arrayString = srcString.match(reString)
+        if (arrayString) {
+            return srcString.substring(1)
+        }
+        else {
+            return srcString;
+        }
     }
-}
 
-// 文字列せ先の '/' を取る
-JapaneseUtil.prototype.trimSlash = function (srcString) {
-    let reString = /^[/]/;
-    let arrayString = srcString.match(reString)
-    if (arrayString) {
-        return srcString.substring(1)
+    // カーソルの直前のアスキー文字列を取得する
+    // ret = ['ASCIIよりも前の文字列', 'ASCII文字列',開始位置,終了位置]
+    takePrevCursorAscii(srcString, cursorPosition) {
+        let prevCursorString = srcString.substring(0, cursorPosition);
+        let ascii = this.takeLastAscii(prevCursorString);
+        let prevAsciiString = prevCursorString.substring(0, prevCursorString.length - ascii.length);
+        return [prevAsciiString, ascii, prevCursorString.length - ascii.length, prevCursorString.length];
     }
-    else {
-        return srcString;
+
+    // origStringのstartPosからendPosまでの文字列をreplaceStringで置換する
+    replaceString(origString, replaceString, startPos, endPos) {
+        let prevStr = origString.substring(0, startPos);
+        let nextStr = origString.substring(endPos, origString.length);
+        let ret = prevStr + replaceString + nextStr;
+        return ret;
     }
-}
 
-// カーソルの直前のアスキー文字列を取得する
-// ret = ['ASCIIよりも前の文字列', 'ASCII文字列',開始位置,終了位置]
-JapaneseUtil.prototype.takePrevCursorAscii = function (srcString, cursorPosition) {
-    let prevCursorString = srcString.substring(0, cursorPosition);
-    let ascii = this.takeLastAscii(prevCursorString);
-    let prevAsciiString = prevCursorString.substring(0, prevCursorString.length - ascii.length);
-    return [prevAsciiString, ascii, prevCursorString.length - ascii.length, prevCursorString.length];
-}
-
-// origStringのstartPosからendPosまでの文字列をreplaceStringで置換する
-JapaneseUtil.prototype.replaceString = function (origString, replaceString, startPos, endPos) {
-    let prevStr = origString.substring(0, startPos);
-    let nextStr = origString.substring(endPos, origString.length);
-    let ret = prevStr + replaceString + nextStr;
-    return ret;
-}
-
-// カーソル位置の前と後ろの２つの文字列を返す
-JapaneseUtil.prototype.takePrevNextString = function (srcString, cursorPosition) {
-    let prevString = srcString.substring(0, cursorPosition);
-    let nextString = srcString.substring(cursorPosition)
-    return [prevString, nextString];
+    // カーソル位置の前と後ろの２つの文字列を返す
+    takePrevNextString(srcString, cursorPosition) {
+        let prevString = srcString.substring(0, cursorPosition);
+        let nextString = srcString.substring(cursorPosition)
+        return [prevString, nextString];
+    }
 }
