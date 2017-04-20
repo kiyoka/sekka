@@ -29,99 +29,97 @@
 //   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-function DomUtil() {
-
-}
-
-DomUtil.prototype.moveForward = function (target) {
-    this.moveOffset(target, 1)
-}
-
-DomUtil.prototype.moveBackward = function (target) {
-    this.moveOffset(target, -1)
-}
-
-DomUtil.prototype.moveToBeginningOfLine = function (target) {
-    this.moveToPos(target, 0)
-}
-
-DomUtil.prototype.moveToEndOfLine = function (target) {
-    let origText = $(target).val();
-    this.moveToPos(target, origText.length);
-}
-
-DomUtil.prototype.getCursorPosition = function (target) {
-    return $(target).prop("selectionStart");
-}
-
-// Emacs's Backspace
-DomUtil.prototype.backspace = function (target) {
-    let cursorPosition = $(target).prop("selectionStart");
-    let origText = $(target).val();
-    let jutil = new JapaneseUtil();
-    let [prevStr, nextStr] = jutil.takePrevNextString(origText, cursorPosition);
-    if (0 == prevStr.length) {
-        return;
+class DomUtil {
+    moveForward(target) {
+        this.moveOffset(target, 1)
     }
-    else {
-        prevStr = prevStr.substring(0, prevStr.length - 1);
-        $(target).val(prevStr + nextStr);
-        this.moveToPos(target, cursorPosition - 1);
-    }
-}
 
-// Emacs's delete
-DomUtil.prototype.deleteNextChar = function (target) {
-    let cursorPosition = $(target).prop("selectionStart");
-    let origText = $(target).val();
-    let jutil = new JapaneseUtil();
-    let [prevStr, nextStr] = jutil.takePrevNextString(origText, cursorPosition);
-    if (0 == nextStr.length) {
-        return;
+    moveBackward(target) {
+        this.moveOffset(target, -1)
     }
-    else {
-        nextStr = nextStr.substring(1);
-        $(target).val(prevStr + nextStr);
-        this.moveToPos(target, cursorPosition);
+
+    moveToBeginningOfLine(target) {
+        this.moveToPos(target, 0)
     }
-}
 
-// Emacs's kill-line
-DomUtil.prototype.killLine = function (target) {
-    let cursorPosition = $(target).prop("selectionStart");
-    let origText = $(target).val();
-    let jutil = new JapaneseUtil();
-    let [prevStr, nextStr] = jutil.takePrevNextString(origText, cursorPosition);
-    if (0 == nextStr.length) {
-        return;
+    moveToEndOfLine(target) {
+        let origText = $(target).val();
+        this.moveToPos(target, origText.length);
     }
-    else {
-        $(target).val(prevStr);
-        this.moveToPos(target, cursorPosition);
+
+    getCursorPosition(target) {
+        return $(target).prop("selectionStart");
     }
-}
+
+    // Emacs's Backspace
+    backspace(target) {
+        let cursorPosition = $(target).prop("selectionStart");
+        let origText = $(target).val();
+        let jutil = new JapaneseUtil();
+        let [prevStr, nextStr] = jutil.takePrevNextString(origText, cursorPosition);
+        if (0 == prevStr.length) {
+            return;
+        }
+        else {
+            prevStr = prevStr.substring(0, prevStr.length - 1);
+            $(target).val(prevStr + nextStr);
+            this.moveToPos(target, cursorPosition - 1);
+        }
+    }
+
+    // Emacs's delete
+    deleteNextChar(target) {
+        let cursorPosition = $(target).prop("selectionStart");
+        let origText = $(target).val();
+        let jutil = new JapaneseUtil();
+        let [prevStr, nextStr] = jutil.takePrevNextString(origText, cursorPosition);
+        if (0 == nextStr.length) {
+            return;
+        }
+        else {
+            nextStr = nextStr.substring(1);
+            $(target).val(prevStr + nextStr);
+            this.moveToPos(target, cursorPosition);
+        }
+    }
+
+    // Emacs's kill-line
+    killLine(target) {
+        let cursorPosition = $(target).prop("selectionStart");
+        let origText = $(target).val();
+        let jutil = new JapaneseUtil();
+        let [prevStr, nextStr] = jutil.takePrevNextString(origText, cursorPosition);
+        if (0 == nextStr.length) {
+            return;
+        }
+        else {
+            $(target).val(prevStr);
+            this.moveToPos(target, cursorPosition);
+        }
+    }
 
 
-DomUtil.prototype.moveOffset = function (target, offset) {
-    let cursorPosition = $(target).prop("selectionStart");
-    let elem = target[0];
-    let targetPosition = cursorPosition + offset;
-    this.moveToPos(target, targetPosition);
-}
+    moveOffset(target, offset) {
+        let cursorPosition = $(target).prop("selectionStart");
+        let elem = target[0];
+        let targetPosition = cursorPosition + offset;
+        this.moveToPos(target, targetPosition);
+    }
 
-DomUtil.prototype.moveToPos = function (target, targetPosition) {
-    let cursorPosition = $(target).prop("selectionStart");
-    let elem = target[0];
-    if (elem.setSelectionRange) {
-        elem.setSelectionRange(targetPosition, targetPosition);
-    } else if (elem.selectionStart) {
-        elem.selectionStart = targetPosition;
-        elem.selectionEnd = targetPosition;
-    } else if (elem.createTextRange) {
-        var range = elem.createTextRange();
-        range.collapse(true);
-        range.moveEnd('character', targetPosition);
-        range.moveStart('character', targetPosition);
-        range.select();
+    moveToPos(target, targetPosition) {
+        let cursorPosition = $(target).prop("selectionStart");
+        let elem = target[0];
+        if (elem.setSelectionRange) {
+            elem.setSelectionRange(targetPosition, targetPosition);
+        } else if (elem.selectionStart) {
+            elem.selectionStart = targetPosition;
+            elem.selectionEnd = targetPosition;
+        } else if (elem.createTextRange) {
+            var range = elem.createTextRange();
+            range.collapse(true);
+            range.moveEnd('character', targetPosition);
+            range.moveStart('character', targetPosition);
+            range.select();
+        }
     }
 }
