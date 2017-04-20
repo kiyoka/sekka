@@ -32,7 +32,7 @@
 const SEKKA_URL = 'http://sekka.example.com:12929/';
 
 function httpRequest_status() {
-    var ret;
+    let ret;
     jQuery.ajax({
         url: SEKKA_URL + 'status',
         success: function (result) {
@@ -44,17 +44,17 @@ function httpRequest_status() {
 }
 
 function httpRequest_api(apiname, argHash, sendResponse) {
-    var formData = new FormData();
+    let formData = new FormData();
     for (key in argHash) {
         formData.append(key, argHash[key]);
     }
 
-    var ret;
+    let ret;
     jQuery.ajax({
         type: 'POST',
         url: SEKKA_URL + apiname,
         success: function (result) {
-            var obj = JSON.parse(result);
+            let obj = JSON.parse(result);
             ret = { api: apiname, result: obj }
         },
         data: formData,

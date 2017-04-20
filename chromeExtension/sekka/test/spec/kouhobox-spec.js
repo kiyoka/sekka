@@ -1,5 +1,5 @@
 describe('KouhoBox', function () {
-    var kouhobox;
+    let kouhobox;
 
     beforeEach(function () {
         kouhobox = new KouhoBox(

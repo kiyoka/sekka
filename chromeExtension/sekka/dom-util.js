@@ -115,7 +115,7 @@ class DomUtil {
             elem.selectionStart = targetPosition;
             elem.selectionEnd = targetPosition;
         } else if (elem.createTextRange) {
-            var range = elem.createTextRange();
+            let range = elem.createTextRange();
             range.collapse(true);
             range.moveEnd('character', targetPosition);
             range.moveStart('character', targetPosition);

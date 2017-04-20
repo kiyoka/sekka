@@ -29,8 +29,8 @@
 //   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-var kouhoBox = null;
-var keydownCount = 0;
+let kouhoBox = null;
+let keydownCount = 0;
 
 function domAddEventListener(element) {
     if (element.addEventListener) {
@@ -41,14 +41,14 @@ function domAddEventListener(element) {
 }
 
 // add EventListener to oinput/textarea
-var g_names = [];
-var g_ids = [];
+let g_names = [];
+let g_ids = [];
 function hookToTextArea() {
     $('input[type=text], textarea').each(
         function (index) {
-            var input = $(this);
-            var name = input.attr('name');
-            var id = input.attr('id');
+            let input = $(this);
+            let name = input.attr('name');
+            let id = input.attr('id');
             if (null != name) {
                 g_names.push(name);
             }
@@ -240,10 +240,10 @@ function keyDownHandler(e) {
     });
 
     if (hit) {
-        var key_code = e.keyCode;
-        var shift_key = e.shiftKey;
-        var ctrl_key = e.ctrlKey;
-        var alt_key = e.altKey;
+        let key_code = e.keyCode;
+        let shift_key = e.shiftKey;
+        let ctrl_key = e.ctrlKey;
+        let alt_key = e.altKey;
 
         if (false) {
             console.log("code:" + key_code);

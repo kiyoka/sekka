@@ -1,5 +1,5 @@
 describe('JapaneseUtil', function () {
-  var jutil;
+  let jutil;
 
   beforeEach(function () {
     jutil = new JapaneseUtil();
