@@ -23,19 +23,22 @@ describe('KouhoBox', function () {
     });
     describe('変換候補の返却', function () {
         it('変換候補リスト', function () {
-            expect(kouhobox.getKouhoList()).toEqual(["返還", "変換", "変化"])
+            expect(kouhobox.getKouhoList()).toEqual(["返還", "変換", "変化"]);
+        });
+        it('変換候補リスト(html)', function () {
+            expect(kouhobox.getKouhoGuideHtml()).toEqual("1:返還 <br> 2:変換 <br> 3:変化 <br> ");
         });
         it('次の変換候補(1)', function () {
-            expect(kouhobox.getNextKouho()).toEqual("変換")
+            expect(kouhobox.getNextKouho()).toEqual("変換");
         });
         it('次の変換候補(2)', function () {
             kouhobox.getNextKouho();
-            expect(kouhobox.getNextKouho()).toEqual("変化")
+            expect(kouhobox.getNextKouho()).toEqual("変化");
         });
         it('次の変換候補(3)', function () {
             kouhobox.getNextKouho();
             kouhobox.getNextKouho();
-            expect(kouhobox.getNextKouho()).toEqual("返還")
+            expect(kouhobox.getNextKouho()).toEqual("返還");
         });
     });
     describe('カーソル位置の状態調査', function () {

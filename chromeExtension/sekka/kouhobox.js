@@ -54,6 +54,23 @@ class KouhoBox {
         return list;
     }
 
+    // 変換候補の選択状態をHTMLで返す
+    getKouhoGuideHtml() {
+        let html = "";
+        let id = 1;
+        for(let text of this.getKouhoList()){
+            let line = id + ":" + text + " <br> ";
+            if (this.getIndex() == id) {
+                html += "<b>" + line + "</b>";
+            }
+            else {
+                html += line;
+            }
+            id ++;
+        }        
+        return html;
+    }
+
     // 変換前のテキスト全体を返す
     getOrigText() {
         return this.origText;

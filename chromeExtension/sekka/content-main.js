@@ -131,19 +131,8 @@ function henkanAction(target, ctrl_key, key_code) {
                     $(target).val(headText + kouhoStr + tailText);
                     domutil.moveToPos(target, headText.length + kouhoStr.length);
                 }
-
-                // 候がが多すぎる時は、オーバレイで候補をガイドしてくれる。
-                kouhoList = kouhoBox.getKouhoList();
-                let html = "";
-                jQuery.each(kouhoList, function (id, text) {
-                    line = id + ":" + text + " <br> ";
-                    if (kouhoBox.getIndex() == id) {
-                        html += "<b>" + line + "</b>";
-                    }
-                    else {
-                        html += line;
-                    }
-                });
+                let html = kouhoBox.getKouhoGuideHtml();
+                // 候が多すぎる時は、オーバレイで候補をガイドしてくれる。
                 if (1 < kouhoBox.getIndex()) {
                     displayTag(target, html);
                 }
