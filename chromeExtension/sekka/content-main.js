@@ -63,8 +63,8 @@ function hookToTextArea() {
 hookToTextArea();
 
 // call status api on sekka server.
-function sekkaRequest_status() {
-    chrome.runtime.sendMessage({ api: "status" }, function (response) {
+function sekkaRequest_status(baseUrl) {
+    chrome.runtime.sendMessage({ baseUrl: baseUrl, api: "status" }, function (response) {
         console.log(response);
     });
 }
@@ -89,13 +89,12 @@ function henkanResponseHandler(target, resp, startPos, endPos) {
 }
 
 // call api on sekka server.
-function sekkaRequest(target, apiname, argHash, startPos, endPos) {
+function sekkaRequest(target, baseUrl, apiname, argHash, startPos, endPos) {
     keydownCount = 0;
-    chrome.runtime.sendMessage({ api: apiname, argHash: argHash }, function (response) {
+    chrome.runtime.sendMessage({ baseUrl: baseUrl, api: apiname, argHash: argHash }, function (response) {
         henkanResponseHandler(target, response.result, startPos, endPos);
     });
 }
-
 
 function displayTag(target, html) {
     $(target).w2tag(html, {});
@@ -106,6 +105,8 @@ function hideTag(target) {
 }
 
 function henkanAction(target, ctrl_key, key_code) {
+    sekkaSetting = new SekkaSetting();
+    sekkaSetting.load();
     domutil = new DomUtil();
 
     let consumeFlag = false;
@@ -140,8 +141,9 @@ function henkanAction(target, ctrl_key, key_code) {
         }
         else {
             sekkaRequest(target,
+                sekkaSetting.getBaseUrl(),
                 'henkan',
-                { 'userid': 'kiyoka', 'format': 'json', 'yomi': yomi, 'method': 'normal', 'limit': '0' },
+                { 'userid': sekkaSetting.getUsername(), 'format': 'json', 'yomi': yomi, 'method': 'normal', 'limit': '0' },
                 startPos,
                 endPos
             );

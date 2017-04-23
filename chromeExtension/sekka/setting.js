@@ -29,51 +29,32 @@
 //   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-function httpRequest_status(baseUrl) {
-    let ret;
-    jQuery.ajax({
-        url: baseUrl + 'status',
-        success: function (result) {
-            ret = { api: 'status', result: result }
-        },
-        async: false
-    });
-    return ret;
-}
+let g_urlIndex = 0;
+let g_username = '';
+let g_baseUrlList = ["", "", ""];
 
-function httpRequest_api(baseUrl, apiname, argHash, sendResponse) {
-    let formData = new FormData();
-    for (key in argHash) {
-        formData.append(key, argHash[key]);
+class SekkaSetting {
+    load() {
+        chrome.storage.sync.get({
+            index: 0,
+            url1: "",
+            url2: "",
+            url3: "",
+            username: ""
+        }, this.syncHandler);
     }
 
-    let ret;
-    jQuery.ajax({
-        type: 'POST',
-        url: baseUrl + apiname,
-        success: function (result) {
-            let obj = JSON.parse(result);
-            ret = { api: apiname, result: obj }
-        },
-        data: formData,
-        contentType: false,
-        processData: false,
-        async: false
-    });
-    return ret;
-}
+    syncHandler(items) {
+        g_urlIndex = items.index;
+        g_baseUrlList = [items.url1, items.url2, items.url3];
+        g_username = items.username;
+    }
 
-chrome.runtime.onMessage.addListener(
-    function (request, sender, sendResponse) {
-        console.log(sender.tab ?
-            "from a content script:" + sender.tab.url :
-            "from the extension");
-        if (request.api == "henkan") {
-            let result = httpRequest_api(request.baseUrl, request.api, request.argHash);
-            sendResponse(result);
-        }
-        else if (request.api == "status") {
-            let result = httpRequest_status(request.baseUrl);
-            sendResponse(result);
-        }
-    });
+    getBaseUrl() {
+        return g_baseUrlList[g_urlIndex];
+    }
+
+    getUsername() {
+        return g_username;
+    }
+}

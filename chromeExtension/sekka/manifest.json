@@ -54,6 +54,7 @@
                 "japanese-util.js",
                 "dom-util.js",
                 "kouhobox.js",
+                "setting.js",
                 "content-main.js"
             ],
             "run_at": "document_idle",
@@ -69,7 +70,13 @@
     "permissions": [
         "activeTab",
         "file:///*/*",
+        "http://localhost:12929/*",
         "http://sekka.example.com:12929/*",
-        "https://sekka.example.com:12929/*"
-    ]
+        "https://sekka.example.com:12929/*",
+        "storage"
+    ],
+    "options_ui": {
+        "page": "options.html",
+        "chrome_style": true
+    }
 }
