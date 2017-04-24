@@ -182,7 +182,7 @@ module SekkaServer
 
       body = case req.request_method
              when 'GET'
-               getMethod(req)
+               execGetMethod(req)
              when 'POST'
                if !req.params.has_key?('userid')
                  str = "Err: parameter 'userid' required"
@@ -193,7 +193,7 @@ module SekkaServer
                  STDERR.puts str
                  @core.writeToString( str )
                else
-                 postMethod(req)
+                 execPostMethod(req)
                end
              else
                "no message."        
@@ -206,10 +206,10 @@ module SekkaServer
       res.finish
     end
     
-    def getMethod(req)
+    def execGetMethod(req)
       case req.path
       when "/status"
-        "OK\n"
+        "OK"
       end
     end
     
@@ -217,7 +217,7 @@ module SekkaServer
       return "json" == format.downcase
     end
     
-    def postMethod(req)
+    def execPostMethod(req)
       revertMemcache()
                  
       userid = URI.decode( req.params['userid'].force_encoding("UTF-8") )
