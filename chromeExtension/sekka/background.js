@@ -32,6 +32,7 @@
 function httpRequest_status(baseUrl) {
     let ret;
     jQuery.ajax({
+        type: 'GET',
         url: baseUrl + 'status',
         success: function (result) {
             ret = { api: 'status', result: result }

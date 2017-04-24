@@ -44,10 +44,32 @@ function restore_options() {
                 document.getElementById('radiourl2').checked = true;
                 break;
             case 2:
-                document.getElementById('radiourl2').checked = true;
+                document.getElementById('radiourl3').checked = true;
                 break;
         }
     });
 }
+
+// call status api on sekka server.
+function sekkaRequest_status() {
+    let url = "";
+    if (document.getElementById('radiourl1').checked) { url = document.getElementById('url1').value; }
+    if (document.getElementById('radiourl2').checked) { url = document.getElementById('url2').value; }
+    if (document.getElementById('radiourl3').checked) { url = document.getElementById('url3').value; }
+    let status = document.getElementById('status');
+    status.textContent = 'connecting...';
+    chrome.runtime.sendMessage({ baseUrl: url, api: "status" }, function (response) {
+        if (null == response) {
+            status.textContent = 'NG';
+            setTimeout(function () { status.textContent = '';}, 1000);
+        }
+        else {
+            status.textContent = 'OK';
+            setTimeout(function () { status.textContent = '';}, 1000);
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', restore_options);
 document.getElementById('save').addEventListener('click', save_options);
+document.getElementById('connect').addEventListener('click', sekkaRequest_status);
