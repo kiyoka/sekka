@@ -1,3 +1,4 @@
+
 //
 //   Copyright (c) 2017  Kiyoka Nishiyama  <kiyoka@sumibi.org>
 //
@@ -28,56 +29,34 @@
 //   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 //   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
-{
-    "manifest_version": 2,
-    "name": "Sekka input method",
-    "description": "This extension is japanese input method.",
-    "version": "1.0",
-    //"browser_action": {
-    //  "default_icon": "icon.png",
-    //  "default_popup": "popup.html"
-    //},
-    "content_scripts": [
-        {
-            "matches": [
-                "file:///*/*",
-                "http://*/*",
-                "https://*/*",
-                "https://tweetdeck.twitter.com/"
-            ],
-            "css": [
-                "lib/w2ui-1.5.rc1.css"
-            ],
-            "js": [
-                "lib/jquery-3.2.0.js",
-                "lib/w2ui-1.5.rc1.js",
-                "japanese-util.js",
-                "dom-util.js",
-                "kouhobox.js",
-                "kouhowindow.js",
-                "setting.js",
-                "content-main.js"
-            ],
-            "run_at": "document_idle",
-            "all_frames": true
+
+let g_instance = null;
+
+// this class is singleton
+class KouhoWindow {
+    constructor() {
+        if (!g_instance) {
+            this.target = null;
+            this.createDateString = new Date().toISOString();
+            g_instance = this;
         }
-    ],
-    "background": {
-        "scripts": [
-            "lib/jquery-3.2.0.js",
-            "background.js"
-        ]
-    },
-    "permissions": [
-        "activeTab",
-        "file:///*/*",
-        "http://localhost:12929/*",
-        "http://sekka.example.com:12929/*",
-        "https://sekka.example.com:12929/*",
-        "storage"
-    ],
-    "options_ui": {
-        "page": "options.html",
-        "chrome_style": true
+        return g_instance;
+    }
+
+    display(target, html) {
+        this.target = target;
+        $(this.target).w2tag(html, {});
+    }
+
+    discard() {
+        $(this.target).w2tag('', {});
+    }
+
+    isDisplay() {
+        return (null != this.target);
+    }
+
+    getCreateDateString() {
+        return this.createDateString;
     }
 }

@@ -92,16 +92,13 @@ function henkanResponseHandler(target, resp, startPos, endPos) {
 function sekkaRequest(target, baseUrl, apiname, argHash, startPos, endPos) {
     keydownCount = 0;
     chrome.runtime.sendMessage({ baseUrl: baseUrl, api: apiname, argHash: argHash }, function (response) {
-        henkanResponseHandler(target, response.result, startPos, endPos);
+        if (null == response) {
+            alert("Error: can't connect to sekka server [" + baseUrl + "]");
+        }
+        else {
+            henkanResponseHandler(target, response.result, startPos, endPos);
+        }
     });
-}
-
-function displayTag(target, html) {
-    $(target).w2tag(html, {});
-}
-
-function hideTag(target) {
-    $(target).w2tag('', {});
 }
 
 function henkanAction(target, ctrl_key, key_code) {
@@ -135,7 +132,8 @@ function henkanAction(target, ctrl_key, key_code) {
                 let html = kouhoBox.getKouhoGuideHtml();
                 // 候が多すぎる時は、オーバレイで候補をガイドしてくれる。
                 if (1 < kouhoBox.getIndex()) {
-                    displayTag(target, html);
+                    let kouhoWindow = new KouhoWindow();
+                    kouhoWindow.display(target, html);
                 }
             }
         }
@@ -206,7 +204,8 @@ function henkanAction(target, ctrl_key, key_code) {
     }
 
     if (!henkanFlag) {
-        hideTag(target);
+        let kouhoWindow = new KouhoWindow();
+        kouhoWindow.discard();
     }
 
     return consumeFlag;
