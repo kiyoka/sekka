@@ -57,17 +57,17 @@ class KouhoBox {
     // 変換候補の選択状態をHTMLで返す
     getKouhoGuideHtml() {
         let html = "";
-        let id = 1;
-        for(let text of this.getKouhoList()){
-            let line = id + ":" + text + " <br> ";
-            if (this.getIndex() == id) {
-                html += "<b>" + line + "</b>";
+        let index = 0;
+        for (let text of this.getKouhoList()) {
+            let line = (index+1) + ":" + text
+            if (this.getIndex() == index) {
+                html += "<b>" + line + "</b><br>";
             }
             else {
-                html += line;
+                html += line + "<br>"
             }
-            id ++;
-        }        
+            index++;
+        }
         return html;
     }
 
@@ -100,12 +100,28 @@ class KouhoBox {
         return [this.origText, this.headText, this.yomi, this.tailText];
     }
 
+    // 現在の候補文字列を返す
+    getCurKouho() {
+        let list = this.getKouhoList();
+        return list[this.index];
+    }
+
     // 次の候補文字列を返す
     getNextKouho() {
         this.index++;
         let list = this.getKouhoList();
         if (list.length <= this.index) {
             this.index = 0;
+        }
+        return list[this.index];
+    }
+
+    // 次の候補文字列を返す
+    getPrevKouho() {
+        this.index--;
+        let list = this.getKouhoList();
+        if (this.index < 0) {
+            this.index = list.length - 1;
         }
         return list[this.index];
     }

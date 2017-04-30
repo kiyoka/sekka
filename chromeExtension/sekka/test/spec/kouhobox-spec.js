@@ -25,8 +25,13 @@ describe('KouhoBox', function () {
         it('変換候補リスト', function () {
             expect(kouhobox.getKouhoList()).toEqual(["返還", "変換", "変化"]);
         });
-        it('変換候補リスト(html)', function () {
-            expect(kouhobox.getKouhoGuideHtml()).toEqual("1:返還 <br> 2:変換 <br> 3:変化 <br> ");
+        it('変換候補リストhtml(1)', function () {
+            expect(kouhobox.getKouhoGuideHtml()).toEqual("<b>1:返還</b><br>2:変換<br>3:変化<br>");
+        });
+        it('変換候補リストhtml(2)', function () {
+            kouhobox.getNextKouho();
+            kouhobox.getNextKouho();
+            expect(kouhobox.getKouhoGuideHtml()).toEqual("1:返還<br>2:変換<br><b>3:変化</b><br>");
         });
         it('次の変換候補(1)', function () {
             expect(kouhobox.getNextKouho()).toEqual("変換");
@@ -35,11 +40,28 @@ describe('KouhoBox', function () {
             kouhobox.getNextKouho();
             expect(kouhobox.getNextKouho()).toEqual("変化");
         });
+        it('前の変換候補(1)', function () {
+            kouhobox.getNextKouho();
+            expect(kouhobox.getPrevKouho()).toEqual("返還");
+        });
+        it('前の変換候補(2)', function () {
+            kouhobox.getNextKouho();
+            kouhobox.getNextKouho();
+            expect(kouhobox.getPrevKouho()).toEqual("変換");
+        });
         it('次の変換候補(3)', function () {
             kouhobox.getNextKouho();
             kouhobox.getNextKouho();
             expect(kouhobox.getNextKouho()).toEqual("返還");
         });
+        it('現在の変換候補(1)', function () {
+            expect(kouhobox.getCurKouho()).toEqual("返還");
+        });
+        it('現在の変換候補(2)', function () {
+            kouhobox.getNextKouho();
+            expect(kouhobox.getCurKouho()).toEqual("変換");
+        });
+
     });
     describe('カーソル位置の状態調査', function () {
         it('オリジナルテキスト', function () {

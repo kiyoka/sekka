@@ -50,6 +50,7 @@ class KouhoWindow {
 
     discard() {
         $(this.target).w2tag('', {});
+        this.target = null;
     }
 
     isDisplay() {

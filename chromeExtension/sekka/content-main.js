@@ -105,6 +105,7 @@ function henkanAction(target, ctrl_key, key_code) {
     sekkaSetting = new SekkaSetting();
     sekkaSetting.load();
     domutil = new DomUtil();
+    let kouhoWindow = new KouhoWindow();
 
     let consumeFlag = false;
     let henkanFlag = false;
@@ -132,7 +133,6 @@ function henkanAction(target, ctrl_key, key_code) {
                 let html = kouhoBox.getKouhoGuideHtml();
                 // 候が多すぎる時は、オーバレイで候補をガイドしてくれる。
                 if (1 < kouhoBox.getIndex()) {
-                    let kouhoWindow = new KouhoWindow();
                     kouhoWindow.display(target, html);
                 }
             }
@@ -199,12 +199,42 @@ function henkanAction(target, ctrl_key, key_code) {
         consumeFlag = true;
         domutil.killLine(target);
     }
+    else if (key_code == 38 || key_code == 40) { // ↑矢印 or ↓矢印
+        if (kouhoWindow.isDisplay()) {
+            if (null != kouhoBox) {
+                let kouhoStr = null;
+                if (key_code == 38) {
+                    console.log("↑");
+                    kouhoBox.getPrevKouho();
+                }
+                else if (key_code == 40) {
+                    console.log("↓");
+                    kouhoBox.getNextKouho();
+                }
+                let html = kouhoBox.getKouhoGuideHtml();
+                kouhoWindow.display(target, html);
+            }
+            henkanFlag = true;
+            consumeFlag = true;
+        }
+    }
+    else if (key_code == 13) { // Enter key
+        if (kouhoWindow.isDisplay()) {
+            // カーソル位置を次の候補で差し替える。
+            let [origText, headText, yomi, tailText] = kouhoBox.getTextSet();
+            let kouhoStr = kouhoBox.getCurKouho();
+            $(target).val(headText + kouhoStr + tailText);
+            domutil.moveToPos(target, headText.length + kouhoStr.length);
+            kouhoWindow.discard();
+            henkanFlag = true;
+            consumeFlag = true;
+        }
+    }
     else {
         keydownCount++;
     }
 
     if (!henkanFlag) {
-        let kouhoWindow = new KouhoWindow();
         kouhoWindow.discard();
     }
 
