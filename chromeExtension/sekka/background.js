@@ -29,6 +29,7 @@
 //   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
+// 疎通確認
 function httpRequest_status(baseUrl) {
     let ret;
     jQuery.ajax({
@@ -42,6 +43,7 @@ function httpRequest_status(baseUrl) {
     return ret;
 }
 
+// api呼び出し
 function httpRequest_api(baseUrl, apiname, argHash, sendResponse) {
     let formData = new FormData();
     for (key in argHash) {
@@ -70,6 +72,10 @@ chrome.runtime.onMessage.addListener(
             "from a content script:" + sender.tab.url :
             "from the extension");
         if (request.api == "henkan") {
+            let result = httpRequest_api(request.baseUrl, request.api, request.argHash);
+            sendResponse(result);
+        }
+        else if (request.api == "kakutei") {
             let result = httpRequest_api(request.baseUrl, request.api, request.argHash);
             sendResponse(result);
         }

@@ -30,6 +30,8 @@
 //   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
+const reString = /^[0-9a-zA-Z.?,-]+$/;
+
 class KouhoBox {
     constructor(jsonObject, origText, headText, yomi, tailText, origPos) {
         this.jsonObject = jsonObject;
@@ -41,9 +43,21 @@ class KouhoBox {
         this.index = 0; // 第一候補を指しておく
     }
 
+    // 変換候補のキーリストを返す
+    getKeyList() {
+        let list = [];
+        for (let entry of this.jsonObject) {
+            let nihongo = entry[0];
+            let key = entry[2];
+            if (!nihongo.match(reString)) {
+                list.push(key);
+            }
+        }
+        return list;
+    }
+
     // 変換候補の文字列リストを返す(但し、アルファベットの候補は外す)
     getKouhoList() {
-        const reString = /^[0-9a-zA-Z.?,-]+$/;
         let list = [];
         for (let entry of this.jsonObject) {
             let nihongo = entry[0];
@@ -59,7 +73,7 @@ class KouhoBox {
         let html = "";
         let index = 0;
         for (let text of this.getKouhoList()) {
-            let line = (index+1) + ":" + text
+            let line = (index + 1) + ":" + text
             if (this.getIndex() == index) {
                 html += "<b>" + line + "</b><br>";
             }
@@ -98,6 +112,12 @@ class KouhoBox {
     // オリジナルテキスト、前方、読み、後方の4つのテキストを返す
     getTextSet() {
         return [this.origText, this.headText, this.yomi, this.tailText];
+    }
+
+    // 現在の候補キーを返す
+    getCurKey() {
+        let list = this.getKeyList();
+        return list[this.index];
     }
 
     // 現在の候補文字列を返す

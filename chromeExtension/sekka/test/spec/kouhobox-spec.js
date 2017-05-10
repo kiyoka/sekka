@@ -25,6 +25,9 @@ describe('KouhoBox', function () {
         it('変換候補リスト', function () {
             expect(kouhobox.getKouhoList()).toEqual(["返還", "変換", "変化"]);
         });
+        it('変換キーリスト', function () {
+            expect(kouhobox.getKeyList()).toEqual(["へんかん", "へんかん", "へんか"]);
+        });
         it('変換候補リストhtml(1)', function () {
             expect(kouhobox.getKouhoGuideHtml()).toEqual("<b>1:返還</b><br>2:変換<br>3:変化<br>");
         });
@@ -56,10 +59,12 @@ describe('KouhoBox', function () {
         });
         it('現在の変換候補(1)', function () {
             expect(kouhobox.getCurKouho()).toEqual("返還");
+            expect(kouhobox.getCurKey()).toEqual("へんかん");
         });
         it('現在の変換候補(2)', function () {
             kouhobox.getNextKouho();
             expect(kouhobox.getCurKouho()).toEqual("変換");
+            expect(kouhobox.getCurKey()).toEqual("へんかん");
         });
 
     });

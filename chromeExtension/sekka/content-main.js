@@ -95,7 +95,7 @@ function sekkaRequest(target, baseUrl, apiname, argHash, startPos, endPos) {
         if (null == response) {
             alert("Error: can't connect to sekka server [" + baseUrl + "]");
         }
-        else {
+        else if ('henkan' === apiname) {
             henkanResponseHandler(target, response.result, startPos, endPos);
         }
     });
@@ -228,6 +228,16 @@ function henkanAction(target, ctrl_key, key_code) {
             kouhoWindow.discard();
             henkanFlag = true;
             consumeFlag = true;
+
+            // 変換候補の確定（学習）APIを呼ぶ
+            let key = kouhoBox.getCurKey();
+            sekkaRequest(target,
+                sekkaSetting.getBaseUrl(),
+                'kakutei',
+                { 'userid': sekkaSetting.getUsername(), 'format': 'json', 'key': key, 'tango': kouhoStr },
+                0,
+                0
+            );
         }
     }
     else {
