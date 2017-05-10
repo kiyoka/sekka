@@ -259,6 +259,9 @@ module SekkaServer
         _key    = URI.decode( req.params[   'key'].force_encoding("UTF-8") )
         _tango  = URI.decode( req.params[ 'tango'].force_encoding("UTF-8") )
         @queue.push( 'k ' + userid + " " + _key + " " + _tango )
+        if isJson(format)
+          sprintf("{}")
+        end
       when "/register"
         dict    = URI.decode( req.params['dict'].force_encoding( "UTF-8" ) ).split( "\n" )
         dict.each { |x|
