@@ -99,13 +99,13 @@ class KouhoBox {
     isSelectingPos(prevText) {
         let kouhoList = this.getKouhoList();
         let found = false;
-        jQuery.each(kouhoList, function (i, kouho) {
+        for (let kouho of kouhoList) {
             //console.log('kouho:' + kouho)
             let re = new RegExp(kouho + '$');
             if (re.test(prevText)) {
                 found = true;
             }
-        });
+        }
         return found;
     }
 
