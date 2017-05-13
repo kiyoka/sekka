@@ -31,6 +31,8 @@
 
 let kouhoBox = null;
 let keydownCount = 0;
+let keyBuffer = "";
+let henkanBusy = false;
 
 function domAddEventListener(element) {
     if (element.addEventListener) {
@@ -74,16 +76,17 @@ function henkanResponseHandler(target, resp, startPos, endPos) {
     let kanji = first_entry[0];
     let textOfTextarea = $(target).val();
     jutil = new JapaneseUtil();
-    let replacedString = jutil.replaceString(textOfTextarea, kanji, startPos, endPos);
+    let replacedString = jutil.replaceString(textOfTextarea, kanji + keyBuffer, startPos, endPos);
+
     $(target).val(replacedString);
 
     domutil = new DomUtil();
-    //console.log('keydownCount:' + keydownCount);
-    domutil.moveToPos(target, startPos + kanji.length + keydownCount);
+    domutil.moveToPos(target, startPos + kanji.length + keyBuffer.length);
 
     let headText = textOfTextarea.substring(0, startPos)
     let yomi = textOfTextarea.substring(startPos, endPos);
     let tailText = textOfTextarea.substring(endPos);
+
     kouhoBox = new KouhoBox(resp, textOfTextarea, headText, yomi, tailText, endPos)
     //alert("kanji:" + kanji + " startPos:" + startPos + " endPos:" + endPos + "repalced:" + replacedString);
 }
@@ -91,6 +94,8 @@ function henkanResponseHandler(target, resp, startPos, endPos) {
 // call api on sekka server.
 function sekkaRequest(target, baseUrl, apiname, argHash, startPos, endPos) {
     keydownCount = 0;
+    keyBuffer = "";
+    henkanBusy = true;
     chrome.runtime.sendMessage({ baseUrl: baseUrl, api: apiname, argHash: argHash }, function (response) {
         if (null == response) {
             alert("Error: can't connect to sekka server [" + baseUrl + "]");
@@ -98,10 +103,11 @@ function sekkaRequest(target, baseUrl, apiname, argHash, startPos, endPos) {
         else if ('henkan' === apiname) {
             henkanResponseHandler(target, response.result, startPos, endPos);
         }
+        henkanBusy = false;
     });
 }
 
-function henkanAction(target, ctrl_key, key_code) {
+function henkanAction(target, ctrl_key, shift_key, key_code) {
     sekkaSetting = new SekkaSetting();
     sekkaSetting.load();
     domutil = new DomUtil();
@@ -111,42 +117,47 @@ function henkanAction(target, ctrl_key, key_code) {
     let henkanFlag = false;
     if (ctrl_key && key_code == 74) { // CTRL+J
         jutil = new JapaneseUtil();
-        console.log("ctrl+j");
         consumeFlag = true;
-        let textOfTextarea = $(target).val();
-        let cursorPosition = $(target).prop("selectionStart");
-        let [prevYomi, yomi, startPos, endPos] = jutil.takePrevCursorAscii(textOfTextarea, cursorPosition);
-        yomi = jutil.trimSlash(yomi);
-        if (0 < yomi.length) {
-            // アスキー文字列があったら、変換候補を捨てる。
-            kouhoBox = null;
-        }
-        if (null != kouhoBox) {
-            if (kouhoBox.isSelectingPos(prevYomi + yomi)) {
-                // カーソル位置を次の候補で差し替える。
-                {
-                    let [origText, headText, yomi, tailText] = kouhoBox.getTextSet();
-                    let kouhoStr = kouhoBox.getNextKouho();
-                    $(target).val(headText + kouhoStr + tailText);
-                    domutil.moveToPos(target, headText.length + kouhoStr.length);
-                }
-                let html = kouhoBox.getKouhoGuideHtml();
-                // 候が多すぎる時は、オーバレイで候補をガイドしてくれる。
-                if (1 < kouhoBox.getIndex()) {
-                    kouhoWindow.display(target, html);
-                }
-            }
+        if (henkanBusy) {
+            console.log("ctrl+j(busy)");
         }
         else {
-            sekkaRequest(target,
-                sekkaSetting.getBaseUrl(),
-                'henkan',
-                { 'userid': sekkaSetting.getUsername(), 'format': 'json', 'yomi': yomi, 'method': 'normal', 'limit': '0' },
-                startPos,
-                endPos
-            );
+            console.log("ctrl+j");
+            let textOfTextarea = $(target).val();
+            let cursorPosition = $(target).prop("selectionStart");
+            let [prevYomi, yomi, startPos, endPos] = jutil.takePrevCursorAscii(textOfTextarea, cursorPosition);
+            yomi = jutil.trimSlash(yomi);
+            if (0 < yomi.length) {
+                // アスキー文字列があったら、変換候補を捨てる。
+                kouhoBox = null;
+            }
+            if (null != kouhoBox) {
+                if (kouhoBox.isSelectingPos(prevYomi + yomi)) {
+                    // カーソル位置を次の候補で差し替える。
+                    {
+                        let [origText, headText, yomi, tailText] = kouhoBox.getTextSet();
+                        let kouhoStr = kouhoBox.getNextKouho();
+                        $(target).val(headText + kouhoStr + tailText);
+                        domutil.moveToPos(target, headText.length + kouhoStr.length);
+                    }
+                    let html = kouhoBox.getKouhoGuideHtml();
+                    // 候が多すぎる時は、オーバレイで候補をガイドしてくれる。
+                    if (1 < kouhoBox.getIndex()) {
+                        kouhoWindow.display(target, html);
+                    }
+                }
+            }
+            else {
+                sekkaRequest(target,
+                    sekkaSetting.getBaseUrl(),
+                    'henkan',
+                    { 'userid': sekkaSetting.getUsername(), 'format': 'json', 'yomi': yomi, 'method': 'normal', 'limit': '0' },
+                    startPos,
+                    endPos
+                );
+            }
+            henkanFlag = true; // 変換コマンド実行した
         }
-        henkanFlag = true; // 変換コマンド実行した
     }
     else if (ctrl_key && key_code == 70) { // CTRL+F
         console.log("ctrl+f");
@@ -240,8 +251,15 @@ function henkanAction(target, ctrl_key, key_code) {
             );
         }
     }
-    else {
+    else if (henkanBusy && !ctrl_key) {
         keydownCount++;
+        let str = String.fromCharCode(key_code);
+        if (!shift_key) {
+            str = str.toLowerCase();
+        }
+        str = jutil.takeLastAscii(str);
+        keyBuffer += str;
+        consumeFlag = true;
     }
 
     if (!henkanFlag) {
@@ -282,7 +300,7 @@ function keyDownHandler(e) {
             console.log("alt:" + alt_key);
         }
 
-        if (henkanAction(target, ctrl_key, key_code)) {
+        if (henkanAction(target, ctrl_key, shift_key, key_code)) {
             e.preventDefault();
             e.stopPropagation();
         }
