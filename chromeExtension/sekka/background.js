@@ -49,7 +49,7 @@ function httpRequest_api(baseUrl, apiname, argHash, sendResponse) {
     for (key in argHash) {
         formData.append(key, argHash[key]);
     }
-
+    let starttime = new Date();
     let ret;
     jQuery.ajax({
         type: 'POST',
@@ -63,6 +63,8 @@ function httpRequest_api(baseUrl, apiname, argHash, sendResponse) {
         processData: false,
         async: false
     });
+    let endime = new Date();
+    console.log("httpRequest_api(" + baseUrl + apiname + ") " + (endime - starttime) + "ms")
     return ret;
 }
 
