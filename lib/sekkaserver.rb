@@ -68,7 +68,7 @@ module SekkaServer
                                                       SekkaServer::Config.cacheSource )
 
       # connection check to memcached
-      fail_message = "sekka-server: failt to access memcached.\n"
+      fail_message = "sekka-server: failed to access memcached.\n"
       begin
         @core.flushCacheServer(@initialCachesv)
       rescue MemCache::MemCacheError
