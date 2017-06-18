@@ -47,12 +47,6 @@
 ;;-------------------------------------------------------------------
 (test-section "memcached access")
 
-(test* "db connect NG and Exception"
-       (test-error MemCache::MemCacheError)
-       (let1 sv (Kvs.new dbtype)
-         (sv.open "localhost:11111")
-         (sv.put! "temp:1" "one")))
-
 (test* "db connect OK"
        "one"
        (begin

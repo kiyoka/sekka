@@ -31,7 +31,7 @@
 #
 #  $Id:
 #
-require 'memcache'
+require 'memcachepod'
 
 class Kvs
   def initialize( dbtype )
@@ -110,9 +110,7 @@ class Kvs
     when :redis
       @db = Redis.new( :host => name )
     when :memcache
-      @db = MemCache.new( name,
-                          :connect_timeout => 1000.0,
-                          :timeout => 1000.0 )
+      @db = MemcachePod::Client.new( name, { :expires_in => 600 } )
     when :gdbm
       if not name.match( /.db$/ )
         name = name + ".db"
@@ -175,11 +173,17 @@ class Kvs
     if 0 == key.size
       fallback
     else
-      val = @db[ key ]
-      if val
-        val.force_encoding("UTF-8")
+      val = ''
+      case @dbtype
+      when :memcache
+        val = @db.get(key.force_encoding("ASCII-8BIT"))
       else
-        fallback
+        val = @db[ key ]
+      end
+      if val
+        return val.force_encoding("UTF-8")
+      else
+        return fallback
       end
     end
   end
