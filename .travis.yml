@@ -13,6 +13,3 @@ env:
 
 gemfile:
  - gemfiles/Gemfile
-
-services:
- - memcache
