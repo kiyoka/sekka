@@ -103,7 +103,6 @@ module SekkaServer
       STDERR.printf( "  dict  version  : %s\n", SekkaVersion.dictVersion        )
       STDERR.printf( "  dict-type      : %s\n", SekkaServer::Config.dictType    )
       STDERR.printf( "  dict-db        : %s\n", SekkaServer::Config.dictSource  )
-      STDERR.printf( "  memcached      : %s\n", SekkaServer::Config.cacheSource )
       STDERR.printf( "  listenPort     : %s\n", SekkaServer::Config.listenPort  )
       STDERR.printf( "  proxyHost      : %s\n", SekkaServer::Config.proxyHost   )
       STDERR.printf( "  proxyPort      : %s\n", SekkaServer::Config.proxyPort   )
@@ -218,7 +217,6 @@ module SekkaServer
     end
     
     def execPostMethod(req)
-      revertMemcache()
                  
       userid = URI.decode( req.params['userid'].force_encoding("UTF-8") )
       format = URI.decode( req.params['format'].force_encoding("UTF-8") )
@@ -243,16 +241,12 @@ module SekkaServer
             end
           rescue MemCache::MemCacheError
             result = "sekka-server: memcached server is down (or may be offline)"
-            disableMemcache()
           rescue Timeout
             result = "sekka-server: Timeout to request memcached server #{_orRedis} (or may be offline)"
-            disableMemcache()
           rescue SocketError
             result = "sekka-server: SocketError to request memcached server #{_orRedis} (or may be offline)"
-            disableMemcache()
           rescue Errno::ECONNREFUSED
             result = "sekka-server: ConnectionRefused to request memcached server #{_orRedis} (or may be offline)"
-            disableMemcache()
           end
         }
       when "/kakutei"
@@ -290,23 +284,6 @@ module SekkaServer
       else
         sprintf( "sekka-server:unknown path name. [%s]", req.path )
       end
-    end
-
-    def revertMemcache()
-      now = DateTime.now
-      ## STDERR.printf( "Sekka Debug: [%d]/[%d]\n", @downTime.to_time.to_i, now.to_time.to_i )
-      if not @cachesv
-        if (@downTime.to_time.to_i + (10 * 60)) < now.to_time.to_i
-          @cachesv = @initialCachesv
-          STDERR.printf( "Sekka Info: revert using memcache server. [%s]\n", @downTime )        
-        end
-      end
-    end
-    
-    def disableMemcache()
-      @cachesv  = false
-      @downTime = DateTime.now
-      STDERR.printf( "Sekka Warning: disabled using memcache server. [%s]\n", @downTime )
     end
   end
 end
