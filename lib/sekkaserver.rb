@@ -132,8 +132,8 @@ module SekkaServer
                       STDERR.puts "Info: processing  [register(" + dictline + ") on " + userid + "] batch command... "
                       begin
                         registered = @core.registerUserJisyo(userid, @kvs, dictline)
-                      rescue RuntimeError
-                        STDERR.puts "Info: missing [register(" + dictline + ")] batch command..."
+                      rescue Exception => e
+                        STDERR.puts "Error: missing [register(" + dictline + ")] batch command... [" + e.message + "]"
                       end
                       if registered
                         str = d.strftime( "%D %X" )
@@ -149,17 +149,16 @@ module SekkaServer
                       STDERR.puts "Info: processing  [kakutei(" + _tango + ")] batch command..."
                       begin
                         @core.sekkaKakutei( userid, @kvs, @cachesv, _key, _tango )
-                      rescue RuntimeError
-                        STDERR.puts "Info: missing [kakutei(" + _tango + ")] batch command..."
+                      rescue Exception => e
+                        STDERR.puts "Error: missing   [kakutei(" + _tango + ")] batch command... [" + e.message + "]"
                       end
-
                       STDERR.printf( "Info: kakutei [%s:%s] \n", _key, _tango )
                     when 'f' # flush
                       STDERR.puts "Info: processing [flush] batch command..."
                       begin
                         n = @core.flushUserJisyo( userid, @kvs )
-                      rescue RuntimeError
-                        STDERR.puts "Info: missing [flush] batch command..."
+                      rescue Exception => e
+                        STDERR.puts "Error: missing [flush] batch command... [" + e.message + "]"
                       end
                       @core.flushCacheServer( @cachesv )
                       STDERR.printf( "info : flush [%s] user's dict %d entries. \n", userid, n )
@@ -171,8 +170,8 @@ module SekkaServer
           }
         end
         @thread.run
-      rescue
-        p $!  # => "unhandled exception"
+      rescue Exception => e
+        STDERR.puts "Error: " + e.message  # => "unhandled exception"
       end
     end
 
