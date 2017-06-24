@@ -109,5 +109,11 @@
          '("shiroI Cしろi" "siroI Cしろi" "xiroI Cしろi" "しろi /白" "ai Cあい" "あい /愛/哀/相/挨" "Greek /Α/Β/Γ/Δ/Ε/Ζ/Η/Θ/Ι/Κ/Λ/Μ/Ν/Ξ/Ο/Π/Ρ/Σ/Τ/Υ/Φ/Χ/Ψ/Ω" ">an C>あん" ">ann C>あん" ">aq C>あん" ">あん /案" ">yasuI C>やすi" ">やすi /易" "! /！/感嘆符" "? /？" "ko'hi' Cこーひー" "ko'hi- Cこーひー" "ko'hi: Cこーひー" "ko'hi^ Cこーひー" "ko-hi' Cこーひー" "ko-hi- Cこーひー" "ko-hi: Cこーひー" "ko-hi^ Cこーひー" "ko:hi' Cこーひー" "ko:hi- Cこーひー" "ko:hi: Cこーひー" "ko:hi^ Cこーひー" "ko^hi' Cこーひー" "ko^hi- Cこーひー" "ko^hi: Cこーひー" "ko^hi^ Cこーひー" "こーひー /コーヒー" "=shimashita しました" "=shimasita しました" "=shimast しました" "=simashita しました" "=simasita しました" "=simast しました" "=ximast しました" "=shiteimasu しています" "=shitwms しています" "=siteimasu しています" "=sitwms しています" "=xitwms しています")
          (convert-skk-jisyo-f _input)))
 
+;;(with-open "./data/1000.tsv"
+;;           (lambda (_input)
+;;             (test* "restore"
+;;                    '("")
+;;                    (restore-sekka-jisyo-f _input "out.ldb"))))
+
 ;;===================================================================
 (test-end)

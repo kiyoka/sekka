@@ -116,7 +116,7 @@ task :test do
     files << "./test/henkan-main.nnd  leveldb"
   end
   files.each {|filename|
-    sh  sprintf( "ruby -I ./lib -S nendo -I ./lib -d %s", filename )
+    sh  sprintf( "export RUBY_THREAD_VM_STACK_SIZE=100000 ; ruby -I ./lib -S nendo -I ./lib -d %s", filename )
   }
   sh "cat test.record"
 end
@@ -150,6 +150,10 @@ end
 
 task :dump do
   sh sprintf( "ruby ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.N.tch#xmsiz=1024m > ./data/SEKKA-JISYO-%s.N.tsv", dictVersion )
+end
+
+task :restore do
+  sh sprintf("export RUBY_THREAD_VM_STACK_SIZE=100000 ; ruby -I ./lib ./bin/sekka-jisyo restore  ./data/SEKKA-JISYO-%s.N.tsv jisyo.N.ldb", dictVersion )
 end
 
 task :load_leveldb do

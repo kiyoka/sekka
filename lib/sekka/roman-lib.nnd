@@ -360,7 +360,7 @@
 
 ;; 子音が2音入ったテーブル
 (define sekka-kana->roman-alist-long
-  `(
+  '(
     ;; "n" 一つで "nn" を表現する件と被るのでAZIK専用拡張とする(エントリ上書き)
     ("にゃ"      "nya"                                "nga")
     ("にゅ"      "nyu"                                "ngu")
@@ -711,12 +711,19 @@
 
 ;; ハッシュテーブル  ローマ字 =>平仮名
 (define (sekka-alist-swap alist)
-  (append-map
-   (lambda (x)
-     (let ((hira   (car x))
-           (romans (cdr x)))
-       (map (lambda (r) (list r hira)) romans)))
-   alist))
+  (let1 mapped (map
+                (lambda (x)
+                  (let ((hira   (car x))
+                        (romans (cdr x)))
+                    (map (lambda (r) (list r hira)) romans)))
+                alist)
+    (let1 lst '()
+      (for-each
+       (lambda (x)
+         (for-each (lambda (y) (push! lst y)) (reverse x)))
+       mapped)
+      (reverse lst))))
+
 (define sekka-roman->kana-hash-short
   (alist->hash-table (sekka-alist-swap sekka-kana->roman-alist-short)))
 (define sekka-roman->kana-hash-long
