@@ -71,7 +71,7 @@
     "permissions": [
         "activeTab",
         "file:///*/*",
-        "http://localhost:12929/*",
+        "http://127.0.0.1:12929/*",
         "http://sekka.example.com:12929/*",
         "https://sekka.example.com:12929/*",
         "storage"

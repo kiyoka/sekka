@@ -26,7 +26,7 @@ function save_options() {
 
 function restore_options() {
     chrome.storage.sync.get({
-        url1: "http://localhost:12929/",
+        url1: "http://127.0.0.1:12929/",
         url2: "http://sekka.example.com:12929/",
         url3: "",
         username: "chrome",
