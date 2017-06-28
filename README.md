@@ -1,6 +1,6 @@
 # Sekka (石火) SKK like Japanese input method
 
-![Logo]( https://photos-5.dropbox.com/t/2/AAArBt5XptvNq-LYf7wiiQMCrC7trLLin6dweS1-GRn_sg/12/3870066/jpeg/32x32/1/_/1/2/iStock_000016378483XTiny.jpg/EIrI9AIYyJofIAIoAg/hjx9DTHsdwnSIXY57hM5FXbOPTbpikUYgPoVn_-doBs?size=2048x1536&size_mode=3 )　[![Build Status](https://travis-ci.org/kiyoka/sekka.svg?branch=master)](https://travis-ci.org/kiyoka/sekka)
+![Logo]( https://photos-5.dropbox.com/t/2/AAArBt5XptvNq-LYf7wiiQMCrC7trLLin6dweS1-GRn_sg/12/3870066/jpeg/32x32/1/_/1/2/iStock_000016378483XTiny.jpg/EIrI9AIYyJofIAIoAg/hjx9DTHsdwnSIXY57hM5FXbOPTbpikUYgPoVn_-doBs?size=2048x1536&size_mode=3 )  [![Build Status](https://travis-ci.org/kiyoka/sekka.svg?branch=master)](https://travis-ci.org/kiyoka/sekka)
 
 ----
 
