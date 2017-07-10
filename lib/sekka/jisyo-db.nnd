@@ -107,11 +107,11 @@
               okuri-nashi-list
               hiragana-phrase-list)))
 
-  (let1 progress (if displayProgress
+  (let1 progress1 (if displayProgress
                      (ProgressBar.create (alist->hash-table
                                           `(
-                                            [title  . "trie-tree  "]
-                                            [total  . ,(* 2 (length keylist))]
+                                            [title  . "trie-tree(1)"]
+                                            [total  . ,(length keylist)]
                                             [output . ,STDERR]
                                             [format . ,progressbar-format]
                                             )))
@@ -119,7 +119,7 @@
     (receive (okuri-ari-list
               okuri-nashi-list
               hiragana-phrase-list)
-        (grouping-keylist keylist progress)
+        (grouping-keylist keylist progress1)
 
       (let1 okuri-nashi-reverse-list
           (filter-map
@@ -129,32 +129,38 @@
                  (str.reverse)))
            okuri-nashi-list)
 
-        (when progress 
-          (progress.progress= (+ (length keylist)
-                                 (- (length keylist)
-                                    (+
-                                     (length okuri-ari-list)
-                                     (length okuri-nashi-list)
-                                     (length okuri-nashi-reverse-list)
-                                     (length hiragana-phrase-list))))))
-        (set! keylist '()) ;; free memory
+        (let1 progress2
+            (if displayProgress
+                (ProgressBar.create (alist->hash-table
+                                     `(
+                                       [title  . "trie-tree(2)"]
+                                       [total  . ,(+
+                                                   (length okuri-ari-list)
+                                                   (length okuri-nashi-list)
+                                                   (length okuri-nashi-reverse-list)
+                                                   (length hiragana-phrase-list))]
+                                       [output . ,STDERR]
+                                       [format . ,progressbar-format]
+                                       )))
+                #f)
+          (set! keylist '()) ;; free memory
 
-        (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-ari-prefix ":" userid ":"))
-          (trie-add-autocommit trie   okuri-ari-list       progress))
-        (set! okuri-ari-list '()) ;; free memory
-      
-        (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-nashi-prefix ":" userid ":"))
-          (trie-add-autocommit trie   okuri-nashi-list     progress))
-        (set! okuri-nashi-list '()) ;; free memory
-
-        (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-nashi-reverse-prefix ":" userid ":"))
-          (trie-add-autocommit trie   okuri-nashi-reverse-list     progress))
-        (set! okuri-nashi-reverse-list '()) ;; free memory
-
-        (let1 trie (DistributedTrie::Trie.new kvs (+ hiragana-phrase-prefix ":" userid ":"))
-          (trie-add-autocommit trie   hiragana-phrase-list progress))
-        (set! hiragana-phrase-list '()) ;; free memory
-        ))))
+          (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-ari-prefix ":" userid ":"))
+            (trie-add-autocommit trie   okuri-ari-list       progress2))
+          (set! okuri-ari-list '()) ;; free memory
+          
+          (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-nashi-prefix ":" userid ":"))
+            (trie-add-autocommit trie   okuri-nashi-list     progress2))
+          (set! okuri-nashi-list '()) ;; free memory
+          
+          (let1 trie (DistributedTrie::Trie.new kvs (+ okuri-nashi-reverse-prefix ":" userid ":"))
+            (trie-add-autocommit trie   okuri-nashi-reverse-list     progress2))
+          (set! okuri-nashi-reverse-list '()) ;; free memory
+          
+          (let1 trie (DistributedTrie::Trie.new kvs (+ hiragana-phrase-prefix ":" userid ":"))
+            (trie-add-autocommit trie   hiragana-phrase-list progress2))
+          (set! hiragana-phrase-list '()) ;; free memory
+          )))))
 
 (define (append-entry userid kvs _key value)
   (let1 key (+ userid ":" _key)
@@ -193,7 +199,7 @@
   (define (create-keylist kvs f)
     (let1 progress (ProgressBar.create (alist->hash-table
                                         `(
-                                          [title  . "data-body  "]
+                                          [title  . "data-body   "]
                                           [total  . ,(file-length f)]
                                           [output . ,STDERR]
                                           [format . ,progressbar-format]
