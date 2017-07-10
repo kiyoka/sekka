@@ -15,6 +15,7 @@
 #     DB=gdbm
 #     DB=tokyocabinet
 #     DB=redis
+#     DB=pure            pure Ruby(for travis-ci)
 #     DB=                (default)
 #     DB=all             gdbm/tokyocabinet/redis
 #
@@ -153,7 +154,7 @@ task :dump do
 end
 
 task :restore do
-  sh sprintf("export RUBY_THREAD_VM_STACK_SIZE=100000 ; ruby -I ./lib ./bin/sekka-jisyo restore  ./data/SEKKA-JISYO-%s.N.tsv jisyo.N.ldb", dictVersion )
+  sh sprintf("export RUBY_THREAD_VM_STACK_SIZE=100000 ; ruby -I ./lib ./bin/sekka-jisyo restore  ./data/SEKKA-JISYO-%s.N.tsv jisyo.N.db", dictVersion )
 end
 
 task :load_leveldb do
