@@ -63,6 +63,13 @@ class Kvs
       @leveldbFlag = false
     end
 
+    @mapdbFlag = true
+    begin
+      require 'jruby-mapdb'
+    rescue LoadError
+      @mapdbFlag = false
+    end
+
     @dbtype = dbtype
     case dbtype
     when :tokyocabinet
@@ -94,6 +101,13 @@ class Kvs
         raise RuntimeError, "Kvs.new() missed require( 'leveldb' )."
       end
 
+    when :mapdb
+      if @mapdbFlag
+        # do nothing
+      else
+        raise RuntimeError, "Kvs.new() missed require( 'jruby-mapdb' )."
+      end        
+
     when :pure
       # do nothing
     else
@@ -121,6 +135,15 @@ class Kvs
         name = name + ".ldb"
       end
       @db = LevelDB::DB.new name
+    when :mapdb
+      @basedb = Jruby::Mapdb::DB.new(name)
+      h = @basedb.trees
+      if h.has_key?(:Sekka)
+        @db = h[:Sekka]
+      else 
+        @basedb.tree(:Sekka)
+        @db = Sekka
+      end
     when :pure
       @name = name
       if File.exist?( @name )
@@ -156,7 +179,7 @@ class Kvs
   def pure_put!( key, value, timeout = 0 )
     if 0 < key.size
       case @dbtype
-      when :tokyocabinet, :gdbm, :redis, :leveldb
+      when :tokyocabinet, :gdbm, :redis, :leveldb, :mapdb
         @db[ key.force_encoding("ASCII-8BIT") ] = value.force_encoding("ASCII-8BIT")
       when :memcache
         @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"), timeout )
@@ -200,7 +223,7 @@ class Kvs
 
   def clear()
     case @dbtype
-    when :tokyocabinet, :gdbm, :pure
+    when :tokyocabinet, :gdbm, :pure, :mapdb
       @db.clear
     when :leveldb
       @db.clear!
@@ -216,7 +239,7 @@ class Kvs
   # return array of key string
   def keys()
     case @dbtype
-    when :tokyocabinet, :gdbm, :redis
+    when :tokyocabinet, :gdbm, :redis, :mapdb
       @db.keys.map { |k|
         k.force_encoding("UTF-8")
       }
@@ -241,7 +264,7 @@ class Kvs
       }
     when :memcache
       raise RuntimeError, "Kvs#forward_match_keys method was not implemented for memcache."
-    when :gdbm, :leveldb, :pure
+    when :gdbm, :leveldb, :pure, :mapdb
       self.keys( ).select {|key|
         key.match( "^" + prefix )
       }
@@ -256,6 +279,8 @@ class Kvs
       @db.close
     when :memcache, :redis
       # do nothing
+    when :mapdb
+      @basedb.close
     when :pure
       File.open( @name, "w" ) { |f|
         f.print( @db )

@@ -16,6 +16,7 @@
 #     DB=tokyocabinet
 #     DB=redis
 #     DB=pure            pure Ruby(for travis-ci)
+#     DB=mapdb           for Java platform
 #     DB=                (default)
 #     DB=all             gdbm/tokyocabinet/redis
 #
@@ -84,6 +85,7 @@ task :test do
     FileUtils.rm_rf( name ) if File.exist?( name )
   }
   files = []
+  files << "./test/jruby_mapdb.nnd"
   files << "./test/memcache.nnd"
   files << "./test/util.nnd"
   files << "./test/alphabet-lib.nnd"
@@ -103,6 +105,8 @@ task :test do
   when 'redis'
     files << "./test/redis.nnd"
     files << "./test/henkan-main.nnd  redis"
+  when 'mapdb'
+    files << "./test/henkan-main.nnd  mapdb"
   when 'pure'
     files << "./test/henkan-main.nnd  pure"
   when 'all'
