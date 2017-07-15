@@ -43,11 +43,29 @@
 ;;-------------------------------------------------------------------
 (test-section "open DB")
 
+(define db #f)
+(define tree #f)
+
+(set! db (MapDB::DB.new "test_mapdb" "sekka1"))
 (test* "db open"
        "val1"
-       (let1 tree (Jruby::Mapdb::DB.new "test_mapdb" "sekka1")
+       (let1 tree (db.getTree)
          (tree.put "key1" "val1")
          (tree.get "key1")))
+(db.close)
+
+(set! db (MapDB::DB.new "test_mapdb" "sekka2"))
+(test* "db put & get"
+       "val1val2val3"
+       (begin
+         (let1 tree (db.getTree)
+           (tree.put "key1" "val1")
+           (tree.put "key2" "val2")
+           (tree.put "key3" "val3")
+           (+ (tree.get "key1")
+              (tree.get "key2")
+              (tree.get "key3")))))
+(db.close)
 
 ;;===================================================================
 

@@ -30,80 +30,66 @@
 #   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 #
-require 'forwardable'
-require '/usr/local/stow/ruby-1.7.27-jruby/lib/ruby/gems/shared/gems/jruby-mapdb-1.2.0-java/lib/mapdb-0.9.8.jar'
+require '/tmp/guava-22.0.jar'
+require '/tmp/elsa-3.0.0-M7.jar'
+require '/tmp/kotlin-stdlib-jre8-1.1.2-3.jar'
+require '/tmp/kotlin-compiler-1.1.2-3.jar'
+require '/tmp/google-collections-1.0.jar'
+require '/tmp/eclipse-collections-8.2.0.jar'
+require '/tmp/eclipse-collections-api-8.2.0.jar'
+require '/tmp/lz4-1.3.0.jar'
+require '/tmp/mapdb-3.1.0-SNAPSHOT.jar'
 
-module Jruby
-  module Mapdb
-    module ClassMethods
-      include Enumerable
-      extend Forwardable
-      def encode(key, value)
-        @tree.put key, Marshal.dump(value).to_java_bytes
-      end
-      def decode(key)
-        stored = @tree.get(key)
-        return nil if stored.nil?
-        Marshal.load String.from_java_bytes(stored)
-      end
-      def each
-        @tree.each_pair { |key,value| yield(key, Marshal.load(String.from_java_bytes(value))) }
-      end
-      def keys
-        @tree.key_set.to_a
-      end
-      def regexp(pattern)
-        re = Regexp.new "#{pattern}", Regexp::EXTENDED | Regexp::IGNORECASE
-        @tree.select{ |k,v| "#{k}" =~ re }.map(&:first)
-      end
-      def_delegator :@tree, :clear,    :clear
-      def_delegator :@tree, :has_key?, :key?
-      def_delegator :@tree, :count,    :size
-      alias :[]=   :encode
-      alias :[]    :decode
-      alias :count :size
-      def put(key,value)
-        @tree[key] = value
-      end
-      def get(key)
-        @tree[key]
-      end
+module OrgMapdb
+  include_package "org.mapdb"
+end
+
+module MapDB
+  class Tree
+    def initialize(treeobj)
+      @treeobj = treeobj
     end
-    class Tree
-      extend ClassMethods
+    def keys
+      @treeobj.key_set.to_a
     end
-    class DB
-      extend Forwardable
-      attr_reader :mapdb, :type
-      def initialize(dbname=nil,treename=nil)
-        if dbname.nil?
-          @type = :MemoryDB
-          @mapdb = Java::OrgMapdb::DBMaker.
-                     newMemoryDB().
-                     closeOnJvmShutdown().
-                     make()
-        else
-          @type = :FileDB
-          @mapdb = Java::OrgMapdb::DBMaker.
-                     newFileDB(Java::JavaIo::File.new("#{dbname}")).
-                     closeOnJvmShutdown().
-                     transactionDisable().
-                     mmapFileEnable().
-                     asyncWriteEnable().
-                     make()
-        end
-        if treename.nil?
-          raise ArgumentError("require treename.")
-        end
-        @tree = @mapdb.treeMap("#{treename}").createOrOpen()
-        p @tree
-        @tree
+    def put(key,value)
+      @treeobj[key] = value
+    end
+    def get(key)
+      @treeobj[key]
+    end
+  end
+
+  class DB
+    attr_reader :mapdb, :type
+    def initialize(dbname=nil,treename=nil)
+      @tree = nil
+      if dbname.nil?
+        @type = :MemoryDB
+        @mapdb = OrgMapdb::DBMaker.
+                   memoryDB().
+                   closeOnJvmShutdown().
+                   make()
+      else
+        @type = :FileDB
+        @mapdb = OrgMapdb::DBMaker.
+                   fileDB(Java::JavaIo::File.new("#{dbname}")).
+                   closeOnJvmShutdown().
+                   make()
       end
-      def trees
-        Hash[*(@mapdb.getAll.map(&:first).map(&:to_sym).zip(@mapdb.getAll.map(&:last).map(&:size)).flatten)]
+      if treename.nil?
+        raise ArgumentError("require treename.")
       end
-      def_delegators :@mapdb, :close, :closed?, :compact
+      tree = @mapdb.treeMap("#{treename}").createOrOpen()
+      @tree = MapDB::Tree.new(tree)
+    end
+
+    def getTree()
+      return @tree
+    end
+
+    def close
+      @mapdb.close
     end
   end
 end
-
