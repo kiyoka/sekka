@@ -136,7 +136,7 @@ class Kvs
       end
       @db = LevelDB::DB.new name
     when :mapdb
-      @basedb = Jruby::Mapdb::DB.new(name)
+      @basedb = MapDB::DB.new(name)
       h = @basedb.trees
       if h.has_key?(:Sekka)
         @db = h[:Sekka]

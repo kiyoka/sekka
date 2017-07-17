@@ -60,6 +60,9 @@ module MapDB
     def get(key)
       @treeobj[key]
     end
+    def delete(key)
+      @treeobj.remove(key)
+    end
   end
 
   class DB
