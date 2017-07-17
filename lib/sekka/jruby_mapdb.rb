@@ -30,15 +30,17 @@
 #   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 #
-require '/tmp/guava-22.0.jar'
-require '/tmp/elsa-3.0.0-M7.jar'
-require '/tmp/kotlin-stdlib-jre8-1.1.2-3.jar'
-require '/tmp/kotlin-compiler-1.1.2-3.jar'
-require '/tmp/google-collections-1.0.jar'
-require '/tmp/eclipse-collections-8.2.0.jar'
-require '/tmp/eclipse-collections-api-8.2.0.jar'
-require '/tmp/lz4-1.3.0.jar'
-require '/tmp/mapdb-3.1.0-SNAPSHOT.jar'
+jarpath = File.expand_path('../jar', __FILE__) + '/'
+
+require jarpath + 'guava-19.0.jar'
+require jarpath + 'elsa-3.0.0-M7.jar'
+require jarpath + 'kotlin-stdlib-jre8-1.1.2-3.jar'
+require jarpath + 'kotlin-compiler-1.1.2-3.jar'
+require jarpath + 'google-collections-1.0.jar'
+require jarpath + 'eclipse-collections-8.2.0.jar'
+require jarpath + 'eclipse-collections-api-8.2.0.jar'
+require jarpath + 'lz4-1.3.0.jar'
+require jarpath + 'mapdb-3.1.0-SNAPSHOT.jar'
 
 module OrgMapdb
   include_package "org.mapdb"
