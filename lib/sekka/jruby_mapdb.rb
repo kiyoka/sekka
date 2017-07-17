@@ -57,11 +57,20 @@ module MapDB
     def put(key,value)
       @treeobj[key] = value
     end
+    def set(key,value)
+      put(key,value)
+    end
     def get(key)
       @treeobj[key]
     end
     def delete(key)
       @treeobj.remove(key)
+    end
+    def clear
+      @treeobj.clear
+    end
+    def close
+      #nothing to do
     end
   end
 

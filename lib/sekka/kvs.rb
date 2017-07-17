@@ -65,7 +65,7 @@ class Kvs
 
     @mapdbFlag = true
     begin
-      require 'jruby-mapdb'
+      require 'sekka/jruby_mapdb'
     rescue LoadError
       @mapdbFlag = false
     end
@@ -105,7 +105,7 @@ class Kvs
       if @mapdbFlag
         # do nothing
       else
-        raise RuntimeError, "Kvs.new() missed require( 'jruby-mapdb' )."
+        raise RuntimeError, "Kvs.new() missed require( 'sekka/jruby_mapdb' )."
       end        
 
     when :pure
@@ -136,14 +136,8 @@ class Kvs
       end
       @db = LevelDB::DB.new name
     when :mapdb
-      @basedb = MapDB::DB.new(name)
-      h = @basedb.trees
-      if h.has_key?(:Sekka)
-        @db = h[:Sekka]
-      else 
-        @basedb.tree(:Sekka)
-        @db = Sekka
-      end
+      @basedb = MapDB::DB.new(name,"sekka")
+      @db = @basedb.getTree
     when :pure
       @name = name
       if File.exist?( @name )
@@ -179,10 +173,12 @@ class Kvs
   def pure_put!( key, value, timeout = 0 )
     if 0 < key.size
       case @dbtype
-      when :tokyocabinet, :gdbm, :redis, :leveldb, :mapdb
+      when :tokyocabinet, :gdbm, :redis, :leveldb
         @db[ key.force_encoding("ASCII-8BIT") ] = value.force_encoding("ASCII-8BIT")
       when :memcache
         @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"), timeout )
+      when :mapdb
+        @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"))
       when :pure
         @db[ key ] = value
       else
@@ -198,7 +194,7 @@ class Kvs
     else
       val = ''
       case @dbtype
-      when :memcache
+      when :memcache, :mapdb
         val = @db.get(key.force_encoding("ASCII-8BIT"))
       else
         val = @db[ key ]
