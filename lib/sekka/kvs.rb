@@ -178,7 +178,7 @@ class Kvs
       when :memcache
         @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"), timeout )
       when :mapdb
-        @db.set( key.force_encoding("ASCII-8BIT"), value.force_encoding("ASCII-8BIT"))
+        @db.set( key, value )
       when :pure
         @db[ key ] = value
       else
@@ -194,8 +194,10 @@ class Kvs
     else
       val = ''
       case @dbtype
-      when :memcache, :mapdb
+      when :memcache
         val = @db.get(key.force_encoding("ASCII-8BIT"))
+      when :mapdb
+        val = @db.get(key)
       else
         val = @db[ key ]
       end

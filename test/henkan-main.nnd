@@ -61,7 +61,7 @@
  ((eq? dbtype 'leveldb)
   (set! target "./test.ldb"))
  ((eq? dbtype 'mapdb)
-  (set! target "./test_mapdb"))
+  (set! target "./test2.mapdb"))
  ((eq? dbtype 'memcache)
   (error "memcached interface is obsolute."))
  (else

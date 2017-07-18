@@ -78,7 +78,7 @@ task :test do
     exit 1
   end
 
-  ["test.record", "test.tch", "test.db" ].each {|name|
+  ["test.record", "test.tch", "test.db", "test1.mapdb", "test2.mapdb"].each {|name|
     File.unlink( name ) if File.exist?( name )
   }
   ["test.ldb"].each {|name|

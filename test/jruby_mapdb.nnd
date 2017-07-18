@@ -46,7 +46,7 @@
 (define db #f)
 (define tree #f)
 
-(set! db (MapDB::DB.new "test_mapdb" "sekka1"))
+(set! db (MapDB::DB.new "test1.mapdb" "sekka1"))
 (test* "db open"
        "val1"
        (let1 tree (db.getTree)
@@ -54,7 +54,7 @@
          (tree.get "key1")))
 (db.close)
 
-(set! db (MapDB::DB.new "test_mapdb" "sekka2"))
+(set! db (MapDB::DB.new "test1.mapdb" "sekka2"))
 (test* "db put & get"
        "val1val2val3"
        (begin
@@ -67,15 +67,15 @@
               (tree.get "key3")))))
 (db.close)
 
-(set! db (MapDB::DB.new "test_mapdb" "sekka3"))
+(set! db (MapDB::DB.new "test1.mapdb" "sekka3"))
 (test* "db keys"
        '("key1" "key2" "key3" "key4")
        (begin
          (let1 tree (db.getTree)
-           (tree.put "key1" 1)
-           (tree.put "key2" 2)
-           (tree.put "key3" 3)
-           (tree.put "key4" 4)
+           (tree.put "key1" "1")
+           (tree.put "key2" "2")
+           (tree.put "key3" "3")
+           (tree.put "key4" "4")
            (to-list (tree.keys)))))
 
 (test* "db delete"
@@ -84,6 +84,19 @@
          (let1 tree (db.getTree)
            (tree.delete "key3")
            (to-list (tree.keys)))))
+
+(test* "db put kanji"
+       "まじぱねぇ /マジパネェ/"
+       (begin
+         (let1 tree (db.getTree)
+           (tree.put "M:i;chi" "Cいっち")
+           (tree.get "M:i;chi")
+           (tree.put "M:かに" "/蟹/可児/蠏")
+           (tree.get "M:かに")
+           (tree.put "dummy:(stored)" "まじぱねぇ /マジパネェ/")
+           (tree.get "dummy:(stored)")
+           )))
+       
 (db.close)
 
 ;;===================================================================

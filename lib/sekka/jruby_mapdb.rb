@@ -94,7 +94,10 @@ module MapDB
       if treename.nil?
         raise ArgumentError("require treename.")
       end
-      tree = @mapdb.treeMap("#{treename}").createOrOpen()
+      tree = @mapdb.treeMap("#{treename}").
+               keySerializer(OrgMapdb::Serializer.STRING).
+               valueSerializer(OrgMapdb::Serializer.STRING).
+               createOrOpen()
       @tree = MapDB::Tree.new(tree)
     end
 
