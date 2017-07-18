@@ -88,6 +88,7 @@ module MapDB
         @type = :FileDB
         @mapdb = OrgMapdb::DBMaker.
                    fileDB(Java::JavaIo::File.new("#{dbname}")).
+                   fileMmapEnableIfSupported().
                    closeOnJvmShutdown().
                    make()
       end
