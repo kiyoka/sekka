@@ -158,7 +158,7 @@ task :dump do
 end
 
 task :restore do
-  sh sprintf("export RUBY_THREAD_VM_STACK_SIZE=100000 ; ruby -I ./lib ./bin/sekka-jisyo restore  ./data/SEKKA-JISYO-%s.N.tsv SEKKA-JISYO-%s.N.mapdb", dictVersion, dictVersion )
+  sh sprintf("export RUBY_THREAD_VM_STACK_SIZE=100000 ; ruby -I ./lib ./bin/sekka-jisyo restore  ./data/SEKKA-JISYO-%s.N.tsv ./data/SEKKA-JISYO-%s.N.mapdb", dictVersion, dictVersion )
 end
 
 task :load_leveldb do
