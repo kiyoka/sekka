@@ -154,7 +154,7 @@ task :load do
 end
 
 task :dump do
-  sh sprintf( "ruby ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO.N.tch#xmsiz=1024m > ./data/SEKKA-JISYO-%s.N.tsv", dictVersion )
+  sh sprintf( "ruby ./bin/sekka-jisyo dump    ./data/SEKKA-JISYO-%s.N.mapdb > ./data/SEKKA-JISYO-%s.N.tsv", dictVersion, dictVersion )
 end
 
 task :restore do

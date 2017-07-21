@@ -17,6 +17,7 @@ PIDFILE   = DICTDIR + "/pid"
 
 TC_OPTS       = "#xmsiz=256m"
 TC_FILE       = sprintf( "%s/SEKKA-JISYO-%s.N.tch%s",          DICTDIR, SekkaVersion.dictVersion, TC_OPTS )
+MAPDB_FILE    = sprintf( "%s/SEKKA-JISYO-%s.N.mapdb",          DICTDIR, SekkaVersion.dictVersion )
 TSV_FILE      = sprintf( "%s/SEKKA-JISYO-%s.N.tsv",            DICTDIR, SekkaVersion.dictVersion )
 TSV_SUMFILE   = sprintf( "%s/SEKKA-JISYO-%s.N.md5",            DICTDIR, SekkaVersion.dictVersion )
 LDB_FILE      = sprintf( "%s/SEKKA-JISYO-%s.N.ldb.tar.gz",     DICTDIR, SekkaVersion.dictVersion )
@@ -48,11 +49,17 @@ def getSekkaDbInfo( env )
       [ :gdbm, nil ]
     elsif m = ENV['SEKKA_DB'].match( /^level[a-z]+$/i )
       [ :leveldb, nil ]
+    elsif m = ENV['SEKKA_DB'].match( /^map[a-z]+$/i )
+      [ :mapdb, nil ]
     else
-      raise RuntimeError, "Error: env var SEKKA_DB requires [redis:hostname] or [redis:] or [tokyocabinet] or [leveldb]"
+      raise RuntimeError, "Error: env var SEKKA_DB requires [redis:hostname] or [redis:] or [tokyocabinet] or [leveldb] or [mapdb]"
     end
   else
-    [ :tokyocabinet, nil ]
+    if RUBY_PLATFORM == 'java'
+      [ :mapdb, nil ]
+    else
+      [ :tokyocabinet, nil ]
+    end
   end
 end
 
@@ -79,6 +86,13 @@ def checkJisyoIsInstalled( dictType, dictSource )
                require 'tokyocabinet'
                require 'sekka/kvs'
                kvs = Kvs.new( :tokyocabinet )
+               kvs.open( dictSource )
+               ret = kvs.get( key )
+               kvs.close()
+               ret
+             when :mapdb
+               require 'sekka/kvs'
+               kvs = Kvs.new( :mapdb )
                kvs.open( dictSource )
                ret = kvs.get( key )
                kvs.close()
@@ -208,6 +222,17 @@ def main
     end
     STDERR.printf( "Info: [OK]\n" )
     dictSource = TC_FILE
+
+  when :mapdb
+    # MapDBに辞書が投入済みか確認する
+    ok = checkJisyoIsInstalled( dictType, MAPDB_FILE )
+    unless ok
+      # tsvファイルをuploadする
+      STDERR.printf( "Error: mapdb file is not installed.\n" )
+      exit(1)
+    end
+    STDERR.printf( "Info: [OK]\n" )
+    dictSource = MAPDB_FILE
 
   when :redis
     # redisサーバーに辞書が投入済みか確認する
