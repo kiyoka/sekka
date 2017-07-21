@@ -55,13 +55,13 @@ module MapDB
       @treeobj.key_set.to_a
     end
     def put(key,value)
-      @treeobj[key] = value
+      @treeobj.put(key,value)
     end
     def set(key,value)
       put(key,value)
     end
     def get(key)
-      @treeobj[key]
+      @treeobj.get(key)
     end
     def delete(key)
       @treeobj.remove(key)
