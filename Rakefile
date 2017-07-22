@@ -85,7 +85,9 @@ task :test do
     FileUtils.rm_rf( name ) if File.exist?( name )
   }
   files = []
-  files << "./test/jruby_mapdb.nnd"
+  if RUBY_PLATFORM == 'java'
+    files << "./test/jruby_mapdb.nnd"
+  end
   files << "./test/memcache.nnd"
   files << "./test/util.nnd"
   files << "./test/alphabet-lib.nnd"
@@ -116,9 +118,14 @@ task :test do
     files << "./test/henkan-main.nnd  pure"
     files << "./test/henkan-main.nnd  leveldb"
   else # default
-    files << "./test/henkan-main.nnd  tokyocabinet"
-    files << "./test/henkan-main.nnd  pure"
-    files << "./test/henkan-main.nnd  leveldb"
+    if RUBY_PLATFORM == 'java'
+      files << "./test/henkan-main.nnd  mapdb"
+      files << "./test/henkan-main.nnd  pure"
+    else
+      files << "./test/henkan-main.nnd  tokyocabinet"
+      files << "./test/henkan-main.nnd  pure"
+      files << "./test/henkan-main.nnd  leveldb"
+    end
   end
   files.each {|filename|
     sh  sprintf( "export RUBY_THREAD_VM_STACK_SIZE=100000 ; ruby -I ./lib -S nendo -I ./lib -d %s", filename )

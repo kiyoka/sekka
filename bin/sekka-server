@@ -17,19 +17,22 @@ PIDFILE   = DICTDIR + "/pid"
 
 TC_OPTS       = "#xmsiz=256m"
 TC_FILE       = sprintf( "%s/SEKKA-JISYO-%s.N.tch%s",          DICTDIR, SekkaVersion.dictVersion, TC_OPTS )
-MAPDB_FILE    = sprintf( "%s/SEKKA-JISYO-%s.N.mapdb",          DICTDIR, SekkaVersion.dictVersion )
 TSV_FILE      = sprintf( "%s/SEKKA-JISYO-%s.N.tsv",            DICTDIR, SekkaVersion.dictVersion )
 TSV_SUMFILE   = sprintf( "%s/SEKKA-JISYO-%s.N.md5",            DICTDIR, SekkaVersion.dictVersion )
 LDB_FILE      = sprintf( "%s/SEKKA-JISYO-%s.N.ldb.tar.gz",     DICTDIR, SekkaVersion.dictVersion )
 LDB_SUMFILE   = sprintf( "%s/SEKKA-JISYO-%s.N.ldb.tar.gz.md5", DICTDIR, SekkaVersion.dictVersion )
+MAPDB_FILE    = sprintf( "%s/SEKKA-JISYO-%s.N.mapdb",          DICTDIR, SekkaVersion.dictVersion )
+MAPDB_SUMFILE = sprintf( "%s/SEKKA-JISYO-%s.N.mapdb.md5",      DICTDIR, SekkaVersion.dictVersion )
 
-GDBM_FILE     = sprintf( "%s/SEKKA-JISYO-%s.N.db",          DICTDIR, SekkaVersion.dictVersion )
-LEVELDB_FILE  = sprintf( "%s/SEKKA-JISYO-%s.N.ldb",         DICTDIR, SekkaVersion.dictVersion )
+GDBM_FILE     = sprintf( "%s/SEKKA-JISYO-%s.N.db",             DICTDIR, SekkaVersion.dictVersion )
+LEVELDB_FILE  = sprintf( "%s/SEKKA-JISYO-%s.N.ldb",            DICTDIR, SekkaVersion.dictVersion )
 
 TSV_URLURL    = sprintf( "%s/SEKKA-JISYO-%s.N.url",              DICTURL, SekkaVersion.dictVersion )
 TSV_SUMURL    = sprintf( "%s/SEKKA-JISYO-%s.N.md5",              DICTURL, SekkaVersion.dictVersion )
 LDB_URLURL    = sprintf( "%s/SEKKA-JISYO-%s.N.ldb.tar.gz.url",   DICTURL, SekkaVersion.dictVersion )
 LDB_SUMURL    = sprintf( "%s/SEKKA-JISYO-%s.N.ldb.tar.gz.md5",   DICTURL, SekkaVersion.dictVersion )
+MAPDB_URLURL  = sprintf( "%s/SEKKA-JISYO-%s.N.ldb.tar.gz.url",   DICTURL, SekkaVersion.dictVersion )
+MAPDB_SUMURL  = sprintf( "%s/SEKKA-JISYO-%s.N.ldb.tar.gz.md5",   DICTURL, SekkaVersion.dictVersion )
 
 MEMCACHED = "localhost:11211"                # memcahced
 
@@ -179,6 +182,8 @@ def main
   case dictType
   when :leveldb
     downloadFile( LDB_FILE, LDB_SUMFILE, LDB_URLURL, LDB_SUMURL )
+  when :mapdb
+    downloadFile( MAPDB_FILE, MAPDB_SUMFILE, MAPDB_URLURL, MAPDB_SUMURL )
   else
     downloadFile( TSV_FILE, TSV_SUMFILE, TSV_URLURL, TSV_SUMURL )
   end
