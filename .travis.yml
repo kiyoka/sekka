@@ -20,4 +20,4 @@ matrix:
     - rvm: jruby-19mode
 
 jdk:
-  - openjdk8
+  - oraclejdk8
