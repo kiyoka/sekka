@@ -31,8 +31,8 @@ TSV_URLURL    = sprintf( "%s/SEKKA-JISYO-%s.N.url",              DICTURL, SekkaV
 TSV_SUMURL    = sprintf( "%s/SEKKA-JISYO-%s.N.md5",              DICTURL, SekkaVersion.dictVersion )
 LDB_URLURL    = sprintf( "%s/SEKKA-JISYO-%s.N.ldb.tar.gz.url",   DICTURL, SekkaVersion.dictVersion )
 LDB_SUMURL    = sprintf( "%s/SEKKA-JISYO-%s.N.ldb.tar.gz.md5",   DICTURL, SekkaVersion.dictVersion )
-MAPDB_URLURL  = sprintf( "%s/SEKKA-JISYO-%s.N.ldb.tar.gz.url",   DICTURL, SekkaVersion.dictVersion )
-MAPDB_SUMURL  = sprintf( "%s/SEKKA-JISYO-%s.N.ldb.tar.gz.md5",   DICTURL, SekkaVersion.dictVersion )
+MAPDB_URLURL  = sprintf( "%s/SEKKA-JISYO-%s.N.mapdb.url",        DICTURL, SekkaVersion.dictVersion )
+MAPDB_SUMURL  = sprintf( "%s/SEKKA-JISYO-%s.N.mapdb.md5",        DICTURL, SekkaVersion.dictVersion )
 
 MEMCACHED = "localhost:11211"                # memcahced
 
