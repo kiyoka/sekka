@@ -65,7 +65,7 @@ class Downloader
       http.use_ssl = true
     end
     http.request req do |response|
-      open path, 'w' do |io|
+      open path, 'wb' do |io|
         response.read_body do |chunk|
           io.write chunk
         end
