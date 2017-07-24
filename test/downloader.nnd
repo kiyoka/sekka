@@ -46,28 +46,36 @@
 (test* "download md5"
        65
        (let1 dl (Downloader.new "https://raw.githubusercontent.com/kiyoka/sekka/master/public_dict/1.6.2/SEKKA-JISYO-1.6.2.N.md5")
-         (dl.downloadAsText)
+         (dl.download)
          (dl.getBodySize)))
 
 (test* "download md5"
        "./data/SEKKA-JISYO-1.6.2.N.tsv"
        (let1 dl (Downloader.new "https://raw.githubusercontent.com/kiyoka/sekka/master/public_dict/1.6.2/SEKKA-JISYO-1.6.2.N.md5")
-         (dl.downloadAsText)
+         (dl.download)
          (cadr (to-list (. (dl.getBody) split #/[ \n]+/)))))
 
 (when #f
   (test* "download tsv"
          196089257
          (let1 dl (Downloader.new "https://s3-ap-northeast-1.amazonaws.com/sekkadict/1.6.2/SEKKA-JISYO-1.6.2.N.tsv" "/tmp/")
-           (dl.downloadAsText)
+           (dl.download)
            (dl.saveAs "/tmp/t.tsv")
            (dl.getBodySize))))
 
 (test* "calc md5"
        "611ed4eed5d5b4ed23cc06ca18944d74"
        (let1 dl (Downloader.new "https://raw.githubusercontent.com/kiyoka/sekka/master/public_dict/1.6.2/SEKKA-JISYO-1.6.2.N.md5")
-         (dl.downloadAsText)
+         (dl.download)
          (dl.calcMD5)))
+
+(test* "download to file"
+       "c93df55bb4034c353d6aa8b40734329f  ./data/SEKKA-JISYO-1.6.2.N.tsv"
+       (let1 dl (Downloader.new "https://raw.githubusercontent.com/kiyoka/sekka/master/public_dict/1.6.2/SEKKA-JISYO-1.6.2.N.md5")
+         (dl.downloadToFile "/tmp/md5.txt")
+         (with-open "/tmp/md5.txt"
+                    (lambda (f)
+                      (f.read.chomp)))))
 
 ;;===================================================================
 

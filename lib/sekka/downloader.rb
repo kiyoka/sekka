@@ -43,7 +43,7 @@ class Downloader
     @body = nil
   end
 
-  def downloadAsText()
+  def download()
     url = URI.parse(@url_str)
     if(url)
       req = Net::HTTP::Get.new(url.path)
@@ -55,6 +55,22 @@ class Downloader
       @body = res.body
     end
     return @body
+  end
+
+  def downloadToFile(path)
+    url = URI.parse(@url_str)
+    req = Net::HTTP::Get.new url.path
+    http = Net::HTTP.new(url.host, url.port)
+    if url.scheme == 'https'
+      http.use_ssl = true
+    end
+    http.request req do |response|
+      open path, 'w' do |io|
+        response.read_body do |chunk|
+          io.write chunk
+        end
+      end
+    end
   end
 
   def getBodySize()

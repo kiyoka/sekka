@@ -7,6 +7,7 @@ require 'rack'
 require 'uri'
 require 'sekkaconfig'
 require 'sekka/sekkaversion'
+require 'sekka/downloader'
 
 
 
@@ -120,19 +121,24 @@ end
 def downloadFile( targetfile, sumfile, urlurl, sumurl )
   if not File.exist?( targetfile )
     STDERR.printf( "Info: Downloading SEKKA-JISYO\n" )
-    # 辞書をダウンロードする
-    cmd = sprintf( "curl %s",          urlurl )
-    STDERR.printf( "Command : %s\n", cmd )
-    targeturl = open( "|" + cmd ) { |f|
-      f.read
-    }
-    STDERR.printf( "   download   URL of target file : %s\n", targeturl );
-    cmd = sprintf( "curl -o %s %s",    targetfile, targeturl )
-    STDERR.printf( "Command : %s\n", cmd )
-    system( cmd )
-    cmd = sprintf( "curl -o %s %s",    sumfile, sumurl )
-    STDERR.printf( "Command : %s\n", cmd )
-    system( cmd )
+    # 辞書のURLをダウンロードする
+    dl = Downloader.new( urlurl )
+    dl.download()
+    targeturl = dl.getBody().chomp
+    dl.clearBody()
+
+    # md5記載ファイルをダウンロード
+    dl = Downloader.new( sumurl )
+    dl.download()
+    md5body = dl.getBody()
+    correctSum = md5body.chomp.split[0]
+    dl.clearBody()
+    
+    # 辞書ファイル本体をダウンロード
+    STDERR.printf( "   downloading URL of target file : %s ...\n", targeturl );
+    dl = Downloader.new( targeturl )
+    dl.downloadToFile( targetfile )
+    dl.clearBody()
 
     # チェックサムを確認する
     downloadSum = ""
@@ -140,18 +146,16 @@ def downloadFile( targetfile, sumfile, urlurl, sumurl )
       dataBody = f.read
       downloadSum = Digest::MD5.hexdigest( dataBody )
     }
-    open( sumfile ) { |f|
-      correctSum = f.readline.chomp.split[0]
-      STDERR.printf( "   downloaded file's MD5 : %s\n", downloadSum )
-      STDERR.printf( "             correct MD5 : %s\n", correctSum   )
-      if downloadSum == correctSum
-        STDERR.printf( "Info:  downloaded file [%s] verify OK.\n", targetfile )
-      else
-        STDERR.printf( "Error: downloaded file [%s] verify NG.\n", targetfile )
-        File.unlink( targetfile )
-        exit( 1 )
-      end
-    }
+
+    STDERR.printf( "   downloaded file's MD5 : %s\n", downloadSum )
+    STDERR.printf( "             correct MD5 : %s\n", correctSum   )
+    if downloadSum == correctSum
+      STDERR.printf( "Info:  downloaded file [%s] verify OK.\n", targetfile )
+    else
+      STDERR.printf( "Error: downloaded file [%s] verify NG.\n", targetfile )
+      File.unlink( targetfile )
+      exit( 1 )
+    end
   end
 end
   
