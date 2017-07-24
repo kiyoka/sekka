@@ -88,6 +88,7 @@ task :test do
   if RUBY_PLATFORM == 'java'
     files << "./test/jruby_mapdb.nnd"
   end
+  files << "./test/downloader.nnd"
   files << "./test/memcache.nnd"
   files << "./test/util.nnd"
   files << "./test/alphabet-lib.nnd"
