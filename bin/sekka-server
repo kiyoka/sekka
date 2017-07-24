@@ -135,17 +135,14 @@ def downloadFile( targetfile, sumfile, urlurl, sumurl )
     dl.clearBody()
     
     # 辞書ファイル本体をダウンロード
-    STDERR.printf( "   downloading URL of target file : %s ...\n", targeturl );
+    STDERR.printf( "   downloading URL : %s ...\n", targeturl );
     dl = Downloader.new( targeturl )
     dl.downloadToFile( targetfile )
     dl.clearBody()
 
     # チェックサムを確認する
-    downloadSum = ""
-    open( targetfile ) { |f|
-      dataBody = f.read
-      downloadSum = Digest::MD5.hexdigest( dataBody )
-    }
+    md5 = Digest::MD5.file( targetfile )
+    downloadSum = md5.hexdigest
 
     STDERR.printf( "   downloaded file's MD5 : %s\n", downloadSum )
     STDERR.printf( "             correct MD5 : %s\n", correctSum   )
