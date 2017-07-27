@@ -1,11 +1,11 @@
-source "http://rubygems.org"
+# frozen_string_literal: true
+source "https://rubygems.org"
+
+gem "warbler", "1.4.10"
 gem "eventmachine"
-gem "jeweler2"
-gem "rspec"
 gem "distributed-trie"
 gem "memcachepod"
 gem "nendo"
 gem "json"
-gem "rake"
 gem "ruby-progressbar"
-gem "warbler", "1.4.10"
+gem "rack"

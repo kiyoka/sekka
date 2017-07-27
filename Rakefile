@@ -10,6 +10,9 @@
 #   4. rake release
 #   5. gem push pkg/sekka-x.x.x.gem   ( need gem version 1.3.6 or higer. Please "gem update --system" to update )
 #
+# Release jar one-binary Engineering:
+#   1. cd warbler ; make
+#
 # Enviroment Variables:
 #   Please select from
 #     DB=gdbm
