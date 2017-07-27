@@ -43,11 +43,27 @@ class Downloader
     @body = nil
   end
 
+  def httpInstance(scheme,host,port)
+    if scheme == 'https'
+      http_proxy = ENV['https_proxy']
+    else
+      http_proxy = ENV['http_proxy']
+    end
+    if http_proxy
+      (p_host,p_port) = http_proxy.split(':')
+      proxy_class = Net::HTTP::Proxy(p_host,p_port.to_i)
+      http = proxy_class.new(host,port)
+    else
+      http = Net::HTTP.new(host,port)
+    end
+    return http
+  end
+
   def download()
     url = URI.parse(@url_str)
     if(url)
       req = Net::HTTP::Get.new(url.path)
-      http = Net::HTTP.new(url.host,url.port)
+      http = httpInstance(url.scheme,url.host,url.port)
       if url.scheme == 'https'
         http.use_ssl = true
       end
@@ -59,8 +75,8 @@ class Downloader
 
   def downloadToFile(path)
     url = URI.parse(@url_str)
-    req = Net::HTTP::Get.new url.path
-    http = Net::HTTP.new(url.host, url.port)
+    req = Net::HTTP::Get.new(url.path)
+    http = httpInstance(url.scheme,url.host,url.port)
     if url.scheme == 'https'
       http.use_ssl = true
     end
