@@ -41,7 +41,6 @@ require 'uri'
 require 'date'
 require 'sekkaconfig'
 require 'sekka/sekkaversion'
-require 'memcache'
 
 module SekkaServer
   class Server
@@ -67,24 +66,7 @@ module SekkaServer
                                                       SekkaServer::Config.dictSource,
                                                       SekkaServer::Config.cacheSource )
 
-      # connection check to memcached
-      fail_message = "sekka-server: failed to access memcached.\n"
-      begin
-        @core.flushCacheServer(@initialCachesv)
-      rescue MemCache::MemCacheError
-        STDERR.printf(fail_message)
-        exit(1)
-      rescue Timeout
-        STDERR.printf(fail_message)
-        exit(1)
-      rescue SocketError
-        STDERR.printf(fail_message)
-        exit(1)
-      rescue Errno::ECONNREFUSED
-        STDERR.printf(fail_message)
-        exit(1)
-      end
-      
+      @core.flushCacheServer(@initialCachesv)
       @cachesv = @initialCachesv
       @downTime = DateTime.now
       
@@ -238,8 +220,6 @@ module SekkaServer
                 @core.writeToString(obj)
               end
             end
-          rescue MemCache::MemCacheError
-            result = "sekka-server: memcached server is down (or may be offline)"
           rescue Timeout
             result = "sekka-server: Timeout to request memcached server #{_orRedis} (or may be offline)"
           rescue SocketError
