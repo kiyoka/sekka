@@ -21,5 +21,5 @@ end
 if console_exist?
   require 'app/sekka-server'
 else
-  JOptionPane.showMessageDialog(nil, 'consoleが存在しません。 コンソールで java -jar sekka-server.jar を実行してください')
+  JOptionPane.showMessageDialog(nil, 'consoleが存在しません。 コンソールで java -jar sekka-server*.jar を実行してください')
 end
