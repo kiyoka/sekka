@@ -19,7 +19,9 @@ def console_exist?
 end
 
 if console_exist?
+  ENV.delete('SEKKA_DB')
   require 'app/sekka-server'
 else
-  JOptionPane.showMessageDialog(nil, 'consoleが存在しません。 コンソールで java -jar sekka-server*.jar を実行してください')
+  require 'sekka/sekkaversion.rb'
+  JOptionPane.showMessageDialog(nil, 'consoleが存在しません。 コンソールで java -jar sekka-server-' + SekkaVersion.version + '.jar を実行してください')
 end
