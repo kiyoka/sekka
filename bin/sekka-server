@@ -124,7 +124,7 @@ def downloadFile( targetfile, sumfile, urlurl, sumurl )
     # 辞書のURLをダウンロードする
     dl = Downloader.new( urlurl )
     dl.download()
-    targeturl = dl.getBody().chomp
+    targeturl = dl.getBody().chomp.chomp
     dl.clearBody()
 
     # md5記載ファイルをダウンロード
@@ -135,7 +135,7 @@ def downloadFile( targetfile, sumfile, urlurl, sumurl )
     dl.clearBody()
     
     # 辞書ファイル本体をダウンロード
-    STDERR.printf( "   downloading URL : %s ...\n", targeturl );
+    STDERR.printf( "   downloading URL : [%s] ...\n", targeturl );
     dl = Downloader.new( targeturl )
     dl.downloadToFile( targetfile )
     dl.clearBody()
