@@ -21,12 +21,13 @@ Sekkaには日本語モードがありません。
 
 ## EmacsLispのインストール
 
-Melpaから`sekka`パッケージをインストールしてください。
+1. Melpaから`sekka`パッケージをインストールしてください。
+2. .emacsに以下を追記すると、Sekkaが有効になります。
 
-.emacsに以下を追記すると、Sekkaが有効になります。
-
-    (require 'sekka)
-    (global-sekka-mode 1)
+```
+(require 'sekka)
+(global-sekka-mode 1)
+```
 
 ![enabled]( ./doc/img/sekka.modeline.png )
 
@@ -34,10 +35,12 @@ Melpaから`sekka`パッケージをインストールしてください。
 
 ## 変換サーバーのインストール
 
-dockerでsekkaイメージをインストール・実行してください。
-localhostのポート番号12929でクライアントからのHTTP通信待ち状態になります。
+1. sekka-server-1.8.0.jar をダウンロードしてください． <https://github.com/kiyoka/sekka/releases/tag/v1.8.0>
+2. 次のコマンドでサーバーを起動してください．localhostのポート番号12929でクライアントからのHTTP通信待ち状態になります。
 
-    sudo docker run -p 12929:12929 -t kiyoka/sekka
+```
+java -jar sekka-server-1.8.0.jar
+```
 
 ----
 
