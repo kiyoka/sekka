@@ -57,7 +57,7 @@
   :group 'input-method
   :group 'Japanese)
 
-(defcustom sekka-server-url "http://localhost:12929/"
+(defcustom sekka-server-url "http://127.0.0.1:12929/"
   "SekkaサーバーのURLを指定する。"
   :type  'string
   :group 'sekka)
