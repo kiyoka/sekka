@@ -39,11 +39,10 @@ Sekkaには日本語モードがありません。
 2. 次のコマンドでサーバーを起動してください．localhostのポート番号12929でクライアントからのHTTP通信待ち状態になります。
 
 ```
-java -jar sekka-server-1.8.0.jar
+java -Xss128m -jar sekka-server-1.8.0.jar
 ```
 
 ----
 
 ## 詳細
  <http://oldtype.sumibi.org/show-page/Sekka>
-
