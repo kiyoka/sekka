@@ -42,6 +42,8 @@ Sekkaには日本語モードがありません。
 java -Xss128m -jar sekka-server-1.8.0.jar
 ```
 
+![enabled]( ./doc/img/java_on_windows10.png )
+
 ----
 
 ## 詳細
