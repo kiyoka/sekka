@@ -1,9 +1,9 @@
-# [[Sekka]]のリリースノート
+# Sekkaの変更履歴
 
 ## version 1.7.1 (2017年07月25日)
-    - JRuby 1.7.27上ではRedisなどのリモートKVSが無くても内臓のMapDBだけで動くようにした。
-    - JRuby 上では，デフォルトの辞書をMapDBを使う。(MapDBの辞書をダウンロードして変換処理無しにした)
-    - sekka-serverにMapDBのjarを含むようにした。
+- JRuby 1.7.27上ではRedisなどのリモートKVSが無くても内臓のMapDBだけで動くようにした。
+- JRuby 上では，デフォルトの辞書をMapDBを使う。(MapDBの辞書をダウンロードして変換処理無しにした)
+- sekka-serverにMapDBのjarを含むようにした。
 
 
 ## version 1.7.0 (2017年06月28日)
