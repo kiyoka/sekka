@@ -7,22 +7,22 @@
 
 
 ## version 1.7.0 (2017年06月28日)
-    - memcachedpod 0.0.2を使うことで、memcachedサーバーを不要にした。
-    - JRuby 1.7.27で動くようにした。(Rubyスレッドのstack sizeが100KByteでも動くように修正した)
-    - WebAPIのフォーマットとして、S式の他にJSONをサポートした(Chrome Extension用)
-    - 外部からの疎通確認用に、/status WebAPIを追加した。
+- memcachedpod 0.0.2を使うことで、memcachedサーバーを不要にした。
+- JRuby 1.7.27で動くようにした。(Rubyスレッドのstack sizeが100KByteでも動くように修正した)
+- WebAPIのフォーマットとして、S式の他にJSONをサポートした(Chrome Extension用)
+- 外部からの疎通確認用に、/status WebAPIを追加した。
 
 
 ## version 1.6.6 (2017年03月14日)
-    - CRuby 2.4.0に対応した。
-    - nendo 0.8.0を使うようにした。
-    - redis利用時の接続先メッセージを修正した。
-    - memcachedがダウンしている時は、sekka-serverを起動しないようにした。
+- CRuby 2.4.0に対応した。
+- nendo 0.8.0を使うようにした。
+- redis利用時の接続先メッセージを修正した。
+- memcachedがダウンしている時は、sekka-serverを起動しないようにした。
 
 
 ## version 1.6.4 (2015年07月08日)
-    - 辞書を更新した。dictVersion=1.6.2
-        - TokyoCabinet、Redis、gdbm用の辞書ファイル(*.tsv)が壊れていたのを修正した。
+- 辞書を更新した。dictVersion=1.6.2
+    - TokyoCabinet、Redis、gdbm用の辞書ファイル(*.tsv)が壊れていたのを修正した。
 
 
 ## version 1.6.3 (2015年05月13日)
@@ -34,38 +34,38 @@
 
 
 ## version 1.6.2 (2015年04月21日)
-    - memcachedが停止していても縮退運転で運用できるようした。
-        - 縮退運転中はレスポンスが悪くても運用可能なので、memachedが無い環境でも利用可能となった。
-        - なお、約10分ごとにmemcachedを確認して通常運転に復帰する。
+- memcachedが停止していても縮退運転で運用できるようした。
+    - 縮退運転中はレスポンスが悪くても運用可能なので、memachedが無い環境でも利用可能となった。
+    - なお、約10分ごとにmemcachedを確認して通常運転に復帰する。
 
 
 ## version 1.6.1 (2015年04月18日)
-    - 辞書を更新した。dictVersion=1.6.0
-        - Sekka辞書ファイルにバージョンを含めるように変更した ( SEKKA-JISYO-1.6.0.N.tsv )
-        - 以下のカタカナ語を追加した。
+- 辞書を更新した。dictVersion=1.6.0
+    - Sekka辞書ファイルにバージョンを含めるように変更した ( SEKKA-JISYO-1.6.0.N.tsv )
+    - 以下のカタカナ語を追加した。
         ```
  みす /ミス/
         ```
-        - 以下のひらがなフレーズを追加した。
+    - 以下のひらがなフレーズを追加した。
         ```
  しないと /しないと/
  これを /これを/
         ```
-        - Nendo 0.7.3を使うようにした。
-        - sekka.elのcurlなしのモードでもsekka-serverの自動切り替えをサポートした。
+    - Nendo 0.7.3を使うようにした。
+    - sekka.elのcurlなしのモードでもsekka-serverの自動切り替えをサポートした。
 
 
 ## version 1.6.0 (2015年02月28日)
-    - 辞書を更新した。dictVersion=1.5.0
-        - SMALL辞書を開始し、辞書サイズを１つにした。(元LARGEのみに１本化)
-        - 環境変数 SEKKA_LARGE を廃止した。
-        - 環境変数 SEKKA_AZIK  を廃止した。
+- 辞書を更新した。dictVersion=1.5.0
+    - SMALL辞書を開始し、辞書サイズを１つにした。(元LARGEのみに１本化)
+    - 環境変数 SEKKA_LARGE を廃止した。
+    - 環境変数 SEKKA_AZIK  を廃止した。
 
 
 ## version 1.5.9 (2015年02月06日)
-    - 辞書を更新した。dictVersion=1.4.2
-    - Sekkaの辞書として，2010年8月のものから2015年1月時点のSKK-JISYO.Lに更新した。
-    - 以下のカタカナ語を追加した。
+- 辞書を更新した。dictVersion=1.4.2
+- Sekkaの辞書として，2010年8月のものから2015年1月時点のSKK-JISYO.Lに更新した。
+- 以下のカタカナ語を追加した。
     ```
  きー /キー/
  ましん /マシン/
@@ -73,7 +73,7 @@
  さいと /サイト/
  めもり /メモリ/
      ```
-    - CRuby 2.2.0で配列のsort-byの挙動が変わり、テストがfailするようになったのを修正した。
+- CRuby 2.2.0で配列のsort-byの挙動が変わり、テストがfailするようになったのを修正した。
 
 
 ## version 1.5.8 (2014年11月29日)
