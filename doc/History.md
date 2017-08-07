@@ -166,18 +166,18 @@
 - プログレスバー表示用gemとして、progressbar をやめ、ruby-progressbar を使うようにした。
 
 
-# version 1.2.0 (2012年08月14日)
+## version 1.2.0 (2012年08月14日)
 - version 1.1.4 preからの変更無し
 
 
-# version 1.1.4.pre (2012年07月10日)
+## version 1.1.4.pre (2012年07月10日)
 - バグ修正。
     - インストール済み辞書バージョンのチェック方法が間違っていたのを修正した。
         - キー SEKKA:VERSION ではなく SEKKA::VERSION でチェックしていた。
         - コロンの数が違う。
 
 
-# version 1.1.3.pre (2012年05月29日)
+## version 1.1.3.pre (2012年05月29日)
 - 辞書データの圧縮を行なった。
 - 辞書バージョン1.2.2
     - キーの圧縮
@@ -212,10 +212,10 @@ AZIK辞書
 ```
 
 
-# version 1.1.2.pre (2012年05月29日)
+## version 1.1.2.pre (2012年05月29日)
 - リリースミス。欠番。
 
-# version 1.1.1.pre (2012年05月19日)
+## version 1.1.1.pre (2012年05月19日)
 - .sekka-jisyoファイルに次の平仮名フレーズの書式を追加した。
     - 既存仕様
         -  ひらがな	//[改行]
@@ -224,17 +224,17 @@ AZIK辞書
 - sekka-serverに辞書バージョンの整合性チェック追加した。
 
 
-# version 1.1.0.pre (2012年05月05日)
+## version 1.1.0.pre (2012年05月05日)
 - [[http://github.com/kiyoka/distributed-trie|distributed-trie]]を使って曖昧辞書検索を高速化した。
 - 辞書バージョン1.2.0 
 - Tokyo Cabinetのメモリキャッシュ指定を64MByteから256MByteに増やした。
 
 
-# version 1.0.0 (2012年04月07日)
+## version 1.0.0 (2012年04月07日)
 - Memcachedのタイムアウトを1秒に拡大した。
 
 
-# version 0.9.7 (2012年03月03日)
+## version 0.9.7 (2012年03月03日)
 - jewelerの仕様変更に対応した
     - カレントディレクトリにGemfileがあると、生成されたgemspecの依存規則に採用されてしまう。
     - SekkaのGemfileはTrivis CI専用なので gemfiles/Gemfile に移動した。
@@ -250,7 +250,7 @@ AZIK辞書
     - これまで通りsekka-server自身からの相対パスを使う。
 
 
-# version 0.9.6 (2011年11月08日)
+## version 0.9.6 (2011年11月08日)
 - gemの依存規則で、Nendoの必須バージョンを0.6.1に限定した。
 - sekka-serverのエラー処理を追加した。
     - memcachedがダウンしている状況をクライアントに報せるようにした。
@@ -261,7 +261,7 @@ AZIK辞書
         - https://github.com/kiyoka/sekka/blob/master/public_dict/0.9.2/SEKKA-JISYO.SMALL.url
 
 
-# version 0.9.5 (2011年10月15日)
+## version 0.9.5 (2011年10月15日)
 - sekka.el: url-host関数が呼び出せず、mode-lineのSekka[]の表示が消えるバグを修正した。  (require 'url-parse)が必要だった。
 - sekka.el: sekka-kakutei-with-spacekey のデフォルト値を nil に戻した。
 - sekka.el: sekka-muhenkan-key のデフォルト値をnilに設定した。
@@ -270,12 +270,12 @@ AZIK辞書
 - sekka-serverの辞書追加/既に登録済みのメッセージをシンプルなものに変更した。
 
 
-# version 0.9.4 (2011年10月06日)
+## version 0.9.4 (2011年10月06日)
 - sekka.elが変数の初期化不良でsekka-serverに接続できないバグを修正した。
     - 変数 current-sekka-server-url の初期化不良
 
 
-# version 0.9.3 (2011年10月04日)
+## version 0.9.3 (2011年10月04日)
 - sekka.elに最大３つの接続先sekka-serverのURLを登録できるようにした。
     - カスタマイズ変数 sekka-server-url、sekka-server-url-2、sekka-server-url-3の３つ。
     - 第一サーバが落ちていたら、第二サーバ、第三サーバを順に試す。
@@ -285,7 +285,7 @@ AZIK辞書
     - sekka-serverを使うという運用ができる。
 
 
-# version 0.9.2 (2011年09月17日)
+## version 0.9.2 (2011年09月17日)
 - 辞書用ストレージとして、Redisに対応した。
 - [経緯など]
     -  [[kiyoka.2011_09_08]][Sekka] [[http://redis.io/|Redis]]を試す
@@ -297,7 +297,7 @@ AZIK辞書
 - 有効/無効は、sekka-muhenkan-keyで 'q' 以外のキーに変更可能。
 
 
-# version 0.9.1 (2011年09月02日)
+## version 0.9.1 (2011年09月02日)
 - Ctrl-RでGoogleIME経由の辞書登録と平仮名フレーズの登録の両方を行えるようにした。
 - Tokyo Cabinetのサポートバージョンを 1.4.37 以上に引き下げた。
     - Debian squeezeとUbuntu 10.10以上に含まれるTokyo Cabinetが1.4.37であるため。
@@ -313,7 +313,7 @@ AZIK辞書
     - sprintfのフォーマット文字列(%s)と実引数の個数が異なるというエラー。
 
 
-# version 0.9.0 (2011年08月24日)
+## version 0.9.0 (2011年08月24日)
 - 平仮名入力時も平仮名フレーズ辞書でスペルミスを救済するようにした。
 - 辞書ソースはWebCorpusとipadic-2.7.0を使用した。
     - [[http://s-yata.jp/corpus/nwc2010/ngrams/|N-gram コーパス - 日本語ウェブコーパス 2010]]
@@ -332,7 +332,7 @@ AZIK辞書
     - デフォルトは有効。
 
 
-# version 0.8.8 (2011年07月31日)
+## version 0.8.8 (2011年07月31日)
 - gemの依存規則で、Nendoの必須バージョンを0.5.2に限定した。
     - Nendo 0.5.1からNendo 0.5.2に変更することで、Nendo処理系が高速化する。
 - C-gで変換候補のリアルタイム表示を終了するようにした。
@@ -342,21 +342,21 @@ AZIK辞書
     - 例えば、「とらとらとら」を「toratoratora」で入力・確定したあと、Ctrl-Jで変換候補選択に入れない。
 
 
-# version 0.8.7 (2011年06月24日)
+## version 0.8.7 (2011年06月24日)
 - gemの依存規則で、Nendoの必須バージョンを0.5.1に限定した。
 - 組み合わせ関数を自前で持たず、Nendoのutil.combinationsを使うようにした。
 - memcacehdプロトコルで辞書を保存する機能を廃止した。
 - Tokyo Cabinetの辞書ファイルが壊れている場合、sekka-server起動時に自動修復するようにした。
 
 
-#* version 0.8.6 (2011年04月12日)
+## version 0.8.6 (2011年04月12日)
 - gemの依存規則で、Nendoの必須バージョンを0.4.1に限定した。
 - 今後、NendoのライブラリAPIの仕様変更で動かなくなる可能性があるため。
     - gemspec.add_dependency( "nendo", "= 0.4.1" )
 - sekka-server起動時、sekka-serverが使用中のNendoバージョンを表示するようにした。
 
 
-# version 0.8.5 (2011年03月10日)
+## version 0.8.5 (2011年03月10日)
 - 辞書中の「数字+単位」の変換をサポート
 - 例)
     - "20ko" → "二十個" や "２０個" など
@@ -368,7 +368,7 @@ AZIK辞書
     - sekka.el: 変換確定動作で、メジャーモードのfaceを上書きしてしまうバグを修正した。
 
 
-# version 0.8.4 (2011年02月24日)
+## version 0.8.4 (2011年02月24日)
 - 変更内容
     - Google IME APIへのアクセスタイムアウトを5秒から20秒に変更した。(Herokuが重い場合があるので、そのための調整)
     - ローマ字表記に xa xi xu xe xo xya xyu xyo xwa xtu を追加した。
@@ -380,7 +380,7 @@ AZIK辞書
     - sekka.el: ユーザー辞書ファイル ~/.sekka-jisyo が存在しない場合、辞書登録に失敗するバグを修正した。
 
 
-# version 0.8.3 (2011年02月12日)
+## version 0.8.3 (2011年02月12日)
 - 概要
     - ユーザー定義語彙の登録UIを追加。
     - Gogole IME APIを使った未知語の解決をサポート。
@@ -391,7 +391,7 @@ AZIK辞書
     - sekka-server: memcachedサーバーの停止状態を検知して、クライアントにエラーメッセージを返すようにした。
 
 
-# version 0.8.2 (2010年12月06日)
+## version 0.8.2 (2010年12月06日)
 - 変更内容
     - Sekka Web APIのベンチマークツール sekka-benchmark を追加した。 (使いかたは[[Sekka.Benchmark]]を参照)
     - sekka.el: viperのサポートを廃止した。
@@ -399,7 +399,7 @@ AZIK辞書
     - 巨大なユーザー辞書ファイル(.sekka-jisyo)を登録すると、sekka.elがエラーになる問題を修正した。
 
 
-# version 0.8.1 (2010年11月26日)
+## version 0.8.1 (2010年11月26日)
 - 概要
     - AZIKの定義間違いを多数修正
     - 英語キーボードのサポート
@@ -425,7 +425,7 @@ AZIK辞書
         - DDSKKのskk-azik.elのテーブルからテストスイートを生成して、テーブルに抜けが無いかチェックした。
 
 
-# version 0.8.0 (2010年11月17日)
+## version 0.8.0 (2010年11月17日)
 - 初回リリース
 
 
