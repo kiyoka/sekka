@@ -288,8 +288,8 @@ AZIK辞書
 ## version 0.9.2 (2011年09月17日)
 - 辞書用ストレージとして、Redisに対応した。
 - [経緯など]
-    - [kiyoka.2011_09_08[Sekka] Redis]を試す](http://oldtype.sumibi.org/show-page/kiyoka.2011_09_08)
-    - [kiyoka.2011_09_10[Sekka] Redis]は仮想メモリ機能を使ってメモリを節約してくれる](http://oldtype.sumibi.org/show-page/kiyoka.2011_09_10)
+    - [kiyoka.2011_09_08[Sekka] Redisを試す](http://oldtype.sumibi.org/show-page/kiyoka.2011_09_08)
+    - [kiyoka.2011_09_10[Sekka] Redisは仮想メモリ機能を使ってメモリを節約してくれる](http://oldtype.sumibi.org/show-page/kiyoka.2011_09_10)
 - 辞書にバージョン番号を含めた。(key=SEKKA::VERSION)
     -  sekka-serverへの辞書データアップロード済みかどうかを、上記のキー(SEKKA::VERSION)の有無で判断します。
 - 'q'キーで無変換を指定するユーザ・インタフェースを追加した。
