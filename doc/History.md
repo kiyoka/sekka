@@ -102,7 +102,7 @@
 
 ## version 1.5.3 (2014年06月04日)
 - Nendo 0.7.0を使うようになった。
-    - GitHub上の辞書リソースへのURLリダイレクトができなくなっていた問題を修正。 ( Thanks! [ento (Marica Odagaki)]]](http://github.com/ento) )
+    - GitHub上の辞書リソースへのURLリダイレクトができなくなっていた問題を修正。 ( Thanks! [ento (Marica Odagaki)](http://github.com/ento) )
          - GitHubのルール変更でリポジトリ上のRawdataの直接参照は https://raw.github.com/ では禁止されたため、
          - https://raw.githubusercontent.com/ を使うようにした。
 
@@ -156,7 +156,7 @@
 ## version 1.2.2 (2013年03月25日)
 - 辞書バージョン1.3.0
     - 平仮名フレーズのコーパスを変更。
-    - [日本語ウェブコーパス 2010]]](http://s-yata.jp/corpus/nwc2010/) を廃止してWikipedia日本語版を使うようにした。
+    - [日本語ウェブコーパス 2010](http://s-yata.jp/corpus/nwc2010/) を廃止してWikipedia日本語版を使うようにした。
 - SMALL辞書とLARGE辞書を使いわけれるようにした。
 - 環境変数で、LARGE辞書が選択される。未定義でSMALLが使われる。
     - export SEKKA_LARGE=1
@@ -225,7 +225,7 @@ AZIK辞書
 
 
 ## version 1.1.0.pre (2012年05月05日)
-- [distributed-trie]]](http://github.com/kiyoka/distributed-trie) を使って曖昧辞書検索を高速化した。
+- [distributed-trie](http://github.com/kiyoka/distributed-trie) を使って曖昧辞書検索を高速化した。
 - 辞書バージョン1.2.0 
 - Tokyo Cabinetのメモリキャッシュ指定を64MByteから256MByteに増やした。
 
@@ -288,8 +288,8 @@ AZIK辞書
 ## version 0.9.2 (2011年09月17日)
 - 辞書用ストレージとして、Redisに対応した。
 - [経緯など]
-    - [kiyoka.2011_09_08]][Sekka] [[http://redis.io/|Redis]]を試す](http://oldtype.sumibi.org/show-page/kiyoka.2011_09_08)
-    - [kiyoka.2011_09_10]][Sekka] [[http://redis.io/|Redis]]は仮想メモリ機能を使ってメモリを節約してくれる](http://oldtype.sumibi.org/show-page/kiyoka.2011_09_10)
+    - [kiyoka.2011_09_08[Sekka] Redis]を試す](http://oldtype.sumibi.org/show-page/kiyoka.2011_09_08)
+    - [kiyoka.2011_09_10[Sekka] Redis]は仮想メモリ機能を使ってメモリを節約してくれる](http://oldtype.sumibi.org/show-page/kiyoka.2011_09_10)
 - 辞書にバージョン番号を含めた。(key=SEKKA::VERSION)
     -  sekka-serverへの辞書データアップロード済みかどうかを、上記のキー(SEKKA::VERSION)の有無で判断します。
 - 'q'キーで無変換を指定するユーザ・インタフェースを追加した。
@@ -315,16 +315,16 @@ AZIK辞書
 ## version 0.9.0 (2011年08月24日)
 - 平仮名入力時も平仮名フレーズ辞書でスペルミスを救済するようにした。
 - 辞書ソースはWebCorpusとipadic-2.7.0を使用した。
-    - [N-gram コーパス - 日本語ウェブコーパス 2010]]](http://s-yata.jp/corpus/nwc2010/ngrams/)
-    - [[http://chasen.aist-nara.ac.jp/stable/ipadic/|Index of /stable/ipadic]]
+    - [N-gram コーパス - 日本語ウェブコーパス 2010](http://s-yata.jp/corpus/nwc2010/ngrams/)
+    - [Index of /stable/ipadic](http://chasen.aist-nara.ac.jp/stable/ipadic/)
     - [経緯など]
-        - [kiyoka.2011_07_06]][Sekka] 平仮名フレーズ辞書を追加してみようかな(1)](http://oldtype.sumibi.org/show-page/kiyoka.2011_07_06)
-        - [kiyoka.2011_07_07]][Sekka] 平仮名フレーズ辞書を追加してみようかな(2)](http://oldtype.sumibi.org/show-page/kiyoka.2011_07_07]])
-        - [kiyoka.2011_07_13]][Sekka] 平仮名フレーズ辞書を追加してみようかな(3)](http://oldtype.sumibi.org/show-page/kiyoka.2011_07_13]])
-        - [kiyoka.2011_08_10]][Sekka] 平仮名フレーズ辞書を追加してみようかな(4)](http://oldtype.sumibi.org/show-page/kiyoka.2011_08_10]])
+        - [kiyoka.2011_07_06[Sekka] 平仮名フレーズ辞書を追加してみようかな(1)](http://oldtype.sumibi.org/show-page/kiyoka.2011_07_06)
+        - [kiyoka.2011_07_07[Sekka] 平仮名フレーズ辞書を追加してみようかな(2)](http://oldtype.sumibi.org/show-page/kiyoka.2011_07_07)
+        - [kiyoka.2011_07_13[Sekka] 平仮名フレーズ辞書を追加してみようかな(3)](http://oldtype.sumibi.org/show-page/kiyoka.2011_07_13)
+        - [kiyoka.2011_08_10[Sekka] 平仮名フレーズ辞書を追加してみようかな(4)](http://oldtype.sumibi.org/show-page/kiyoka.2011_08_10)
 - gemの依存規則で、Nendoの必須バージョンを0.5.3に限定した。
 - 継続的インテグレーションを開始した。
-    - [Travis CI]]](http://travis-ci.org/) でCRuby 1.9.2とCRuby 1.9.3のテストを通るようにした。
+    - [Travis CI](http://travis-ci.org/) でCRuby 1.9.2とCRuby 1.9.3のテストを通るようにした。
     - Travis CIのテスト環境用にkvs.rbにdbmとRubyのHash(オンメモリ)での辞書管理を追加した。
 - リアルタイム候補表示中(サジェスト期間中)はスペースキーで変換可能なユーザ・インタフェースにした。
     - カスタマイズ変数 sekka-kakutei-with-spacekey で有効/無効を制御できる。
@@ -392,7 +392,7 @@ AZIK辞書
 
 ## version 0.8.2 (2010年12月06日)
 - 変更内容
-    - Sekka Web APIのベンチマークツール sekka-benchmark を追加した。 (使いかたは[Sekka.Benchmark]]](http://oldtype.sumibi.org/show-page/Sekka.Benchmark) を参照)
+    - Sekka Web APIのベンチマークツール sekka-benchmark を追加した。 (使いかたは[Sekka.Benchmark](http://oldtype.sumibi.org/show-page/Sekka.Benchmark) を参照)
     - sekka.el: viperのサポートを廃止した。
 - バグ修正:
     - 巨大なユーザー辞書ファイル(.sekka-jisyo)を登録すると、sekka.elがエラーになる問題を修正した。
