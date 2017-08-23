@@ -19,20 +19,6 @@ Sekkaには日本語モードがありません。
 
 ----
 
-## EmacsLispのインストール
-
-1. Melpaから`sekka`パッケージをインストールしてください。
-2. .emacsに以下を追記すると、Sekkaが有効になります。
-
-```
-(require 'sekka)
-(global-sekka-mode 1)
-```
-
-![enabled]( ./doc/img/sekka.modeline.png )
-
-----
-
 ## 変換サーバーのインストール
 
 1. sekka-server-1.8.0.jar をダウンロードしてください． <https://github.com/kiyoka/sekka/releases/tag/v1.8.0>
@@ -43,6 +29,20 @@ java -Xss128m -jar sekka-server-1.8.0.jar
 ```
 
 ![enabled]( ./doc/img/java_on_windows10.png )
+
+----
+
+## Emacsクライアントのインストール
+
+1. Melpaから`sekka`パッケージをインストールしてください。
+2. .emacsに以下を追記すると、Sekkaが有効になります。
+
+```
+(require 'sekka)
+(global-sekka-mode 1)
+```
+
+![enabled]( ./doc/img/sekka.modeline.png )
 
 ----
 
