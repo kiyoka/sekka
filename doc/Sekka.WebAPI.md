@@ -14,10 +14,14 @@ Sekka用クライアントソフトウェアを開発される方は活用して
 # sekka-server仕様
 ## アクセスURL
 以下のルールでアクセスします。メソッドはPOSTを使用してください。
-! http://ホスト名:12929/機能
+```
+http://ホスト名:12929/機能
+```
 
 例:
-! http://localhost:12929/henkan
+```
+http://localhost:12929/henkan
+```
 
 ## パラメータ
 パラメータはPOSTのBodyで渡します。
@@ -25,14 +29,16 @@ Sekka用クライアントソフトウェアを開発される方は活用して
 
 以下に、curlでsekka-serverにアクセスする完全なコマンドラインサンプルを示します。(実際にsekka.elからリクエストされるコマンドです)
 見易いように途中で改行を入れていますが実際は1行です。
-!curl --silent --show-error  --max-time 10  --insecure
-!  --header 'Content-Type: application/x-www-form-urlencoded'
-!    http://localhost:12929/henkan
-!  --data 'format=sexp'
-!  --data 'yomi=Kanjihenkan'
-!  --data 'limit=0'
-!  --data 'method=normal'
-!  --data 'userid=kiyoka' 
+```bash
+curl --silent --show-error  --max-time 10  --insecure
+  --header 'Content-Type: application/x-www-form-urlencoded'
+    http://localhost:12929/henkan
+  --data 'format=sexp'
+  --data 'yomi=Kanjihenkan'
+  --data 'limit=0'
+  --data 'method=normal'
+  --data 'userid=kiyoka' 
+```
 
 仮にvim用スクリプトを作る場合もsekka.el同様、上記のコマンドがそのまま使用できるでしょう。
 
@@ -51,13 +57,15 @@ Emacs用クライアントではログインIDを渡す実装になっていま�
 ## /henkan
 ローマ字を仮名漢字に変換します。
 次のような変換候補一覧が返ります。(format=sexpの例)
-!(("漢字変換" nil "かんじへんかん" j 0)
-! ("かんじへんかん" nil "kanjihenkan" h 1)
-! ("カンジヘンカン" nil "kanjihenkan" k 2)
-! ("かぬんいへにんあん" nil "kanjihenkan" h 3)
-! ("カヌンイヘニンアン" nil "kanjihenkan" k 4)
-! ("Ｋａｎｊｉｈｅｎｋａｎ" nil "Kanjihenkan" z 5)
-! ("Kanjihenkan" nil "Kanjihenkan" l 6))
+```lisp
+(("漢字変換" nil "かんじへんかん" j 0)
+ ("かんじへんかん" nil "kanjihenkan" h 1)
+ ("カンジヘンカン" nil "kanjihenkan" k 2)
+ ("かぬんいへにんあん" nil "kanjihenkan" h 3)
+ ("カヌンイヘニンアン" nil "kanjihenkan" k 4)
+ ("Ｋａｎｊｉｈｅｎｋａｎ" nil "Kanjihenkan" z 5)
+ ("Kanjihenkan" nil "Kanjihenkan" l 6))
+```
 リストの各要素のフォーマットは下記の通りです。
 # 第1要素: 変換結果文字列
 "漢字変換"など
@@ -89,14 +97,18 @@ j n h k z l のうちどれかになります.
 ### yomi
 変換するローマ字文字列。
 例:
-!yomi=KanjiHenkan
+```
+yomi=KanjiHenkan
+```
 
 ### limit
 返却する変換候補の制限数。
 ゼロを指定すると無制限になります。
 変換候補をリアルタイム表示する用途には 1 を指定すれば、サーバーのCPUリソースと通信量を減らして処理を軽量化することができます。
 例:
-!limit=1
+```
+limit=1
+```
 
 ### method
 ローマ字解釈としてnormal(通常ローマ字)かAZIK(AZIK拡張ローマ字)のどちらを優先するかの指定。
@@ -113,13 +125,17 @@ j n h k z l のうちどれかになります.
 
 例:
 「key=かんじへんかん」をutf-8としてURI Encodeしたもの
-!key=%e3%81%8b%e3%82%93%e3%81%98%e3%81%b8%e3%82%93%e3%81%8b%e3%82%93
+```
+key=%e3%81%8b%e3%82%93%e3%81%98%e3%81%b8%e3%82%93%e3%81%8b%e3%82%93
+```
 
 ### tango
 /henkan機能で返却された変換結果文字列。
 例:
 「tango=漢字変換」をutf-8としてURI Encodeしたもの
-!tango=%e6%bc%a2%e5%ad%97%e5%a4%89%e6%8f%9b
+```
+tango=%e6%bc%a2%e5%ad%97%e5%a4%89%e6%8f%9b
+```
 
 
 ## /register
@@ -131,7 +147,9 @@ j n h k z l のうちどれかになります.
 改行も含めて UTF-8としてURI Encodeしたものを送ります。
 例:
 「dict=へんしゅうきょり /編集距離/\n」をutf-8としてURI Encodeしたもの
-!dict=%e3%81%b8%e3%82%93%e3%81%97%e3%82%85%e3%81%86%e3%81%8d%e3%82%87%e3%82%8a%20%2f%e7%b7%a8%e9%9b%86%e8%b7%9d%e9%9b%a2%2f%0a
+```
+dict=%e3%81%b8%e3%82%93%e3%81%97%e3%82%85%e3%81%86%e3%81%8d%e3%82%87%e3%82%8a%20%2f%e7%b7%a8%e9%9b%86%e8%b7%9d%e9%9b%a2%2f%0a
+```
 
 ## /flush
 サーバー上のユーザー辞書を全て削除します。ユーザー登録語彙と、学習内容が全て消えます。
@@ -141,7 +159,9 @@ j n h k z l のうちどれかになります.
 ## /googleime
 googleimeを使って平仮名から漢字に変換します。
 次のような変換候補一覧が返ります。(format=sexpの例)
-!("山ガール" "やまガール" "やまがーる" "ヤマガール" "ﾔﾏｶﾞｰﾙ")
+```lisp
+("山ガール" "やまガール" "やまがーる" "ヤマガール" "ﾔﾏｶﾞｰﾙ")
+```
 
 サーバー側でエラーが発生した場合は、エラーメッセージを含んだ文字列が返ります。
 
@@ -151,7 +171,9 @@ googleimeを使って平仮名から漢字に変換します。
 変換するローマ字文字列。
 例:
 「yomi=やまがーる」をutf-8としてURI Encodeしたもの
-!yomi=%e3%82%84%e3%81%be%e3%81%8c%e3%83%bc%e3%82%8b
+```
+yomi=%e3%82%84%e3%81%be%e3%81%8c%e3%83%bc%e3%82%8b
+```
 
 
 [以上]

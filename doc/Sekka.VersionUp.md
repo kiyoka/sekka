@@ -3,7 +3,9 @@
 
 ## Sekka本体のバージョンアップ
 既に[Sekka](https://github.com/kiyoka/sekka)の過去バージョンがインストール済であれば、次のコマンドでバージョンアップできます。
-!$ gem update
+```bash
+$ gem update
+```
 
 ## EmacsLispのバージョンアップ
 gem updateすると最新のSekkaのgemがインストールされ、sekka.el の場所が変わります。
