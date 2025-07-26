@@ -1,8 +1,8 @@
-# [Sekka](Sekka)(石火)のバージョンアップ手順
-まだ[Sekka](Sekka)がインストールされていない場合は、[Sekka.Setup](Sekka.Setup)を参照してください。
+# [Sekka](https://github.com/kiyoka/sekka)(石火)のバージョンアップ手順
+まだ[Sekka](https://github.com/kiyoka/sekka)がインストールされていない場合は、[Sekka.Setup](Sekka.Setup)を参照してください。
 
 ## Sekka本体のバージョンアップ
-既に[Sekka](Sekka)の過去バージョンがインストール済であれば、次のコマンドでバージョンアップできます。
+既に[Sekka](https://github.com/kiyoka/sekka)の過去バージョンがインストール済であれば、次のコマンドでバージョンアップできます。
 !$ gem update
 
 ## EmacsLispのバージョンアップ

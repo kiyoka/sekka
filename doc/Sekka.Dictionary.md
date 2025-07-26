@@ -1,4 +1,4 @@
-# [Sekka](Sekka)(石火)の辞書について
+# [Sekka](https://github.com/kiyoka/sekka)(石火)の辞書について
 Sekkaの辞書はSKKの辞書をベースにしています。
 sekka-serverを初めて起動した時に自動的に辞書データをサイトから取得・変換します。
 

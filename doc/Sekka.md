@@ -30,7 +30,7 @@ Sekkaの日本語入力風景です。
 
 
 # ソースコード
-開発言語には[Nendo](Nendo)とRubyが使われています。
+開発言語には[Nendo](https://github.com/kiyoka/nendo)とRubyが使われています。
 [kiyoka/sekka - GitHub](http://github.com/kiyoka/sekka)
 
 

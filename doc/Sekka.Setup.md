@@ -1,4 +1,4 @@
-# [Sekka](Sekka)(石火)のセットアップ手順
+# [Sekka](https://github.com/kiyoka/sekka)(石火)のセットアップ手順
 
 ## てっとりばやいセットアップ方法
 手元にDockerが使える環境があれば、こちらの手順がおすすめです。Ruby/gem/memcached/辞書 など全部入りのDockerイメージがあります。
