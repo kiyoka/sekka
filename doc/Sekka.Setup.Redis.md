@@ -99,4 +99,4 @@ Info: database file was clean
 上記のメッセージが表示され、クライアントからのリクエスト待ち状態になります。
 
 
-[Sekka.Setup](Sekka.Setup)ページに戻る
+[Sekka.Setup](Sekka.Setup.md)ページに戻る

@@ -123,8 +123,3 @@ Sekka専用のブログはありませんが、[kiyoka](kiyoka)のブログ([!ki
 - [blog.2011_09_03](https://kiyoka.github.io/blog-archive/2011/09/03/post/) [Sekka] Sekka 0.9.1 リリース
 - [blog.2011_09_17](https://kiyoka.github.io/blog-archive/2011/09/17/post/) [Sekka] Sekka 0.9.2 リリース
 
-
-# 他に質問などありましたらコメント欄に書きこんで下さい
-<!-- Comments section -->
-
-[以上]

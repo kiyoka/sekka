@@ -36,16 +36,16 @@ Debian       squeeze Ubuntu 10.10以上では、簡単にRedisをインストー
 
 ## sekka-serverの環境構築
 LevelDBを使う場合
-→ [Sekka.Setup.LevelDB](Sekka.Setup.LevelDB)
+→ [Sekka.Setup.LevelDB](Sekka.Setup.LevelDB.md)
 
 Tokyo Cabinetを使う場合
-→ [Sekka.Setup.TokyoCabinet](Sekka.Setup.TokyoCabinet)
+→ [Sekka.Setup.TokyoCabinet](Sekka.Setup.TokyoCabinet.md)
 
 Redisを使う場合
-→ [Sekka.Setup.Redis](Sekka.Setup.Redis)
+→ [Sekka.Setup.Redis](Sekka.Setup.Redis.md)
 
 gdbmを使う場合
-→ [Sekka.Setup.gdbm](Sekka.Setup.gdbm)
+→ [Sekka.Setup.gdbm](Sekka.Setup.gdbm.md)
 
 
 ### proxyサーバーの指定
@@ -86,7 +86,7 @@ export http_proxy="http://host.example.com:8080/"
 ```
 # Emacsを起動します。
 # Emacsのモードラインに 「Sekka」という文字が出たらインストール完了です。
-# Emacsからの操作方法は[Sekka.Emacs](Sekka.Emacs)を参照してください。
+# Emacsからの操作方法は[Sekka.Emacs](Sekka.Emacs.md)を参照してください。
 
 
 ## sekka-serverを多人数で共有する

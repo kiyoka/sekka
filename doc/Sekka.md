@@ -35,17 +35,14 @@ Sekkaの日本語入力風景です。
 
 
 # ドキュメント
-[Sekka.Setup](Sekka.Setup)
-[Sekka.VersionUp](Sekka.VersionUp)
-[Sekka.Emacs](Sekka.Emacs)
-[Sekka.FAQ](Sekka.FAQ)
-[Sekka.Dictionary](Sekka.Dictionary)
-[Sekka.WebAPI](Sekka.WebAPI)
-[Sekka.Benchmark](Sekka.Benchmark)
-[Sekka.ReleaseNote](Sekka.ReleaseNote)
-[Sekka.TODO](Sekka.TODO)
-[Sekka.DONE](Sekka.DONE)
-
+[Sekka.Setup](Sekka.Setup.md)
+[Sekka.VersionUp](Sekka.VersionUp.md)
+[Sekka.Emacs](Sekka.Emacs.md)
+[Sekka.FAQ](Sekka.FAQ.md)
+[Sekka.Dictionary](Sekka.Dictionary.md)
+[Sekka.WebAPI](Sekka.WebAPI.md)
+[Sekka.Benchmark](Sekka.Benchmark.md)
+[Sekka.ReleaseNote](Sekka.ReleaseNote.md)
 
 # スライド
 - [IM飲み会2010 Sekka開発秘話](http://www.slideshare.net/KiyokaNishiyama/im2010-sekka)

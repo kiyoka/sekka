@@ -1,5 +1,5 @@
 # [Sekka](https://github.com/kiyoka/sekka)(石火)のバージョンアップ手順
-まだ[Sekka](https://github.com/kiyoka/sekka)がインストールされていない場合は、[Sekka.Setup](Sekka.Setup)を参照してください。
+まだ[Sekka](https://github.com/kiyoka/sekka)がインストールされていない場合は、[Sekka.Setup](Sekka.Setup.md)を参照してください。
 
 ## Sekka本体のバージョンアップ
 既に[Sekka](https://github.com/kiyoka/sekka)の過去バージョンがインストール済であれば、次のコマンドでバージョンアップできます。
@@ -7,7 +7,7 @@
 
 ## EmacsLispのバージョンアップ
 gem updateすると最新のSekkaのgemがインストールされ、sekka.el の場所が変わります。
-[Sekka.Setup](Sekka.Setup)の例のように、sekka-pathコマンドを使った設定をしていれば、自動的に最新のEmacsLispをロードします。
+[Sekka.Setup](Sekka.Setup.md)の例のように、sekka-pathコマンドを使った設定をしていれば、自動的に最新のEmacsLispをロードします。
 
 
 ## 辞書の更新について

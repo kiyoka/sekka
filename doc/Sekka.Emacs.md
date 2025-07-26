@@ -22,7 +22,7 @@
 Emacsのモードラインに「Sekka」という文字が表示されているか確認してください。
 以下のようなイメージです。
 ![](img/sekka.modeline.png)
-もし、表示されていないようでしたら、[Sekka.Setup](Sekka.Setup)(セットアップ手順)を確認してください。
+もし、表示されていないようでしたら、[Sekka.Setup](Sekka.Setup.md)(セットアップ手順)を確認してください。
 
 
 # 基本操作
