@@ -1,5 +1,5 @@
 # EmacsからのSekka(石火)の使いかた
- ![](../img/emacs_48.png)
+ ![](img/~emacs_48.png)
 
 ## はじめに
 [Sekka](Sekka)に興味を持ったあなたは、SKKユーザーである可能性が高いでしょう。
@@ -21,7 +21,7 @@
 ## 準備
 Emacsのモードラインに「Sekka」という文字が表示されているか確認してください。
 以下のようなイメージです。
-![](../img/sekka.modeline.png)
+![](img/sekka.modeline.png)
 もし、表示されていないようでしたら、[Sekka.Setup](Sekka.Setup)(セットアップ手順)を確認してください。
 
 
@@ -31,16 +31,16 @@ Emacsのモードラインに「Sekka」という文字が表示されている�
 [Ctrl-J]は一番使うキーですので、最初に覚えてください。
 Emacsのどのバッファ内でも、カーソルの直前のローマ字を [Ctrl-J] キーで変換できます。
 
-![](../img/sekka.before_henkan.png)
+![](img/sekka.before_henkan.png)
    ↓[Ctrl-J]を押す。
-![](../img/sekka.after_henkan.png)
+![](img/sekka.after_henkan.png)
 このように、[Ctrl-J]で第一候補で確定します。(ローマ字が第一候補の文字列に置換されます)
 Microsoft IMEのように、長文を一気に変換することはできません。1文節づつ変換します。
 
 ## 変換候補の切りかえ
 確定済みの候補が気に入らない場合は別の候補に切りかえることができます。
 最後に確定した単語の最後にカーソルを合わせて、[Ctrl-J]を押すと、候補選択モードに入ります。
-![](../img/sekka.selectmode.png)
+![](img/sekka.selectmode.png)
 さらに、[Ctrl-J]を押していくと、変化候補が次々と変ります。
 候補選択モード内のその他のキーについては、後述のキーマップ一覧を見てください。
 
@@ -126,13 +126,13 @@ methodを
 
 # 変換候補のリアルタイム表示
 一度[Ctrl-J]を押すと、変換候補のリアルタイム表示が開始します。
-![](../img/sekka.realtime1.png)
+![](img/sekka.realtime1.png)
   ↓heを入力
-![](../img/sekka.realtime2.png)
+![](img/sekka.realtime2.png)
   ↓nを入力
-![](../img/sekka.realtime3.png)
+![](img/sekka.realtime3.png)
   ↓kanを入力
-![](../img/sekka.realtime4.png)
+![](img/sekka.realtime4.png)
 このリアルタイム表示は、システムが「ユーザーはこれ以上日本語変換をしないだろう」と判断すると自動的に止まります。
 次のいずれかに該当したら停止します。
 - 最後に[Ctrl-J]を押してから30秒経過すると止まります。
@@ -218,7 +218,7 @@ M-x customize-group [return]
 ```
 でプロンプトが出たら、sekkaと入力すると、sekkaのカスタマイズ画面に入ります。
 項目については、実際にカスタマイズ画面に入って説明を読んで下さい。
-![](../img/sekka.customize_group.png)
+![](img/sekka.customize_group.png)
 
 
 # ユーザー登録語彙について
@@ -227,7 +227,7 @@ M-x customize-group [return]
 sekka.elではユーザー定義語彙を自分で入力する手間を省くために、GoogleImeAPIで取得した変換候補から選択するだけで良いようになっています。
 もし、その候補に期待したものが無ければ、初めて自分で入力することになります。
 期待したものが無ければメニューから「(自分で入力する)」を選んで対話的に入力するか、後述の ~/.sekka-jisyoを直接編集する方法のどちらかになります。
-![](../img/sekka.newword_selection.png)
+![](img/sekka.newword_selection.png)
 
 
 ## ~/.sekka-jisyoを直接編集する場合
@@ -285,11 +285,10 @@ nateimasu
 ## ~/.sekka-jisyoをDropboxで共有する
 Dropboxを使えば、ユーザ辞書を複数のEmacsで共有できます。
 ※ Dropboxのアカウントは以下のサイトで取得してください。
- ##(img-s http://www.dropbox.com/static/images/dropbox_logo_home.png)
  [Dropbox - 安全なバックアップ、同期、および共有を簡単に。](http://www.dropbox.com/)
 
 .sekka-jisyoファイルをDropboxのディレクトリに移動し、カスタマイズ変数 sekka-jisyo-filename 以下のようにを設定します。
- ![](../img/sekka.jisyo-dropbox.png)
+ ![](img/sekka.jisyo-dropbox.png)
 
 
 # 複数のsekka-serverの自動切替

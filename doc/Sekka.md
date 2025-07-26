@@ -1,6 +1,8 @@
 # Sekka(石火): SKK like Japanese input method
 Sekka(石火)は[kiyoka](kiyoka)が開発中のSKKライクな日本語入力メソッドです。現在はEmacs専用です。
- ![](http://dl.dropbox.com/u/3870066/blog/iStock_000016378483XSmall.jpg)
+
+![img](img/iStock_000016378483XSmall.jpg)
+
 # 特徴
 ## モードレス
 Sekkaには日本語入力モードという概念がありません。Emacsのカーソル位置のローマ字を(Ctrl+J)キーで直接、漢字変換できます。
@@ -47,7 +49,7 @@ Sekkaの日本語入力風景です。
 
 # スライド
 - [IM飲み会2010 Sekka開発秘話](http://www.slideshare.net/KiyokaNishiyama/im2010-sekka)
-    ![](../img/InputMethodNomikai2010_Sekka.page1.png)
+    ![](img/InputMethodNomikai2010_Sekka.page1.png)
 
 
 # 議論
