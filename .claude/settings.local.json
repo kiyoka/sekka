@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3:*)",
+      "Bash(rm:*)",
+      "Bash(identify:*)",
+      "Bash(convert:*)",
+      "Bash(mv:*)"
+    ],
+    "deny": []
+  }
+}

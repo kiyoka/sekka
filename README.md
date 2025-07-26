@@ -46,11 +46,5 @@ java -Xss128m -jar sekka-server-1.8.0.jar
 
 ----
 
-## 変更履歴
-
-[History]( ./doc/History.md )
-
-----
-
-## 詳細
- <http://oldtype.sumibi.org/show-page/Sekka>
+## より詳細なドキュメント
+[Sekka](doc/Sekka.md)
