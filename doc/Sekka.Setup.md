@@ -7,21 +7,19 @@
 
 ## 必要システム(Dockerが使えない場合)
 - Mac OS X 10.6(Snow Leopard)/10.7(Lion)、Debian 5.0(lenny)と6.0(squeeze)、Windows 7動作確認しています。
--- ruby          1.9.2、1.9.3、2.0.0、2.2.0でテスト済み (WindowsはRubyInstaller.org 1.9.3)
- Travis-CIで複数バージョンのrubyで動作確認しています。
- [Travis CI - Distributed build platform for the Ruby community](http://travis-ci.org/#!/kiyoka/sekka/builds/85100)
+  - ruby          1.9.2、1.9.3、2.0.0、2.2.0でテスト済み (WindowsはRubyInstaller.org 1.9.3)
+    Travis-CIで複数バージョンのrubyで動作確認しています。 [Travis CI - Distributed build platform for the Ruby community](http://travis-ci.org/#!/kiyoka/sekka/builds/85100)
  ![](http://travis-ci.org/kiyoka/sekka.png)
--- memcached     1.2.2、 1.4.5 でテスト済み
--- [Tokyo Cabinet](http://fallabs.com/tokyocabinet/) 1.4.37、1.4.46 でテスト済み
--- [Redis](http://redis.io/)         1.2.6、2.2.12、2.4.2、3.0.0でテスト済み
--- LevelDB       1.15.0 でテスト済み
--- curl          7.19でテスト済み
--- Emacs         23、24でテスト済み。WindowsはGNU Emacs 24.2.1 (i386-mingw-nt6.1.7601) でテスト済み。
--- apel          10.7、10.8 でテスト済み (但し、Emacs24ではapel 10.8を使う必要があります)
-
+  - memcached     1.2.2、 1.4.5 でテスト済み
+  - [Tokyo Cabinet](http://fallabs.com/tokyocabinet/) 1.4.37、1.4.46 でテスト済み
+  - [Redis](http://redis.io/)         1.2.6、2.2.12、2.4.2、3.0.0でテスト済み
+  - LevelDB       1.15.0 でテスト済み
+  - curl          7.19でテスト済み
+  - Emacs         23、24でテスト済み。WindowsはGNU Emacs 24.2.1 (i386-mingw-nt6.1.7601) でテスト済み。
+  - apel          10.7、10.8 でテスト済み (但し、Emacs24ではapel 10.8を使う必要があります)
 
 ## 辞書ストレージサーバの選択
-[Tokyo Cabinet](Sekka]] の辞書ストーレージサーバとして[[http://fallabs.com/tokyocabinet/)、[Redis](http://redis.io/)、[LevelDB](http://leveldb.org/)、gdbmのどれかから選ぶことができます。
+Sekkaの辞書ストーレージサーバとして [tokyocabinet][http://fallabs.com/tokyocabinet/)、[Redis](http://redis.io/)、[LevelDB](http://leveldb.org/)、gdbmのどれかから選ぶことができます。
 一番バランスが良いのはLevelDBで少ないメモリでもかなり快適に使えます。
 sekka-serverを動かすサーバの空きメモリサイズによって決めてください。
 
