@@ -12,21 +12,22 @@ Sekkaには日本語入力モードという概念がありません。Emacsの�
 
 ## ミスタイプ許容
 ローマ字表記の揺れ(siとshi、nとnnなどの混在)や少々のローマ字のミスタイプは曖昧辞書検索によって救済されます。
+```text
  Kanji    => "漢字"            Kannj    => "漢字"
  Funiki   => "雰囲気"          fuinki   => "雰囲気"
  Shizegegosor => "自然言語処理"
+```
 
 ## DDSKKと共存可能
-SekkaとDDSKKの両方インストールしても競合しないので、徐々にSekkaに慣れることができます。
-Sekkaが有効になった状態でも、[Ctrl-X][Ctrl-J] で従来通りDDSKKが有効になります。
-
+- SekkaとDDSKKの両方インストールしても競合しないので、徐々にSekkaに慣れることができます。
+- Sekkaが有効になった状態でも、[Ctrl-X][Ctrl-J] で従来通りDDSKKが有効になります。
 
 # 動画
-Sekkaの日本語入力風景です。
- YouTube: https://www.youtube.com/watch?v=xVgO1JoOKAs
+- Sekkaの日本語入力風景です。
+  YouTube: https://www.youtube.com/watch?v=xVgO1JoOKAs
 
-0.8.1の新機能の紹介です。
- YouTube: https://www.youtube.com/watch?v=wFKNnMkQQOY
+- 0.8.1の新機能の紹介です。
+  YouTube: https://www.youtube.com/watch?v=wFKNnMkQQOY
 
 
 # ソースコード
@@ -35,23 +36,16 @@ Sekkaの日本語入力風景です。
 
 
 # ドキュメント
-[Sekka.Setup](Sekka.Setup.md)
-[Sekka.VersionUp](Sekka.VersionUp.md)
-[Sekka.Emacs](Sekka.Emacs.md)
-[Sekka.FAQ](Sekka.FAQ.md)
-[Sekka.Dictionary](Sekka.Dictionary.md)
-[Sekka.WebAPI](Sekka.WebAPI.md)
-[Sekka.Benchmark](Sekka.Benchmark.md)
-[Sekka.ReleaseNote](Sekka.ReleaseNote.md)
+- [Sekka.Setup](Sekka.Setup.md)
+- [Sekka.VersionUp](Sekka.VersionUp.md)
+- [Sekka.Emacs](Sekka.Emacs.md)
+- [Sekka.FAQ](Sekka.FAQ.md)
+- [Sekka.Dictionary](Sekka.Dictionary.md)
+- [Sekka.WebAPI](Sekka.WebAPI.md)
+- [Sekka.Benchmark](Sekka.Benchmark.md)
+- [Sekka.ReleaseNote](Sekka.ReleaseNote.md)
 
 # スライド
-- [IM飲み会2010 Sekka開発秘話](http://www.slideshare.net/KiyokaNishiyama/im2010-sekka)
-    ![](img/InputMethodNomikai2010_Sekka.page1.png)
+![](img/InputMethodNomikai2010_Sekka.page1.png)
 
-
-# 議論
-[sekka_users | Google グループ](http://groups.google.com/group/sekka_users?hl=ja) でユーザー同士の情報交換や開発者への質問ができます。
-
-
-# このページへの質問・要望など、コメントおねがいします
-<!-- Comments section -->
+[IM飲み会2010 Sekka開発秘話](http://www.slideshare.net/KiyokaNishiyama/im2010-sekka)
