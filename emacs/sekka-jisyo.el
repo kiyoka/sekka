@@ -54,7 +54,8 @@
 既存エントリがあれば候補をマージする."
   (when (file-readable-p file)
     (with-temp-buffer
-      (insert-file-contents file)
+      (let ((coding-system-for-read 'utf-8))
+        (insert-file-contents file))
       (goto-char (point-min))
       (while (not (eobp))
         (let* ((line (buffer-substring-no-properties
@@ -95,13 +96,15 @@ EXISTING, NEW はそれぞれ \"/候補1/候補2/\" 形式."
 Set this before calling `sekka-jisyo-init'.")
 
 (defun sekka-jisyo-default-file-list ()
-  "デフォルトの辞書ファイルリストを返す."
-  (let ((data-dir (expand-file-name
-                   "data"
-                   (file-name-directory
-                    (or (locate-library "sekka-jisyo")
-                        (file-name-directory
-                         (or load-file-name buffer-file-name "")))))))
+  "デフォルトの辞書ファイルリストを返す.
+emacs/ ディレクトリの親にある data/ を探す."
+  (let* ((elisp-dir (file-name-directory
+                     (or (locate-library "sekka-jisyo")
+                         load-file-name buffer-file-name "")))
+         (data-dir (expand-file-name
+                    "data"
+                    (file-name-directory
+                     (directory-file-name elisp-dir)))))
     (cl-remove-if-not
      #'file-exists-p
      (list
@@ -255,6 +258,30 @@ OKURI が指定された場合、各候補に送り仮名を付加する."
       (maphash (lambda (k v)
                  (insert k " " v "\n"))
                entries))))
+
+;;; ============================================================
+;;; 新規単語登録
+;;; ============================================================
+
+(defun sekka-jisyo-register-word (key tango)
+  "KEY に TANGO を新規登録する (ユーザー辞書).
+既に登録済みなら nil を返す。登録したら t を返す."
+  (unless sekka-jisyo-loaded
+    (sekka-jisyo-init))
+  (let* ((existing (gethash key sekka-user-jisyo-hash))
+         (candidates (if existing
+                        (sekka-jisyo--split-candidates existing)
+                      nil)))
+    (if (member tango candidates)
+        nil  ;; 既に登録済み
+      (let ((new-val (concat "/" tango
+                             (if candidates
+                                 (concat "/" (mapconcat #'identity candidates "/"))
+                               "")
+                             "/")))
+        (puthash key new-val sekka-user-jisyo-hash)
+        (sekka-jisyo--save-user-entry key new-val)
+        t))))
 
 (provide 'sekka-jisyo)
 ;;; sekka-jisyo.el ends here
