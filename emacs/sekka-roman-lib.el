@@ -1,0 +1,893 @@
+;;; sekka-roman-lib.el --- Roman-Kana conversion library for Sekka  -*- lexical-binding: t; -*-
+;;
+;; Copyright (C) 2010-2014 Kiyoka Nishiyama
+;;
+;; This file is part of Sekka
+;;
+;; Sekka is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 2, or (at your option)
+;; any later version.
+;;
+;; Sekka is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+
+;;; Code:
+
+(require 'cl-lib)
+
+;; AZIKを使用するかどうか
+(defvar sekka-use-azik t)
+
+;;; ============================================================
+;;; 変換テーブル (kana->roman alist)
+;;; ============================================================
+
+;; 子音が1音のテーブル (short)
+;; 各エントリは (ひらがな ローマ字1 ローマ字2 ...) の形式
+;; AZIK専用キーは azik-exclude-list で除外制御する
+(defconst sekka-kana->roman-alist-short
+  '(
+    ("ぁ"        "la" "xa" "xxa")
+    ("あ"        "a")
+    ("ぃ"        "li" "xi" "xxi")
+    ("い"        "i")
+    ("ぅ"        "lu" "xu" "xxu")
+    ("う"        "u"  "whu")
+    ("う゛"      "vu")
+    ("う゛ぁ"    "va")
+    ("う゛ぃ"    "vi")
+    ("う゛ぇ"    "ve")
+    ("う゛ぉ"    "vo")
+    ("ぇ"        "le" "xe" "xxe")
+    ("え"        "e")
+    ("ぉ"        "lo" "xo" "xxo")
+    ("お"        "o")
+    ("か"        "ka")
+    ("が"        "ga")
+    ("き"        "ki" "kf")
+    ("きゃ"      "kya" "kga")
+    ("きゅ"      "kyu" "kgu")
+    ("きぇ"      "kye" "kge")
+    ("きょ"      "kyo" "kgo")
+    ("ぎ"        "gi")
+    ("ぎゃ"      "gya")
+    ("ぎゅ"      "gyu")
+    ("ぎぇ"      "gye")
+    ("ぎょ"      "gyo")
+    ("く"        "ku")
+    ("ぐ"        "gu")
+    ("け"        "ke")
+    ("げ"        "ge")
+    ("こ"        "ko")
+    ("ご"        "go")
+    ("さ"        "sa")
+    ("ざ"        "za" "zc")
+    ("し"        "shi" "si")
+    ("しゃ"      "sha" "sya")
+    ("しゅ"      "shu" "syu")
+    ("しぇ"      "she" "sye")
+    ("しょ"      "sho" "syo")
+    ("じ"        "ji" "zi")
+    ("じゃ"      "ja" "jya" "zya")
+    ("じゅ"      "ju" "jyu" "zyu" "jf")
+    ("じぇ"      "je" "jye" "zye")
+    ("じょ"      "jo" "jyo" "zyo")
+    ("す"        "su")
+    ("ず"        "zu")
+    ("せ"        "se")
+    ("ぜ"        "ze" "zf")
+    ("そ"        "so")
+    ("ぞ"        "zo")
+    ("た"        "ta")
+    ("だ"        "da")
+    ("ち"        "chi" "tyi" "ti" "ci")
+    ("ちゃ"      "cha" "tya" "ca")
+    ("ちゅ"      "chu" "tyu" "cu")
+    ("ちぇ"      "che" "tye" "ce" "cf")
+    ("ちょ"      "cho" "tyo" "co")
+    ("ぢ"        "di")
+    ("ぢゃ"      "dya")
+    ("ぢゅ"      "dyu")
+    ("ぢぇ"      "dye")
+    ("ぢょ"      "dyo")
+    ("っ"        "tt" "@" ";" "ltu" "xtu")
+    ("つ"        "tsu" "tu")
+    ("づ"        "du")
+    ("て"        "te")
+    ("で"        "de" "df")
+    ("と"        "to")
+    ("ど"        "do")
+    ("な"        "na")
+    ("に"        "ni")
+    ("にゃ"      "nya")
+    ("にゅ"      "nyu")
+    ("にぇ"      "nye")
+    ("にょ"      "nyo")
+    ("ぬ"        "nu" "nf")
+    ("ね"        "ne")
+    ("の"        "no")
+    ("は"        "ha")
+    ("ば"        "ba")
+    ("ぱ"        "pa")
+    ("ひ"        "hi")
+    ("ひゃ"      "hya" "hga")
+    ("ひゅ"      "hyu" "hgu")
+    ("ひぇ"      "hye" "hge")
+    ("ひょ"      "hyo" "hgo")
+    ("び"        "bi")
+    ("びゃ"      "bya")
+    ("びゅ"      "byu")
+    ("びぇ"      "bye")
+    ("びょ"      "byo")
+    ("ぴ"        "pi")
+    ("ぴゃ"      "pya" "pga")
+    ("ぴゅ"      "pyu" "pgu")
+    ("ぴぇ"      "pye" "pge")
+    ("ぴょ"      "pyo" "pgo")
+    ("ふ"        "fu" "hu" "hf")
+    ("ふぁ"      "fa")
+    ("ふぃ"      "fi")
+    ("ふぇ"      "fe")
+    ("ふぉ"      "fo")
+    ("ぶ"        "bu")
+    ("ぷ"        "pu")
+    ("へ"        "he")
+    ("べ"        "be")
+    ("ぺ"        "pe")
+    ("ほ"        "ho")
+    ("ぼ"        "bo")
+    ("ぽ"        "po")
+    ("ま"        "ma")
+    ("み"        "mi")
+    ("みゃ"      "mya" "mga")
+    ("みゅ"      "myu" "mgu")
+    ("みぇ"      "mye" "mge")
+    ("みょ"      "myo" "mgo")
+    ("む"        "mu" "mf")
+    ("め"        "me")
+    ("も"        "mo")
+    ("ゃ"        "xya" "lya")
+    ("や"        "ya")
+    ("ゅ"        "xyu" "lyu")
+    ("ゆ"        "yu" "yf")
+    ("ょ"        "xyo" "lyo")
+    ("よ"        "yo")
+    ("ら"        "ra")
+    ("り"        "ri")
+    ("りゃ"      "rya")
+    ("りゅ"      "ryu")
+    ("りょ"      "ryo")
+    ("る"        "ru")
+    ("れ"        "re")
+    ("ろ"        "ro")
+    ("ゎ"        "xwa" "lwa")
+    ("わ"        "wa")
+    ("うぃ"      "wi" "whi")
+    ("うぇ"      "we" "whe")
+    ("を"        "wo")
+    ("うぉ"      "wso" "who")
+    ("ん"        "nn" "n" "q")
+    ("でぃ"      "dyi" "dhi" "dci")
+    ("でぅ"      "dyu" "dhu" "dcu")
+    ("ー"        "-" "^" ":" "'")
+    ("てぃ"      "thi" "tgi")
+    ("てぅ"      "thu" "tgu")
+    (">"         ">")
+    ("ゐ"        "yi")
+    ;; 撥音から始まるキーワード
+    ("っう゛"    "vvu" "@vu" ";vu")
+    ("っう゛ぁ"  "vva" "@va" ";va")
+    ("っう゛ぃ"  "vvi" "@vi" ";vi")
+    ("っう゛ぇ"  "vve" "@ve" ";ve")
+    ("っう゛ぉ"  "vvo" "@vo" ";vo")
+    ("っか"      "kka" "@ka" ";ka")
+    ("っが"      "gga" "@ga" ";ga")
+    ("っき"      "kki" "@ki" ";ki")
+    ("っきゃ"    "kkya" "@kya" ";kya")
+    ("っきゅ"    "kkyu" "@kyu" ";kyu")
+    ("っきぇ"    "kkye" "@kye" ";kye")
+    ("っきょ"    "kkyo" "@kyo" ";kyo")
+    ("っぎ"      "ggi" "@gi" ";gi")
+    ("っぎゃ"    "ggya" "@gya" ";gya")
+    ("っぎゅ"    "ggyu" "@gyu" ";gyu")
+    ("っぎぇ"    "ggye" "@gye" ";gye")
+    ("っぎょ"    "ggyo" "@gyo" ";gyo")
+    ("っく"      "kku" "@ku" ";ku")
+    ("っぐ"      "ggu" "@gu" ";gu")
+    ("っけ"      "kke" "@ke" ";ke")
+    ("っげ"      "gge" "@ge" ";ge")
+    ("っこ"      "kko" "@ko" ";ko")
+    ("っご"      "ggo" "@go" ";go")
+    ("っさ"      "ssa" "@sa" ";sa")
+    ("っざ"      "zza" "@za" ";za")
+    ("っし"      "sshi" "@shi" ";shi")
+    ("っしゃ"    "ssha" "ssya" "@sha" "@sya" ";sha" ";sya")
+    ("っしゅ"    "sshu" "ssyu" "@shu" "@syu" ";shu" ";syu")
+    ("っしぇ"    "sshe" "ssye" "@she" "@sye" ";she" ";sye")
+    ("っしょ"    "ssho" "ssyo" "@sho" "@syo" ";sho" ";syo")
+    ("っじ"      "jji" "@ji" ";ji")
+    ("っじゃ"    "jja" "@ja" ";ja")
+    ("っじゅ"    "jju" "@ju" ";ju")
+    ("っじぇ"    "jje" "@je" ";je")
+    ("っじょ"    "jjo" "@jo" ";jo")
+    ("っす"      "ssu" "@su" ";su")
+    ("っず"      "zzu" "@zu" ";zu")
+    ("っせ"      "sse" "@se" ";se")
+    ("っぜ"      "zze" "@ze" ";ze")
+    ("っそ"      "sso" "@so" ";so")
+    ("っぞ"      "zzo" "@zo" ";zo")
+    ("った"      "tta" "@ta" ";ta")
+    ("っだ"      "dda" "@da" ";da")
+    ("っち"      "cchi" "ttyi" "cci" "@chi" "@tyi" "@ci" ";chi" ";tyi" ";ci")
+    ("っちゃ"    "ccha" "ttya" "cca" "@cha" "@tya" "@ca" ";cha" ";tya" ";ca")
+    ("っちゅ"    "cchu" "ttyu" "ccu" "@chu" "@tyu" "@cu" ";chu" ";tyu" ";cu")
+    ("っちぇ"    "cche" "ttye" "cce" "@che" "@tye" "@ce" ";che" ";tye" ";ce")
+    ("っちょ"    "ccho" "ttyo" "cco" "@cho" "@tyo" "@co" ";cho" ";tyo" ";co")
+    ("っぢ"      "ddi" "@di" ";di")
+    ("っぢゃ"    "ddya" "@dya" ";dya")
+    ("っぢゅ"    "ddyu" "@dyu" ";dyu")
+    ("っぢぇ"    "ddye" "@dye" ";dye")
+    ("っぢょ"    "ddyo" "@dyo" ";dyo")
+    ("っつ"      "ttsu" "@tsu" ";tsu")
+    ("っづ"      "ddu" "@du" ";du")
+    ("って"      "tte" "@te" ";te")
+    ("っで"      "dde" "@de" ";de")
+    ("っと"      "tto" "@to" ";to")
+    ("っど"      "ddo" "@do" ";do")
+    ("っは"      "hha" "@ha" ";ha")
+    ("っば"      "bba" "@ba" ";ba")
+    ("っぱ"      "ppa" "@pa" ";pa")
+    ("っひ"      "hhi" "@hi" ";hi")
+    ("っひゃ"    "hhya" "@hya" ";hya")
+    ("っひゅ"    "hhyu" "@hyu" ";hyu")
+    ("っひぇ"    "hhye" "@hye" ";hye")
+    ("っひょ"    "hhyo" "@hyo" ";hyo")
+    ("っび"      "bbi" "@bi" ";bi")
+    ("っびゃ"    "bbya" "@bya" ";bya")
+    ("っびゅ"    "bbyu" "@byu" ";byu")
+    ("っびぇ"    "bbye" "@bye" ";bye")
+    ("っびょ"    "bbyo" "@byo" ";byo")
+    ("っぴ"      "ppi" "@pi" ";pi")
+    ("っぴゃ"    "ppya" "@pya" ";pya")
+    ("っぴゅ"    "ppyu" "@pyu" ";pyu")
+    ("っぴぇ"    "ppye" "@pye" ";pye")
+    ("っぴょ"    "ppyo" "@pyo" ";pyo")
+    ("っふ"      "ffu" "hhu" "@fu" "@hu" ";fu" ";hu")
+    ("っふぁ"    "ffa" "@fa" ";fa")
+    ("っふぃ"    "ffi" "@fi" ";fi")
+    ("っふぇ"    "ffe" "@fe" ";fe")
+    ("っふぉ"    "ffo" "@fo" ";fo")
+    ("っぶ"      "bbu" "@bu" ";bu")
+    ("っぷ"      "ppu" "@pu" ";pu")
+    ("っへ"      "hhe" "@he" ";he")
+    ("っべ"      "bbe" "@be" ";be")
+    ("っぺ"      "ppe" "@pe" ";pe")
+    ("っほ"      "hho" "@ho" ";ho")
+    ("っぼ"      "bbo" "@bo" ";bo")
+    ("っぽ"      "ppo" "@po" ";po")
+    ("っや"      "yya" "@ya" ";ya")
+    ("っゆ"      "yyu" "@yu" ";yu")
+    ("っよ"      "yyo" "@yo" ";yo")
+    ("っら"      "rra" "@ra" ";ra")
+    ("っり"      "rri" "@ri" ";ri")
+    ("っりゃ"    "rrya" "@rya" ";rya")
+    ("っりゅ"    "rryu" "@ryu" ";ryu")
+    ("っりぇ"    "rrye" "@rye" ";rye")
+    ("っりょ"    "rryo" "@ryo" ";ryo")
+    ("っる"      "rru" "@ru" ";ru")
+    ("っれ"      "rre" "@re" ";re")
+    ("っろ"      "rro" "@ro" ";ro")
+    ("#"         "#")))
+
+;; AZIK専用キーワード除外リスト
+(defconst sekka-azik-exclude-list
+  '("whu" "kf" "kga" "kgu" "kge" "kgo"
+    "zc" "xi" "xa" "xc" "xu" "xe" "xo"
+    "jf" "zf" "df" "nf"
+    "nga" "ngu" "nge" "ngo" "nf"
+    "hga" "hgu" "hge" "hgo"
+    "pga" "pgu" "pge" "pgo"
+    "hf"
+    "mga" "mgu" "mge" "mgo" "mf"
+    "yf"
+    "dci" "dcu"
+    "tgi" "tgu"
+    "cc" "cf"))
+
+;; 子音が2音入ったテーブル (long) - AZIK拡張含む
+(defconst sekka-kana->roman-alist-long
+  '(
+    ;; AZIK専用上書き
+    ("にゃ"      "nya" "nga")
+    ("にゅ"      "nyu" "ngu")
+    ("にぇ"      "nye" "nge")
+    ("にょ"      "nyo" "ngo")
+    ("ちゃ"      "cha" "tya" "ca" "cc")
+    ("し"        "shi" "si" "xi")
+    ("しゃ"      "sha" "sya" "xa" "xc")
+    ("しゅ"      "shu" "syu" "xu")
+    ("しぇ"      "she" "sye" "xe")
+    ("しょ"      "sho" "syo" "xo")
+    ;; AZIK撥音拡張
+    ("かん"       "kz" "kn")
+    ("きん"       "kk" "kv")
+    ("くん"       "kj")
+    ("けん"       "kd")
+    ("こん"       "kl")
+    ("さん"       "sz" "sn")
+    ("しん"       "sk" "xk")
+    ("すん"       "sj")
+    ("せん"       "sd")
+    ("そん"       "sl")
+    ("たん"       "tz" "tn")
+    ("ちん"       "tk" "ck")
+    ("つん"       "tj")
+    ("てん"       "td")
+    ("とん"       "tl")
+    ("なん"       "nz")
+    ("にん"       "nk")
+    ("ぬん"       "nj" "nv")
+    ("ねん"       "nd")
+    ("のん"       "nl")
+    ("はん"       "hz" "hn")
+    ("ひん"       "hk")
+    ("ふん"       "hj" "fj")
+    ("へん"       "hd")
+    ("ほん"       "hl")
+    ("ふぁん"     "fz" "fn")
+    ("ふぃん"     "fk")
+    ("ふぇん"     "fd")
+    ("ふぉん"     "fl")
+    ("まん"       "mz")
+    ("みん"       "mk")
+    ("むん"       "mj" "mv")
+    ("めん"       "md")
+    ("もん"       "ml")
+    ("やん"       "yz" "yn")
+    ("ゆん"       "yj")
+    ("よん"       "yl")
+    ("らん"       "rz" "rn")
+    ("りん"       "rk")
+    ("るん"       "rj")
+    ("れん"       "rd")
+    ("ろん"       "rl" "wz")
+    ("わん"       "wn" "wz")
+    ("うぃん"     "wk")
+    ("うぇん"     "wd")
+    ("うぉん"     "wl")
+    ;; AZIK二重母音拡張
+    ("かい"      "kq")
+    ("くう"      "kh")
+    ("けい"      "kw")
+    ("こう"      "kp")
+    ("さい"      "sq" "sf" "sv")
+    ("すう"      "sh")
+    ("せい"      "sw" "ss")
+    ("そう"      "sp")
+    ("たい"      "tq")
+    ("つう"      "th")
+    ("てい"      "tw")
+    ("とう"      "tp")
+    ("ない"      "nq")
+    ("ぬう"      "nh")
+    ("ねい"      "nw")
+    ("のう"      "np")
+    ("はい"      "hq")
+    ("ふう"      "hh" "fh")
+    ("へい"      "hw")
+    ("ほう"      "hp")
+    ("ふぁい"    "fq" "fs")
+    ("ふぇい"    "fw")
+    ("ふぉー"    "fp")
+    ("まい"      "mq")
+    ("むう"      "mh")
+    ("めい"      "mw")
+    ("もう"      "mp")
+    ("やい"      "yq")
+    ("ゆう"      "yh" "yv")
+    ("よう"      "yp")
+    ("らい"      "rq")
+    ("るう"      "rh")
+    ("れい"      "rw")
+    ("ろう"      "rp")
+    ("わい"      "wq" "wf")
+    ("うぉー"    "wp")
+    ;; AZIK濁音・半濁音
+    ("がん"       "gz" "gn")
+    ("ぎん"       "gg" "gk")
+    ("ぐん"       "gj")
+    ("げん"       "gd")
+    ("ごん"       "gl")
+    ("ざん"       "zz" "zn")
+    ("じん"       "jk" "zk")
+    ("ずん"       "zj")
+    ("ぜん"       "zd")
+    ("ぞん"       "zl")
+    ("だん"       "dz" "dn")
+    ("ぢん"       "dd" "dk")
+    ("づん"       "dj")
+    ("でん"       "dd" "dv")
+    ("どん"       "dl")
+    ("ばん"       "bz" "bn")
+    ("びん"       "bb" "bk")
+    ("ぶん"       "bj")
+    ("べん"       "bd")
+    ("ぼん"       "bl")
+    ("ぱん"       "pz" "pn")
+    ("ぴん"       "pp" "pk")
+    ("ぷん"       "pj")
+    ("ぺん"       "pd")
+    ("ぽん"       "pl" "pf")
+    ;; AZIK濁音・半濁音二重母音拡張
+    ("がい"      "gq")
+    ("ぐう"      "gh")
+    ("げい"      "gw")
+    ("ごう"      "gp")
+    ("ざい"      "zq" "zv")
+    ("ずう"      "zh")
+    ("ぜい"      "zw" "zx")
+    ("ぞう"      "zp")
+    ("だい"      "dq")
+    ("づう"      "dh")
+    ("でい"      "dw")
+    ("どう"      "dp")
+    ("ばい"      "bq")
+    ("ぶう"      "bh")
+    ("べい"      "bw" "bx")
+    ("ぼう"      "bp")
+    ("ぱい"      "pq")
+    ("ぷう"      "ph")
+    ("ぺい"      "pw")
+    ("ぽう"      "pp" "pv")
+    ;; AZIK特殊拡張
+    ("こと"       "kt")
+    ("わた"       "wt")
+    ("かも"       "km")
+    ("する"       "sr")
+    ("られ"       "rr")
+    ("ねば"       "nb")
+    ("にち"       "nt")
+    ("した"       "st")
+    ("もの"       "mn")
+    ("ため"       "tm")
+    ("たら"       "tr")
+    ("ざる"       "zr")
+    ("びと"       "bt")
+    ("だち"       "dt")
+    ("たち"       "tt")
+    ("ます"       "ms")
+    ("でも"       "dm")
+    ("なる"       "nr")
+    ("また"       "mt")
+    ("がら"       "gr")
+    ("われ"       "wr")
+    ("ひと"       "ht")
+    ("です"       "ds")
+    ("から"       "kr")
+    ("よる"       "yr")
+    ("たび"       "tb")
+    ("ごと"       "gt")
+    ;; skk-azik.elからの不足分
+    ("ばら"       "br")
+    ("びぇん"     "byd")
+    ("びゅう"     "byh")
+    ("びゅん"     "byj")
+    ("びょん"     "byl")
+    ("びゃん"     "byn" "byz")
+    ("びょう"     "byp")
+    ("びゃい"     "byq")
+    ("びぇい"     "byw")
+    ("ちぇん"     "cd" "tyd")
+    ("ちゅう"     "ch" "tyh")
+    ("ちゅん"     "cj" "tyj")
+    ("ちょん"     "cl" "tyl")
+    ("ちゃん"     "cn" "cz" "tyn" "tyz")
+    ("ちょう"     "cp" "typ")
+    ("ちゃい"     "cq" "cv" "tyq")
+    ("ちぇい"     "cw" "cx" "tyw")
+    ("でゅー"     "dch")
+    ("でぃん"     "dck")
+    ("どぅー"     "dcp")
+    ("でゅ"       "dcu")
+    ("だが"       "dg")
+    ("である"     "dr")
+    ("ふむ"       "fm")
+    ("ふる"       "fr")
+    ("ぎぇん"     "gyd")
+    ("ぎゅう"     "gyh")
+    ("ぎゅん"     "gyj")
+    ("ぎょん"     "gyl")
+    ("ぎゃん"     "gyn" "gyz")
+    ("ぎょう"     "gyp")
+    ("ぎゃい"     "gyq")
+    ("ぎぇい"     "gyw")
+    ("ひぇん"     "hgd" "hyd")
+    ("ひゅう"     "hgh" "hyh")
+    ("ひゅん"     "hgj")
+    ("ひょん"     "hgl" "hyl")
+    ("ひゃん"     "hgn" "hgz" "hyz")
+    ("ひょう"     "hgp" "hyp")
+    ("ひゃい"     "hgq" "hyq")
+    ("ひぇい"     "hgw" "hyw")
+    ("じぇん"     "jd" "zyd")
+    ("じゅう"     "jh" "jv" "zyh")
+    ("じゅん"     "jj" "zyj")
+    ("じょん"     "jl" "zyl")
+    ("じゃん"     "jn" "jz" "zyn" "zyz")
+    ("じょう"     "jp" "zyp")
+    ("じゃい"     "jq" "zyq")
+    ("じぇい"     "jw" "zyw")
+    ("きぇん"     "kgd" "kyd")
+    ("きゅう"     "kgh" "kyh")
+    ("きょん"     "kgl" "kyl")
+    ("きゃん"     "kgn" "kgz" "kyn" "kyz")
+    ("きょう"     "kgp" "kyp")
+    ("きゃい"     "kgq" "kyq")
+    ("きぇい"     "kgw" "kyw")
+    ("きゅん"     "kyj")
+    ("みぇん"     "mgd" "myd")
+    ("みゅう"     "mgh" "myh")
+    ("みゅん"     "mgj" "myj")
+    ("みょん"     "mgl" "myl")
+    ("みゃん"     "mgn" "mgz" "myn" "myz")
+    ("みょう"     "mgp" "myp")
+    ("みゃい"     "mgq" "myq")
+    ("みぇい"     "mgw" "myw")
+    ("まる"       "mr")
+    ("にぇん"     "ngd" "nyd")
+    ("にゅう"     "ngh" "nyh")
+    ("にゅん"     "ngj" "nyj")
+    ("にょん"     "ngl" "nyl")
+    ("にゃん"     "ngn" "ngz" "nyn" "nyz")
+    ("にょう"     "ngp" "nyp")
+    ("にゃい"     "ngq" "nyq")
+    ("にぇい"     "ngw" "nyw")
+    ("ぴぇん"     "pgd" "pyd")
+    ("ぴゅう"     "pgh" "pyh")
+    ("ぴゅん"     "pgj" "pyj")
+    ("ぴょん"     "pgl" "pyl")
+    ("ぴゃん"     "pgn" "pgz" "pyn" "pyz")
+    ("ぴょう"     "pgp" "pyp")
+    ("ぴゃい"     "pgq" "pyq")
+    ("ぴぇい"     "pgw" "pyw")
+    ("りぇん"     "ryd")
+    ("りゅう"     "ryh")
+    ("りゅん"     "ryj")
+    ("りょく"     "ryk")
+    ("りょん"     "ryl")
+    ("りゃん"     "ryn" "ryz")
+    ("りょう"     "ryp")
+    ("りゃい"     "ryq")
+    ("りぇい"     "ryw")
+    ("しも"       "sm")
+    ("しぇん"     "syd" "xd")
+    ("しゅう"     "syh" "xh")
+    ("しゅん"     "syj" "xj")
+    ("しょん"     "syl" "xl")
+    ("しょう"     "syp" "xp")
+    ("しゃい"     "syq" "xq" "xv")
+    ("しぇい"     "syw" "xf" "xw")
+    ("しゃん"     "syz" "xn" "xz")
+    ("てゅー"     "tgh")
+    ("てぃん"     "tgk")
+    ("とぅー"     "tgp")
+    ("てゅ"       "tgu")
+    ("つぁ"       "tsa")
+    ("つぇ"       "tse")
+    ("つぃ"       "tsi")
+    ("つぉ"       "tso")
+    ("う゛ぇん"   "vd")
+    ("う゛ぃん"   "vk")
+    ("う゛ぉん"   "vl")
+    ("う゛ぁん"   "vn" "vz")
+    ("う゛ぉー"   "vp")
+    ("う゛ぁい"   "vq")
+    ("う゛ぇい"   "vw")
+    ("う゛ゃ"     "vya")
+    ("う゛ぇ"     "vye")
+    ("う゛ょ"     "vyo")
+    ("う゛ゅ"     "vyu")
+    ("うぁ"       "wha")
+    ("しゅつ"     "xt")))
+
+
+;;; ============================================================
+;;; hash-table 構築
+;;; ============================================================
+
+(defun sekka--alist-to-roman->kana-hash (alist)
+  "alist を (roman . kana) の hash-table に変換する(最初に登録した値が優先)."
+  (let ((h (make-hash-table :test 'equal)))
+    (dolist (entry alist)
+      (let ((kana (car entry))
+            (romans (cdr entry)))
+        (dolist (r romans)
+          (unless (gethash r h)
+            (puthash r kana h)))))
+    h))
+
+(defun sekka--alist-to-kana->roman-hash (alist)
+  "alist を (kana . roman-list) の hash-table に変換する."
+  (let ((h (make-hash-table :test 'equal)))
+    (dolist (entry alist)
+      (let ((kana (car entry))
+            (romans (cdr entry)))
+        (puthash kana romans h)))
+    h))
+
+(defun sekka--filter-azik-from-alist (alist)
+  "alistからAZIK専用キーを除外したものを返す."
+  (mapcar
+   (lambda (entry)
+     (let ((kana (car entry))
+           (romans (cdr entry)))
+       (cons kana
+             (cl-remove-if
+              (lambda (r)
+                (or (string-match-p "[@;]" r)
+                    (member r sekka-azik-exclude-list)))
+              romans))))
+   alist))
+
+;; ローマ字→かな hash (short / long)
+(defvar sekka-roman->kana-hash-short nil)
+(defvar sekka-roman->kana-hash-long nil)
+
+;; かな→ローマ字 hash (short / long, azik / no-azik)
+(defvar sekka-kana->roman-hash-short-azik nil)
+(defvar sekka-kana->roman-hash-short-no-azik nil)
+(defvar sekka-kana->roman-hash-long-azik nil)
+(defvar sekka-kana->roman-hash-long-no-azik nil)
+
+(defun sekka-roman-lib-init ()
+  "変換用hash-tableを初期化する."
+  (setq sekka-roman->kana-hash-short
+        (sekka--alist-to-roman->kana-hash sekka-kana->roman-alist-short))
+  (setq sekka-roman->kana-hash-long
+        (sekka--alist-to-roman->kana-hash
+         (append sekka-kana->roman-alist-short
+                 sekka-kana->roman-alist-long)))
+  (setq sekka-kana->roman-hash-short-azik
+        (sekka--alist-to-kana->roman-hash sekka-kana->roman-alist-short))
+  (setq sekka-kana->roman-hash-short-no-azik
+        (sekka--alist-to-kana->roman-hash
+         (sekka--filter-azik-from-alist sekka-kana->roman-alist-short)))
+  (setq sekka-kana->roman-hash-long-azik
+        (sekka--alist-to-kana->roman-hash
+         (append sekka-kana->roman-alist-short
+                 sekka-kana->roman-alist-long)))
+  (setq sekka-kana->roman-hash-long-no-azik
+        sekka-kana->roman-hash-short-no-azik))
+
+
+;;; ============================================================
+;;; ローマ字→ひらがな変換
+;;; ============================================================
+
+(defun sekka--roman->hiragana-with-hash (h roman-str)
+  "hash-table H を使って ROMAN-STR をひらがなに変換する.
+失敗した場合はnilを返す."
+  (let ((result nil)
+        (pos 0)
+        (len (length roman-str))
+        (err nil))
+    (while (and (< pos len) (not err))
+      (let* ((remain (- len pos))
+             (s4 (when (>= remain 4) (substring roman-str pos (+ pos 4))))
+             (s3 (when (>= remain 3) (substring roman-str pos (+ pos 3))))
+             (s2 (when (>= remain 2) (substring roman-str pos (+ pos 2))))
+             (s1 (substring roman-str pos (+ pos 1))))
+        (cond
+         ((and s4 (gethash s4 h))
+          (push (gethash s4 h) result)
+          (setq pos (+ pos 4)))
+         ((and s3 (gethash s3 h))
+          (push (gethash s3 h) result)
+          (setq pos (+ pos 3)))
+         ((and s2 (gethash s2 h))
+          (push (gethash s2 h) result)
+          (setq pos (+ pos 2)))
+         ((gethash s1 h)
+          (push (gethash s1 h) result)
+          (setq pos (+ pos 1)))
+         (t
+          (setq err t)))))
+    (if err
+        nil
+      (mapconcat #'identity (nreverse result) ""))))
+
+(defun sekka-roman->hiragana (roman-str roman-method)
+  "ROMAN-STR をひらがなに変換する.
+ROMAN-METHOD は :normal または :azik.
+結果はひらがな文字列のリスト(重複排除済み). 失敗時は nil."
+  (unless sekka-roman->kana-hash-short
+    (sekka-roman-lib-init))
+  (let ((s (sekka--roman->hiragana-with-hash sekka-roman->kana-hash-short roman-str))
+        (l (sekka--roman->hiragana-with-hash sekka-roman->kana-hash-long roman-str)))
+    (cl-delete-duplicates
+     (cl-remove nil
+                (cond
+                 ((eq roman-method :azik)  (list l s))
+                 ((eq roman-method :normal) (list s l))
+                 (t (error "sekka-roman->hiragana: illegal roman-method %s" roman-method))))
+     :test #'equal)))
+
+(defun sekka-roman->katakana (roman-str roman-method)
+  "ROMAN-STR をカタカナに変換する."
+  (mapcar #'sekka-hiragana->katakana
+          (sekka-roman->hiragana roman-str roman-method)))
+
+
+;;; ============================================================
+;;; ひらがな⇔カタカナ変換
+;;; ============================================================
+
+(defun sekka-hiragana->katakana (str)
+  "ひらがなをカタカナに変換する."
+  (let ((result (copy-sequence str)))
+    (dotimes (i (length result))
+      (let ((c (aref result i)))
+        (when (and (>= c ?ぁ) (<= c ?ん))
+          (aset result i (+ c (- ?ァ ?ぁ))))
+        (when (= c ?ー)
+          (aset result i ?ー))))
+    result))
+
+(defun sekka-katakana->hiragana (str)
+  "カタカナをひらがなに変換する."
+  (let ((result (copy-sequence str)))
+    (dotimes (i (length result))
+      (let ((c (aref result i)))
+        (when (and (>= c ?ァ) (<= c ?ン))
+          (aset result i (+ c (- ?ぁ ?ァ))))
+        (when (= c ?ー)
+          (aset result i ?ー))))
+    result))
+
+
+;;; ============================================================
+;;; 文字種判定
+;;; ============================================================
+
+(defun sekka-katakana-p (str)
+  "文字列が全てカタカナかどうか."
+  (and (> (length str) 0)
+       (string-match-p "\\`[ァ-ンッー]+\\'" str)))
+
+(defun sekka-hiragana-p (str)
+  "文字列が全てひらがなかどうか."
+  (and (> (length str) 0)
+       (string-match-p "\\`[ぁ-んっー]+\\'" str)))
+
+(defun sekka-include-hiragana-p (str)
+  "文字列にひらがなが含まれているか."
+  (string-match-p "[ぁ-んっー]+" str))
+
+(defun sekka-kanji-p (str)
+  "文字列が全て漢字かどうか."
+  (and (> (length str) 0)
+       (string-match-p "\\`\\cC+\\'" str)))
+
+(defun sekka-include-kanji-p (str)
+  "文字列に漢字が含まれているか."
+  (string-match-p "\\cC" str))
+
+(defun sekka-hiragana-and-okuri-p (str)
+  "送り仮名付きひらがな文字列(例:\"おこなu\")かどうか."
+  (and (> (length str) 0)
+       (string-match-p "\\`[ぁ-んっー]+[a-z]\\'" str)))
+
+(defun sekka-drop-okuri (str)
+  "送り仮名付き漢字文字列の送り仮名部分を削除する."
+  (if (string-match "\\`\\([^ぁ-んっー]+\\).+\\'" str)
+      (match-string 1 str)
+    str))
+
+
+;;; ============================================================
+;;; 大文字/小文字変換 (@と;を特殊扱い)
+;;; ============================================================
+
+(defun sekka-upcase (str)
+  "小文字→大文字. @→`, ;→+ に変換してからupcase."
+  (let ((s (copy-sequence str)))
+    (dotimes (i (length s))
+      (cond
+       ((= (aref s i) ?@) (aset s i ?`))
+       ((= (aref s i) ?\;) (aset s i ?+))))
+    (upcase s)))
+
+(defun sekka-downcase (str)
+  "大文字→小文字. `→@, +→; に変換してからdowncase."
+  (let ((s (copy-sequence str)))
+    (dotimes (i (length s))
+      (cond
+       ((= (aref s i) ?`) (aset s i ?@))
+       ((= (aref s i) ?+) (aset s i ?\;))))
+    (downcase s)))
+
+
+;;; ============================================================
+;;; ひらがな→ローマ字逆変換
+;;; ============================================================
+
+(defun sekka--hiragana->roman-patterns-with-hash (h hiragana)
+  "hash-table H を使ってひらがなをローマ字パターンのリストに分解する.
+各要素はローマ字候補リスト."
+  (unless h (sekka-roman-lib-init))
+  (let ((result nil)
+        (pos 0)
+        (len (length hiragana)))
+    (while (< pos len)
+      (let* ((remain (- len pos))
+             (s3 (when (>= remain 3) (substring hiragana pos (+ pos 3))))
+             (s2 (when (>= remain 2) (substring hiragana pos (+ pos 2))))
+             (s1 (substring hiragana pos (+ pos 1)))
+             (matched nil))
+        (when (and s3 (gethash s3 h))
+          (push (gethash s3 h) result)
+          (setq pos (+ pos 3) matched t))
+        (unless matched
+          (when (and s2 (gethash s2 h))
+            (push (gethash s2 h) result)
+            (setq pos (+ pos 2) matched t)))
+        (unless matched
+          (when (gethash s1 h)
+            (push (gethash s1 h) result)
+            (setq pos (+ pos 1) matched t)))
+        (unless matched
+          (setq pos (+ pos 1)))))
+    (nreverse result)))
+
+(defun sekka-hiragana->roman-patterns (hiragana)
+  "ひらがなからローマ字パターンのリストを返す."
+  (unless sekka-kana->roman-hash-short-azik
+    (sekka-roman-lib-init))
+  (if sekka-use-azik
+      (cl-delete-duplicates
+       (list
+        (sekka--hiragana->roman-patterns-with-hash
+         sekka-kana->roman-hash-short-azik hiragana)
+        (sekka--hiragana->roman-patterns-with-hash
+         sekka-kana->roman-hash-long-azik hiragana))
+       :test #'equal)
+    (cl-delete-duplicates
+     (list
+      (sekka--hiragana->roman-patterns-with-hash
+       sekka-kana->roman-hash-short-no-azik hiragana)
+      (sekka--hiragana->roman-patterns-with-hash
+       sekka-kana->roman-hash-long-no-azik hiragana))
+     :test #'equal)))
+
+(defun sekka--cartesian-product (lists)
+  "LISTS の直積を返す. 各要素はリスト."
+  (if (null lists)
+      '(())
+    (let ((rest (sekka--cartesian-product (cdr lists)))
+          (result nil))
+      (dolist (x (car lists))
+        (dolist (r rest)
+          (push (cons x r) result)))
+      (nreverse result))))
+
+(defun sekka-hiragana->roman-list (hiragana)
+  "ひらがなから可能なローマ字表現のリストを返す."
+  (let ((patterns (sekka-hiragana->roman-patterns hiragana)))
+    (cl-delete-duplicates
+     (sort
+      (cl-mapcan
+       (lambda (pat)
+         (mapcar
+          (lambda (combo)
+            (mapconcat #'identity combo ""))
+          (sekka--cartesian-product pat)))
+       patterns)
+      #'string<)
+     :test #'equal)))
+
+(provide 'sekka-roman-lib)
+;;; sekka-roman-lib.el ends here
