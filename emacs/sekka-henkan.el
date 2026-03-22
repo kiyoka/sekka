@@ -60,25 +60,49 @@ OKURI が指定された場合、各候補に送り仮名を付加する."
 ;;; 送り仮名なしの変換
 ;;; ============================================================
 
+(defun sekka-henkan--resolve-value (v key)
+  "辞書の値 V を解決する. \"C\" で始まる間接参照を追跡する."
+  (if (and v (> (length v) 0) (= (aref v 0) ?C))
+      (let ((indirect (sekka-jisyo-get (substring v 1))))
+        (when indirect
+          (sekka-henkan--split-kouho indirect key)))
+    (when v
+      (sekka-henkan--split-kouho v key))))
+
 (defun sekka-henkan--okuri-nashi (keyword limit roman-method)
-  "送り仮名なしの変換.
+  "送り仮名なしの変換(完全一致 + 曖昧検索).
 KEYWORD はローマ字入力(先頭大文字除去済み)."
   (let* ((hira-list (sekka-roman->hiragana (sekka-downcase keyword) roman-method))
-         (result nil))
+         (exact-result nil)
+         (approx-result nil)
+         (seen (make-hash-table :test 'equal)))
+    ;; 1. 完全一致検索
     (dolist (hira hira-list)
-      (let ((v (sekka-jisyo-get hira)))
-        (when v
-          ;; "C" で始まる場合は間接参照
-          (if (and (> (length v) 0) (= (aref v 0) ?C))
-              (let ((indirect (sekka-jisyo-get (substring v 1))))
-                (when indirect
-                  (setq result (append result
-                                       (sekka-henkan--split-kouho indirect hira)))))
-            (setq result (append result
-                                 (sekka-henkan--split-kouho v hira)))))))
-    (if (and (> limit 0) (> (length result) limit))
-        (cl-subseq result 0 limit)
-      result)))
+      (let ((entries (sekka-henkan--resolve-value (sekka-jisyo-get hira) hira)))
+        (dolist (e entries)
+          (unless (gethash (car e) seen)
+            (puthash (car e) t seen)
+            (push e exact-result)))))
+    (setq exact-result (nreverse exact-result))
+    ;; 2. 曖昧検索 (各ひらがな変換結果に対して SymSpell)
+    (dolist (hira hira-list)
+      (let ((approx-matches (sekka-jisyo-approximate-search hira 20)))
+        (dolist (m approx-matches)
+          (let* ((dist (nth 0 m))
+                 (key (nth 1 m))
+                 (val (nth 2 m)))
+            (when (> dist 0)  ;; distance 0 は完全一致で既に処理済み
+              (let ((entries (sekka-henkan--resolve-value val key)))
+                (dolist (e entries)
+                  (unless (gethash (car e) seen)
+                    (puthash (car e) t seen)
+                    (push e approx-result)))))))))
+    (setq approx-result (nreverse approx-result))
+    ;; 完全一致を優先、曖昧検索結果を後ろに
+    (let ((result (append exact-result approx-result)))
+      (if (and (> limit 0) (> (length result) limit))
+          (cl-subseq result 0 limit)
+        result))))
 
 
 ;;; ============================================================

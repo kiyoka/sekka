@@ -18,6 +18,7 @@
 ;;; Code:
 
 (require 'cl-lib)
+(require 'sekka-symspell)
 
 ;; メイン辞書 (ひらがなキー → "/候補1/候補2/..." 文字列)
 (defvar sekka-jisyo-hash nil
@@ -126,7 +127,10 @@ Set this before calling `sekka-jisyo-init'.")
     (sekka-jisyo-load-file sekka-user-jisyo-file sekka-user-jisyo-hash))
   (setq sekka-jisyo-loaded t)
   (message "Sekka: 辞書の読み込み完了 (entries: %d)"
-           (hash-table-count sekka-jisyo-hash)))
+           (hash-table-count sekka-jisyo-hash))
+  ;; SymSpellインデックスの構築
+  (message "Sekka: SymSpellインデックスを構築中...")
+  (sekka-symspell-build-index sekka-jisyo-hash))
 
 
 ;;; ============================================================
@@ -147,6 +151,21 @@ Set this before calling `sekka-jisyo-init'.")
   (let ((val (sekka-jisyo-get key)))
     (when val
       (sekka-jisyo--split-candidates val))))
+
+(defun sekka-jisyo-approximate-search (query &optional max-results)
+  "QUERY に対して曖昧検索(SymSpell, edit distance ≤ 1)を行う.
+結果は ((distance key value) ...) のリスト(距離昇順)."
+  (unless sekka-jisyo-loaded
+    (sekka-jisyo-init))
+  (let ((matches (sekka-symspell-search query max-results))
+        (result nil))
+    (dolist (m matches)
+      (let* ((dist (car m))
+             (key (cdr m))
+             (val (sekka-jisyo-get key)))
+        (when val
+          (push (list dist key val) result))))
+    (nreverse result)))
 
 
 ;;; ============================================================
