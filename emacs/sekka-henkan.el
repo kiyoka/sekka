@@ -158,7 +158,7 @@ KEYWORD は例えば \"okonaU\" (大文字が送り仮名の開始を示す)."
   (let ((k (concat (sekka-henkan--string-downcase-first keyword)))
         (case-fold-search nil))
     ;; パターン: stem + 大文字送り仮名開始
-    (when (string-match "\\`\\([a-z]\\)\\([a-z^-]+\\)\\([A-Z`+]\\)\\([a-zA-Z]*\\)\\'" k)
+    (when (string-match "\\`\\([a-z]\\)\\([a-z^-]*\\)\\([A-Z`+]\\)\\([a-zA-Z]*\\)\\'" k)
       (let* ((prefix (match-string 1 k))
              (stem-body (match-string 2 k))
              (okuri-start (match-string 3 k))

@@ -105,11 +105,52 @@ Phase 3の曖昧検索にはSymSpellを採用する方針。hash-tableベース�
 - 検索性能はリアルタイムガイド(0.2秒間隔)に十分
 - hash-tableは揮発性(メモリ上のみ)で、Emacs起動ごとに再構築が必要
 
-.emacs.d/init.elにどのように書けばロードできるか教えてください。
 
-以下のコードだけで、ロード可能な状態になりましたか？
-(require 'sekka)
-(global-sekka-mode 1)
+### Phase 4 実装結果
 
-じっさいにいしょうくずみのsekkaをつかってみましたが，かんじのこうほがでません．
-ひらがなしかへんかんできません．
+#### 実装済み機能
+
+| 機能 | ファイル | 状態 |
+|---|---|---|
+| 確定(候補並び替え) | `emacs/sekka-jisyo.el` `sekka-jisyo-kakutei` | 実装済み |
+| 新規単語登録 | `emacs/sekka-jisyo.el` `sekka-jisyo-register-word` | 実装済み |
+| ユーザー辞書ファイル永続化 | `emacs/sekka-jisyo.el` `sekka-jisyo--save-user-entry` | 実装済み |
+| ユーザー辞書の優先読み込み | `emacs/sekka-jisyo.el` `sekka-jisyo-get` | 実装済み |
+| UI連携(確定時の学習) | `emacs/sekka.el` `sekka-select-kakutei` | 実装済み |
+| UI連携(単語登録) | `emacs/sekka.el` `sekka-add-new-word-sub` | 実装済み |
+| SymSpellインデックス即時更新 | `emacs/sekka-jisyo.el` `sekka-jisyo-register-word` | 実装済み |
+| 変更検知(無駄な書き込み回避) | `emacs/sekka-jisyo.el` `sekka-jisyo-kakutei` | 実装済み |
+
+#### ユーザー辞書の仕組み
+
+- ファイル: `~/.sekka-jisyo` (SKK辞書形式、`sekka-user-jisyo-file` で変更可)
+- メモリ: `sekka-user-jisyo-hash` (メイン辞書より優先して参照)
+- 起動時: `sekka-jisyo-init` でメイン辞書と共にロード
+- 確定時: 候補順序を変更しユーザー辞書に保存 (順序変更がない場合はスキップ)
+- 単語登録時: ユーザー辞書に追加し、新規キーならSymSpellインデックスも更新
+
+#### バグ修正(Phase 4実装中に発見)
+
+- `sekka-hiragana-and-okuri-p`: `case-fold-search`が`t`のため大文字もマッチしていた → `let`で`nil`にバインド
+- `sekka-henkan--okuri-ari`: 正規表現のstem-bodyが`[a-z^-]+`(1文字以上必須)で"eRu","AU"等がマッチしなかった → `[a-z^-]*`に変更
+
+#### ERTテスト
+
+`emacs/sekka-tests.el` に全248テストを実装:
+
+| カテゴリ | テスト数 | 移植元 |
+|---|---|---|
+| alphabet-lib | 43 | `test/alphabet-lib.nnd` |
+| sharp-number | 36 | `test/sharp-number.nnd` |
+| roman-lib | 53 | `test/roman-lib.nnd` |
+| util | 6 | `test/util.nnd` |
+| henkan | 80 | `test/henkan-main.nnd` |
+| symspell | 6 | (新規) |
+| jisyo | 4 | (新規) |
+| kakutei/学習 | 12 | `test/henkan-main.nnd` |
+| register-word | 5 | (新規) |
+| helper関数 | 3 | (新規) |
+
+実行方法: `emacs --batch -L emacs/ -l emacs/sekka-tests.el -f ert-run-tests-batch-and-exit`
+
+コミットしてください。

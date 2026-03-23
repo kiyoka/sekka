@@ -778,8 +778,9 @@ ROMAN-METHOD は :normal または :azik.
 
 (defun sekka-hiragana-and-okuri-p (str)
   "送り仮名付きひらがな文字列(例:\"おこなu\")かどうか."
-  (and (> (length str) 0)
-       (string-match-p "\\`[ぁ-んっー]+[a-z]\\'" str)))
+  (let ((case-fold-search nil))
+    (and (> (length str) 0)
+         (string-match-p "\\`[ぁ-んっー]+[a-z]\\'" str))))
 
 (defun sekka-drop-okuri (str)
   "送り仮名付き漢字文字列の送り仮名部分を削除する."

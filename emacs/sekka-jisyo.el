@@ -196,7 +196,8 @@ OKURI が指定された場合、各候補に送り仮名を付加する."
 
 (defun sekka-jisyo-kakutei (key tango)
   "確定した TANGO を KEY の候補の先頭に移動する.
-ユーザー辞書に保存する."
+ユーザー辞書に保存する.
+候補順序が変更された場合は TANGO を返し、変更不要な場合は nil を返す."
   (let* ((val (sekka-jisyo-get key)))
     (when val
       (let* ((candidates (sekka-jisyo--split-candidates val))
@@ -219,9 +220,11 @@ OKURI が指定された場合、各候補に送り仮名を付加する."
           (let ((new-val (concat "/" (mapconcat #'identity
                                                (append matched others) "/")
                                  "/")))
-            (puthash key new-val sekka-user-jisyo-hash)
-            (sekka-jisyo--save-user-entry key new-val)
-            tango))))))
+            ;; 順序が変わった場合のみ保存する
+            (unless (string= val new-val)
+              (puthash key new-val sekka-user-jisyo-hash)
+              (sekka-jisyo--save-user-entry key new-val)
+              tango)))))))
 
 (defun sekka-jisyo--okuri-key-p (key)
   "KEY が送りあり辞書キー(末尾がアルファベット)かどうか."
@@ -265,7 +268,8 @@ OKURI が指定された場合、各候補に送り仮名を付加する."
 
 (defun sekka-jisyo-register-word (key tango)
   "KEY に TANGO を新規登録する (ユーザー辞書).
-既に登録済みなら nil を返す。登録したら t を返す."
+既に登録済みなら nil を返す。登録したら t を返す.
+新規キーの場合は SymSpell インデックスも更新する."
   (unless sekka-jisyo-loaded
     (sekka-jisyo-init))
   (let* ((existing (gethash key sekka-user-jisyo-hash))
@@ -281,6 +285,10 @@ OKURI が指定された場合、各候補に送り仮名を付加する."
                              "/")))
         (puthash key new-val sekka-user-jisyo-hash)
         (sekka-jisyo--save-user-entry key new-val)
+        ;; 新規キーの場合、SymSpell インデックスに追加する
+        (when (and (not existing)
+                   sekka-symspell-index)
+          (sekka-symspell--index-key key sekka-symspell-index sekka-symspell-dict-set))
         t))))
 
 (provide 'sekka-jisyo)
