@@ -163,26 +163,22 @@ KEYWORD は例えば \"okonaU\" (大文字が送り仮名の開始を示す)."
              (stem-body (match-string 2 k))
              (okuri-start (match-string 3 k))
              (okuri-rest (match-string 4 k))
-             ;; 辞書キー用: stem + 送り仮名マーカー(小文字化)
-             (dict-roman (concat prefix stem-body (sekka-downcase okuri-start)))
-             ;; 送り仮名のローマ字
+             ;; stem部分のローマ字 (送り仮名の子音を含まない)
+             (stem-roman (concat prefix stem-body))
+             ;; 送り仮名の先頭子音 (SKK辞書キーの末尾に付くアルファベット)
+             (okuri-consonant (downcase okuri-start))
+             ;; 送り仮名のローマ字 (全体)
              (okuri-roman (sekka-downcase (concat okuri-start okuri-rest)))
-             ;; ひらがなに変換
-             (hira-list (sekka-roman->hiragana dict-roman roman-method))
+             ;; stemをひらがなに変換
+             (stem-hira-list (sekka-roman->hiragana stem-roman roman-method))
              ;; 送り仮名をひらがなに
              (okuri-hira-list (sekka-roman->hiragana okuri-roman roman-method))
              (okuri-hira-list (if okuri-hira-list okuri-hira-list '("")))
              (result nil))
-        (dolist (hira hira-list)
-          ;; 末尾1文字をアルファベットに (SKK辞書の送りあり形式)
-          ;; 例: "おこなu" → key="おこなu" は dict-roman の最後の子音
+        (dolist (stem-hira stem-hira-list)
           ;; SKK辞書は "おこなu /行/" のような形式
-          (let* ((okuri-char (sekka-downcase okuri-start))
-                 (dict-key (concat (substring hira 0 (- (length hira)
-                                                        (length (or (car (sekka-roman->hiragana
-                                                                          okuri-char roman-method))
-                                                                    ""))))
-                                   (downcase okuri-start)))
+          ;; stem のひらがな + 送り仮名の子音1文字 = 辞書キー
+          (let* ((dict-key (concat stem-hira okuri-consonant))
                  (v (sekka-jisyo-get dict-key)))
             (when v
               (dolist (okuri-hira okuri-hira-list)
