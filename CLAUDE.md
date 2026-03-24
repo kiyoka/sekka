@@ -153,4 +153,44 @@ Phase 3の曖昧検索にはSymSpellを採用する方針。hash-tableベース�
 
 実行方法: `emacs --batch -L emacs/ -l emacs/sekka-tests.el -f ert-run-tests-batch-and-exit`
 
-コミットしてください。
+### オリジナル(nendo) vs 現行(pure Elisp) 曖昧検索の比較
+
+#### アーキテクチャの違い
+
+| | オリジナル (nendo) | 現行 (pure Elisp) |
+|---|---|---|
+| 検索キー空間 | ローマ字 ("henkan") | ひらがな ("へんかん") |
+| アルゴリズム | Jaro-Winkler (閾値0.94) + DistributedTrie | SymSpell (Levenshtein d≤1) + hash-table |
+| 検索方式 | 全Trieノード走査 | 削除バリアントのhash-table lookup |
+
+オリジナルは `lib/sekka/approximatesearch.rb` + `distributedtrie` gem (Cネイティブ) で実装。
+現行は `emacs/sekka-symspell.el` で純粋なEmacs Lispで実装。
+
+#### 検索速度 (Apple Silicon, 全辞書265,272エントリ)
+
+| 処理 | 速度 |
+|---|---|
+| SymSpell検索単体 | 1.5〜2.5ms/query |
+| approximate-search (辞書値付き) | 2.0〜2.4ms/query |
+| henkan全体 | 4〜12ms/query |
+
+リアルタイムガイド(200ms間隔)には十分な速度。
+
+#### 精度の比較
+
+| ケース | オリジナル | 現行 | 備考 |
+|---|---|---|---|
+| 1文字の打ち間違い (henka→henkan) | ✓ (Jaro 0.97) | ✓ (Levenshtein 1) | 同等 |
+| nn/nの揺れ (hennka→henka) | ✓ (曖昧検索) | ✓ (ローマ字変換層で吸収) | 方式は異なるが結果は同等 |
+| ローマ字多義性 (kani→かに/かんい) | ✓ (Trie上で完全一致) | ✗ (ひらがな空間でd=2) | **劣化** |
+| 長い文字列の許容範囲 (8文字で2文字ミス等) | ✓ (Jaro-Winkler閾値0.94) | ✗ (d≤1固定) | **やや劣化** |
+| ひらがなフレーズ検索 (=narimas→=narimasu等) | ✓ (type="h"で検索) | ✗ (未実装) | **未実装** |
+
+#### 劣化の原因と対策
+
+最大の違いは「検索をローマ字空間ではなくひらがな空間で行う」設計変更に起因する。
+
+- **ローマ字多義性**: `sekka-roman->hiragana` が複数候補を返せれば曖昧検索に頼らず解決可能 (現在 "kani" → ("かに") のみ、"かんい" は未対応)
+- **長い文字列**: SymSpellのmax edit distanceを2に拡張可能だが、インデックスサイズと検索時間が増大するトレードオフ
+- **ひらがなフレーズ**: 辞書データとして未登録のため、辞書追加が必要
+

@@ -86,7 +86,7 @@ KEYWORD はローマ字入力(先頭大文字除去済み)."
     (setq exact-result (nreverse exact-result))
     ;; 2. 曖昧検索 (各ひらがな変換結果に対して SymSpell)
     (dolist (hira hira-list)
-      (let ((approx-matches (sekka-jisyo-approximate-search hira 20)))
+      (let ((approx-matches (sekka-jisyo-approximate-search hira nil)))
         (dolist (m approx-matches)
           (let* ((dist (nth 0 m))
                  (key (nth 1 m))

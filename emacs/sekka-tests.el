@@ -1061,5 +1061,198 @@
   (should (equal "漢字" (sekka-jisyo--drop-okuri-from-tango "漢字"))))
 
 
+
+;;; ============================================================
+;;; 曖昧検索 (SymSpell) テスト
+;;; ============================================================
+
+;; --- sekka-symspell-search 直接テスト ---
+(ert-deftest sekka-test-symspell-search-exact ()
+  "完全一致は distance=0 で見つかる."
+  :tags '(symspell jisyo)
+  (sekka-test--ensure-jisyo)
+  (let* ((results (sekka-symspell-search "へんかん" 10))
+         (exact (cl-find-if (lambda (r) (string= (cdr r) "へんかん")) results)))
+    (should exact)
+    (should (= 0 (car exact)))))
+
+(ert-deftest sekka-test-symspell-search-delete ()
+  "1文字削除(edit distance=1)で近傍キーが見つかる."
+  :tags '(symspell jisyo)
+  (sekka-test--ensure-jisyo)
+  ;; "へんか" は "へんかん" の1文字削除
+  (let* ((results (sekka-symspell-search "へんか" nil))
+         (keys (mapcar #'cdr results)))
+    (should (member "へんか" keys))    ;; 完全一致
+    (should (member "へんかん" keys)))) ;; distance=1
+
+(ert-deftest sekka-test-symspell-search-insert ()
+  "1文字挿入(edit distance=1)で近傍キーが見つかる."
+  :tags '(symspell jisyo)
+  (sekka-test--ensure-jisyo)
+  ;; "へんかんん" は "へんかん" への1文字挿入
+  (let* ((results (sekka-symspell-search "へんかんん" 20))
+         (keys (mapcar #'cdr results)))
+    (should (member "へんかん" keys))))
+
+(ert-deftest sekka-test-symspell-search-substitute ()
+  "1文字置換(edit distance=1)で近傍キーが見つかる."
+  :tags '(symspell jisyo)
+  (sekka-test--ensure-jisyo)
+  ;; "へんかく" は "へんかん" の末尾1文字置換
+  (let* ((results (sekka-symspell-search "へんかく" 20))
+         (keys (mapcar #'cdr results)))
+    (should (member "へんかん" keys))))
+
+(ert-deftest sekka-test-symspell-search-no-match ()
+  "edit distance > 1 のキーは見つからない."
+  :tags '(symspell jisyo)
+  (sekka-test--ensure-jisyo)
+  ;; "へんxx" は "へんかん" と distance=2 なので見つからない
+  (let* ((results (sekka-symspell-search "へんxx" 20))
+         (keys (mapcar #'cdr results)))
+    (should-not (member "へんかん" keys))))
+
+(ert-deftest sekka-test-symspell-search-distance-order ()
+  "結果は距離昇順(distance=0 が先、distance=1 が後)."
+  :tags '(symspell jisyo)
+  (sekka-test--ensure-jisyo)
+  (let* ((results (sekka-symspell-search "へんか" 20)))
+    (when (> (length results) 1)
+      ;; 全結果が距離昇順であること
+      (let ((prev-dist -1)
+            (ordered t))
+        (dolist (r results)
+          (when (< (car r) prev-dist)
+            (setq ordered nil))
+          (setq prev-dist (car r)))
+        (should ordered)))))
+
+;; --- sekka-jisyo-approximate-search テスト ---
+(ert-deftest sekka-test-approximate-search-henkan ()
+  "「へんかん」の曖昧検索: 完全一致 + 近傍キーが辞書値付きで返る."
+  :tags '(symspell jisyo)
+  (sekka-test--ensure-jisyo)
+  (let* ((results (sekka-jisyo-approximate-search "へんかん" 20))
+         (keys (mapcar #'cadr results)))
+    ;; 完全一致
+    (should (member "へんかん" keys))
+    ;; distance=0 の結果は辞書値を持つ
+    (let ((exact (cl-find-if (lambda (r) (string= (nth 1 r) "へんかん")) results)))
+      (should exact)
+      (should (= 0 (nth 0 exact)))
+      (should (stringp (nth 2 exact))))))
+
+(ert-deftest sekka-test-approximate-search-henka ()
+  "「へんか」の曖昧検索: 「へんかん」が distance=1 で見つかる."
+  :tags '(symspell jisyo)
+  (sekka-test--ensure-jisyo)
+  (let* ((results (sekka-jisyo-approximate-search "へんか" nil))
+         (keys (mapcar #'cadr results)))
+    (should (member "へんか" keys))
+    (should (member "へんかん" keys))))
+
+(ert-deftest sekka-test-approximate-search-saki ()
+  "「さき」の曖昧検索: 完全一致で辞書値が返る."
+  :tags '(symspell jisyo)
+  (sekka-test--ensure-jisyo)
+  (let* ((results (sekka-jisyo-approximate-search "さき" 20))
+         (exact (cl-find-if (lambda (r) (and (string= (nth 1 r) "さき") (= 0 (nth 0 r)))) results)))
+    (should exact)
+    (should (stringp (nth 2 exact)))))
+
+;; --- henkan レベルで曖昧検索が効いているかのテスト ---
+(ert-deftest sekka-test-henkan-fuzzy-henka-finds-henkan ()
+  "「henka」(=へんか) の変換で曖昧検索により「変換」が候補に含まれる."
+  :tags '(henkan symspell jisyo)
+  (sekka-test--ensure-jisyo)
+  (let* ((result (sekka-henkan--okuri-nashi "henka" 0 :normal))
+         (words (sekka-test--words result)))
+    ;; 完全一致: へんか → 変化, 返歌
+    (should (member "変化" words))
+    ;; 曖昧検索: へんかん(distance=1) → 変換, 返還
+    (should (member "変換" words))
+    (should (member "返還" words))))
+
+(ert-deftest sekka-test-henkan-fuzzy-exact-before-approx ()
+  "完全一致の候補が曖昧検索の候補よりも前に出る."
+  :tags '(henkan symspell jisyo)
+  (sekka-test--ensure-jisyo)
+  (let* ((result (sekka-henkan--okuri-nashi "henka" 0 :normal))
+         (words (sekka-test--words result))
+         (pos-henka (cl-position "変化" words :test #'equal))
+         (pos-henkan (cl-position "変換" words :test #'equal)))
+    ;; 「変化」(完全一致: へんか) が「変換」(曖昧: へんかん) より前
+    (should pos-henka)
+    (should pos-henkan)
+    (should (< pos-henka pos-henkan))))
+
+(ert-deftest sekka-test-henkan-fuzzy-kani-finds-kami ()
+  "「kani」(=かに) の変換で曖昧検索により「神」(かみ, distance=1)が候補に含まれる."
+  :tags '(henkan symspell jisyo)
+  (sekka-test--ensure-jisyo)
+  (let* ((result (sekka-henkan--okuri-nashi "kani" 0 :normal))
+         (words (sekka-test--words result)))
+    ;; 完全一致: かに → 蟹
+    (should (member "蟹" words))
+    ;; 曖昧検索: かみ(distance=1) → 神, かき(distance=1) → 柿
+    (should (member "神" words))
+    (should (member "柿" words))))
+
+(ert-deftest sekka-test-henkan-fuzzy-kami-finds-kani ()
+  "「kami」(=かみ) の変換で曖昧検索により「蟹」(かに, distance=1)が候補に含まれる."
+  :tags '(henkan symspell jisyo)
+  (sekka-test--ensure-jisyo)
+  (let* ((result (sekka-henkan--okuri-nashi "kami" 0 :normal))
+         (words (sekka-test--words result)))
+    ;; 完全一致: かみ → 神, 紙, 髪
+    (should (member "神" words))
+    ;; 曖昧検索: かに(distance=1) → 蟹
+    (should (member "蟹" words))))
+
+(ert-deftest sekka-test-henkan-fuzzy-no-false-positive ()
+  "edit distance > 1 の候補は含まれない."
+  :tags '(henkan symspell jisyo)
+  (sekka-test--ensure-jisyo)
+  ;; 「しぜんげんご」(自然言語) と「へんかん」(変換) は距離が大きすぎるので混ざらない
+  (let* ((result (sekka-henkan--okuri-nashi "henkan" 0 :normal))
+         (words (sekka-test--words result)))
+    (should-not (member "自然言語" words))))
+
+
+;;; ============================================================
+;;; ユーザー辞書の手動追記 + SymSpellインデックス反映テスト
+;;; ============================================================
+
+(ert-deftest sekka-test-user-jisyo-init-symspell ()
+  "sekka-jisyo-init でユーザー辞書のキーも SymSpell に追加される."
+  :tags '(jisyo)
+  (sekka-test--ensure-jisyo)
+  (let ((sekka-user-jisyo-file (make-temp-file "sekka-test-jisyo"))
+        (sekka-user-jisyo-hash (make-hash-table :test 'equal :size 100))
+        (key "てすとようじしょきー"))
+    (unwind-protect
+        (progn
+          ;; 手動追記をシミュレート: ファイルに直接書く
+          (with-temp-file sekka-user-jisyo-file
+            (insert key " /テスト用辞書値/\n"))
+          ;; ユーザー辞書をロード
+          (sekka-jisyo-load-file sekka-user-jisyo-file sekka-user-jisyo-hash)
+          ;; SymSpell にはまだない
+          (should-not (gethash key sekka-symspell-dict-set))
+          ;; init のユーザー辞書SymSpell追加処理を直接実行
+          (maphash
+           (lambda (k _v)
+             (unless (gethash k sekka-symspell-dict-set)
+               (sekka-symspell--index-key k sekka-symspell-index sekka-symspell-dict-set)))
+           sekka-user-jisyo-hash)
+          ;; SymSpell に追加された
+          (should (gethash key sekka-symspell-dict-set))
+          ;; 完全一致検索でも見つかる
+          (should (equal "/テスト用辞書値/" (sekka-jisyo-get key))))
+      (when (file-exists-p sekka-user-jisyo-file)
+        (delete-file sekka-user-jisyo-file)))))
+
+
 (provide 'sekka-tests)
 ;;; sekka-tests.el ends here

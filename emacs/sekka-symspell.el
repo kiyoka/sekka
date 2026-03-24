@@ -173,10 +173,17 @@ MAX-RESULTS で最大件数を制限(デフォルト無制限)."
                 (puthash key dist candidates)))))))
 
     ;; 結果をリストに変換してソート
-    (maphash (lambda (key dist)
-               (push (cons dist key) result))
-             candidates)
-    (setq result (sort result (lambda (a b) (< (car a) (car b)))))
+    ;; 距離昇順、同距離内ではクエリとの長さの差が小さい順(実用的な候補を優先)
+    (let ((qlen (length query)))
+      (maphash (lambda (key dist)
+                 (push (cons dist key) result))
+               candidates)
+      (setq result (sort result
+                         (lambda (a b)
+                           (if (= (car a) (car b))
+                               (< (abs (- (length (cdr a)) qlen))
+                                  (abs (- (length (cdr b)) qlen)))
+                             (< (car a) (car b)))))))
 
     ;; 件数制限
     (if (and max-results (> (length result) max-results))

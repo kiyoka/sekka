@@ -133,7 +133,17 @@ emacs/ ディレクトリの親にある data/ を探す."
            (hash-table-count sekka-jisyo-hash))
   ;; SymSpellインデックスの構築
   (message "Sekka: SymSpellインデックスを構築中...")
-  (sekka-symspell-build-index sekka-jisyo-hash))
+  (sekka-symspell-build-index sekka-jisyo-hash)
+  ;; ユーザー辞書のキーもSymSpellインデックスに追加
+  (when (> (hash-table-count sekka-user-jisyo-hash) 0)
+    (message "Sekka: ユーザー辞書のキーをSymSpellインデックスに追加中...")
+    (maphash
+     (lambda (key _val)
+       (unless (gethash key sekka-symspell-dict-set)
+         (sekka-symspell--index-key key sekka-symspell-index sekka-symspell-dict-set)))
+     sekka-user-jisyo-hash)
+    (message "Sekka: ユーザー辞書のキーを追加完了 (%d entries)"
+             (hash-table-count sekka-user-jisyo-hash))))
 
 
 ;;; ============================================================
@@ -155,12 +165,24 @@ emacs/ ディレクトリの親にある data/ を探す."
     (when val
       (sekka-jisyo--split-candidates val))))
 
+(defun sekka-jisyo--okuri-key-score (key query-is-kana)
+  "送りあり辞書キーのソートスコアを返す.
+QUERY-IS-KANA が non-nil の場合、送りありキーを後回しにする(スコア1)."
+  (if (and query-is-kana
+           (sekka-jisyo--okuri-key-p key))
+      1
+    0))
+
 (defun sekka-jisyo-approximate-search (query &optional max-results)
   "QUERY に対して曖昧検索(SymSpell, edit distance ≤ 1)を行う.
-結果は ((distance key value) ...) のリスト(距離昇順)."
+結果は ((distance key value) ...) のリスト(距離昇順).
+MAX-RESULTS は辞書値を持つ候補の件数制限(SymSpell検索自体は全件取得).
+クエリがひらがなの場合、送りありキーを後回しにする."
   (unless sekka-jisyo-loaded
     (sekka-jisyo-init))
-  (let ((matches (sekka-symspell-search query max-results))
+  ;; SymSpell検索は全件取得し、辞書値を持つ候補に絞ってから件数制限する
+  (let ((matches (sekka-symspell-search query nil))
+        (query-is-kana (string-match-p "\\`[ぁ-んっー]+\\'" query))
         (result nil))
     (dolist (m matches)
       (let* ((dist (car m))
@@ -168,7 +190,20 @@ emacs/ ディレクトリの親にある data/ を探す."
              (val (sekka-jisyo-get key)))
         (when val
           (push (list dist key val) result))))
-    (nreverse result)))
+    (setq result (nreverse result))
+    ;; クエリがひらがなの場合、送りありキーを後回しにソート
+    (when query-is-kana
+      (setq result
+            (sort result
+                  (lambda (a b)
+                    (let ((da (nth 0 a)) (db (nth 0 b))
+                          (oa (sekka-jisyo--okuri-key-score (nth 1 a) t))
+                          (ob (sekka-jisyo--okuri-key-score (nth 1 b) t)))
+                      (or (< da db)
+                          (and (= da db) (< oa ob))))))))
+    (if (and max-results (> (length result) max-results))
+        (cl-subseq result 0 max-results)
+      result)))
 
 
 ;;; ============================================================
