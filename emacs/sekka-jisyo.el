@@ -19,6 +19,7 @@
 
 (require 'cl-lib)
 (require 'sekka-symspell)
+(require 'url)
 
 ;; メイン辞書 (ひらがなキー → "/候補1/候補2/..." 文字列)
 (defvar sekka-jisyo-hash nil
@@ -33,6 +34,14 @@
 
 (defvar sekka-jisyo-loaded nil
   "Non-nil if dictionary has been loaded.")
+
+(defvar sekka-dictionary-base-url
+  "https://raw.githubusercontent.com/kiyoka/sekka/master/data/"
+  "Base URL for downloading dictionary files from GitHub.")
+
+(defvar sekka-dictionary-cache-dir
+  (expand-file-name "sekka" user-emacs-directory)
+  "Directory to cache downloaded dictionary files.")
 
 
 ;;; ============================================================
@@ -95,24 +104,89 @@ EXISTING, NEW はそれぞれ \"/候補1/候補2/\" 形式."
   "List of dictionary files to load.
 Set this before calling `sekka-jisyo-init'.")
 
+(defvar sekka-jisyo-dictionary-names
+  '("SKK-JISYO.L.201501"
+    "SKK-JISYO.L.hira-kata"
+    "SKK-JISYO.jinmei"
+    "SKK-JISYO.station"
+    "SKK-JISYO.fullname")
+  "List of dictionary file names to load.")
+
+(defun sekka-jisyo--download-file (url dest)
+  "URL からファイルをダウンロードし DEST に保存する.
+成功時は DEST を返し、失敗時は nil を返す."
+  (let ((url-show-status nil)
+        (buf nil))
+    (condition-case err
+        (progn
+          (setq buf (url-retrieve-synchronously url t))
+          (when buf
+            (with-current-buffer buf
+              (goto-char (point-min))
+              (if (not (re-search-forward "^HTTP/[0-9.]+ 200" nil t))
+                  (progn
+                    (message "Sekka: download failed (non-200): %s" url)
+                    nil)
+                (re-search-forward "\r?\n\r?\n" nil t)
+                (let ((coding-system-for-write 'binary))
+                  (write-region (point) (point-max) dest nil 'silent))
+                dest))))
+      (error
+       (message "Sekka: download error: %s" (error-message-string err))
+       nil))
+    ;; バッファのクリーンアップ (condition-caseの外で確実に実行)
+    (when (and buf (buffer-live-p buf))
+      (kill-buffer buf))
+    ;; dest が存在すれば成功
+    (when (file-exists-p dest) dest)))
+
+(defun sekka-jisyo--ensure-dictionaries ()
+  "辞書ファイルがキャッシュディレクトリに存在することを確認する.
+存在しなければ GitHub からダウンロードする.
+ダウンロードした(または既存の)ファイルのリストを返す."
+  (unless (file-directory-p sekka-dictionary-cache-dir)
+    (make-directory sekka-dictionary-cache-dir t))
+  (let ((files nil))
+    (dolist (name sekka-jisyo-dictionary-names)
+      (let ((local-path (expand-file-name name sekka-dictionary-cache-dir)))
+        (if (file-exists-p local-path)
+            (push local-path files)
+          (message "Sekka: downloading %s ..." name)
+          (let ((url (concat sekka-dictionary-base-url name)))
+            (when (sekka-jisyo--download-file url local-path)
+              (message "Sekka: downloaded %s" name)
+              (push local-path files))))))
+    (nreverse files)))
+
 (defun sekka-jisyo-default-file-list ()
   "デフォルトの辞書ファイルリストを返す.
-emacs/ ディレクトリの親にある data/ を探す."
+まず emacs/ ディレクトリの親にある data/ を探し、
+見つからなければキャッシュディレクトリから取得(必要ならダウンロード)する."
   (let* ((elisp-dir (file-name-directory
                      (or (locate-library "sekka-jisyo")
                          load-file-name buffer-file-name "")))
          (data-dir (expand-file-name
                     "data"
                     (file-name-directory
-                     (directory-file-name elisp-dir)))))
-    (cl-remove-if-not
-     #'file-exists-p
-     (list
-      (expand-file-name "SKK-JISYO.L.201501" data-dir)
-      (expand-file-name "SKK-JISYO.L.hira-kata" data-dir)
-      (expand-file-name "SKK-JISYO.jinmei" data-dir)
-      (expand-file-name "SKK-JISYO.station" data-dir)
-      (expand-file-name "SKK-JISYO.fullname" data-dir)))))
+                     (directory-file-name elisp-dir))))
+         (local-files
+          (cl-remove-if-not
+           #'file-exists-p
+           (mapcar (lambda (name) (expand-file-name name data-dir))
+                   sekka-jisyo-dictionary-names))))
+    (if local-files
+        local-files
+      (sekka-jisyo--ensure-dictionaries))))
+
+(defun sekka-jisyo-download-dictionaries ()
+  "辞書ファイルをキャッシュディレクトリにダウンロードする.
+既にキャッシュ済みのファイルは再ダウンロードしない.
+動作確認やキャッシュの事前構築に使用する."
+  (interactive)
+  (let ((files (sekka-jisyo--ensure-dictionaries)))
+    (message "Sekka: %d dictionary files ready in %s"
+             (length files) sekka-dictionary-cache-dir)
+    files))
 
 (defun sekka-jisyo-init ()
   "辞書を初期化してhash-tableにロードする."

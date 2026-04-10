@@ -1254,5 +1254,69 @@
         (delete-file sekka-user-jisyo-file)))))
 
 
+;;; ============================================================
+;;; 辞書ダウンロード関連テスト
+;;; ============================================================
+
+(ert-deftest sekka-test-dictionary-names-defined ()
+  "sekka-jisyo-dictionary-names が定義されている."
+  :tags '(download)
+  (should (listp sekka-jisyo-dictionary-names))
+  (should (> (length sekka-jisyo-dictionary-names) 0)))
+
+(ert-deftest sekka-test-ensure-dictionaries-creates-cache-dir ()
+  "sekka-jisyo--ensure-dictionaries がキャッシュディレクトリを作成する."
+  :tags '(download)
+  (let* ((tmp-dir (make-temp-file "sekka-test-cache" t))
+         (cache-dir (expand-file-name "subdir" tmp-dir))
+         (sekka-dictionary-cache-dir cache-dir)
+         (sekka-jisyo-dictionary-names '("test-file"))
+         ;; ダウンロードは実行しない (ネットワーク不要)
+         (sekka-dictionary-base-url "file:///nonexistent/"))
+    (unwind-protect
+        (progn
+          (should-not (file-directory-p cache-dir))
+          (sekka-jisyo--ensure-dictionaries)
+          (should (file-directory-p cache-dir)))
+      (delete-directory tmp-dir t))))
+
+(ert-deftest sekka-test-ensure-dictionaries-uses-existing-cache ()
+  "既にキャッシュに辞書があればダウンロードせずにそれを返す."
+  :tags '(download)
+  (let* ((tmp-dir (make-temp-file "sekka-test-cache" t))
+         (sekka-dictionary-cache-dir tmp-dir)
+         (sekka-jisyo-dictionary-names '("test-dict")))
+    (unwind-protect
+        (progn
+          ;; キャッシュにファイルを事前作成
+          (with-temp-file (expand-file-name "test-dict" tmp-dir)
+            (insert "あ /亜/\n"))
+          (let ((result (sekka-jisyo--ensure-dictionaries)))
+            (should (= 1 (length result)))
+            (should (string-suffix-p "test-dict" (car result)))))
+      (delete-directory tmp-dir t))))
+
+(ert-deftest sekka-test-default-file-list-prefers-local ()
+  "ローカル data/ に辞書があればキャッシュよりも優先する."
+  :tags '(download)
+  (let* ((tmp-dir (make-temp-file "sekka-test-local" t))
+         (data-dir (expand-file-name "data" tmp-dir))
+         (elisp-dir (expand-file-name "emacs" tmp-dir))
+         (sekka-jisyo-dictionary-names '("test-dict")))
+    (unwind-protect
+        (progn
+          (make-directory data-dir t)
+          (make-directory elisp-dir t)
+          ;; data/ にダミー辞書を作成
+          (with-temp-file (expand-file-name "test-dict" data-dir)
+            (insert "い /位/\n"))
+          ;; locate-library を emacs/ サブディレクトリに向ける
+          (cl-letf (((symbol-function 'locate-library)
+                     (lambda (_name &rest _) (expand-file-name "sekka-jisyo.el" elisp-dir))))
+            (let ((result (sekka-jisyo-default-file-list)))
+              (should (= 1 (length result)))
+              (should (string-match-p "/data/test-dict\\'" (car result))))))
+      (delete-directory tmp-dir t))))
+
 (provide 'sekka-tests)
 ;;; sekka-tests.el ends here

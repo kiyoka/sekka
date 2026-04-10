@@ -194,3 +194,31 @@ Phase 3の曖昧検索にはSymSpellを採用する方針。hash-tableベース�
 - **長い文字列**: SymSpellのmax edit distanceを2に拡張可能だが、インデックスサイズと検索時間が増大するトレードオフ
 - **ひらがなフレーズ**: 辞書データとして未登録のため、辞書追加が必要
 
+
+### MELPA配布時の辞書配置
+
+GitHub raw URLから辞書を自動ダウンロードする方式を採用。
+
+#### 仕組み
+
+- 初回起動時、ローカル `data/` に辞書がなければ `~/.emacs.d/sekka/` にGitHubからダウンロード
+- 2回目以降はキャッシュ済みファイルをそのまま使用(オフライン動作可)
+- `sekka-dictionary-base-url` でダウンロード元URLをカスタマイズ可能
+- `sekka-dictionary-cache-dir` でキャッシュディレクトリをカスタマイズ可能
+
+#### 関連変数・関数
+
+| 変数/関数 | 役割 |
+|---|---|
+| `sekka-dictionary-base-url` | ダウンロード元URL (デフォルト: GitHub raw) |
+| `sekka-dictionary-cache-dir` | キャッシュ先ディレクトリ (デフォルト: `~/.emacs.d/sekka/`) |
+| `sekka-jisyo-dictionary-names` | ダウンロード対象の辞書ファイル名リスト |
+| `sekka-jisyo--download-file` | URL→ローカルファイルのダウンロード |
+| `sekka-jisyo--ensure-dictionaries` | キャッシュ確認＋必要ならダウンロード |
+| `sekka-jisyo-default-file-list` | ローカルdata/優先、なければキャッシュ/DL |
+| `sekka-jisyo-download-dictionaries` | 手動ダウンロード用インタラクティブコマンド |
+
+#### 動作確認
+
+開発環境ではローカル `data/` が存在するため自動ダウンロードは発動しない。
+手動テストは `M-x sekka-jisyo-download-dictionaries` で実行可能。
