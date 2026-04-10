@@ -3,9 +3,9 @@
 ;; Copyright (C) 2010-2024 Kiyoka Nishiyama
 ;;
 ;; Author: Kiyoka Nishiyama <kiyoka@sumibi.org>
-;; Version: 2.0.0          ;;SEKKA-VERSION
-;; Keywords: ime, skk, japanese
-;; Package-Requires: ((cl-lib "0.3") (popup "0.5.2"))
+;; Version: 2.0.0
+;; Keywords: i18n
+;; Package-Requires: ((emacs "25.1") (popup "0.5.2"))
 ;; URL: https://github.com/kiyoka/sekka
 ;;
 ;; This file is part of Sekka
@@ -198,8 +198,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Skicky-shift
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar sticky-key ";")
-(defvar sticky-list
+(defvar sekka-sticky-key ";")
+(defvar sekka-sticky-list
   '(("a" . "A")("b" . "B")("c" . "C")("d" . "D")("e" . "E")("f" . "F")("g" . "G")
     ("h" . "H")("i" . "I")("j" . "J")("k" . "K")("l" . "L")("m" . "M")("n" . "N")
     ("o" . "O")("p" . "P")("q" . "Q")("r" . "R")("s" . "S")("t" . "T")("u" . "U")
@@ -208,9 +208,8 @@
     ("8" . "(")("9" . ")")
     ("`" . "@")("[" . "{")("]" . "}")("-" . "=")("^" . "~")("\\" . "|")("." . ">")
     ("/" . "?")(";" . ";")(":" . "*")("@" . "`")
-    ("\C-h" . "")
-    ))
-(defvar sticky-map (make-sparse-keymap))
+    ("\C-h" . "")))
+(defvar sekka-sticky-map (make-sparse-keymap))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -820,8 +819,7 @@
 	     (sekka-debug-print (format "sekka-history-search : sekka-cand-cur-backup : %S\n" sekka-cand-cur-backup))
 	     (sekka-debug-print (format "sekka-history-search : sekka-cand-len %S\n" sekka-cand-len))
 	     (sekka-debug-print (format "sekka-history-search : sekka-last-fix %S\n" sekka-last-fix))
-	     (sekka-debug-print (format "sekka-history-search : sekka-henkan-kouho-list %S\n" sekka-henkan-kouho-list)))
-	   )))
+	     (sekka-debug-print (format "sekka-history-search : sekka-henkan-kouho-list %S\n" sekka-henkan-kouho-list)))))
      sekka-history-stack)
     found))
 
@@ -853,8 +851,7 @@
    ;; タイマーイベントを設定しない条件
    ((or
      sekka-timer
-     (> 1 sekka-realtime-guide-running-seconds)
-     ))
+     (> 1 sekka-realtime-guide-running-seconds)))
    (t
     ;; タイマーイベント関数の登録
     (progn
@@ -1036,16 +1033,16 @@
 
 (defun sekka-sticky-shift-init-function ()
   ;; sticky-shift
-  (define-key global-map sticky-key sticky-map)
+  (define-key global-map sekka-sticky-key sekka-sticky-map)
   (mapcar (lambda (pair)
-	    (define-key sticky-map (car pair)
+	    (define-key sekka-sticky-map (car pair)
 	      `(lambda()(interactive)
 		 (if ,(< 0 (length (cdr pair)))
 		     (setq unread-command-events
 			   (cons ,(string-to-char (cdr pair)) unread-command-events))
 		   nil))))
-	  sticky-list)
-  (define-key sticky-map sticky-key '(lambda ()(interactive)(insert sticky-key))))
+	  sekka-sticky-list)
+  (define-key sekka-sticky-map sekka-sticky-key '(lambda ()(interactive)(insert sekka-sticky-key))))
 
 
 (defun sekka-insert-space (times)
