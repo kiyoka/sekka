@@ -464,6 +464,8 @@
   (unless sekka-test--jisyo-initialized
     (sekka-roman-lib-init)
     (sekka-jisyo-init)
+    ;; テスト環境ではidle timerが発火しないため、直接SymSpellインデックスを構築
+    (sekka-jisyo-build-symspell-now)
     (setq sekka-test--jisyo-initialized t)))
 
 ;; --- henkan (number) ---

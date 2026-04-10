@@ -35,6 +35,12 @@
 (defvar sekka-jisyo-loaded nil
   "Non-nil if dictionary has been loaded.")
 
+(defvar sekka-symspell-ready nil
+  "Non-nil if SymSpell index has been built.")
+
+(defvar sekka-symspell-building nil
+  "Non-nil if SymSpell index is currently being built.")
+
 (defvar sekka-dictionary-base-url
   "https://raw.githubusercontent.com/kiyoka/sekka/master/data/"
   "Base URL for downloading dictionary files from GitHub.")
@@ -205,19 +211,51 @@ Set this before calling `sekka-jisyo-init'.")
   (setq sekka-jisyo-loaded t)
   (message "Sekka: 辞書の読み込み完了 (entries: %d)"
            (hash-table-count sekka-jisyo-hash))
-  ;; SymSpellインデックスの構築
-  (message "Sekka: SymSpellインデックスを構築中...")
-  (sekka-symspell-build-index sekka-jisyo-hash)
-  ;; ユーザー辞書のキーもSymSpellインデックスに追加
-  (when (> (hash-table-count sekka-user-jisyo-hash) 0)
-    (message "Sekka: ユーザー辞書のキーをSymSpellインデックスに追加中...")
-    (maphash
-     (lambda (key _val)
-       (unless (gethash key sekka-symspell-dict-set)
-         (sekka-symspell--index-key key sekka-symspell-index sekka-symspell-dict-set)))
-     sekka-user-jisyo-hash)
-    (message "Sekka: ユーザー辞書のキーを追加完了 (%d entries)"
-             (hash-table-count sekka-user-jisyo-hash))))
+  ;; SymSpellインデックスの構築をアイドル時に遅延実行
+  (setq sekka-symspell-ready nil)
+  (setq sekka-symspell-building nil)
+  (sekka-jisyo--schedule-symspell-build))
+
+(defun sekka-jisyo-build-symspell-now ()
+  "SymSpellインデックスを即座に構築する.
+テスト環境やバッチ処理で使用."
+  (when (and sekka-jisyo-loaded (not sekka-symspell-ready))
+    (setq sekka-symspell-building t)
+    (message "Sekka: SymSpellインデックスを構築中...")
+    (sekka-symspell-build-index sekka-jisyo-hash)
+    ;; ユーザー辞書のキーもSymSpellインデックスに追加
+    (when (> (hash-table-count sekka-user-jisyo-hash) 0)
+      (maphash
+       (lambda (key _val)
+         (unless (gethash key sekka-symspell-dict-set)
+           (sekka-symspell--index-key key sekka-symspell-index sekka-symspell-dict-set)))
+       sekka-user-jisyo-hash))
+    (setq sekka-symspell-building nil)
+    (setq sekka-symspell-ready t)
+    (message "Sekka: SymSpellインデックス構築完了 (曖昧検索が有効になりました)")))
+
+(defun sekka-jisyo--schedule-symspell-build ()
+  "SymSpellインデックス構築をアイドル時にインクリメンタルに実行する.
+チャンク分割でEmacsの操作をブロックしない."
+  (message "Sekka: SymSpellインデックスはアイドル時に構築します (完全一致検索は即座に利用可能)")
+  (run-with-idle-timer
+   2 nil
+   (lambda ()
+     (when (and sekka-jisyo-loaded (not sekka-symspell-ready) (not sekka-symspell-building))
+       (setq sekka-symspell-building t)
+       (sekka-symspell-build-index-incremental
+        sekka-jisyo-hash
+        (lambda ()
+          ;; ユーザー辞書のキーもSymSpellインデックスに追加
+          (when (> (hash-table-count sekka-user-jisyo-hash) 0)
+            (maphash
+             (lambda (key _val)
+               (unless (gethash key sekka-symspell-dict-set)
+                 (sekka-symspell--index-key key sekka-symspell-index sekka-symspell-dict-set)))
+             sekka-user-jisyo-hash))
+          (setq sekka-symspell-building nil)
+          (setq sekka-symspell-ready t)
+          (message "Sekka: SymSpellインデックス構築完了 (曖昧検索が有効になりました)")))))))
 
 
 ;;; ============================================================
