@@ -15,6 +15,10 @@
 ;; GNU General Public License for more details.
 ;;
 
+;;; Commentary:
+
+;; Half-width/Full-width alphabet conversion utilities for Sekka.
+
 ;;; Code:
 
 (defun sekka-alphabet-han->zen (str)

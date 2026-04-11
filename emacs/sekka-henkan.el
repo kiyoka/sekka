@@ -15,6 +15,11 @@
 ;; GNU General Public License for more details.
 ;;
 
+;;; Commentary:
+
+;; Conversion engine for Sekka Japanese IME.
+;; Handles romaji-to-kana conversion and dictionary lookup.
+
 ;;; Code:
 
 (require 'cl-lib)

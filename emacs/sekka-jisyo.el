@@ -15,6 +15,10 @@
 ;; GNU General Public License for more details.
 ;;
 
+;;; Commentary:
+
+;; Dictionary loading, lookup, and user dictionary management for Sekka.
+
 ;;; Code:
 
 (require 'cl-lib)

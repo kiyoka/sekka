@@ -15,6 +15,10 @@
 ;; GNU General Public License for more details.
 ;;
 
+;;; Commentary:
+
+;; Roman-to-Kana conversion table and functions for Sekka.
+
 ;;; Code:
 
 (require 'cl-lib)

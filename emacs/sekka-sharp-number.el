@@ -15,6 +15,10 @@
 ;; GNU General Public License for more details.
 ;;
 
+;;; Commentary:
+
+;; Kanji numeral conversion (e.g., 123 -> 百二十三) for Sekka.
+
 ;;; Code:
 
 (require 'sekka-alphabet-lib)
