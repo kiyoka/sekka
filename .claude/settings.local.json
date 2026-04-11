@@ -5,7 +5,19 @@
       "Bash(rm:*)",
       "Bash(identify:*)",
       "Bash(convert:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(gh issue:*)",
+      "Bash(git stash:*)",
+      "Bash(git checkout:*)",
+      "Bash(emacs --batch -L emacs/ -l emacs/sekka-tests.el -f ert-run-tests-batch-and-exit)",
+      "Bash(git mv:*)",
+      "Bash(git commit:*)",
+      "Bash(emacs --batch -L emacs/ -l emacs/sekka-henkan.el --eval ':*)",
+      "Bash(emacs --batch -L emacs/ -l emacs/sekka.el --eval ':*)",
+      "Bash(emacs --batch -L emacs/ -l emacs/sekka-henkan.el -l emacs/sekka-jisyo.el -l emacs/sekka-symspell.el --eval ':*)",
+      "Bash(emacs:*)",
+      "Bash(ls:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }

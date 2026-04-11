@@ -179,7 +179,7 @@
 (defvar sekka-cand-cur-backup 0)        ; カレント候補番号(UNDO用に退避する変数)
 (defvar sekka-cand-len nil)             ; 候補数
 (defvar sekka-last-fix "")              ; 最後に確定した文字列
-(defvar sekka-last-roman "")            ; 最後にsekka-serverにリクエストしたローマ字文字列
+(defvar sekka-last-roman "")            ; 最後に変換リクエストしたローマ字文字列
 (defvar sekka-select-operation-times 0) ; 選択操作回数
 (defvar sekka-henkan-kouho-list nil)    ; 変換結果リスト
 
