@@ -1,5 +1,18 @@
 # Sekkaの変更履歴
 
+## version 2.0.0 (2026年04月11日)
+- **Pure Emacs Lisp化**: サーバー(nendo/Java)を廃止し、Emacs Lispのみで動作するスタンドアロンIMEに刷新した。
+- `package-install` だけでインストール可能になった。サーバーの起動・管理は不要。
+- 曖昧検索アルゴリズムをJaro-Winkler + DistributedTrieからSymSpell (hash-tableベース)に変更した。
+- 辞書をEmacs内のhash-tableに読み込む方式に変更した。
+- ユーザー辞書(~/.sekka-jisyo)の学習・永続化をファイルベースで実装した。
+- MELPA配布用に辞書の自動ダウンロード機能を追加した。
+- SymSpellインデックス構築をidle timerでインクリメンタル化し、UIフリーズを解消した。
+- ERTテスト267件を実装した。
+- 旧サーバーコード(lib/sekka/, bin/, test/, tool/等)を削除した。
+- ドキュメントをpure Elisp版に合わせて更新した。
+
+
 ## version 1.8.0 (2017年08月03日)
 - sekka-serverを１つのjarファイルにまとめた。(warblerを利用)
 - sekka-serverが辞書のダウンロード処理をpure Rubyで実装し、curlを不要とした。
