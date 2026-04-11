@@ -59,7 +59,7 @@
 コメント行やパース不能な行は nil."
   (when (and (> (length line) 0)
              (not (= (aref line 0) ?\;)))
-    (let ((space-pos (string-search " " line)))
+    (let ((space-pos (string-match " " line)))
       (when space-pos
         (cons (substring line 0 space-pos)
               (substring line (1+ space-pos)))))))
