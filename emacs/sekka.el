@@ -306,11 +306,12 @@
 	      'japanese-jisx0208
 	    result)))
     (defun sekka-char-charset (ch)
-      (sekka-debug-print (format "sekka-char-charset:2(%s) => %s\n" ch (char-category)))
-      (cond ((equal (char-category ch) "a") 'ascii)
-	    ((equal (char-category ch) "k") 'katakana-jisx0201)
-	    ((string-match "[SAHK]j" (char-category ch)) 'japanese-jisx0208)
-	    (t nil) )) ))
+      (let ((cat (category-set-mnemonics (char-category-set ch))))
+	(sekka-debug-print (format "sekka-char-charset:2(%s) => %s\n" ch cat))
+	(cond ((string-match "a" cat) 'ascii)
+	      ((string-match "k" cat) 'katakana-jisx0201)
+	      ((string-match "[SAHK]j" cat) 'japanese-jisx0208)
+	      (t nil)))) ))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -391,11 +392,11 @@
 
 	(let* (
 	       (start       (point-marker))
-	       (_cur        sekka-cand-cur)
-	       (_len        sekka-cand-len))
+	       (cur        sekka-cand-cur)
+	       (len        sekka-cand-len))
 	  (progn
 	    (insert insert-word)
-	    (message (format "[%s] candidate (%d/%d)" insert-word (+ _cur 1) _len))
+	    (message (format "[%s] candidate (%d/%d)" insert-word (+ cur 1) len))
 	    (let* ((end         (point-marker))
 		   (ov          (make-overlay start end)))
 
@@ -481,7 +482,7 @@
 		"   ; "
 		(nth sekka-annotation-index x)))
 	     sekka-henkan-kouho-list))
-	   (map (make-sparse-keymap))
+	   (_map (make-sparse-keymap))
 	   (result
 	    (popup-menu* lst
 			 :scroll-bar t
@@ -497,8 +498,8 @@
   (setq sekka-select-operation-times 0))
 
 ;; 変換を確定し入力されたキーを再入力する関数
-(defun sekka-kakutei-and-self-insert (arg)
-  "候補選択を確定し、入力された文字を入力する"
+(defun sekka-kakutei-and-self-insert (_arg)
+  "候補選択を確定し、入力された文字を入力する."
   (interactive "P")
   (sekka-select-kakutei)
   (setq unread-command-events (list last-command-event)))
@@ -571,24 +572,20 @@
 ;; 指定された tango のindex番号を返す
 (defun sekka-find-by-tango ( tango )
   (let ((result-index nil))
-    (mapcar
-     (lambda (x)
-       (let ((_tango (nth sekka-tango-index x)))
-	 (when (string-equal _tango tango)
-	   (setq result-index (nth sekka-id-index x)))))
-     sekka-henkan-kouho-list)
+    (dolist (x sekka-henkan-kouho-list)
+      (let ((tango-val (nth sekka-tango-index x)))
+	(when (string-equal tango-val tango)
+	  (setq result-index (nth sekka-id-index x)))))
     (sekka-debug-print (format "sekka-find-by-tango: tango=%s result=%S \n" tango result-index))
     result-index))
 
 ;; 指定された type の候補を抜き出す
-(defun sekka-select-by-type-filter ( _type )
+(defun sekka-select-by-type-filter (type)
   (let ((lst '()))
-    (mapcar
-     (lambda (x)
-       (let ((sym (nth sekka-kind-index x)))
-	 (when (eq sym _type)
-	   (push x lst))))
-     sekka-henkan-kouho-list)
+    (dolist (x sekka-henkan-kouho-list)
+      (let ((sym (nth sekka-kind-index x)))
+	(when (eq sym type)
+	  (push x lst))))
     (sekka-debug-print (format "filtered-lst = %S\n" (reverse lst)))
     (if (null lst)
 	nil
@@ -596,27 +593,27 @@
 
 
 ;; 指定された type の候補が存在するか調べる
-(defun sekka-include-typep ( _type )
-  (sekka-select-by-type-filter _type))
+(defun sekka-include-typep (type)
+  (sekka-select-by-type-filter type))
 
 ;; 指定された type の候補に強制的に切りかえる
 ;; 切りかえが成功したかどうかを t or nil で返す。
-(defun sekka-select-by-type ( _type )
-  (let ((kouho (car (sekka-select-by-type-filter _type))))
+(defun sekka-select-by-type (type)
+  (let ((kouho (car (sekka-select-by-type-filter type))))
     (if (not kouho)
 	(progn
 	 (cond
-	  ((eq _type 'j)
+	  ((eq type 'j)
 	   (message "Sekka: 漢字の候補はありません。"))
-	  ((eq _type 'h)
+	  ((eq type 'h)
 	   (message "Sekka: ひらがなの候補はありません。"))
-	  ((eq _type 'k)
+	  ((eq type 'k)
 	   (message "Sekka: カタカナの候補はありません。"))
-	  ((eq _type 'l)
+	  ((eq type 'l)
 	   (message "Sekka: 半角の候補はありません。"))
-	  ((eq _type 'z)
+	  ((eq type 'z)
 	   (message "Sekka: 全角の候補はありません。"))
-	  ((eq _type 'n)
+	  ((eq type 'n)
 	   (message "Sekka: 数字混在の候補はありません．")))
 	 nil)
       (let ((num   (nth sekka-id-index kouho)))
@@ -746,81 +743,75 @@
   (sekka-debug-print (format "sekka-history-gc before len=%d\n" (length sekka-history-stack)))
 
   (let ((temp-list '()))
-    (mapcar
-     (lambda (alist)
-       (let ((markers  (sekka-assoc-ref 'markers  alist nil)))
-	 (sekka-debug-print (format "markers=%S\n" markers))
-	 (sekka-debug-print (format "marker-position car=%S\n" (marker-position (car markers))))
-	 (sekka-debug-print (format "marker-position cdr=%S\n" (marker-position (cdr markers))))
-	 (when (and (marker-position (car markers))
-		    (marker-position (cdr markers)))
-	   (if (= (marker-position (car markers))
-		  (marker-position (cdr markers)))
-	       (progn
-		 (set-marker (car markers) nil)
-		 (set-marker (cdr markers) nil))
-	     (push alist temp-list)))))
-     sekka-history-stack)
+    (dolist (alist sekka-history-stack)
+      (let ((markers  (sekka-assoc-ref 'markers  alist nil)))
+	(sekka-debug-print (format "markers=%S\n" markers))
+	(sekka-debug-print (format "marker-position car=%S\n" (marker-position (car markers))))
+	(sekka-debug-print (format "marker-position cdr=%S\n" (marker-position (cdr markers))))
+	(when (and (marker-position (car markers))
+		   (marker-position (cdr markers)))
+	  (if (= (marker-position (car markers))
+		 (marker-position (cdr markers)))
+	      (progn
+		(set-marker (car markers) nil)
+		(set-marker (cdr markers) nil))
+	    (push alist temp-list)))))
 
     (sekka-debug-print (format "sekka-history-gc temp-list  len=%d\n" (length temp-list)))
 
     ;; temp-list から limit 件数だけコピーする
     (setq sekka-history-stack '())
-    (mapcar
-     (lambda (alist)
-       (when (< (length sekka-history-stack)
-		sekka-history-stack-limit)
-	 (push alist sekka-history-stack)))
-     (reverse temp-list)))
+    (dolist (alist (reverse temp-list))
+      (when (< (length sekka-history-stack)
+	       sekka-history-stack-limit)
+	(push alist sekka-history-stack))))
   (sekka-debug-print (format "sekka-history-gc after  len=%d\n" (length sekka-history-stack))))
 
 
 ;;確定ヒストリから、指定_pointに変換済の単語が埋まっているかどうか調べる
 ;; t か nil を返す。
 ;; また、_load に 真を渡すと、見付かった情報で、現在の変換候補変数にロードしてくれる。
-(defun sekka-history-search (_point _load)
+(defun sekka-history-search (_point load-p)
   (sekka-history-gc)
 
   ;; カーソル位置に有効な変換済エントリがあるか探す
   (let ((found nil))
-    (mapcar
-     (lambda (alist)
-       (let* ((markers  (sekka-assoc-ref 'markers  alist nil))
-	      (last-fix (sekka-assoc-ref 'last-fix alist ""))
-	      (end      (marker-position (cdr markers)))
-	      (start    (- end (length last-fix)))
-	      (bufname  (sekka-assoc-ref 'bufname alist ""))
-	      (pickup   (if (string-equal bufname (buffer-name))
-			    (buffer-substring start end)
-			  "")))
-	 (sekka-debug-print (format "sekka-history-search  bufname:   [%s]\n"   bufname))
-	 (sekka-debug-print (format "sekka-history-search  (point):   %d\n"     (point)))
-	 (sekka-debug-print (format "sekka-history-search    range:   %d-%d\n"  start end))
-	 (sekka-debug-print (format "sekka-history-search last-fix:   [%s]\n"   last-fix))
-	 (sekka-debug-print (format "sekka-history-search   pickup:   [%s]\n"   pickup))
-	 (when (and
-		(string-equal bufname (buffer-name))
-		(<  start   (point))
-		(<= (point) end)
-		(string-equal last-fix pickup))
-	   (setq found t)
-	   (when _load
-	     (setq sekka-markers            (cons
-					     (move-marker (car markers) start)
-					     (cdr markers)))
-	     (setq sekka-cand-cur           (sekka-assoc-ref 'cand-cur alist           nil))
-	     (setq sekka-cand-cur-backup    (sekka-assoc-ref 'cand-cur-backup alist    nil))
-	     (setq sekka-cand-len           (sekka-assoc-ref 'cand-len alist           nil))
-	     (setq sekka-last-fix           pickup)
-	     (setq sekka-henkan-kouho-list  (sekka-assoc-ref 'henkan-kouho-list alist  nil))
+    (dolist (alist sekka-history-stack)
+      (let* ((markers  (sekka-assoc-ref 'markers  alist nil))
+	     (last-fix (sekka-assoc-ref 'last-fix alist ""))
+	     (end      (marker-position (cdr markers)))
+	     (start    (- end (length last-fix)))
+	     (bufname  (sekka-assoc-ref 'bufname alist ""))
+	     (pickup   (if (string-equal bufname (buffer-name))
+			   (buffer-substring start end)
+			 "")))
+	(sekka-debug-print (format "sekka-history-search  bufname:   [%s]\n"   bufname))
+	(sekka-debug-print (format "sekka-history-search  (point):   %d\n"     (point)))
+	(sekka-debug-print (format "sekka-history-search    range:   %d-%d\n"  start end))
+	(sekka-debug-print (format "sekka-history-search last-fix:   [%s]\n"   last-fix))
+	(sekka-debug-print (format "sekka-history-search   pickup:   [%s]\n"   pickup))
+	(when (and
+	       (string-equal bufname (buffer-name))
+	       (<  start   (point))
+	       (<= (point) end)
+	       (string-equal last-fix pickup))
+	  (setq found t)
+	  (when load-p
+	    (setq sekka-markers            (cons
+					    (move-marker (car markers) start)
+					    (cdr markers)))
+	    (setq sekka-cand-cur           (sekka-assoc-ref 'cand-cur alist           nil))
+	    (setq sekka-cand-cur-backup    (sekka-assoc-ref 'cand-cur-backup alist    nil))
+	    (setq sekka-cand-len           (sekka-assoc-ref 'cand-len alist           nil))
+	    (setq sekka-last-fix           pickup)
+	    (setq sekka-henkan-kouho-list  (sekka-assoc-ref 'henkan-kouho-list alist  nil))
 
-	     (sekka-debug-print (format "sekka-history-search : sekka-markers         : %S\n" sekka-markers))
-	     (sekka-debug-print (format "sekka-history-search : sekka-cand-cur        : %S\n" sekka-cand-cur))
-	     (sekka-debug-print (format "sekka-history-search : sekka-cand-cur-backup : %S\n" sekka-cand-cur-backup))
-	     (sekka-debug-print (format "sekka-history-search : sekka-cand-len %S\n" sekka-cand-len))
-	     (sekka-debug-print (format "sekka-history-search : sekka-last-fix %S\n" sekka-last-fix))
-	     (sekka-debug-print (format "sekka-history-search : sekka-henkan-kouho-list %S\n" sekka-henkan-kouho-list))))))
-     sekka-history-stack)
+	    (sekka-debug-print (format "sekka-history-search : sekka-markers         : %S\n" sekka-markers))
+	    (sekka-debug-print (format "sekka-history-search : sekka-cand-cur        : %S\n" sekka-cand-cur))
+	    (sekka-debug-print (format "sekka-history-search : sekka-cand-cur-backup : %S\n" sekka-cand-cur-backup))
+	    (sekka-debug-print (format "sekka-history-search : sekka-cand-len %S\n" sekka-cand-len))
+	    (sekka-debug-print (format "sekka-history-search : sekka-last-fix %S\n" sekka-last-fix))
+	    (sekka-debug-print (format "sekka-history-search : sekka-henkan-kouho-list %S\n" sekka-henkan-kouho-list))))))
     found))
 
 (defun sekka-history-push ()
@@ -997,13 +988,13 @@
 	    (backward-paragraph)
 	    (when (< 1 (point))
 	      (forward-line 1))
-	    (goto-char (point-at-bol))
+	    (goto-char (line-beginning-position))
 	    (let (
 		  (start-point (point)))
 	      (setq limit-point
 		    (+
 		     start-point
-		     (skip-chars-forward (concat "\t " sekka-stop-chars) (point-at-eol))))))
+		     (skip-chars-forward (concat "\t " sekka-stop-chars) (line-end-position))))))
 
 	  ;; パラグラフ位置でストップする
 	  (if (< (+ (point) result) limit-point)
@@ -1015,13 +1006,13 @@
       ;; auto-fill-modeが無効の時
       (progn
 	(save-excursion
-	  (goto-char (point-at-bol))
+	  (goto-char (line-beginning-position))
 	  (let (
 		(start-point (point)))
 	    (setq limit-point
 		  (+
 		   start-point
-		   (skip-chars-forward (concat "\t " sekka-stop-chars) (point-at-eol))))))
+		   (skip-chars-forward (concat "\t " sekka-stop-chars) (line-end-position))))))
 
 	(if (< (+ (point) result) limit-point)
 	    ;; インデント位置でストップする。
@@ -1034,26 +1025,26 @@
 (defun sekka-sticky-shift-init-function ()
   ;; sticky-shift
   (define-key global-map sekka-sticky-key sekka-sticky-map)
-  (mapcar (lambda (pair)
-	    (define-key sekka-sticky-map (car pair)
-	      `(lambda()(interactive)
-		 (if ,(< 0 (length (cdr pair)))
-		     (setq unread-command-events
-			   (cons ,(string-to-char (cdr pair)) unread-command-events))
-		   nil))))
-	  sekka-sticky-list)
-  (define-key sekka-sticky-map sekka-sticky-key '(lambda ()(interactive)(insert sekka-sticky-key))))
+  (mapc (lambda (pair)
+	  (define-key sekka-sticky-map (car pair)
+	    `(lambda()(interactive)
+	       (if ,(< 0 (length (cdr pair)))
+		   (setq unread-command-events
+			 (cons ,(string-to-char (cdr pair)) unread-command-events))
+		 nil))))
+	sekka-sticky-list)
+  (define-key sekka-sticky-map sekka-sticky-key #'(lambda ()(interactive)(insert sekka-sticky-key))))
 
 
 (defun sekka-insert-space (times)
   (if (null times)
       (insert " ")
-    (dotimes(i times)
+    (dotimes (_i times)
       (insert " "))))
 
 (defun sekka-spacekey-init-function ()
   (define-key global-map (kbd "SPC")
-    '(lambda (&optional arg)(interactive "P")
+    #'(lambda (&optional arg)(interactive "P")
        (cond ((and (< 0 sekka-timer-rest)
 		   sekka-kakutei-with-spacekey)
 	      (cond
@@ -1072,7 +1063,7 @@
 
 (defun sekka-muhenkan-key-init-function ()
   (define-key global-map sekka-muhenkan-key
-    '(lambda (&optional arg)(interactive "P")
+    #'(lambda (&optional _arg)(interactive "P")
        (if (< 0 sekka-timer-rest)
 	   ;; qキーで無変換+スペースを入力する
 	   (cond
@@ -1099,7 +1090,7 @@ sekka-modeがONの間中呼び出される可能性がある。"
     (setq sekka-timer-rest (- sekka-timer-rest 1))
 
     ;; カーソルがsekka-realtime-guide-limit-lines をはみ出していないかチェック
-    (sekka-debug-print (format "sekka-last-lineno [%d] : current-line\n" sekka-last-lineno (line-number-at-pos (point))))
+    (sekka-debug-print (format "sekka-last-lineno [%d] : current-line [%d]\n" sekka-last-lineno (line-number-at-pos (point))))
     (when (< 0 sekka-realtime-guide-limit-lines)
       (let ((diff-lines (abs (- (line-number-at-pos (point)) sekka-last-lineno))))
 	(when (<= sekka-realtime-guide-limit-lines diff-lines)
@@ -1231,8 +1222,9 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
 
 
 ;; 全バッファで sekka-input-mode を変更する
+(defvar inactivate-current-input-method-function)
 (defun sekka-input-mode (&optional arg)
-  "入力モード変更"
+  "入力モード変更."
   (interactive "P")
   (if (< 0 arg)
       (progn
@@ -1243,9 +1235,11 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
 
 
 ;; input method 対応
-(defun sekka-activate (&rest arg)
+(defun sekka-activate (&rest _arg)
+  "Sekka入力メソッドを有効にする."
   (sekka-input-mode 1))
-(defun sekka-inactivate (&rest arg)
+(defun sekka-inactivate (&rest _arg)
+  "Sekka入力メソッドを無効にする."
   (sekka-input-mode -1))
 (register-input-method
  "japanese-sekka" "Japanese" 'sekka-activate
@@ -1259,8 +1253,8 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
 (defconst sekka-version
   "2.0.0" ;;SEKKA-VERSION
   )
-(defun sekka-version (&optional arg)
-  "バージョン番号を表示する"
+(defun sekka-version (&optional _arg)
+  "バージョン番号を表示する."
   (interactive "P")
   (message sekka-version))
 
