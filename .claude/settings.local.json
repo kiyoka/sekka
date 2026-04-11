@@ -17,7 +17,13 @@
       "Bash(emacs --batch -L emacs/ -l emacs/sekka-henkan.el -l emacs/sekka-jisyo.el -l emacs/sekka-symspell.el --eval ':*)",
       "Bash(emacs:*)",
       "Bash(ls:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git tag:*)",
+      "Bash(gh api:*)",
+      "Bash(git rm:*)",
+      "Bash(git push:*)",
+      "Bash(gh pr:*)",
+      "Bash(make recipes/sekka)"
     ],
     "deny": []
   }
