@@ -22,7 +22,7 @@
 Emacsのモードラインに「Sekka」という文字が表示されているか確認してください。
 以下のようなイメージです。
 ![](img/sekka.modeline.png)
-もし、表示されていないようでしたら、[Sekka.Setup](Sekka.Setup.md)(セットアップ手順)を確認してください。
+もし、表示されていないようでしたら、.emacsの設定を確認してください。
 
 
 # 基本操作
@@ -158,8 +158,8 @@ C言語、C++言語のコメントに日本語を入力されるかたは、c-mo
 
 # キーマップ一覧
 ## 初期状態
-[Ctrl-J]     ローマ字をsekka-serverに送信して第一候補で確定する。
-[SPACE]      ローマ字をsekka-serverに送信して第一候補で確定する。(但し、リアルタイム表示中のみ)
+[Ctrl-J]     ローマ字を変換して第一候補で確定する。
+[SPACE]      ローマ字を変換して第一候補で確定する。(但し、リアルタイム表示中のみ)
 [Esc-J]      ローマ字の先頭1文字の大文字・小文字をトグルする。
 `;`            sticky-shiftのShift状態に移行する。
 [Ctrl-G]     リアルタイム表示をストップする
@@ -224,16 +224,15 @@ M-x customize-group [return]
 # ユーザー登録語彙について
 
 ## 登録操作について
-sekka.elではユーザー定義語彙を自分で入力する手間を省くために、GoogleImeAPIで取得した変換候補から選択するだけで良いようになっています。
-もし、その候補に期待したものが無ければ、初めて自分で入力することになります。
-期待したものが無ければメニューから「(自分で入力する)」を選んで対話的に入力するか、後述の ~/.sekka-jisyoを直接編集する方法のどちらかになります。
-![](img/sekka.newword_selection.png)
+候補選択モードで [Ctrl-R] を押すと、ユーザー定義語彙の登録を開始します。
+メニューから候補を選択するか、「(自分で入力する)」を選んで対話的に入力できます。
+後述の ~/.sekka-jisyo を直接編集する方法もあります。
 
 
 ## ~/.sekka-jisyoを直接編集する場合
 ~/.sekka-jisyo というファイルにユーザー語彙を記述してください。
-このファイルの内容がEmacsからの初回変換時にsekka-serverにそのまま送信されます。
-「M-x sekka-register-userdict 」で いますぐ ~/.sekka-jisyo をサーバーに送信することもできます。
+このファイルの内容はSekka起動時に自動的に読み込まれ、メイン辞書より優先して参照されます。
+確定時や単語登録時にも自動的にこのファイルに保存されます。
 
 .sekka-jisyoのフォーマットは、SKKと互換です。つまり SKK-JISYO.L や ~/.skk-jisyo と互換性があります。(但し、utf-8でないといけません)
 DDSKKから移行される際は、.skk-jisyo をコピーしてください。
@@ -255,54 +254,16 @@ cp .skk-jisyo .sekka-jisyo
 
 
 ## ユーザー語彙選定のコツ
-未知語を登録するだけでなく、よく使う複合語(長い単語)を登録しておくと、曖昧検索機能の恩恵を受けることができます。
-例えば、以下の例のように途中しか入力しなくても長い語彙が出てきてくれたり、ミスタイプを救済してくれることが多くなり便利です。
-
-Aimaimojiretu[Ctrl-J]
-  ↓第一候補が絞りこまれる
-曖昧文字列マッチング
-
-Aimaimijoretumacching
-  ↓かなりミスタイプがあっても許容してくれる
-曖昧文字列マッチング
-
-Tesutosui
-  ↓第一候補が絞りこまれる
-テストスイート
+未知語を登録するだけでなく、よく使う複合語(長い単語)を登録しておくと便利です。
+ローマ字表記の揺れ(nとnnの混在など)は曖昧検索で救済されます。
 
 
-平仮名フレーズでよく使うフレーズをあらかじめ登録しておくとミスタイプを救済してくれるます。
-平仮名フレーズエントリは、変換対応を「//」で指定します。
+## ~/.sekka-jisyoを共有する
+.sekka-jisyoファイルをDropboxやiCloud等のクラウドストレージに移動し、変数 `sekka-user-jisyo-file` にそのパスを設定すれば、複数のEmacsで辞書を共有できます。
+
+```lisp
+(setq sekka-user-jisyo-file "~/Dropbox/.sekka-jisyo")
 ```
-なっています //
-```
-
-nateimasu
-  ↓本来「なています」というミスになるが、知っている正しい平仮名フレーズを優先して候補に出してくれる。
-なっています
-
-
-## ~/.sekka-jisyoをDropboxで共有する
-Dropboxを使えば、ユーザ辞書を複数のEmacsで共有できます。
-※ Dropboxのアカウントは以下のサイトで取得してください。
- [Dropbox - 安全なバックアップ、同期、および共有を簡単に。](http://www.dropbox.com/)
-
-.sekka-jisyoファイルをDropboxのディレクトリに移動し、カスタマイズ変数 sekka-jisyo-filename 以下のようにを設定します。
- ![](img/sekka.jisyo-dropbox.png)
-
-
-# 複数のsekka-serverの自動切替
-Sekka 0.9.3からsekka.elに３つののsekka-serverを登録できるようになりました。
-以下の図の様に、サーバがダウンしている時はsekka.elが別のサーバに自動切替します。
-
-以下の３つのカスタマイズ変数にURLを設定すると準備完了です。接続優先順に記載しています。
-- sekka-server-url
-- sekka-server-url-2
-- sekka-server-url-3
-
-![](https://cacoo.com/diagrams/4zcFvWwVNKadRtI2-6912B.png)
-
-![](https://cacoo.com/diagrams/4zcFvWwVNKadRtI2-3892E.png)
 
 
 [以上]

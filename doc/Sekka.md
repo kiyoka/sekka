@@ -12,15 +12,15 @@ Sekkaには日本語入力モードという概念がありません。Emacsの�
 
 ## ミスタイプ許容
 ローマ字表記の揺れ(siとshi、nとnnなどの混在)や少々のローマ字のミスタイプは曖昧辞書検索によって救済されます。
+
 ```text
- Kanji    => "漢字"            Kannj    => "漢字"
- Funiki   => "雰囲気"          fuinki   => "雰囲気"
- Shizegegosor => "自然言語処理"
+ Kanji    => "漢字"            Kannji   => "漢字"
+ henkan   => "へんかん/変換"    hennkan  => "へんかん/変換"
 ```
 
 ## DDSKKと共存可能
 - SekkaとDDSKKの両方インストールしても競合しないので、徐々にSekkaに慣れることができます。
-- Sekkaが有効になった状態でも、[Ctrl-X][Ctrl-J] で従来通りDDSKKが有効になります。
+- Sekkaが有効になった状態でも、`[Ctrl-X][Ctrl-J]` で従来通りDDSKKが有効になります。
 
 # 動画
 - Sekkaの日本語入力風景です。
@@ -31,19 +31,14 @@ Sekkaには日本語入力モードという概念がありません。Emacsの�
 
 
 # ソースコード
-開発言語には[Nendo](https://github.com/kiyoka/nendo)とRubyが使われています。
+Emacs Lispで実装されています。
 [kiyoka/sekka - GitHub](http://github.com/kiyoka/sekka)
 
 
 # ドキュメント
-- [Sekka.Setup](Sekka.Setup.md)
-- [Sekka.VersionUp](Sekka.VersionUp.md)
 - [Sekka.Emacs](Sekka.Emacs.md)
 - [Sekka.FAQ](Sekka.FAQ.md)
-- [Sekka.Dictionary](Sekka.Dictionary.md)
-- [Sekka.WebAPI](Sekka.WebAPI.md)
-- [Sekka.Benchmark](Sekka.Benchmark.md)
-- [Sekka.ReleaseNote](Sekka.ReleaseNote.md)
+- [History.md](History.md)
 
 # スライド
 ![](img/InputMethodNomikai2010_Sekka.page1.png)
