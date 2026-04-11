@@ -1,11 +1,11 @@
-;;; sekka.el --- A client for Sekka IME server
+;;; sekka.el --- Pure Elisp Japanese IME inspired by SKK  -*- lexical-binding: t; -*-
 ;;
-;; Copyright (C) 2010-2014 Kiyoka Nishiyama
+;; Copyright (C) 2010-2024 Kiyoka Nishiyama
 ;;
 ;; Author: Kiyoka Nishiyama <kiyoka@sumibi.org>
-;; Version: 1.8.0          ;;SEKKA-VERSION
-;; Keywords: ime, skk, japanese
-;; Package-Requires: ((cl-lib "0.3") (concurrent "0.3.1") (popup "0.5.2"))
+;; Version: 2.0.0
+;; Keywords: i18n
+;; Package-Requires: ((emacs "25.1") (popup "0.5.2"))
 ;; URL: https://github.com/kiyoka/sekka
 ;;
 ;; This file is part of Sekka
@@ -28,7 +28,7 @@
 ;;; Commentary:
 
 ;; Sekka is yet another Japanese Input Method inspired by SKK.
-;; sekka.el is a client for Sekka IME server.
+;; Pure Emacs Lisp implementation -- no server required.
 ;; [https://github.com/kiyoka/sekka]
 ;;
 ;; you might want to enable IME:
@@ -43,12 +43,11 @@
 ;;
 
 ;;; Code:
-(require 'cl)
+(require 'cl-lib)
 (require 'popup)
-(require 'url-parse)
-(require 'concurrent)
+(require 'sekka-henkan)
 
-;;; 
+;;;
 ;;;
 ;;; customize variables
 ;;;
@@ -57,43 +56,8 @@
   :group 'input-method
   :group 'Japanese)
 
-(defcustom sekka-server-url "http://127.0.0.1:12929/"
-  "SekkaサーバーのURLを指定する。"
-  :type  'string
-  :group 'sekka)
-
-(defcustom sekka-server-url-2 ""
-  "SekkaサーバーのURLを指定する。"
-  :type  'string
-  :group 'sekka)
-
-(defcustom sekka-server-url-3 ""
-  "SekkaサーバーのURLを指定する。"
-  :type  'string
-  :group 'sekka)
-
-(defcustom sekka-server-timeout 10
-  "Sekkaサーバーと通信する時のタイムアウトを指定する。(秒数)"
-  :type  'integer
-  :group 'sekka)
- 
 (defcustom sekka-stop-chars "(){}<> "
   "*漢字変換文字列を取り込む時に変換範囲に含めない文字を設定する"
-  :type  'string
-  :group 'sekka)
-
-(defcustom sekka-use-curl t
-  "non-nil でcurlコマンドを優先して使う。nilで変換動作だけEmacs Lisp(url.el)を使う"
-  :type  'boolean
-  :group 'sekka)
-
-(defcustom sekka-curl "curl"
-  "curlコマンドの絶対パスを設定する"
-  :type  'string
-  :group 'sekka)
-
-(defcustom sekka-no-proxy-hosts ""
-  "http proxyを使わないホスト名を指定する。複数指定する場合は、コンマで区切る。"
   :type  'string
   :group 'sekka)
 
@@ -129,17 +93,6 @@
 		 (const :tag "english(us)-keyboard" "en"))
   :group 'sekka)
 
-(defcustom sekka-jisyo-filename "~/.sekka-jisyo"
-  "sekka-jisyoのファイル名を指定する"
-  :type  'string
-  :group 'sekka)
-
-(defcustom sekka-use-googleime t
-  "変換結果に、漢字のエントリ type=j が含まれていなかったら、自動的にGoogleIMEを APIを使って変換候補を取得する。
-non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
-  :type  'boolean
-  :group 'sekka)
-
 (defcustom sekka-kakutei-with-spacekey nil
   "*Non-nil であれば、リアルタイムガイド表示中のSPACEキーでの確定動作を有効にする"
   :type  'boolean
@@ -156,20 +109,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 (defvar sekka-sticky-shift nil     "*Non-nil であれば、Sticky-Shiftを有効にする")
 (defvar sekka-mode nil             "漢字変換トグル変数")
 (defun sekka-modeline-string ()
-  ;; 接続先sekka-serverのホスト名を表示する。
-  (format " Sekka[%s%s%s]"
-	  (if current-sekka-server-url
-	      (url-host
-	       (url-generic-parse-url current-sekka-server-url))
-	    "")
-          (if current-sekka-server-url
-              (format ":%d"
-                      (url-port
-                       (url-generic-parse-url current-sekka-server-url)))
-            "")
-	  (if sekka-uploading-flag
-	      "(UPLOADING)"
-	    "")))
+  " Sekka")
 (defvar sekka-select-mode nil      "候補選択モード変数")
 (or (assq 'sekka-mode minor-mode-alist)
     (setq minor-mode-alist (cons
@@ -198,15 +138,13 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 (defvar sekka-select-mode-hook nil)
 (defvar sekka-select-mode-end-hook nil)
 
+
 (defconst sekka-login-name   (user-login-name))
 
 (defconst sekka-tango-index  0)
 (defconst sekka-annotation-index  1)
 (defconst sekka-kind-index   3)
 (defconst sekka-id-index     4)
-
-;;--- デバッグメッセージ出力
-(defvar sekka-psudo-server nil)         ; クライアント単体で仮想的にサーバーに接続しているようにしてテストするモード
 
 ;;--- デバッグメッセージ出力
 (defvar sekka-debug nil)		; デバッグフラグ
@@ -217,15 +155,6 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	(with-current-buffer buffer
 	  (goto-char (point-max))
 	  (insert string)))))
-
-;; HTTPクライアントの多重起動防止用
-(defvar sekka-busy 0)
-
-;;; 現在のsekka-serverの接続先
-(defvar current-sekka-server-url     nil)
-
-;;; 辞書のアップロード中かどうか
-(defvar sekka-uploading-flag         nil)
 
 
 ;;; 候補選択モード用
@@ -252,7 +181,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 (defvar sekka-last-fix "")              ; 最後に確定した文字列
 (defvar sekka-last-roman "")            ; 最後にsekka-serverにリクエストしたローマ字文字列
 (defvar sekka-select-operation-times 0) ; 選択操作回数
-(defvar sekka-henkan-kouho-list nil)    ; 変換結果リスト(サーバから帰ってきたデータそのもの)
+(defvar sekka-henkan-kouho-list nil)    ; 変換結果リスト
 
 
 ;; その他
@@ -261,17 +190,16 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 (defvar sekka-timer-rest  0)            ; あと何回呼出されたら、インターバルタイマの呼出を止めるか
 (defvar sekka-last-lineno 0)            ; 最後に変換を実行した行番号
 (defvar sekka-guide-overlay   nil)      ; リアルタイムガイドに使用するオーバーレイ
-(defvar sekka-last-request-time 0)      ; Sekkaサーバーにリクエストした最後の時刻(単位は秒)
-(defvar sekka-guide-lastquery  "")      ; Sekkaサーバーにリクエストした最後のクエリ文字列
-(defvar sekka-guide-lastresult '())     ; Sekkaサーバーにリクエストした最後のクエリ結果
+(defvar sekka-guide-lastquery  "")      ; 最後のクエリ文字列
+(defvar sekka-guide-lastresult '())     ; 最後のクエリ結果
 
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Skicky-shift
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar sticky-key ";")
-(defvar sticky-list
+(defvar sekka-sticky-key ";")
+(defvar sekka-sticky-list
   '(("a" . "A")("b" . "B")("c" . "C")("d" . "D")("e" . "E")("f" . "F")("g" . "G")
     ("h" . "H")("i" . "I")("j" . "J")("k" . "K")("l" . "L")("m" . "M")("n" . "N")
     ("o" . "O")("p" . "P")("q" . "Q")("r" . "R")("s" . "S")("t" . "T")("u" . "U")
@@ -280,9 +208,8 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
     ("8" . "(")("9" . ")")
     ("`" . "@")("[" . "{")("]" . "}")("-" . "=")("^" . "~")("\\" . "|")("." . ">")
     ("/" . "?")(";" . ";")(":" . "*")("@" . "`")
-    ("\C-h" . "")
-    ))
-(defvar sticky-map (make-sparse-keymap))
+    ("\C-h" . "")))
+(defvar sekka-sticky-map (make-sparse-keymap))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -293,6 +220,10 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
     (if entry
 	(cdr entry)
       fallback)))
+
+(defun sekka--roman-method-keyword ()
+  "sekka-roman-method の文字列をキーワードシンボルに変換する."
+  (intern (concat ":" sekka-roman-method)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -309,250 +240,14 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 ;;
 (defun sekka-init ()
   (when (not sekka-init)
-    ;; 現在のsekka-serverの接続先
-    (setq current-sekka-server-url  sekka-server-url) ;; 第一候補で初期化しておく。
-
-    ;; ユーザー語彙のロード + サーバーへの登録
-    (sekka-register-userdict-internal)
-    
+    ;; 辞書の読み込み (SymSpellインデックスも同時に構築される)
+    (sekka-jisyo-init)
     ;; 初期化完了
     (setq sekka-init t)))
 
 
-(defun sekka-construct-curl-argstr (arg-alist)
-  (apply
-   'append
-   (mapcar
-    (lambda (x)
-      (list "--data" (format "%s=%s"
-			     (car x)
-			     (if (stringp (cdr x))
-				 (url-hexify-string (cdr x))
-			       (cdr x)))))
-    arg-alist)))
-
-;; test-code
-(when nil
-  (sekka-construct-curl-argstr
-   '(
-     ("yomi"   .  "kanji")
-     ("limit"  .  2)
-     ("method" .  "normal")
-     ))
-  )
-
-
 ;;
-;; 接続先を次候補のsekka-serverに切りかえる
-;;
-(defun sekka-next-sekka-server ()
-  (defun sekka-next-sekka-server-message(str varname)
-    (message (format "If you have %s sekka-server, please set the `%s' variable." str varname))
-    (sit-for 5))
-
-  (cond
-   ((string-equal current-sekka-server-url
-		  sekka-server-url)
-    (if (< 0 (length sekka-server-url-2))
-	(setq current-sekka-server-url sekka-server-url-2)
-      (sekka-next-sekka-server-message "second" "sekka-server-url-2")))
-   ((string-equal current-sekka-server-url
-		  sekka-server-url-2)
-    (if (< 0 (length sekka-server-url-3))
-	(setq current-sekka-server-url sekka-server-url-3)
-      (setq current-sekka-server-url sekka-server-url)))
-   (t
-    (when (< 0 (length sekka-server-url))
-      (setq current-sekka-server-url sekka-server-url)))))
-
-
-;;
-;; ローマ字で書かれた文章をSekkaサーバーを使って変換する
-;;
-;; arg-alistの引数の形式
-;;  例:
-;;   '(
-;;     ("yomi"   .  "kanji")
-;;     ("limit"  .  2)
-;;     ("method" .  "normal")
-;;    )
-(defun sekka-rest-request (func-name arg-alist)
-  (defun one-request (func-name arg-alist)
-    (let ((result (sekka-rest-request-sub func-name arg-alist)))
-      (if (or
-	   (string-match-p "^curl: [(]6[)] "  result) ;; Couldn't resolve host 'aaa.example.com' 
-	   (string-match-p "^curl: [(]7[)] "  result) ;; Couldn't connect to host 'localhost'
-	   (string-match-p "^curl: [(]28[)] " result) ;; Operation timed out after XXXX milliseconds with 0 bytes received
-	   )
-	  (progn
-	    (sekka-next-sekka-server)
-	    nil)
-	result)))
-  (let ((arg-alist
-	 (cons
-	  `("userid" . ,sekka-login-name)
-	  arg-alist)))
-    (or
-     (one-request func-name arg-alist)
-     (one-request func-name arg-alist)
-     (one-request func-name arg-alist)
-     (concat
-      "Error: All sekka-server are down. "
-      " " sekka-server-url
-      " " sekka-server-url-2
-      " " sekka-server-url-3))))
-
-(defun sekka-rest-request-by-curl (func-name arg-alist)
-  (let* ((lst
-	  (append
-	   (if (< 0 (length sekka-no-proxy-hosts))
-	       (list "--noproxy" sekka-no-proxy-hosts)
-	     nil)
-	   (sekka-construct-curl-argstr (cons
-					 '("format" . "sexp")
-					 arg-alist))))
-	 (buffername "*sekka-output*")
-	 (result ""))
-    (sekka-debug-print (format "arg-lst :[%S]\n" lst))
-    (progn
-      (apply
-       'call-process
-       sekka-curl
-       nil buffername nil
-       "--silent" "--show-error"
-       "--max-time" (format "%d" sekka-server-timeout)
-       "--insecure"
-       "--header" "Content-Type: application/x-www-form-urlencoded"
-       (concat current-sekka-server-url func-name)
-       lst)
-      (setq result
-	    (with-current-buffer buffername
-	      (buffer-substring-no-properties (point-min) (point-max))))
-      (kill-buffer buffername)
-      result)))
-
-
-(when nil
-  ;; unit test
-  (setq sekka-curl "curl")
-  (setq sekka-login-name (user-login-name))
-  (setq current-sekka-server-url "http://localhost:12929/")
-  (sekka-rest-request-by-curl
-   "henkan"
-   '(
-     ("yomi"   . "Nihon")
-     ("limit"  . "1")
-     ("method" . "normal")
-     ("userid" . "kiyoka")))
-  )
-
-
-(defun sekka-url-http-post (url args)
-  "Send ARGS to URL as a POST request."
-  (progn
-    (setq url-request-method "POST")
-    (setq url-http-version "1.0")
-    (setq url-request-extra-headers
-	  '(("Content-Type" . "application/x-www-form-urlencoded")))
-    (setq url-request-data
-	  (mapconcat (lambda (arg)
-		       (concat (url-hexify-string (car arg))
-			       "="
-			       (url-hexify-string (cdr arg))))
-		     args
-		     "&"))
-    (let* ((lines
-	    (let ((buf (url-retrieve-synchronously url)))
-	      (sekka-debug-print (buffer-name buf))
-	      (sekka-debug-print "\n")
-	      (if buf
-                  (with-current-buffer buf
-                    (decode-coding-string 
-                     (let ((str (buffer-substring-no-properties (point-min) (point-max))))
-                       (cond
-                        (url-http-response-status
-                         (sekka-debug-print (format "http result code:%s\n" url-http-response-status))
-                         (sekka-debug-print (format "(%d-%d) eoh=%s\n" (point-min) (point-max) url-http-end-of-headers))
-                         (sekka-debug-print (format "<<<%s>>>\n" str))
-                         str)
-                        (t
-                         "curl: (28) Time out\n" ;; Emulate curl Operation timed out.
-                         )))
-                     'utf-8))
-                "curl: (7)  Couldn't connect to host 'localhost'\n"))) ;; Emulate curl error.
-           (line-list
-            (split-string lines "\n")))
-      
-      (car (reverse line-list)))))
-
-;;
-;; http request function with pure emacs
-;;   (no proxy supported)
-(defun sekka-rest-request-by-pure (func-name arg-alist)
-  (setq sekka-busy (+ sekka-busy 1))
-  (sekka-debug-print (format "sekka-busy=%d\n" sekka-busy))
-  (let* ((arg-alist 
-	  (cons
-	   '("format" . "sexp")
-	   arg-alist))
-	 (result
-	  (sekka-url-http-post 
-	   (concat current-sekka-server-url func-name)
-	   arg-alist)))
-    (setq sekka-busy (- sekka-busy 1))
-    (sekka-debug-print (format "sekka-busy=%d\n" sekka-busy))
-    result))
-
-(when nil
-  ;; unit test
-  (setq sekka-login-name (user-login-name))
-  (setq current-sekka-server-url "http://localhost:12929/")
-  (sekka-rest-request-by-pure
-   "henkan"
-   '(
-     ("yomi"   . "Nihon")
-     ("limit"  . "1")
-     ("method" . "normal")
-     ("userid" . "kiyoka"))))
-
-(defun sekka-rest-request-sub (func-name arg-alist)
-  (if sekka-psudo-server
-      (cond
-       ((string-equal func-name "henkan")
-	;; クライアント単体で仮想的にサーバーに接続しているようにしてテストするモード
-	;; result of /henkan
-	;;"((\"変換\" nil \"へんかん\" j 0) (\"変化\" nil \"へんか\" j 1) (\"ヘンカン\" nil \"へんかん\" k 2) (\"へんかん\" nil \"へんかん\" h 3))")
-	"((\"ヨンモジジュクゴ\" nil \"よんもじじゅくご\" k 0) (\"よんもじじゅくご\" nil \"よんもじじゅくご\" h 1))")
-       ((string-equal func-name "googleime")
-	;; result of /google_ime
-	;;  1) よんもじじゅくご
-	"(\"四文字熟語\" \"４文字熟語\" \"4文字熟語\" \"よんもじじゅくご\" \"ヨンモジジュクゴ\")"
-	;;  2) しょかいきどう
-	;;    "(\"初回起動\", \"諸快気堂\", \"諸開基堂\", \"しょかいきどう\", \"ショカイキドウ\")"
-	))
-    ;; 実際のサーバに接続する
-    (cond
-     (sekka-use-curl
-      (sekka-rest-request-by-curl func-name arg-alist))
-     (t
-      (if (string-equal "register" func-name)
-          (sekka-rest-request-by-curl func-name arg-alist) ;; 辞書登録はcurlを使ってバックグラウンドで実行する。pure版は平行動作できない。
-        (sekka-rest-request-by-pure func-name arg-alist))))))
-
-;;
-;; 現在時刻をUNIXタイムを返す(単位は秒)
-;;
-(defun sekka-current-unixtime ()
-  (let (
-	(_ (current-time)))
-    (+
-     (* (car _)
-	65536)
-     (cadr _))))
-
-
-;;
-;; ローマ字で書かれた文章をSekkaサーバーを使って変換する
+;; ローマ字で書かれた文章を変換する
 ;;
 (defun sekka-henkan-request (yomi limit)
   (sekka-debug-print (format "henkan-input :[%s]\n"  yomi))
@@ -560,179 +255,19 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
     (setq yomi (replace-regexp-in-string ":" "+" yomi)))
   (sekka-debug-print (format "henkan-send  :[%s]\n"  yomi))
 
-  (let (
-	(result (sekka-rest-request "henkan" `(("yomi"   . ,yomi)
-					       ("limit"  . ,(format "%d" limit))
-					       ("method" . ,sekka-roman-method)))))
+  (let ((result (sekka-henkan yomi limit (sekka--roman-method-keyword))))
     (sekka-debug-print (format "henkan-result:%S\n" result))
-    (if (eq (string-to-char result) ?\( )
-	(progn
-	  (message nil)
-	  (condition-case err
-	      (read result)
-	    (end-of-file
-	     (progn
-	       (message "Parse error for parsing result of Sekka Server.")
-	       nil))))
-      (progn
-	(message result)
-	nil))))
+    (message nil)
+    result))
 
 ;;
-;; 確定した単語をサーバーに伝達する
+;; 確定した単語を辞書に学習させる
 ;;
 (defun sekka-kakutei-request (key tango)
   (sekka-debug-print (format "henkan-kakutei key=[%s] tango=[%s]\n" key tango))
-  
-  ;;(message "Requesting to sekka server...")
-  
-  (let ((result (sekka-rest-request "kakutei" `(
-						("key"   . ,key)
-						("tango" . ,tango)))))
-    (sekka-debug-print (format "kakutei-result:%S\n" result))
-    (message result)
-    t))
+  (sekka-jisyo-kakutei key tango)
+  t)
 
-
-;;
-;; GoogleImeAPIリクエストをサーバーに送る
-;;
-(defun sekka-googleime-request (yomi)
-  (sekka-debug-print (format "googleime yomi=[%s]\n" yomi))
-  
-  ;;(message "Requesting to sekka server...")
-  
-  (let ((result (sekka-rest-request "googleime" `(
-						  ("yomi"  . ,yomi)))))
-    (sekka-debug-print (format "googleime-result:%S\n" result))
-    (progn
-      (message nil)
-      (condition-case err
-	  (read result)
-	(end-of-file
-	 (progn
-	   (message "Parse error for parsing result of Sekka Server.")
-	   '()))))))
-
-
-;;
-;; ユーザー語彙をサーバーに再度登録する。
-;;
-(defun sekka-register-userdict (&optional arg)
-  "ユーザー辞書をサーバーに再度アップロードする"
-  (interactive "P")
-  (sekka-register-userdict-internal))
-
-  
-;;
-;; ユーザー語彙をサーバーに登録する。
-(defun sekka-register-userdict-internal (&optional only-first)
-  (lexical-let ((str      (sekka-get-jisyo-str sekka-jisyo-filename)))
-    (lexical-let ((str-lst  (if only-first
-				(list (car (sekka-divide-into-few-line str)))
-			      (sekka-divide-into-few-line str)))
-		  (x '()))
-      (setq sekka-uploading-flag t)
-      (redraw-modeline)
-      (cc:thread 100
-	(while (< 0 (length str-lst))
-	  (setq x (pop str-lst))
-	  ;;(message "Requesting to sekka server...")
-	  (sekka-debug-print (format "register [%s]\n" x))
-	  (lexical-let ((result (sekka-rest-request "register" `(("dict" . ,x)))))
-	    (sekka-debug-print (format "register-result:%S\n" result))))
-	(setq sekka-uploading-flag nil)
-	(redraw-modeline)))
-    t))
-
-
-;;
-;; ユーザー語彙をサーバーから全て削除する
-;;
-(defun sekka-flush-userdict (&optional arg)
-  "サーバー上のユーザー辞書を全て削除する"
-  (interactive "P")
-  (message "Requesting to sekka server...")
-  (let ((result (sekka-rest-request "flush" `())))
-    (sekka-debug-print (format "register-result:%S\n" result))
-    (message result)
-    t))
-
-
-;; str = "line1 \n line2 \n line3 \n line4 \n line5 \n "
-;; result:
-;;     '(
-;;        ("line1 \n line2 \n line3 \n ")
-;;        ("line4 \n line5 \n ")
-;;      )
-;;
-;; for-testing:
-;;   (sekka-divide-into-few-line 
-;;     "line1 \n line2 \n line3 \n line4 \n line5 \n line6 \n line7 \n line8 \n line9 \n line10 \n  line11 \n  line12 \n")
-;;
-(defun sekka-divide-into-few-line (str)
-  (if (stringp str)
-      (let ((str-lst (split-string str "\n"))
-	    (result '()))
-	(while (< 0 (length str-lst))
-	  (push 
-	   (concat
-	    (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" (pop str-lst) "\n" )
-	   result))
-	(reverse result))
-    '()))
-
-
-(defun sekka-file-existp (file)
-  "FILE が存在するかどうかをチェックする。 t か nil で結果を返す"
-  (let* ((file (or (car-safe file)
-		   file))
-	 (file (expand-file-name file)))
-    (file-exists-p file)))
-
-
-(defun sekka-get-jisyo-str (file &optional nomsg)
-  "FILE を開いて Sekka辞書バッファを作り、バッファ1行1文字列のリストで返す"
-  (if (sekka-file-existp file)
-      (let ((str "")
-	    (buf-name (file-name-nondirectory file)))
-	(save-excursion
-	  (find-file-read-only file)
-	  (setq str (with-current-buffer (get-buffer buf-name)
-		      (buffer-substring-no-properties (point-min) (point-max))))
-	  (message (format "Sekka辞書 %s を開いています...完了！" (file-name-nondirectory file)))
-	  (kill-buffer-if-not-modified (get-buffer buf-name)))
-	str)
-    (message (format "Sekka辞書 %s が存在しません..." file))))
-
-
-(defun sekka-add-new-word-to-jisyo (file yomi tango)
-  "FILE Sekka辞書ファイルと見做し、ファイルの先頭に「読み」と「単語」のペアを書き込む
-登録が成功したかどうかを t or nil で返す"
-  (let ((buf-name (file-name-nondirectory file)))
-    (save-excursion
-      (find-file file)
-      (with-current-buffer (get-buffer buf-name)
-	(goto-char (point-min))
-	(let ((newstr (format "%s /%s/" yomi tango)))
-	  (when (not (search-forward newstr nil t))
-	    (insert newstr)
-	    (insert "\n")
-	    (save-buffer)
-		(setq added t)
-		)))
-      (kill-buffer-if-not-modified (get-buffer buf-name)))
-    t))
-
-
-
-;; ポータブル文字列置換( EmacsとXEmacsの両方で動く )
-(defun sekka-replace-regexp-in-string (regexp replace str)
-  (cond ((featurep 'xemacs)
-	 (replace-in-string str regexp replace))
-	(t
-	 (replace-regexp-in-string regexp replace str))))
-	
 
 ;; リージョンをローマ字漢字変換する関数
 (defun sekka-henkan-region (b e)
@@ -742,28 +277,22 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
     (let* (
 	   (yomi (buffer-substring-no-properties b e))
 	   (henkan-list (sekka-henkan-request yomi 0)))
-      
+
       (if henkan-list
-	  (condition-case err
-	      (progn
-		(setq
-		 ;; 変換結果の保持
-		 sekka-henkan-kouho-list henkan-list
-		 ;; 文節選択初期化
-		 sekka-cand-cur 0
-		 ;; 
-		 sekka-cand-len (length henkan-list))
-		
-		(sekka-debug-print (format "sekka-henkan-kouho-list:%s \n" sekka-henkan-kouho-list))
-		(sekka-debug-print (format "sekka-cand-cur:%s \n" sekka-cand-cur))
-		(sekka-debug-print (format "sekka-cand-len:%s \n" sekka-cand-len))
-		;;
-		t)
-	    (sekka-trap-server-down
-	     (beep)
-	     (message (error-message-string err))
-	     (setq sekka-select-mode nil))
-	    (run-hooks 'sekka-select-mode-end-hook))
+	  (progn
+	    (setq
+	     ;; 変換結果の保持
+	     sekka-henkan-kouho-list henkan-list
+	     ;; 文節選択初期化
+	     sekka-cand-cur 0
+	     ;;
+	     sekka-cand-len (length henkan-list))
+
+	    (sekka-debug-print (format "sekka-henkan-kouho-list:%s \n" sekka-henkan-kouho-list))
+	    (sekka-debug-print (format "sekka-cand-cur:%s \n" sekka-cand-cur))
+	    (sekka-debug-print (format "sekka-cand-len:%s \n" sekka-cand-len))
+	    ;;
+	    t)
 	nil))))
 
 
@@ -773,7 +302,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
       (defun sekka-char-charset (ch)
 	(let ((result (char-charset ch)))
 	  (sekka-debug-print (format "sekka-char-charset:1(%s) => %s\n" ch result))
-	  (if (multibyte-string-p (char-to-string ch)) 
+	  (if (multibyte-string-p (char-to-string ch))
 	      'japanese-jisx0208
 	    result)))
     (defun sekka-char-charset (ch)
@@ -840,7 +369,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 
       ;; 確定文字列の作成
       (setq sekka-last-fix insert-word)
-      
+
       (sekka-debug-print (format "don't touch:[%s] point:%d-%d\n" insert-word (marker-position sekka-fence-start) (marker-position sekka-fence-end))))
 
      (t
@@ -848,7 +377,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
       (when sekka-henkan-kouho-list
 	;; UNDO抑制開始
 	(sekka-disable-undo)
-	
+
 	(delete-region b e)
 
 	;; リスト初期化
@@ -859,7 +388,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	;; 変換したpointの保持
 	(setq sekka-fence-start (point-marker))
 	(when select-mode (insert "|"))
-    
+
 	(let* (
 	       (start       (point-marker))
 	       (_cur        sekka-cand-cur)
@@ -869,21 +398,21 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	    (message (format "[%s] candidate (%d/%d)" insert-word (+ _cur 1) _len))
 	    (let* ((end         (point-marker))
 		   (ov          (make-overlay start end)))
-	      
+
 	      ;; 確定文字列の作成
 	      (setq sekka-last-fix insert-word)
-	      
+
 	      ;; 選択中の場所を装飾する。
 	      (when select-mode
 		(overlay-put ov 'face 'default)
 		(overlay-put ov 'face 'highlight))
 	      (setq sekka-markers (cons start end))
 	      (sekka-debug-print (format "insert:[%s] point:%d-%d\n" insert-word (marker-position start) (marker-position end))))))
-	
+
 	;; fenceの範囲を設定する
 	(when select-mode (insert "|"))
 	(setq sekka-fence-end   (point-marker))
-	
+
 	(sekka-debug-print (format "total-point:%d-%d\n"
 				   (marker-position sekka-fence-start)
 				   (marker-position sekka-fence-end)))
@@ -941,19 +470,19 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 
 ;; 選択操作回数のインクリメント
 (defun sekka-select-operation-inc ()
-  (incf sekka-select-operation-times)
+  (cl-incf sekka-select-operation-times)
   (when (< 3 sekka-select-operation-times)
     (sekka-select-operation-reset)
-    (let* ((lst 
+    (let* ((lst
 	    (mapcar
 	     (lambda (x)
-	       (concat 
+	       (concat
 		(nth sekka-tango-index x)
 		"   ; "
 		(nth sekka-annotation-index x)))
 	     sekka-henkan-kouho-list))
 	   (map (make-sparse-keymap))
-	   (result 
+	   (result
 	    (popup-menu* lst
 			 :scroll-bar t
 			 :margin t
@@ -988,12 +517,12 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   (interactive)
   ;; 候補番号リストをバックアップする。
   (setq sekka-cand-cur-backup sekka-cand-cur)
-  ;; サーバーに確定した単語を伝える(辞書学習)
+  ;; 確定した単語を辞書に学習させる
   (let* ((kouho      (nth sekka-cand-cur sekka-henkan-kouho-list))
 	 (_          (sekka-debug-print (format "2:sekka-cand-cur=%s\n" sekka-cand-cur)))
 	 (_          (sekka-debug-print (format "2:kouho=%s\n" kouho)))
 	 (tango      (car kouho))
-	 (key        (caddr kouho))
+	 (key        (cl-caddr kouho))
 	 (kind (nth sekka-kind-index kouho)))
     (when (eq 'j kind)
       (sekka-kakutei-request key tango)))
@@ -1021,7 +550,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   "前の候補に進める"
   (interactive)
   ;; 前の候補に切りかえる
-  (decf sekka-cand-cur)
+  (cl-decf sekka-cand-cur)
   (when (> 0 sekka-cand-cur)
     (setq sekka-cand-cur (- sekka-cand-len 1)))
   (sekka-select-operation-inc)
@@ -1064,8 +593,8 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
     (if (null lst)
 	nil
       (reverse lst))))
-  
-    
+
+
 ;; 指定された type の候補が存在するか調べる
 (defun sekka-include-typep ( _type )
   (sekka-select-by-type-filter _type))
@@ -1116,7 +645,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   (sekka-select-by-type 'l))
 
 (defun sekka-select-zenkaku ()
-  "半角候補に強制的に切りかえる"
+  "全角候補に強制的に切りかえる"
   (interactive)
   (sekka-select-by-type 'z))
 
@@ -1124,9 +653,9 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 (defun sekka-replace-kakutei-word (b e insert-word)
   ;; UNDO抑制開始
   (sekka-disable-undo)
-    
+
   (delete-region b e)
-  
+
   (insert insert-word)
   (message (format "replaced by new word [%s]" insert-word))
   ;; UNDO再開
@@ -1136,9 +665,9 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 ;; 登録語リストからユーザーに該当単語を選択してもらう
 (defun sekka-add-new-word-sub (yomi lst hiragana-lst)
   (let* ((etc "(自分で入力する)")
-	 (lst (if (stringp lst) 
+	 (lst (if (stringp lst)
 		  (progn
-		    (message lst) ;; サーバーから返ってきたエラーメッセージを表示
+		    (message lst)
 		    '())
 		lst))
 	 (result (popup-menu*
@@ -1158,57 +687,54 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 				  (marker-position e)
 				  tango)
 
-      (when (member result hiragana-lst) ;; 平仮名フレーズの場合
+      (when (member result hiragana-lst)
 	(setq yomi  result)
 	(setq tango ""))
 
-      ;; .sekka-jisyoとサーバーの両方に新しい単語を登録する
-      (let ((added (sekka-add-new-word-to-jisyo sekka-jisyo-filename yomi tango)))
-	(if added
-	    (progn
-	      (sekka-register-userdict-internal t)
-	      (message (format "Sekka辞書 %s に単語(%s /%s/)を保存しました！" sekka-jisyo-filename yomi tango)))
-	  (message (format "Sekka辞書 %s に 単語(%s /%s/)を追加しませんでした(登録済)" sekka-jisyo-filename yomi tango)))))))
+      ;; ユーザー辞書に単語を登録する
+      (when (and (> (length yomi) 0) (> (length tango) 0))
+        (if (sekka-jisyo-register-word yomi tango)
+            (message (format "Sekka辞書に単語(%s /%s/)を保存しました！" yomi tango))
+          (message (format "Sekka辞書に単語(%s /%s/)は登録済です" yomi tango)))))))
 
 
 (defun sekka-add-new-word ()
   "変換候補のよみ(平仮名)に対応する新しい単語を追加する"
   (interactive)
-  (setq case-fold-search nil)
-  (let ((type
-	 (cond
-	  ((string-match-p "^[A-Z][^A-Z]+$" sekka-last-roman)
-	   (if (sekka-select-by-type 'h) ;; 平仮名候補に自動切り替え
-	       'H
-	     nil))
-	  ((string-match-p "^[a-z][^A-Z]+$" sekka-last-roman)
-	   'h)
-	  (t
-	   nil))))
-    (let* ((kouho      (nth sekka-cand-cur sekka-henkan-kouho-list))
-	   (hiragana   (car kouho)))
-      (sekka-debug-print (format "sekka-register-new-word: sekka-last-roman=[%s] hiragana=%s result=%S\n" sekka-last-roman hiragana (string-match-p "^[A-Z][^A-Z]+$" sekka-last-roman)))
-      (cond
-       ;; 漢字語彙をgoogleimeで取得
-       ((eq 'H type)
-	(sekka-select-kakutei)
-	(sekka-add-new-word-sub
-	 hiragana
-	 (sekka-googleime-request hiragana)
-	 '()))
-       ;; 平仮名フレーズから選択
-       ((eq 'h type)
-	(sekka-select-kakutei)
-	(let ((kouho (sekka-select-by-type-filter 'h)))
-	  (sekka-debug-print (format "sekka-register-new-word: kouho=%S\n" kouho))
+  (let ((case-fold-search nil))
+    (let ((type
+	   (cond
+	    ((string-match-p "^[A-Z][^A-Z]+$" sekka-last-roman)
+	     (if (sekka-select-by-type 'h)
+		 'H
+	       nil))
+	    ((string-match-p "^[a-z][^A-Z]+$" sekka-last-roman)
+	     'h)
+	    (t
+	     nil))))
+      (let* ((kouho      (nth sekka-cand-cur sekka-henkan-kouho-list))
+	     (hiragana   (car kouho)))
+	(sekka-debug-print (format "sekka-register-new-word: sekka-last-roman=[%s] hiragana=%s result=%S\n" sekka-last-roman hiragana (string-match-p "^[A-Z][^A-Z]+$" sekka-last-roman)))
+	(cond
+	 ;; 漢字語彙: ユーザーに直接入力してもらう
+	 ((eq 'H type)
+	  (sekka-select-kakutei)
 	  (sekka-add-new-word-sub
 	   hiragana
 	   '()
-	   (cons
-	    hiragana ;; 確定値の平仮名文言を先頭に追加。
-	    (mapcar
-	     (lambda (x) (car x)) kouho))))))
-      )))
+	   '()))
+	 ;; 平仮名フレーズから選択
+	 ((eq 'h type)
+	  (sekka-select-kakutei)
+	  (let ((kouho (sekka-select-by-type-filter 'h)))
+	    (sekka-debug-print (format "sekka-register-new-word: kouho=%S\n" kouho))
+	    (sekka-add-new-word-sub
+	     hiragana
+	     '()
+	     (cons
+	      hiragana
+	      (mapcar
+	       (lambda (x) (car x)) kouho))))))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1226,12 +752,10 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	 (sekka-debug-print (format "markers=%S\n" markers))
 	 (sekka-debug-print (format "marker-position car=%S\n" (marker-position (car markers))))
 	 (sekka-debug-print (format "marker-position cdr=%S\n" (marker-position (cdr markers))))
-	 (when (and (marker-position (car markers))	 ;; 存在するバッファを指しているか
+	 (when (and (marker-position (car markers))
 		    (marker-position (cdr markers)))
 	   (if (= (marker-position (car markers))
 		  (marker-position (cdr markers)))
-	       ;; マークの開始と終了が同じ位置を指している場合は、
-	       ;; そのマークは既に無効(選択モードの再表示で一旦マーク周辺の文字列が削除された)
 	       (progn
 		 (set-marker (car markers) nil)
 		 (set-marker (cdr markers) nil))
@@ -1295,13 +819,12 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	     (sekka-debug-print (format "sekka-history-search : sekka-cand-cur-backup : %S\n" sekka-cand-cur-backup))
 	     (sekka-debug-print (format "sekka-history-search : sekka-cand-len %S\n" sekka-cand-len))
 	     (sekka-debug-print (format "sekka-history-search : sekka-last-fix %S\n" sekka-last-fix))
-	     (sekka-debug-print (format "sekka-history-search : sekka-henkan-kouho-list %S\n" sekka-henkan-kouho-list)))
-	   )))
+	     (sekka-debug-print (format "sekka-history-search : sekka-henkan-kouho-list %S\n" sekka-henkan-kouho-list))))))
      sekka-history-stack)
     found))
 
 (defun sekka-history-push ()
-  (push 
+  (push
    `(
      (markers            . ,sekka-markers            )
      (cand-cur           . ,sekka-cand-cur           )
@@ -1321,20 +844,18 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   "ローマ字漢字変換をする。
 ・カーソルから行頭方向にローマ字列が続く範囲でローマ字漢字変換を行う。"
   (interactive)
-;  (print last-command)			; DEBUG
   (sekka-debug-print "sekka-rK-trans()")
 
 
-  (cond 
+  (cond
    ;; タイマーイベントを設定しない条件
    ((or
      sekka-timer
-     (> 1 sekka-realtime-guide-running-seconds)
-     ))
+     (> 1 sekka-realtime-guide-running-seconds)))
    (t
     ;; タイマーイベント関数の登録
     (progn
-      (let 
+      (let
 	  ((ov-point
 	    (save-excursion
 	      (forward-line 1)
@@ -1347,7 +868,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 
   ;; ガイド表示継続回数の更新
   (when (< 0 sekka-realtime-guide-running-seconds)
-    (setq sekka-timer-rest  
+    (setq sekka-timer-rest
 	  (/ sekka-realtime-guide-running-seconds
 	     sekka-realtime-guide-interval)))
 
@@ -1383,27 +904,19 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	      (insert (sekka-get-display-string))
 	      (setq e (point))
 	      (sekka-display-function b e nil)
-	      (sekka-select-kakutei)
-	      (cond
-	       ((string-match-p "^[A-Z][^A-Z]+$" sekka-last-roman)
-		;; 漢字語彙
-		(when sekka-use-googleime
-		  (if (not (sekka-include-typep 'j))
-		      (sekka-add-new-word))))
-	       (t
-		;; 平仮名フレーズはGoogleIMEの問い合わせの自動起動はしない
-		)))))))
-	      
+	      (sekka-select-kakutei))))))
+
+
      ((sekka-kanji (preceding-char))
       (sekka-debug-print (format "sekka-kanji(%s) => t\n" (preceding-char)))
-    
+
       ;; カーソル直前が 全角で漢字以外 だったら候補選択モードに移行する。
       ;; また、最後に確定した文字列と同じかどうかも確認する。
       (when (sekka-history-search (point) t)
 	;; 直前に変換したfenceの範囲に入っていたら、候補選択モードに移行する。
 	(setq sekka-select-mode t)
 	(sekka-debug-print "henkan mode ON\n")
-	
+
 	;; 表示状態を候補選択モードに切替える。
 	(sekka-display-function
 	 (marker-position (car sekka-markers))
@@ -1412,7 +925,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 
      (t
       (sekka-debug-print (format "<<OTHER:non-ascii,non-kanji>> (%s)\n" (preceding-char))))))))
-      
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1441,13 +954,12 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	       (e end)
 	       (roman-str (buffer-substring-no-properties b e)))
 	  (sekka-debug-print (format "capitalize %d %d [%s]" b e roman-str))
-	  (setq case-fold-search nil)
-	  (cond
-	   ((string-match-p "^[A-Z]" roman-str)
-	    (downcase-region b (+ b 1)))
-	   ((string-match-p "^[a-z]" roman-str)
-	    (upcase-region   b (+ b 1))))))))
-   ))
+	  (let ((case-fold-search nil))
+	    (cond
+	     ((string-match-p "^[A-Z]" roman-str)
+	      (downcase-region b (+ b 1)))
+	     ((string-match-p "^[a-z]" roman-str)
+	      (upcase-region   b (+ b 1)))))))))))
 
 
 ;; 全角で漢字以外の判定関数
@@ -1468,7 +980,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	      (concat sekka-skip-chars "\n")
 	    ;; auto-fill-modeが無効の場合はそのまま
 	    sekka-skip-chars))
-	    
+
 	 ;; マークされている位置を求める。
 	 (pos (or (and (markerp (mark-marker)) (marker-position (mark-marker)))
 		  1))
@@ -1493,12 +1005,9 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 		     start-point
 		     (skip-chars-forward (concat "\t " sekka-stop-chars) (point-at-eol))))))
 
-	  ;; (sekka-debug-print (format "(point) = %d  result = %d  limit-point = %d\n" (point) result limit-point))
-	  ;; (sekka-debug-print (format "a = %d b = %d \n" (+ (point) result) limit-point))
-
 	  ;; パラグラフ位置でストップする
 	  (if (< (+ (point) result) limit-point)
-	      (- 
+	      (-
 	       limit-point
 	       (point))
 	    result))
@@ -1510,16 +1019,13 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 	  (let (
 		(start-point (point)))
 	    (setq limit-point
-		  (+ 
+		  (+
 		   start-point
 		   (skip-chars-forward (concat "\t " sekka-stop-chars) (point-at-eol))))))
 
-	;; (sekka-debug-print (format "(point) = %d  result = %d  limit-point = %d\n" (point) result limit-point))
-	;; (sekka-debug-print (format "a = %d b = %d \n" (+ (point) result) limit-point))
-
 	(if (< (+ (point) result) limit-point)
 	    ;; インデント位置でストップする。
-	    (- 
+	    (-
 	     limit-point
 	     (point))
 	  result)))))
@@ -1527,16 +1033,16 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 
 (defun sekka-sticky-shift-init-function ()
   ;; sticky-shift
-  (define-key global-map sticky-key sticky-map)
+  (define-key global-map sekka-sticky-key sekka-sticky-map)
   (mapcar (lambda (pair)
-	    (define-key sticky-map (car pair)
+	    (define-key sekka-sticky-map (car pair)
 	      `(lambda()(interactive)
 		 (if ,(< 0 (length (cdr pair)))
 		     (setq unread-command-events
 			   (cons ,(string-to-char (cdr pair)) unread-command-events))
 		   nil))))
-	  sticky-list)
-  (define-key sticky-map sticky-key '(lambda ()(interactive)(insert sticky-key))))
+	  sekka-sticky-list)
+  (define-key sekka-sticky-map sekka-sticky-key '(lambda ()(interactive)(insert sekka-sticky-key))))
 
 
 (defun sekka-insert-space (times)
@@ -1548,7 +1054,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
 (defun sekka-spacekey-init-function ()
   (define-key global-map (kbd "SPC")
     '(lambda (&optional arg)(interactive "P")
-       (cond ((and (< 0 sekka-timer-rest) 
+       (cond ((and (< 0 sekka-timer-rest)
 		   sekka-kakutei-with-spacekey)
 	      (cond
 	       ((string= " " (char-to-string (preceding-char)))
@@ -1570,7 +1076,7 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
        (if (< 0 sekka-timer-rest)
 	   ;; qキーで無変換+スペースを入力する
 	   (cond
-	    ((string= " " (char-to-string (preceding-char)))	 
+	    ((string= " " (char-to-string (preceding-char)))
 	     ;; 2回目のキー入力で本来のsekka-muhenkan-keyで定義された文字を挿入する
 	     (insert sekka-muhenkan-key))
 	    (t
@@ -1583,10 +1089,6 @@ non-nil で明示的に呼びだすまでGoogleIMEは起動しない。"
   "リアルタイムで変換中のガイドを出す
 sekka-modeがONの間中呼び出される可能性がある。"
   (cond
-   ((< 0 sekka-busy)
-    ;; 残り回数のデクリメント
-    (setq sekka-timer-rest (- sekka-timer-rest 1))
-    (sekka-debug-print "busy!\n"))
    ((or (null sekka-mode)
 	(> 1 sekka-timer-rest))
     (cancel-timer sekka-timer)
@@ -1606,8 +1108,8 @@ sekka-modeがONの間中呼び出される可能性がある。"
     (let* (
 	   (end (point))
 	   (gap (sekka-skip-chars-backward)))
-      (if 
-	  (or 
+      (if
+	  (or
 	   (when (fboundp 'minibufferp)
 	     (minibufferp))
 	   (= gap 0))
@@ -1631,8 +1133,7 @@ sekka-modeがONの間中呼び出される可能性がある。"
 		    (concat "[" (caar lst) "]")
 		  "")))
 	  (sekka-debug-print (format "realtime guide [%s]" str))
-	  (move-overlay sekka-guide-overlay 
-			;; disp-point (min (point-max) (+ disp-point 1))
+	  (move-overlay sekka-guide-overlay
 			b e
 			(current-buffer))
 	  (overlay-put sekka-guide-overlay 'before-string mess))))
@@ -1651,7 +1152,7 @@ sekka-modeがONの間中呼び出される可能性がある。"
 (define-key sekka-mode-map "\M-j" 'sekka-capitalize-trans)
 (or (assq 'sekka-mode minor-mode-map-alist)
     (setq minor-mode-map-alist
-	  (append (list 
+	  (append (list
 		   (cons 'sekka-mode         sekka-mode-map))
 		  minor-mode-map-alist)))
 
@@ -1756,10 +1257,10 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
 (setq default-input-method "japanese-sekka")
 
 (defconst sekka-version
-  "1.8.0" ;;SEKKA-VERSION
+  "2.0.0" ;;SEKKA-VERSION
   )
 (defun sekka-version (&optional arg)
-  "入力モード変更"
+  "バージョン番号を表示する"
   (interactive "P")
   (message sekka-version))
 
