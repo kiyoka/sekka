@@ -19,20 +19,7 @@ Sekkaには日本語モードがありません。
 
 ----
 
-## 変換サーバーのインストール
-
-1. sekka-server-1.8.0.jar をダウンロードしてください． <https://github.com/kiyoka/sekka/releases/tag/v1.8.0>
-2. 次のコマンドでサーバーを起動してください．localhostのポート番号12929でクライアントからのHTTP通信待ち状態になります。
-
-```
-java -Xss128m -jar sekka-server-1.8.0.jar
-```
-
-![enabled]( ./doc/img/java_on_windows10.png )
-
-----
-
-## Emacsクライアントのインストール
+## インストール
 
 1. Melpaから`sekka`パッケージをインストールしてください。
 2. .emacsに以下を追記すると、Sekkaが有効になります。
