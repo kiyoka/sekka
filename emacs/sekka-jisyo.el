@@ -461,10 +461,20 @@ OKURI が指定された場合、各候補に送り仮名を付加する."
 ;;; 新規単語登録
 ;;; ============================================================
 
+(defun sekka-jisyo--register-jarowinkler-key (key)
+  "KEY (ひらがな) を Jaro-Winkler インデックスに新規登録する.
+既登録なら何もしない."
+  (when sekka-jarowinkler-index
+    (let ((roman (sekka-jarowinkler-hiragana->roman key)))
+      (when (and (>= (length roman) (car sekka-jarowinkler-prefix-lengths))
+                 (not (gethash roman sekka-jarowinkler-roman-to-hira)))
+        (puthash roman key sekka-jarowinkler-roman-to-hira)
+        (sekka-jarowinkler--add-to-index roman sekka-jarowinkler-index)))))
+
 (defun sekka-jisyo-register-word (key tango)
   "KEY に TANGO を新規登録する (ユーザー辞書).
 既に登録済みなら nil を返す。登録したら t を返す.
-新規キーの場合は SymSpell インデックスも更新する."
+新規キーの場合は SymSpell / Jaro-Winkler インデックスも更新する."
   (unless sekka-jisyo-loaded
     (sekka-jisyo-init))
   (let* ((existing (gethash key sekka-user-jisyo-hash))
@@ -480,10 +490,11 @@ OKURI が指定された場合、各候補に送り仮名を付加する."
                              "/")))
         (puthash key new-val sekka-user-jisyo-hash)
         (sekka-jisyo--save-user-entry key new-val)
-        ;; 新規キーの場合、SymSpell インデックスに追加する
-        (when (and (not existing)
-                   sekka-symspell-index)
-          (sekka-symspell--index-key key sekka-symspell-index sekka-symspell-dict-set))
+        ;; 新規キーの場合、SymSpell/JW インデックスに追加する
+        (when (not existing)
+          (when sekka-symspell-index
+            (sekka-symspell--index-key key sekka-symspell-index sekka-symspell-dict-set))
+          (sekka-jisyo--register-jarowinkler-key key))
         t))))
 
 (provide 'sekka-jisyo)

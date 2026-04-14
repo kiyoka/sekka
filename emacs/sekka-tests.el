@@ -1041,6 +1041,20 @@
    ;; SymSpell dict-set に追加されている
    (should (gethash "てすときー" sekka-symspell-dict-set))))
 
+(ert-deftest sekka-test-register-word-jarowinkler-update ()
+  "新規キー登録時に Jaro-Winkler インデックスも更新される."
+  :tags '(register jw jisyo)
+  (sekka-test--ensure-jisyo)
+  (sekka-test--with-temp-user-jisyo
+   (let ((key "あたらしいことば"))
+     (sekka-jisyo-register-word key "新しい言葉")
+     ;; ローマ字マップに追加されている
+     (let ((roman (sekka-jarowinkler-hiragana->roman key)))
+       (should (equal key (gethash roman sekka-jarowinkler-roman-to-hira))))
+     ;; 実際に JW 検索でヒットする (先頭4文字一致で確実に入る)
+     (let ((hits (sekka-jisyo-jarowinkler-search "atarashiikotoba" nil 10)))
+       (should (cl-some (lambda (h) (equal (nth 1 h) key)) hits))))))
+
 
 ;;; ============================================================
 ;;; okuri-key / drop-okuri helper tests
