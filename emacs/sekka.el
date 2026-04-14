@@ -3,7 +3,7 @@
 ;; Copyright (C) 2010-2024 Kiyoka Nishiyama
 ;;
 ;; Author: Kiyoka Nishiyama <kiyoka@sumibi.org>
-;; Version: 2.0.0
+;; Version: 2.0.1
 ;; Keywords: i18n
 ;; Package-Requires: ((emacs "25.1") (popup "0.5.2"))
 ;; URL: https://github.com/kiyoka/sekka
@@ -1251,7 +1251,7 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
 (setq default-input-method "japanese-sekka")
 
 (defconst sekka-version
-  "2.0.0" ;;SEKKA-VERSION
+  "2.0.1" ;;SEKKA-VERSION
   )
 (defun sekka-version (&optional _arg)
   "バージョン番号を表示する."
