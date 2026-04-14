@@ -23,6 +23,7 @@
 
 (require 'cl-lib)
 (require 'sekka-symspell)
+(require 'sekka-jarowinkler)
 (require 'url)
 
 ;; メイン辞書 (ひらがなキー → "/候補1/候補2/..." 文字列)
@@ -44,6 +45,9 @@
 
 (defvar sekka-symspell-building nil
   "Non-nil if SymSpell index is currently being built.")
+
+(defvar sekka-jarowinkler-ready nil
+  "Non-nil if Jaro-Winkler index has been built.")
 
 (defvar sekka-dictionary-base-url
   "https://raw.githubusercontent.com/kiyoka/sekka/master/data/"
@@ -218,7 +222,25 @@ Set this before calling `sekka-jisyo-init'.")
   ;; SymSpellインデックスの構築をアイドル時に遅延実行
   (setq sekka-symspell-ready nil)
   (setq sekka-symspell-building nil)
+  (setq sekka-jarowinkler-ready nil)
   (sekka-jisyo--schedule-symspell-build))
+
+(defun sekka-jisyo--build-jarowinkler-index ()
+  "メイン辞書とユーザー辞書から Jaro-Winkler インデックスを構築する."
+  (sekka-jarowinkler-build-index sekka-jisyo-hash)
+  (when (> (hash-table-count sekka-user-jisyo-hash) 0)
+    ;; ユーザー辞書のキーを追加 (単純に再構築でもよいが、軽いのでマージ)
+    (maphash
+     (lambda (key _val)
+       (when (and (stringp key) (> (length key) 0))
+         (let ((roman (sekka-jarowinkler-hiragana->roman key)))
+           (when (>= (length roman) (car sekka-jarowinkler-prefix-lengths))
+             (unless (gethash roman sekka-jarowinkler-roman-to-hira)
+               (puthash roman key sekka-jarowinkler-roman-to-hira)
+               (sekka-jarowinkler--add-to-index
+                roman sekka-jarowinkler-index))))))
+     sekka-user-jisyo-hash))
+  (setq sekka-jarowinkler-ready t))
 
 (defun sekka-jisyo-build-symspell-now ()
   "SymSpellインデックスを即座に構築する.
@@ -236,7 +258,8 @@ Set this before calling `sekka-jisyo-init'.")
        sekka-user-jisyo-hash))
     (setq sekka-symspell-building nil)
     (setq sekka-symspell-ready t)
-    (message "Sekka: SymSpellインデックス構築完了 (曖昧検索が有効になりました)")))
+    (sekka-jisyo--build-jarowinkler-index)
+    (message "Sekka: SymSpell/Jaro-Winklerインデックス構築完了")))
 
 (defun sekka-jisyo--schedule-symspell-build ()
   "SymSpellインデックス構築をアイドル時にインクリメンタルに実行する.
@@ -259,7 +282,8 @@ Set this before calling `sekka-jisyo-init'.")
              sekka-user-jisyo-hash))
           (setq sekka-symspell-building nil)
           (setq sekka-symspell-ready t)
-          (message "Sekka: SymSpellインデックス構築完了 (曖昧検索が有効になりました)")))))))
+          (sekka-jisyo--build-jarowinkler-index)
+          (message "Sekka: SymSpell/Jaro-Winklerインデックス構築完了")))))))
 
 
 ;;; ============================================================
@@ -320,6 +344,26 @@ MAX-RESULTS は辞書値を持つ候補の件数制限(SymSpell検索自体は�
     (if (and max-results (> (length result) max-results))
         (cl-subseq result 0 max-results)
       result)))
+
+(defun sekka-jisyo-jarowinkler-search (roman-query &optional threshold max-results)
+  "ローマ字 ROMAN-QUERY に対して Jaro-Winkler 曖昧検索を行う.
+長い単語の後方欠落 (例: \"shizengengos\" → 自然言語処理) に強い.
+結果は ((score key value) ...) のスコア降順リスト."
+  (unless sekka-jisyo-loaded
+    (sekka-jisyo-init))
+  (when sekka-jarowinkler-ready
+    (let ((hits (sekka-jarowinkler-search roman-query threshold nil))
+          (result nil))
+      (dolist (h hits)
+        (let* ((score (car h))
+               (key (cdr h))
+               (val (sekka-jisyo-get key)))
+          (when val
+            (push (list score key val) result))))
+      (setq result (nreverse result))
+      (if (and max-results (> (length result) max-results))
+          (cl-subseq result 0 max-results)
+        result))))
 
 
 ;;; ============================================================

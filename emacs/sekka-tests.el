@@ -466,6 +466,8 @@
     (sekka-jisyo-init)
     ;; テスト環境ではidle timerが発火しないため、直接SymSpellインデックスを構築
     (sekka-jisyo-build-symspell-now)
+    ;; Jaro-Winklerインデックスも同様に同期構築
+    (sekka-jisyo--build-jarowinkler-index)
     (setq sekka-test--jisyo-initialized t)))
 
 ;; --- henkan (number) ---
@@ -1319,6 +1321,86 @@
               (should (= 1 (length result)))
               (should (string-match-p "/data/test-dict\\'" (car result))))))
       (delete-directory tmp-dir t))))
+
+
+;;; ============================================================
+;;; Jaro-Winkler tests
+;;; ============================================================
+
+;; --- 類似度の基本ケース ---
+(ert-deftest sekka-test-jw-identical ()
+  (should (= 1.0 (sekka-jarowinkler-similarity "henkan" "henkan"))))
+
+(ert-deftest sekka-test-jw-empty ()
+  (should (= 1.0 (sekka-jarowinkler-similarity "" "")))
+  (should (= 0.0 (sekka-jarowinkler-similarity "" "abc")))
+  (should (= 0.0 (sekka-jarowinkler-similarity "abc" ""))))
+
+(ert-deftest sekka-test-jw-one-char-missing ()
+  "末尾1文字欠落は高スコア (オリジナル閾値0.94を通過)."
+  (should (>= (sekka-jarowinkler-similarity "henka" "henkan") 0.94)))
+
+(ert-deftest sekka-test-jw-long-word-trailing-missing ()
+  "長い単語の後方欠落が閾値0.94を通過する (shizengengos vs shizengengoshori)."
+  (should (>= (sekka-jarowinkler-similarity "shizengengos" "shizengengoshori") 0.94)))
+
+(ert-deftest sekka-test-jw-no-match ()
+  "無関係な文字列は低スコア."
+  (should (< (sekka-jarowinkler-similarity "henkan" "xyz") 0.5)))
+
+(ert-deftest sekka-test-jw-prefix-boost ()
+  "先頭一致のプレフィックスボーナスが効く (同じJaroでも先頭一致の方が高い)."
+  (let ((s1 (sekka-jarowinkler-similarity "abcdef" "abcxyz"))  ;; prefix=3
+        (s2 (sekka-jarowinkler-similarity "abcdef" "xyzdef")))  ;; prefix=0
+    (should (> s1 s2))))
+
+;; --- ひらがな→ローマ字変換 ---
+(ert-deftest sekka-test-jw-kana-to-roman-basic ()
+  (should (equal "henkan" (sekka-jarowinkler-hiragana->roman "へんかん"))))
+
+(ert-deftest sekka-test-jw-kana-to-roman-youon ()
+  (should (equal "shizengengoshori"
+                 (sekka-jarowinkler-hiragana->roman "しぜんげんごしょり"))))
+
+(ert-deftest sekka-test-jw-kana-to-roman-sokuon ()
+  (should (equal "nikki" (sekka-jarowinkler-hiragana->roman "にっき")))
+  (should (equal "matcha" (sekka-jarowinkler-hiragana->roman "まっちゃ"))))
+
+(ert-deftest sekka-test-jw-kana-to-roman-single-n ()
+  "`ん` は正準化で単独の `n` に統一する."
+  (should (equal "kanji" (sekka-jarowinkler-hiragana->roman "かんじ"))))
+
+;; --- プレフィックスインデックス + 検索 ---
+(ert-deftest sekka-test-jw-index-and-search ()
+  (sekka-jarowinkler-build-index
+   (list "しぜんげんごしょり" "しぜんげんご" "へんかん" "かんじ"))
+  (let ((hits (sekka-jarowinkler-search "shizengengos")))
+    (should hits)
+    ;; 自然言語処理に相当するキーが返ること
+    (should (cl-some (lambda (h) (equal (cdr h) "しぜんげんごしょり")) hits))))
+
+(ert-deftest sekka-test-jw-search-short-query-rejected ()
+  "プレフィックス長未満のクエリは nil."
+  (sekka-jarowinkler-build-index (list "へんかん"))
+  (should-not (sekka-jarowinkler-search "h")))
+
+;; --- 辞書連携: shizengengos → 自然言語処理 (エンドツーエンド) ---
+(ert-deftest sekka-test-jw-end-to-end-shizengengos ()
+  "オリジナル(nendo)の強力さを再現: shizengengos が 自然言語処理 にヒットする."
+  :tags '(jw jisyo)
+  (sekka-test--ensure-jisyo)
+  (let ((hits (sekka-jisyo-jarowinkler-search "shizengengos" nil 10)))
+    (should hits)
+    ;; しぜんげんごしょり (自然言語処理) が結果に含まれる
+    (should (cl-some (lambda (h) (equal (nth 1 h) "しぜんげんごしょり")) hits))))
+
+(ert-deftest sekka-test-jw-henkan-integration-shizengengos ()
+  "sekka-henkan経由でも shizengengos から 自然言語処理 が得られる."
+  :tags '(jw henkan jisyo)
+  (sekka-test--ensure-jisyo)
+  (let* ((result (sekka-henkan--okuri-nashi "shizengengos" 20 :normal))
+         (words (sekka-test--words result)))
+    (should (member "自然言語処理" words))))
 
 (provide 'sekka-tests)
 ;;; sekka-tests.el ends here

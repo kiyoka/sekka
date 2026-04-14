@@ -102,6 +102,18 @@ KEYWORD はローマ字入力(先頭大文字除去済み)."
                   (unless (gethash (car e) seen)
                     (puthash (car e) t seen)
                     (push e approx-result)))))))))
+    ;; 2b. 生ローマ字に対する Jaro-Winkler 曖昧検索
+    ;;     (後方欠落した長い単語などを拾う)
+    (let* ((raw-roman (sekka-downcase keyword))
+           (jw-matches (sekka-jisyo-jarowinkler-search raw-roman nil nil)))
+      (dolist (m jw-matches)
+        (let* ((key (nth 1 m))
+               (val (nth 2 m))
+               (entries (sekka-henkan--resolve-value val key)))
+          (dolist (e entries)
+            (unless (gethash (car e) seen)
+              (puthash (car e) t seen)
+              (push e approx-result))))))
     (setq approx-result (nreverse approx-result))
     ;; 完全一致を優先、曖昧検索結果を後ろに
     (let ((result (append exact-result approx-result)))
