@@ -78,9 +78,11 @@ OKURI が指定された場合、各候補に送り仮名を付加する."
   "送り仮名なしの変換(完全一致 + 曖昧検索).
 KEYWORD はローマ字入力(先頭大文字除去済み)."
   (let* ((hira-list (sekka-roman->hiragana (sekka-downcase keyword) roman-method))
+         (raw-roman (sekka-downcase keyword))
          (exact-result nil)
          (approx-result nil)
-         (seen (make-hash-table :test 'equal)))
+         (seen (make-hash-table :test 'equal))
+         (jw-matches (sekka-jisyo-jarowinkler-search raw-roman nil nil)))
     ;; 1. 完全一致検索
     (dolist (hira hira-list)
       (let ((entries (sekka-henkan--resolve-value (sekka-jisyo-get hira) hira)))
@@ -88,6 +90,17 @@ KEYWORD はローマ字入力(先頭大文字除去済み)."
           (unless (gethash (car e) seen)
             (puthash (car e) t seen)
             (push e exact-result)))))
+    ;; 1b. JW スコア=1.0 の結果を完全一致扱いで追加
+    ;;     (ローマ字多義性対応: "kani"→"かんい" 等)
+    (dolist (m jw-matches)
+      (when (= (nth 0 m) 1.0)
+        (let* ((key (nth 1 m))
+               (val (nth 2 m))
+               (entries (sekka-henkan--resolve-value val key)))
+          (dolist (e entries)
+            (unless (gethash (car e) seen)
+              (puthash (car e) t seen)
+              (push e exact-result))))))
     (setq exact-result (nreverse exact-result))
     ;; 2. 曖昧検索 (各ひらがな変換結果に対して SymSpell)
     (dolist (hira hira-list)
@@ -102,6 +115,17 @@ KEYWORD はローマ字入力(先頭大文字除去済み)."
                   (unless (gethash (car e) seen)
                     (puthash (car e) t seen)
                     (push e approx-result)))))))))
+    ;; 2b. JW スコア<1.0 の結果を曖昧検索扱いで追加
+    ;;     (後方欠落した長い単語などを拾う)
+    (dolist (m jw-matches)
+      (when (< (nth 0 m) 1.0)
+        (let* ((key (nth 1 m))
+               (val (nth 2 m))
+               (entries (sekka-henkan--resolve-value val key)))
+          (dolist (e entries)
+            (unless (gethash (car e) seen)
+              (puthash (car e) t seen)
+              (push e approx-result))))))
     (setq approx-result (nreverse approx-result))
     ;; 完全一致を優先、曖昧検索結果を後ろに
     (let ((result (append exact-result approx-result)))

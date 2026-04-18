@@ -222,3 +222,122 @@ GitHub raw URLから辞書を自動ダウンロードする方式を採用。
 
 開発環境ではローカル `data/` が存在するため自動ダウンロードは発動しない。
 手動テストは `M-x sekka-jisyo-download-dictionaries` で実行可能。
+
+
+### Phase 5: タイプミス修正の高度化 (Jaro-Winkler 併用)
+
+#### 目的
+
+SymSpell (ひらがな空間, d≤1) では救えない以下のケースをオリジナル (nendo)
+相当まで回復する。
+
+- 長い単語の後方欠落 (例: `shizengengos` → `自然言語処理`)
+- ローマ字多義性の一部 (例: `kani` → `かに`/`かんい`)
+
+#### アプローチ
+
+SymSpell はそのまま残し、**生ローマ字クエリに対する Jaro-Winkler 検索** を
+並走させる。オリジナルと同じく Jaro-Winkler の長さ正規化とプレフィックス
+ボーナスにより、長い単語の後方欠落を閾値 0.94 で拾える。
+
+| 項目 | 実装 |
+|---|---|
+| 距離尺度 | Jaro-Winkler (prefix 最大 4、scaling 0.1) |
+| 検索キー空間 | 生ローマ字 (ひらがな辞書キーを正準 Hepburn に変換) |
+| 候補生成 | 適応型プレフィックスブロッキング (qlen に応じて 2/3/4 文字) |
+| 足切り | 長さ差 `min/max < 0.7` の組合せはスキップ |
+| SymSpell との関係 | 併用 (SymSpell は先頭タイプミス保険、JW は長い単語担当) |
+
+正準ローマ字は `sekka-jarowinkler-hiragana->roman` で 1:1 変換 (`ん` は
+単独 `n`、Hepburn sokuon+ch → `t` 等)。SKK 辞書が保持する全ひらがなキー
+それぞれについて 1 つのローマ字形を生成する。
+
+#### 実装ファイル
+
+| 機能 | ファイル | 備考 |
+|---|---|---|
+| Jaro-Winkler + ひらがな→Hepburn + プレフィックスインデックス | `emacs/sekka-jarowinkler.el` | 新規 |
+| 辞書ロード時の JW インデックス構築 | `emacs/sekka-jisyo.el` `sekka-jisyo--build-jarowinkler-index` | SymSpell 構築完了後に同期実行 |
+| JW 曖昧検索 API | `emacs/sekka-jisyo.el` `sekka-jisyo-jarowinkler-search` | `((score key value) ...)` |
+| 変換フローへの統合 | `emacs/sekka-henkan.el` `sekka-henkan--okuri-nashi` | 生ローマ字 keyword を JW に渡す |
+| ユーザー辞書登録時の JW 更新 | `emacs/sekka-jisyo.el` `sekka-jisyo-register-word` | SymSpell と同様 |
+
+#### 計測結果 (L 辞書 175,768 エントリ, Apple Silicon)
+
+初期化コスト (SymSpell + JW 合計):
+
+| 項目 | 時間 |
+|---|---|
+| 辞書ロード + SymSpell + JW 構築 | 約 4.9 秒 |
+
+JW 単独の構築時間は 1 秒未満 (prefix=2,3,4 の 3 レベル同時構築で約 0.5 秒)。
+
+検索性能 (適応型プレフィックスブロッキング + 長さ足切り):
+
+| クエリ | 長さ | プレフィックス長 | ヒット | 速度 |
+|---|---|---|---|---|
+| `shizengengos` | 12 | 4 | 2 | 6.5 ms |
+| `shizengengoshori` | 16 | 4 | 1 | 6.0 ms |
+| `henka` | 5 | 2 | 8 | 12.9 ms |
+| `kanj` | 4 | 2 | 6 | 13.9 ms |
+| `kokoro` | 6 | 2 | 10 | 52.9 ms |
+| `ringo` | 5 | 2 | 9 | 8.1 ms |
+| `tabe` | 4 | 2 | 6 | 8.6 ms |
+
+リアルタイムガイド (200ms 間隔) に十分収まる。長いクエリほどプレフィックス
+4 文字で候補が激減するため高速。逆に短いクエリは prefix=2 バケットが大きく
+なるため比較的遅いが、最悪でも ~55ms。
+
+長さ適応型プレフィックスを入れる前は `shizengengos` が 414 ms/query と
+リアルタイムガイドに耐えない速度だった。長さ足切り + 適応型プレフィックス
+で約 64 倍の高速化。
+
+#### 残課題
+
+| 項目 | 状態 |
+|---|---|
+| ローマ字多義性 (kani → かに/かんい) | **実装済み** (JW score=1.0 結果を完全一致扱いで昇格) |
+| ひらがなフレーズ検索 (type "h") | 別 issue 化 (#13) |
+| 閾値 0.94 のチューニング | 初期値のまま (利用後に再検討) |
+
+#### ローマ字多義性の実装方針
+
+`sekka-roman->hiragana` の改修ではなく、`sekka-henkan--okuri-nashi` の結果順序を修正した。
+
+- JW 検索は "かんい" → roman "kani" として既にスコア=1.0 でヒットしていた
+- ただし JW 結果はすべて曖昧検索の末尾に追加されており、limit=20 では見えなかった
+- **修正**: JW スコア=1.0 の結果を完全一致扱いに昇格し、SymSpell 曖昧検索の前に挿入
+- "Kani" 変換時: 蟹(かに) → 簡易(かんい) → 官位(かんい) → ... の順で表示
+
+`sekka-henkan--okuri-nashi` (emacs/sekka-henkan.el) のステップ構成:
+1. 完全一致 (ひらがな変換 → 辞書直引き)
+2. JW score=1.0 → 完全一致扱いで追加 (ローマ字多義性対応)
+3. SymSpell 曖昧検索 (Levenshtein d≤1)
+4. JW score<1.0 → 曖昧検索扱いで追加 (後方欠落の長い単語)
+
+#### ERT テスト
+
+`emacs/sekka-tests.el` に Jaro-Winkler 関連 16 件を追加:
+
+| カテゴリ | テスト数 | 内容 |
+|---|---|---|
+| 類似度 | 6 | 完全一致/空文字/1文字欠落/長い単語後方欠落/無関係/プレフィックス加点 |
+| ひらがな→ローマ字 | 4 | 基本/拗音/促音/ん の正準化 |
+| インデックス + 検索 | 2 | ビルド+検索、短クエリ拒否 |
+| 辞書連携 | 2 | `shizengengos` → `自然言語処理` 検索と henkan 統合 |
+| 動的更新 | 1 | register-word 時の JW 更新 |
+| ローマ字多義性 | 1 | `kani` → 蟹(かに)+簡易(かんい) が limit=20 内に現れる |
+
+合計 283 テスト (既存 267 + JW 16) が全てパスする。
+
+### インクリメンタルビルドへの移行 (フリーズ解消)
+
+JW インデックス構築 (~0.5秒) が同期処理のため Emacs がフリーズしていた問題を修正。
+SymSpell と同様に `run-with-timer 0.01` で 2000件/チャンクのインクリメンタルビルドに変更。
+
+完了メッセージに経過時間を追加:
+- `Sekka SymSpell: index built (N keys, M delete entries, X.Xs)`
+- `Sekka JW: index built (N romaji keys, M prefix buckets, X.Xs)`
+
+
+しばらく使ってみて安定動作しているので、PRにしてください。
