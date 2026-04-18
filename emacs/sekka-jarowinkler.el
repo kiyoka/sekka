@@ -246,10 +246,14 @@
       (let ((prefix (substring roman 0 plen)))
         (puthash prefix (cons roman (gethash prefix index)) index)))))
 
+(defvar sekka-jarowinkler--incremental-chunk-size 2000
+  "インクリメンタルビルド時の1チャンクあたりの処理キー数.")
+
 (defun sekka-jarowinkler-build-index (hira-keys)
   "HIRA-KEYS (ひらがなキーのリストまたは hash-table) から
 Jaro-Winkler 用のプレフィックスインデックスを構築する.
-プレフィックス長 2/3/4 の全ての長さでインデックスを作成する."
+プレフィックス長 2/3/4 の全ての長さでインデックスを作成する.
+テスト・バッチ処理用の同期版."
   (sekka-jarowinkler--init-kana-hash)
   (let ((index (make-hash-table :test 'equal :size 16384))
         (roman-map (make-hash-table :test 'equal :size 200000))
@@ -272,6 +276,42 @@ Jaro-Winkler 用のプレフィックスインデックスを構築する.
     (message "Sekka JW: index built (%d romaji keys, %d prefix buckets)"
              count (hash-table-count index))
     index))
+
+(defun sekka-jarowinkler-build-index-incremental (hira-keys callback)
+  "HIRA-KEYS (hash-table) から JW インデックスをチャンク分割で構築する.
+Emacsのイベントループをブロックしない. 完了時に CALLBACK を呼ぶ."
+  (sekka-jarowinkler--init-kana-hash)
+  (let ((key-list nil)
+        (index (make-hash-table :test 'equal :size 16384))
+        (roman-map (make-hash-table :test 'equal :size 200000)))
+    (maphash (lambda (k _v) (push k key-list)) hira-keys)
+    (let ((total (length key-list)))
+      (sekka-jarowinkler--build-chunk key-list 0 total index roman-map callback))))
+
+(defun sekka-jarowinkler--build-chunk (key-list processed total index roman-map callback)
+  "KEY-LIST の先頭からチャンクサイズ分を処理し、残りをタイマーで再スケジュール."
+  (let ((count 0)
+        (chunk-size sekka-jarowinkler--incremental-chunk-size))
+    (while (and key-list (< count chunk-size))
+      (let ((hkey (car key-list)))
+        (when (and (stringp hkey) (> (length hkey) 0))
+          (let ((roman (sekka-jarowinkler-hiragana->roman hkey)))
+            (when (>= (length roman) (car sekka-jarowinkler-prefix-lengths))
+              (puthash roman hkey roman-map)
+              (sekka-jarowinkler--add-to-index roman index)))))
+      (setq key-list (cdr key-list))
+      (setq count (1+ count)))
+    (setq processed (+ processed count))
+    (if key-list
+        (run-with-timer 0.01 nil
+                        #'sekka-jarowinkler--build-chunk
+                        key-list processed total index roman-map callback)
+      (setq sekka-jarowinkler-index index)
+      (setq sekka-jarowinkler-roman-to-hira roman-map)
+      (message "Sekka JW: index built (%d romaji keys, %d prefix buckets)"
+               (hash-table-count roman-map) (hash-table-count index))
+      (when callback
+        (funcall callback)))))
 
 
 ;;; ============================================================

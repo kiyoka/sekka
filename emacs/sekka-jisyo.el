@@ -226,10 +226,10 @@ Set this before calling `sekka-jisyo-init'.")
   (sekka-jisyo--schedule-symspell-build))
 
 (defun sekka-jisyo--build-jarowinkler-index ()
-  "メイン辞書とユーザー辞書から Jaro-Winkler インデックスを構築する."
+  "メイン辞書とユーザー辞書から Jaro-Winkler インデックスを同期構築する.
+テスト・バッチ処理用. 通常起動は sekka-jisyo--schedule-jarowinkler-build を使う."
   (sekka-jarowinkler-build-index sekka-jisyo-hash)
   (when (> (hash-table-count sekka-user-jisyo-hash) 0)
-    ;; ユーザー辞書のキーを追加 (単純に再構築でもよいが、軽いのでマージ)
     (maphash
      (lambda (key _val)
        (when (and (stringp key) (> (length key) 0))
@@ -241,6 +241,26 @@ Set this before calling `sekka-jisyo-init'.")
                 roman sekka-jarowinkler-index))))))
      sekka-user-jisyo-hash))
   (setq sekka-jarowinkler-ready t))
+
+(defun sekka-jisyo--schedule-jarowinkler-build (callback)
+  "JW インデックスをインクリメンタルに構築し、完了後 CALLBACK を呼ぶ.
+Emacsのイベントループをブロックしない."
+  (sekka-jarowinkler-build-index-incremental
+   sekka-jisyo-hash
+   (lambda ()
+     (when (> (hash-table-count sekka-user-jisyo-hash) 0)
+       (maphash
+        (lambda (key _val)
+          (when (and (stringp key) (> (length key) 0))
+            (let ((roman (sekka-jarowinkler-hiragana->roman key)))
+              (when (>= (length roman) (car sekka-jarowinkler-prefix-lengths))
+                (unless (gethash roman sekka-jarowinkler-roman-to-hira)
+                  (puthash roman key sekka-jarowinkler-roman-to-hira)
+                  (sekka-jarowinkler--add-to-index
+                   roman sekka-jarowinkler-index))))))
+        sekka-user-jisyo-hash))
+     (setq sekka-jarowinkler-ready t)
+     (when callback (funcall callback)))))
 
 (defun sekka-jisyo-build-symspell-now ()
   "SymSpellインデックスを即座に構築する.
@@ -282,8 +302,9 @@ Set this before calling `sekka-jisyo-init'.")
              sekka-user-jisyo-hash))
           (setq sekka-symspell-building nil)
           (setq sekka-symspell-ready t)
-          (sekka-jisyo--build-jarowinkler-index)
-          (message "Sekka: SymSpell/Jaro-Winklerインデックス構築完了")))))))
+          (sekka-jisyo--schedule-jarowinkler-build
+           (lambda ()
+             (message "Sekka: SymSpell/Jaro-Winklerインデックス構築完了")))))))))
 
 
 ;;; ============================================================
