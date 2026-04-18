@@ -381,5 +381,3 @@ SymSpell と同様に `run-with-timer 0.01` で 2000件/チャンクのインク
 完了メッセージに経過時間を追加:
 - `Sekka SymSpell: index built (N keys, M delete entries, X.Xs)`
 - `Sekka JW: index built (N romaji keys, M prefix buckets, X.Xs)`
-
-
