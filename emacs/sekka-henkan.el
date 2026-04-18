@@ -324,6 +324,16 @@ QUERY はローマ字または略語 (= を除いた部分).
       (nreverse result))))
 
 
+(defun sekka-henkan--append-phrase (base-list keyword)
+  "BASE-LIST の末尾に KEYWORD のフレーズ検索結果を重複なく追加する."
+  (let ((seen (make-hash-table :test 'equal)))
+    (dolist (e base-list)
+      (puthash (car e) t seen))
+    (append base-list
+            (cl-remove-if (lambda (e) (gethash (car e) seen))
+                          (sekka-henkan--phrase keyword)))))
+
+
 ;;; ============================================================
 ;;; ユーティリティ
 ;;; ============================================================
@@ -390,16 +400,18 @@ ROMAN-METHOD は :normal または :azik.
 
            ;; ひらがなに変換可能
            ((sekka-roman->hiragana keyword roman-method)
-            (append
-             (sekka-henkan--hiragana keyword roman-method)
-             (sekka-henkan--alphabet keyword)
-             (sekka-henkan--okuri-nashi keyword limit roman-method)))
+            (let ((base (append
+                         (sekka-henkan--hiragana keyword roman-method)
+                         (sekka-henkan--alphabet keyword)
+                         (sekka-henkan--okuri-nashi keyword limit roman-method))))
+              (sekka-henkan--append-phrase base keyword)))
 
            ;; その他
            (t
-            (append
-             (sekka-henkan--non-kanji keyword)
-             (sekka-henkan--alphabet keyword))))))
+            (let ((base (append
+                         (sekka-henkan--non-kanji keyword)
+                         (sekka-henkan--alphabet keyword))))
+              (sekka-henkan--append-phrase base keyword))))))
 
     ;; 候補にindex番号を付加
     (let ((idx 0))
