@@ -286,9 +286,9 @@ Emacsのイベントループをブロックしない. 完了時に CALLBACK を
         (roman-map (make-hash-table :test 'equal :size 200000)))
     (maphash (lambda (k _v) (push k key-list)) hira-keys)
     (let ((total (length key-list)))
-      (sekka-jarowinkler--build-chunk key-list 0 total index roman-map callback))))
+      (sekka-jarowinkler--build-chunk key-list 0 total (float-time) index roman-map callback))))
 
-(defun sekka-jarowinkler--build-chunk (key-list processed total index roman-map callback)
+(defun sekka-jarowinkler--build-chunk (key-list processed total start-time index roman-map callback)
   "KEY-LIST の先頭からチャンクサイズ分を処理し、残りをタイマーで再スケジュール."
   (let ((count 0)
         (chunk-size sekka-jarowinkler--incremental-chunk-size))
@@ -305,11 +305,12 @@ Emacsのイベントループをブロックしない. 完了時に CALLBACK を
     (if key-list
         (run-with-timer 0.01 nil
                         #'sekka-jarowinkler--build-chunk
-                        key-list processed total index roman-map callback)
+                        key-list processed total start-time index roman-map callback)
       (setq sekka-jarowinkler-index index)
       (setq sekka-jarowinkler-roman-to-hira roman-map)
-      (message "Sekka JW: index built (%d romaji keys, %d prefix buckets)"
-               (hash-table-count roman-map) (hash-table-count index))
+      (message "Sekka JW: index built (%d romaji keys, %d prefix buckets, %.1fs)"
+               (hash-table-count roman-map) (hash-table-count index)
+               (- (float-time) start-time))
       (when callback
         (funcall callback)))))
 

@@ -133,9 +133,9 @@ Emacsのイベントループをブロックしない.
     (setq sekka-symspell-index (make-hash-table :test 'equal :size 500000))
     (setq sekka-symspell-dict-set (make-hash-table :test 'equal :size 150000))
     (message "Sekka SymSpell: incremental build starting (%d keys)..." total)
-    (sekka-symspell--build-chunk key-list 0 total callback)))
+    (sekka-symspell--build-chunk key-list 0 total (float-time) callback)))
 
-(defun sekka-symspell--build-chunk (key-list processed total callback)
+(defun sekka-symspell--build-chunk (key-list processed total start-time callback)
   "KEY-LIST の先頭からチャンクサイズ分を処理し、残りをタイマーで再スケジュール."
   (let ((count 0)
         (chunk-size sekka-symspell--incremental-chunk-size))
@@ -155,10 +155,11 @@ Emacsのイベントループをブロックしない.
                      processed total (/ (* 100 processed) total)))
           (run-with-timer 0.01 nil
                           #'sekka-symspell--build-chunk
-                          key-list processed total callback))
+                          key-list processed total start-time callback))
       ;; 全て完了
-      (message "Sekka SymSpell: index built (%d keys, %d delete entries)"
-               processed (hash-table-count sekka-symspell-index))
+      (message "Sekka SymSpell: index built (%d keys, %d delete entries, %.1fs)"
+               processed (hash-table-count sekka-symspell-index)
+               (- (float-time) start-time))
       (when callback
         (funcall callback)))))
 
