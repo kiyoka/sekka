@@ -330,4 +330,14 @@ JW 単独の構築時間は 1 秒未満 (prefix=2,3,4 の 3 レベル同時構�
 
 合計 283 テスト (既存 267 + JW 16) が全てパスする。
 
-コミットしてください。
+### インクリメンタルビルドへの移行 (フリーズ解消)
+
+JW インデックス構築 (~0.5秒) が同期処理のため Emacs がフリーズしていた問題を修正。
+SymSpell と同様に `run-with-timer 0.01` で 2000件/チャンクのインクリメンタルビルドに変更。
+
+完了メッセージに経過時間を追加:
+- `Sekka SymSpell: index built (N keys, M delete entries, X.Xs)`
+- `Sekka JW: index built (N romaji keys, M prefix buckets, X.Xs)`
+
+
+しばらく使ってみて安定動作しているので、PRにしてください。
