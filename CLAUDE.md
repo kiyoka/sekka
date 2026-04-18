@@ -297,7 +297,7 @@ JW 単独の構築時間は 1 秒未満 (prefix=2,3,4 の 3 レベル同時構�
 | 項目 | 状態 |
 |---|---|
 | ローマ字多義性 (kani → かに/かんい) | **実装済み** (JW score=1.0 結果を完全一致扱いで昇格) |
-| ひらがなフレーズ検索 (type "h") | 別 issue 化 (#13) |
+| ひらがなフレーズ検索 (type "h") | **実装済み** (Issue #13, `=` prefix) |
 | 閾値 0.94 のチューニング | 初期値のまま (利用後に再検討) |
 
 #### ローマ字多義性の実装方針
@@ -330,6 +330,49 @@ JW 単独の構築時間は 1 秒未満 (prefix=2,3,4 の 3 レベル同時構�
 
 合計 283 テスト (既存 267 + JW 16) が全てパスする。
 
+
+### Phase 6: ひらがなフレーズ曖昧検索 (Issue #13)
+
+#### 概要
+
+`=` プレフィックス付き入力でひらがなフレーズを補完する機能。
+
+- `=narimas` → `なります`、`なりますので` 等のフレーズ候補
+- `=w` → `を` (略語展開)
+- threshold 0.975 (メイン辞書の 0.94 より厳しい)
+
+#### 実装ファイル
+
+| 機能 | ファイル | 備考 |
+|---|---|---|
+| 汎用 JW 検索 (明示的インデックス) | `emacs/sekka-jarowinkler.el` `sekka-jarowinkler-search-with-index` | 既存グローバル版を refactor |
+| フレーズ辞書変数 | `emacs/sekka-jisyo.el` | `sekka-phrase-jisyo-hash` 等 |
+| フレーズ辞書ロード | `emacs/sekka-jisyo.el` `sekka-jisyo-init` | 3辞書ファイルを読み込み |
+| フレーズ JW インデックス構築 | `emacs/sekka-jisyo.el` `sekka-jisyo--build-phrase-jw-index` | 同期 (メイン JW 完了後) |
+| フレーズ検索 API | `emacs/sekka-jisyo.el` `sekka-jisyo-phrase-search` | 完全一致 + JW 補完 |
+| `=` prefix 変換 | `emacs/sekka-henkan.el` `sekka-henkan--phrase` | sekka-henkan dispatch |
+
+#### フレーズ辞書
+
+| ファイル | エントリ数 | 内容 |
+|---|---|---|
+| `SKK-JISYO.hiragana-phrase` | ~39K | ひらがなフレーズ (値=`//`) |
+| `SKK-JISYO.hiragana-phrase2` | ~23K | ひらがなフレーズ (値=`//`) |
+| `SKK-JISYO.hiragana-phrase3` | ~107 | 略語 (`w /を/` 等) |
+
+#### ERT テスト (6件追加)
+
+| テスト名 | 内容 |
+|---|---|
+| `sekka-test-phrase-jisyo-loaded` | フレーズ辞書ロード確認 |
+| `sekka-test-phrase-jw-index-built` | JW インデックス構築確認 |
+| `sekka-test-phrase-search-jw-completion` | `narimas` → `なりま*` フレーズ補完 |
+| `sekka-test-phrase-search-abbreviation` | `w` → `を` 略語展開 |
+| `sekka-test-henkan-phrase-prefix` | `=narimas` henkan 統合 |
+| `sekka-test-henkan-phrase-abbreviation` | `=w` → `を` henkan 統合 |
+
+合計 289 テスト (283 + 6) が全てパスする。
+
 ### インクリメンタルビルドへの移行 (フリーズ解消)
 
 JW インデックス構築 (~0.5秒) が同期処理のため Emacs がフリーズしていた問題を修正。
@@ -340,4 +383,3 @@ SymSpell と同様に `run-with-timer 0.01` で 2000件/チャンクのインク
 - `Sekka JW: index built (N romaji keys, M prefix buckets, X.Xs)`
 
 
-しばらく使ってみて安定動作しているので、PRにしてください。

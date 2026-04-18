@@ -49,6 +49,28 @@
 (defvar sekka-jarowinkler-ready nil
   "Non-nil if Jaro-Winkler index has been built.")
 
+;; フレーズ辞書
+(defvar sekka-phrase-jisyo-hash nil
+  "Phrase dictionary hash-table (hiragana phrases and abbreviations).")
+
+(defvar sekka-phrase-jw-index nil
+  "JW prefix index for phrase dictionary.")
+
+(defvar sekka-phrase-jw-roman-to-hira nil
+  "Roman→hiragana hash-table for phrase JW index.")
+
+(defvar sekka-phrase-jarowinkler-ready nil
+  "Non-nil if phrase JW index has been built.")
+
+(defconst sekka-phrase-jw-threshold 0.975
+  "Jaro-Winkler threshold for phrase fuzzy search (stricter than main dict).")
+
+(defvar sekka-phrase-dictionary-names
+  '("SKK-JISYO.hiragana-phrase"
+    "SKK-JISYO.hiragana-phrase2"
+    "SKK-JISYO.hiragana-phrase3")
+  "Phrase dictionary file names.")
+
 (defvar sekka-dictionary-base-url
   "https://raw.githubusercontent.com/kiyoka/sekka/master/data/"
   "Base URL for downloading dictionary files from GitHub.")
@@ -202,6 +224,21 @@ Set this before calling `sekka-jisyo-init'.")
              (length files) sekka-dictionary-cache-dir)
     files))
 
+(defun sekka-jisyo--phrase-file-list ()
+  "フレーズ辞書ファイルのリストを返す.
+ローカル data/ を優先し、なければキャッシュ/ダウンロードを試みる."
+  (let* ((elisp-dir (file-name-directory
+                     (or (locate-library "sekka-jisyo")
+                         load-file-name buffer-file-name "")))
+         (data-dir (expand-file-name
+                    "data"
+                    (file-name-directory
+                     (directory-file-name elisp-dir)))))
+    (cl-remove-if-not
+     #'file-exists-p
+     (mapcar (lambda (name) (expand-file-name name data-dir))
+             sekka-phrase-dictionary-names))))
+
 (defun sekka-jisyo-init ()
   "辞書を初期化してhash-tableにロードする."
   (interactive)
@@ -216,9 +253,17 @@ Set this before calling `sekka-jisyo-init'.")
   ;; ユーザー辞書の読み込み
   (when (file-readable-p sekka-user-jisyo-file)
     (sekka-jisyo-load-file sekka-user-jisyo-file sekka-user-jisyo-hash))
+  ;; フレーズ辞書の読み込み
+  (setq sekka-phrase-jisyo-hash (make-hash-table :test 'equal :size 100000))
+  (setq sekka-phrase-jarowinkler-ready nil)
+  (let ((phrase-files (sekka-jisyo--phrase-file-list)))
+    (dolist (f phrase-files)
+      (message "Sekka: loading %s ..." (file-name-nondirectory f))
+      (sekka-jisyo-load-file f sekka-phrase-jisyo-hash)))
   (setq sekka-jisyo-loaded t)
-  (message "Sekka: 辞書の読み込み完了 (entries: %d)"
-           (hash-table-count sekka-jisyo-hash))
+  (message "Sekka: 辞書の読み込み完了 (entries: %d, phrase: %d)"
+           (hash-table-count sekka-jisyo-hash)
+           (hash-table-count sekka-phrase-jisyo-hash))
   ;; SymSpellインデックスの構築をアイドル時に遅延実行
   (setq sekka-symspell-ready nil)
   (setq sekka-symspell-building nil)
@@ -242,6 +287,24 @@ Set this before calling `sekka-jisyo-init'.")
      sekka-user-jisyo-hash))
   (setq sekka-jarowinkler-ready t))
 
+(defun sekka-jisyo--build-phrase-jw-index ()
+  "フレーズ辞書から Jaro-Winkler インデックスを同期構築する."
+  (let ((index (make-hash-table :test 'equal :size 8192))
+        (roman-map (make-hash-table :test 'equal :size 80000)))
+    (maphash
+     (lambda (key _val)
+       (when (and (stringp key) (> (length key) 0))
+         (let ((roman (sekka-jarowinkler-hiragana->roman key)))
+           (when (>= (length roman) (car sekka-jarowinkler-prefix-lengths))
+             (puthash roman key roman-map)
+             (sekka-jarowinkler--add-to-index roman index)))))
+     sekka-phrase-jisyo-hash)
+    (setq sekka-phrase-jw-index index)
+    (setq sekka-phrase-jw-roman-to-hira roman-map)
+    (setq sekka-phrase-jarowinkler-ready t)
+    (message "Sekka phrase JW: index built (%d romaji keys, %d prefix buckets)"
+             (hash-table-count roman-map) (hash-table-count index))))
+
 (defun sekka-jisyo--schedule-jarowinkler-build (callback)
   "JW インデックスをインクリメンタルに構築し、完了後 CALLBACK を呼ぶ.
 Emacsのイベントループをブロックしない."
@@ -260,6 +323,8 @@ Emacsのイベントループをブロックしない."
                    roman sekka-jarowinkler-index))))))
         sekka-user-jisyo-hash))
      (setq sekka-jarowinkler-ready t)
+     ;; フレーズ JW インデックスも構築する
+     (sekka-jisyo--build-phrase-jw-index)
      (when callback (funcall callback)))))
 
 (defun sekka-jisyo-build-symspell-now ()
@@ -279,6 +344,7 @@ Emacsのイベントループをブロックしない."
     (setq sekka-symspell-building nil)
     (setq sekka-symspell-ready t)
     (sekka-jisyo--build-jarowinkler-index)
+    (sekka-jisyo--build-phrase-jw-index)
     (message "Sekka: SymSpell/Jaro-Winklerインデックス構築完了")))
 
 (defun sekka-jisyo--schedule-symspell-build ()
@@ -481,6 +547,45 @@ OKURI が指定された場合、各候補に送り仮名を付加する."
 ;;; ============================================================
 ;;; 新規単語登録
 ;;; ============================================================
+
+;;; ============================================================
+;;; フレーズ検索
+;;; ============================================================
+
+(defun sekka-jisyo-phrase-search (query &optional max-results)
+  "QUERY (ローマ字または略語) に対してフレーズ検索を行う.
+1. フレーズ辞書での完全一致 (略語 w→を など)
+2. JW 曖昧検索 (ひらがなフレーズの補完)
+結果は ((score key value) ...) のリスト."
+  (unless sekka-jisyo-loaded
+    (sekka-jisyo-init))
+  (let ((result nil)
+        (seen (make-hash-table :test 'equal)))
+    ;; 1. 完全一致 (略語等)
+    (let ((val (gethash query sekka-phrase-jisyo-hash)))
+      (when val
+        (unless (gethash query seen)
+          (puthash query t seen)
+          (push (list 1.0 query val) result))))
+    ;; 2. JW 曖昧検索 (フレーズ補完)
+    (when sekka-phrase-jarowinkler-ready
+      (let ((hits (sekka-jarowinkler-search-with-index
+                   query
+                   sekka-phrase-jw-index
+                   sekka-phrase-jw-roman-to-hira
+                   sekka-phrase-jw-threshold
+                   nil)))
+        (dolist (h hits)
+          (let* ((score (car h))
+                 (key (cdr h))
+                 (val (gethash key sekka-phrase-jisyo-hash)))
+            (when (and val (not (gethash key seen)))
+              (puthash key t seen)
+              (push (list score key val) result))))))
+    (setq result (nreverse result))
+    (if (and max-results (> (length result) max-results))
+        (cl-subseq result 0 max-results)
+      result)))
 
 (defun sekka-jisyo--register-jarowinkler-key (key)
   "KEY (ひらがな) を Jaro-Winkler インデックスに新規登録する.

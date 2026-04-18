@@ -1431,5 +1431,64 @@
     ;; かんい の候補 (JW score=1.0 で昇格: limit=20 内に現れる)
     (should (member "簡易" words))))
 
+;;; ============================================================
+;;; Issue #13: ひらがなフレーズ曖昧検索テスト
+;;; ============================================================
+
+(defun sekka-test--ensure-phrase-index ()
+  "フレーズ JW インデックスが構築済みであることを保証する."
+  (sekka-test--ensure-jisyo)
+  (unless sekka-phrase-jarowinkler-ready
+    (sekka-jisyo--build-phrase-jw-index)))
+
+(ert-deftest sekka-test-phrase-jisyo-loaded ()
+  "フレーズ辞書が読み込まれていること."
+  :tags '(phrase jisyo)
+  (sekka-test--ensure-jisyo)
+  (should (hash-table-p sekka-phrase-jisyo-hash))
+  (should (> (hash-table-count sekka-phrase-jisyo-hash) 1000)))
+
+(ert-deftest sekka-test-phrase-jw-index-built ()
+  "フレーズ JW インデックスが構築できること."
+  :tags '(phrase jw)
+  (sekka-test--ensure-phrase-index)
+  (should (hash-table-p sekka-phrase-jw-index))
+  (should (> (hash-table-count sekka-phrase-jw-roman-to-hira) 1000)))
+
+(ert-deftest sekka-test-phrase-search-jw-completion ()
+  "narimas → なります/なりますね等が補完される."
+  :tags '(phrase jw)
+  (sekka-test--ensure-phrase-index)
+  (let* ((hits (sekka-jisyo-phrase-search "narimas" nil))
+         (keys (mapcar #'cadr hits)))
+    (should (> (length hits) 0))
+    (should (cl-some (lambda (k) (string-prefix-p "なりま" k)) keys))))
+
+(ert-deftest sekka-test-phrase-search-abbreviation ()
+  "略語 w → を が返る."
+  :tags '(phrase)
+  (sekka-test--ensure-phrase-index)
+  (let* ((hits (sekka-jisyo-phrase-search "w" nil))
+         (vals (mapcar #'caddr hits)))
+    (should (> (length hits) 0))
+    (should (cl-some (lambda (v) (string-match-p "を" v)) vals))))
+
+(ert-deftest sekka-test-henkan-phrase-prefix ()
+  "=narimas でフレーズ候補が返る (henkan 統合)."
+  :tags '(phrase henkan)
+  (sekka-test--ensure-phrase-index)
+  (let* ((result (sekka-henkan "=narimas" 20 :normal))
+         (words (mapcar #'car result)))
+    (should (> (length result) 0))
+    (should (cl-some (lambda (w) (string-prefix-p "なりま" w)) words))))
+
+(ert-deftest sekka-test-henkan-phrase-abbreviation ()
+  "=w でを候補が返る (henkan 統合)."
+  :tags '(phrase henkan)
+  (sekka-test--ensure-phrase-index)
+  (let* ((result (sekka-henkan "=w" 10 :normal))
+         (words (mapcar #'car result)))
+    (should (member "を" words))))
+
 (provide 'sekka-tests)
 ;;; sekka-tests.el ends here

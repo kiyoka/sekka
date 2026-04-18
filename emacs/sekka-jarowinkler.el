@@ -341,12 +341,12 @@ min/max ≥ 0.72 程度が必要 (=長さ差 28% 以内)."
    ((>= qlen 7) 3)
    (t 2)))
 
-(defun sekka-jarowinkler-search (query &optional threshold max-results)
-  "QUERY (ローマ字文字列) に対して Jaro-Winkler 曖昧検索を行う.
-結果は ((score . hira-key) ...) のスコア降順リスト.
-THRESHOLD のデフォルトは `sekka-jarowinkler-default-threshold`.
-MAX-RESULTS は最大件数制限 (省略時は無制限)."
-  (when (and sekka-jarowinkler-index
+(defun sekka-jarowinkler-search-with-index (query index roman-to-hira &optional threshold max-results)
+  "QUERY (ローマ字文字列) に対して Jaro-Winkler 曖昧検索を行う (明示的インデックス版).
+INDEX はプレフィックス→ローマ字リストの hash-table.
+ROMAN-TO-HIRA はローマ字→ひらがなキーの hash-table.
+結果は ((score . hira-key) ...) のスコア降順リスト."
+  (when (and index roman-to-hira
              (stringp query)
              (>= (length query) sekka-jarowinkler-prefix-length))
     (let* ((th (or threshold sekka-jarowinkler-default-threshold))
@@ -354,17 +354,16 @@ MAX-RESULTS は最大件数制限 (省略時は無制限)."
            (qlen (length q))
            (plen (sekka-jarowinkler--pick-prefix-length qlen))
            (prefix (substring q 0 plen))
-           (candidates (gethash prefix sekka-jarowinkler-index))
+           (candidates (gethash prefix index))
            (result nil))
       (dolist (roman candidates)
         (when (sekka-jarowinkler--length-ok-p qlen (length roman))
           (let ((score (sekka-jarowinkler-similarity q roman)))
             (when (>= score th)
-              (let ((hkey (gethash roman sekka-jarowinkler-roman-to-hira)))
+              (let ((hkey (gethash roman roman-to-hira)))
                 (when hkey
                   (push (cons score hkey) result)))))))
       (setq result (sort result (lambda (a b) (> (car a) (car b)))))
-      ;; 同じひらがなキーの重複を排除 (異なるローマ字でスコアが出ることがある)
       (let ((seen (make-hash-table :test 'equal))
             (uniq nil))
         (dolist (item result)
@@ -375,6 +374,15 @@ MAX-RESULTS は最大件数制限 (省略時は無制限)."
       (if (and max-results (> (length result) max-results))
           (cl-subseq result 0 max-results)
         result))))
+
+(defun sekka-jarowinkler-search (query &optional threshold max-results)
+  "QUERY (ローマ字文字列) に対して Jaro-Winkler 曖昧検索を行う.
+結果は ((score . hira-key) ...) のスコア降順リスト.
+THRESHOLD のデフォルトは `sekka-jarowinkler-default-threshold'.
+MAX-RESULTS は最大件数制限 (省略時は無制限)."
+  (sekka-jarowinkler-search-with-index
+   query sekka-jarowinkler-index sekka-jarowinkler-roman-to-hira
+   threshold max-results))
 
 
 (provide 'sekka-jarowinkler)

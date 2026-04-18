@@ -28,6 +28,12 @@
 (require 'sekka-sharp-number)
 (require 'sekka-jisyo)
 
+(defvar sekka-phrase-jisyo-hash)
+(defvar sekka-phrase-jw-index)
+(defvar sekka-phrase-jw-roman-to-hira)
+(defvar sekka-phrase-jarowinkler-ready)
+(defvar sekka-phrase-jw-threshold)
+
 
 ;;; ============================================================
 ;;; 厳密検索 (完全一致)
@@ -288,6 +294,37 @@ KEYWORD は例えば \"okonaU\" (大文字が送り仮名の開始を示す)."
 
 
 ;;; ============================================================
+;;; = プレフィックス: ひらがなフレーズ検索
+;;; ============================================================
+
+(defun sekka-henkan--phrase (query)
+  "= プレフィックス付き入力 QUERY のフレーズ検索.
+QUERY はローマ字または略語 (= を除いた部分).
+候補は (word annotation source type) の形式."
+  (when (> (length query) 0)
+    (let ((matches (sekka-jisyo-phrase-search query nil))
+          (result nil)
+          (seen (make-hash-table :test 'equal)))
+      (dolist (m matches)
+        (let* ((_score (nth 0 m))
+               (key (nth 1 m))
+               (val (nth 2 m))
+               (entries (sekka-jisyo--split-candidates val)))
+          (if entries
+              ;; 値あり (略語展開など)
+              (dolist (e entries)
+                (when (> (length e) 0)
+                  (unless (gethash e seen)
+                    (puthash e t seen)
+                    (push (list e nil query 'h) result))))
+            ;; 値が // (空) → キー自体がフレーズ
+            (unless (gethash key seen)
+              (puthash key t seen)
+              (push (list key nil query 'h) result)))))
+      (nreverse result))))
+
+
+;;; ============================================================
 ;;; ユーティリティ
 ;;; ============================================================
 
@@ -316,6 +353,10 @@ ROMAN-METHOD は :normal または :azik.
          (case-fold-search nil)  ;; 大文字小文字を区別する
          (kouho-list
           (cond
+           ;; = プレフィックス → ひらがなフレーズ検索
+           ((string-prefix-p "=" keyword)
+            (sekka-henkan--phrase (substring keyword 1)))
+
            ;; 大文字を含む → 漢字変換
            ((string-match-p "[A-Z`+]" keyword)
             (let ((k (sekka-henkan--string-downcase-first keyword)))
