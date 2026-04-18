@@ -1416,5 +1416,20 @@
          (words (sekka-test--words result)))
     (should (member "自然言語処理" words))))
 
+;; --- ローマ字多義性: kani → かに + かんい ---
+(ert-deftest sekka-test-jw-roman-ambiguity-kani ()
+  "JW スコア=1.0 の結果が完全一致扱いで上位に昇格される (kani→かんい)."
+  :tags '(jw henkan jisyo)
+  (sekka-test--ensure-jisyo)
+  ;; 他テスト (sekka-test-jw-index-and-search 等) が JW インデックスを
+  ;; 小規模データで上書きする場合があるため、全辞書インデックスを再構築する
+  (sekka-jisyo--build-jarowinkler-index)
+  (let* ((result (sekka-henkan--okuri-nashi "kani" 20 :normal))
+         (words (sekka-test--words result)))
+    ;; かに の候補 (完全一致)
+    (should (member "蟹" words))
+    ;; かんい の候補 (JW score=1.0 で昇格: limit=20 内に現れる)
+    (should (member "簡易" words))))
+
 (provide 'sekka-tests)
 ;;; sekka-tests.el ends here
