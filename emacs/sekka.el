@@ -120,11 +120,36 @@
 ;; ローマ字漢字変換時、対象とするローマ字を設定するための変数
 ;; = を先頭に置くことで「=narimas」のようなフレーズ検索クエリを一括収集できる
 (defvar sekka-skip-chars "=a-zA-Z0-9.,@:`\\-+!\\[\\]?;'")
-(setq  sekka-skip-chars "=a-zA-Z0-9.,@:`\\-+!\\[\\]?;'")
-(defvar sekka-mode-map        (make-sparse-keymap)         "漢字変換トグルマップ")
-(defvar sekka-select-mode-map (make-sparse-keymap)         "候補選択モードマップ")
 (defvar sekka-rK-trans-key "\C-j"
   "*漢字変換キーを設定する")
+(defvar sekka-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map sekka-rK-trans-key #'sekka-rK-trans)
+    (define-key map "\M-j"             #'sekka-capitalize-trans)
+    map)
+  "漢字変換トグルマップ")
+(defvar sekka-select-mode-map
+  (let ((map (make-sparse-keymap))
+        (i 0))
+    (while (<= i ?\177)
+      (define-key map (char-to-string i) #'sekka-kakutei-and-self-insert)
+      (setq i (1+ i)))
+    (define-key map "\C-m"                   #'sekka-select-kakutei)
+    (define-key map "\C-g"                   #'sekka-select-cancel)
+    (define-key map "q"                      #'sekka-select-cancel)
+    (define-key map "\C-a"                   #'sekka-select-kanji)
+    (define-key map "\C-p"                   #'sekka-select-prev)
+    (define-key map "\C-n"                   #'sekka-select-next)
+    (define-key map sekka-rK-trans-key       #'sekka-select-next)
+    (define-key map (kbd "SPC")              #'sekka-select-next)
+    (define-key map "\C-u"                   #'sekka-select-hiragana)
+    (define-key map "\C-i"                   #'sekka-select-katakana)
+    (define-key map "\C-k"                   #'sekka-select-katakana)
+    (define-key map "\C-l"                   #'sekka-select-hankaku)
+    (define-key map "\C-e"                   #'sekka-select-zenkaku)
+    (define-key map "\C-r"                   #'sekka-add-new-word)
+    map)
+  "候補選択モードマップ")
 (or (assq 'sekka-mode minor-mode-map-alist)
     (setq minor-mode-map-alist
 	  (append (list (cons 'sekka-mode         sekka-mode-map)
@@ -320,10 +345,8 @@
 ;; undo 情報の制御
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; undo buffer 退避用変数
-(defvar sekka-buffer-undo-list nil)
-(make-variable-buffer-local 'sekka-buffer-undo-list)
-(defvar sekka-buffer-modified-p nil)
-(make-variable-buffer-local 'sekka-buffer-modified-p)
+(defvar-local sekka-buffer-undo-list nil)
+(defvar-local sekka-buffer-modified-p nil)
 
 (defvar sekka-blink-cursor nil)
 (defvar sekka-cursor-type nil)
@@ -398,7 +421,7 @@
 	       (len        sekka-cand-len))
 	  (progn
 	    (insert insert-word)
-	    (message (format "[%s] candidate (%d/%d)" insert-word (+ cur 1) len))
+	    (message "[%s] candidate (%d/%d)" insert-word (+ cur 1) len)
 	    (let* ((end         (point-marker))
 		   (ov          (make-overlay start end)))
 
@@ -426,25 +449,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 変換候補選択モード
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(let ((i 0))
-  (while (<= i ?\177)
-    (define-key sekka-select-mode-map (char-to-string i)
-      'sekka-kakutei-and-self-insert)
-    (setq i (1+ i))))
-(define-key sekka-select-mode-map "\C-m"                   'sekka-select-kakutei)
-(define-key sekka-select-mode-map "\C-g"                   'sekka-select-cancel)
-(define-key sekka-select-mode-map "q"                      'sekka-select-cancel)
-(define-key sekka-select-mode-map "\C-a"                   'sekka-select-kanji)
-(define-key sekka-select-mode-map "\C-p"                   'sekka-select-prev)
-(define-key sekka-select-mode-map "\C-n"                   'sekka-select-next)
-(define-key sekka-select-mode-map sekka-rK-trans-key       'sekka-select-next)
-(define-key sekka-select-mode-map (kbd "SPC")              'sekka-select-next)
-(define-key sekka-select-mode-map "\C-u"                   'sekka-select-hiragana)
-(define-key sekka-select-mode-map "\C-i"                   'sekka-select-katakana)
-(define-key sekka-select-mode-map "\C-k"                   'sekka-select-katakana)
-(define-key sekka-select-mode-map "\C-l"                   'sekka-select-hankaku)
-(define-key sekka-select-mode-map "\C-e"                   'sekka-select-zenkaku)
-(define-key sekka-select-mode-map "\C-r"                   'sekka-add-new-word)
 
 
 (defvar sekka-popup-menu-keymap
@@ -656,7 +660,7 @@
   (delete-region b e)
 
   (insert insert-word)
-  (message (format "replaced by new word [%s]" insert-word))
+  (message "replaced by new word [%s]" insert-word)
   ;; UNDO再開
   (sekka-enable-undo))
 
@@ -693,8 +697,8 @@
       ;; ユーザー辞書に単語を登録する
       (when (and (> (length yomi) 0) (> (length tango) 0))
         (if (sekka-jisyo-register-word yomi tango)
-            (message (format "Sekka辞書に単語(%s /%s/)を保存しました！" yomi tango))
-          (message (format "Sekka辞書に単語(%s /%s/)は登録済です" yomi tango)))))))
+            (message "Sekka辞書に単語(%s /%s/)を保存しました！" yomi tango)
+          (message "Sekka辞書に単語(%s /%s/)は登録済です" yomi tango))))))
 
 
 (defun sekka-add-new-word ()
@@ -857,7 +861,7 @@
 			(make-overlay ov-point ov-point (current-buffer))))
       (setq sekka-timer
 			(run-at-time 0.1 sekka-realtime-guide-interval
-						 'sekka-realtime-guide)))))
+						 #'sekka-realtime-guide)))))
 
   ;; ガイド表示継続回数の更新
   (when (< 0 sekka-realtime-guide-running-seconds)
@@ -990,7 +994,7 @@
 	    (backward-paragraph)
 	    (when (< 1 (point))
 	      (forward-line 1))
-	    (goto-char (line-beginning-position))
+	    (beginning-of-line)
 	    (let (
 		  (start-point (point)))
 	      (setq limit-point
@@ -1035,7 +1039,7 @@
 			 (cons ,(string-to-char (cdr pair)) unread-command-events))
 		 nil))))
 	sekka-sticky-list)
-  (define-key sekka-sticky-map sekka-sticky-key #'(lambda ()(interactive)(insert sekka-sticky-key))))
+  (define-key sekka-sticky-map sekka-sticky-key (lambda ()(interactive)(insert sekka-sticky-key))))
 
 
 (defun sekka-insert-space (times)
@@ -1046,7 +1050,7 @@
 
 (defun sekka-spacekey-init-function ()
   (define-key global-map (kbd "SPC")
-    #'(lambda (&optional arg)(interactive "P")
+    (lambda (&optional arg)(interactive "P")
        (cond ((and (< 0 sekka-timer-rest)
 		   sekka-kakutei-with-spacekey)
 	      (cond
@@ -1065,7 +1069,7 @@
 
 (defun sekka-muhenkan-key-init-function ()
   (define-key global-map sekka-muhenkan-key
-    #'(lambda (&optional _arg)(interactive "P")
+    (lambda (&optional _arg)(interactive "P")
        (if (< 0 sekka-timer-rest)
 	   ;; qキーで無変換+スペースを入力する
 	   (cond
@@ -1141,8 +1145,6 @@ sekka-modeがONの間中呼び出される可能性がある。"
 ;;;
 ;;; human interface
 ;;;
-(define-key sekka-mode-map sekka-rK-trans-key 'sekka-rK-trans)
-(define-key sekka-mode-map "\M-j" 'sekka-capitalize-trans)
 (or (assq 'sekka-mode minor-mode-map-alist)
     (setq minor-mode-map-alist
 	  (append (list
@@ -1250,7 +1252,6 @@ point から行頭方向に同種の文字列が続く間を漢字変換しま�
 
 ;; input-method として登録する。
 (set-language-info "Japanese" 'input-method "japanese-sekka")
-(setq default-input-method "japanese-sekka")
 
 (defconst sekka-version
   "2.0.1" ;;SEKKA-VERSION
